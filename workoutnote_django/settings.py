@@ -76,11 +76,11 @@ DATABASES = {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'workovg5_db',
-        'USER': 'workovg5_postgres',
-        'PASSWORD': 'workovg5_postgres',
-        'HOST': 'TBD',
-        'PORT': 'TBD'
+        'NAME': 'deltoid-db',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'deltoid-db.cssqpqimlbjy.ap-northeast-2.rds.amazonaws.com',
+        'PORT': '5432'
     }
 }
 

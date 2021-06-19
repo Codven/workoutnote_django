@@ -32,9 +32,9 @@ urlpatterns = [
     path('powerlifting-calculator/', views.handle_powerlifting_calculator, name='powerlifting calculator'),
     path('wilks-calculator/', views.handle_wilks_calculator, name='wilks calculator'),
 
-    path('login/', views.handle_login, name='login'),
-    path('register/', views.handle_register, name='register'),
-    path('logout/', views.handle_logout, name='logout'),
+    path('accounts/login/', views.handle_login, name='login'),
+    path('accounts/register/', views.handle_register, name='register'),
+    path('accounts/logout/', views.handle_logout, name='logout'),
 
     path('profile-main/', views.handle_profile_main, name='profile main'),
     path('settings/', views.handle_settings, name='settings'),

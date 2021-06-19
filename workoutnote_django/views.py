@@ -19,7 +19,8 @@ def handle_login(request):
             email = request.POST['email']
             password = request.POST['password']
             user = authenticate(username=email, password=password)
-            if user:
+            if user and user.is_authenticated:
+                login(request=request, user=user)
                 if 'next' in request.POST and len(request.POST['next']) > 0:
                     return redirect(to=request.POST['next'])
                 else:

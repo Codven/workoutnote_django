@@ -5488,17 +5488,24 @@
     <div class="container">
         <div class="header">
             <div class="header__logo" id="headerLogoSection">
-                <a href="/">
+                <a href="{% url 'index' %}">
                     <img alt="Deltoid" src="{% static 'deltoid.png' %}" width="162" height="40">
                 </a>
             </div>
             <div class="header__login" id="headerLoginSection">
-                <a class="button is-primary" href="{% url 'register' %}">
-                    Register
-                </a>
-                <a class="button" href="{% url 'login' %}">
-                    Log In
-                </a>
+                {% if request.user.is_authenticated %}
+                    <a class="button" href="{% url 'profile main' %}">
+                        <span class="icon"><i class="slicon slicon-fa-dumbbell"></i></span>
+                        <span>Training Log</span>
+                    </a>
+                {% else %}
+                    <a class="button is-primary" href="{% url 'register' %}">
+                        Register
+                    </a>
+                    <a class="button" href="{% url 'login' %}">
+                        Log In
+                    </a>
+                {% endif %}
             </div>
         </div>
         <div id="menucontainer" class="sitemenu__container">
@@ -5540,7 +5547,6 @@
     var addthis_config = {ui_tabindex: 100,};
 </script>
 <style id="service-icons-0"></style>
-
 
 <div class="addthis-smartlayers addthis-smartlayers-desktop" aria-labelledby="at4-share-label" role="region">
     <div id="at4-share-label">AddThis Sharing Sidebar</div>

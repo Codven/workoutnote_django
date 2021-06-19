@@ -21,7 +21,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.handle_index, name='index'),
     path('calculators/', views.handle_calculators, name='calculators'),
-    path('strength-standards/', views.handle_strength_standards, name='strength-standards'),
-    path('training-log-tutorial/', views.handle_training_log_tutorial, name='training-log-tutorial'),
-    path('login/', views.login, name='login'),
+    path('strength-standards/', views.handle_strength_standards, name='strength standards'),
+    path('training-log-tutorial/', views.handle_training_log_tutorial, name='training log tutorial'),
+    path('one-rep-max-calculator/', views.handle_one_rep_max_calculator, name='one rep max calculator'),
+
+    path('login/', views.handle_login, name='login'),
 ]

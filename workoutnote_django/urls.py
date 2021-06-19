@@ -32,4 +32,5 @@ urlpatterns = [
 
     path('profile-main/', views.handle_profile_main, name='profile main'),
     path('settings/', views.handle_settings, name='settings'),
+    path('analyse-lift/', views.handle_analyse_lift, name='analyse lift'),
 ]

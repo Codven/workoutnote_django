@@ -1,0 +1,169 @@
+{% extends 'profile/base.html' %}
+{% block content %}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Get all "navbar-burger" elements
+            const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+            // Check if there are any navbar burgers
+            if ($navbarBurgers.length > 0) {
+
+                // Add a click event on each of them
+                $navbarBurgers.forEach(el => {
+                    el.addEventListener('click', () => {
+
+                        // Get the target from the "data-target" attribute
+                        const target = el.dataset.target;
+                        const $target = document.getElementById(target);
+
+                        // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+                        el.classList.toggle('is-active');
+                        $target.classList.toggle('is-active');
+
+                    });
+                });
+            }
+
+        });
+    </script>
+    <div id="analysisPageContainer"><!---->
+        <section class="hero is-primary is-translucent">
+            <div class="hero-body">
+                <div class="container"><h1 class="title is-3 is-size-4-mobile"><span class="icon mr-1"><i aria-hidden="true" class="slicon slicon-fa-dumbbell"></i></span>
+                    <span>Bench Press Analysis</span></h1>
+                    <h2 class="subtitle is-4 is-size-5-mobile"><a><span class="icon"><i aria-hidden="true" class="slicon slicon-fa-calendar-day"></i></span> <span>15 June 2021</span></a></h2></div>
+            </div>
+        </section>
+        <section class="section has-background-white">
+            <div class="container">
+                <div class="columns">
+                    <div class="column is-half">
+                        <div class="tags are-medium has-addons is-centered"><span class="tag">
+              Strength Level
+            </span> <span class="tag is-primary"><span class="stars"><span class="star__full">★★</span><!----><span class="star__empty">★★★</span></span></span> <span class="tag is-primary">
+            31%
+          </span></div>
+                        <nav class="level is-mobile">
+                            <div class="level-item has-text-centered">
+                                <div>
+                                    <div class="heading">Weight</div>
+                                    <div class="title">50 kg</div>
+                                </div>
+                            </div>
+                            <div class="level-item has-text-centered">
+                                <div>
+                                    <div class="heading">Reps</div>
+                                    <div class="title">10</div>
+                                </div>
+                            </div>
+                            <div class="level-item has-text-centered">
+                                <div>
+                                    <div class="heading">Estimated 1RM</div>
+                                    <div class="title">66.7 kg</div>
+                                </div>
+                            </div>
+                        </nav>
+                        <nav class="level is-mobile">
+                            <div class="level-item has-text-centered">
+                                <div>
+                                    <div class="heading">Bodyweight</div>
+                                    <div class="title">67 kg</div>
+                                </div>
+                            </div>
+                            <div class="level-item has-text-centered">
+                                <div>
+                                    <div class="heading">Bodyweight Ratio</div>
+                                    <div class="title">0.75 x</div>
+                                </div>
+                            </div>
+                        </nav>
+                        <div class="buttons is-centered"><!----> <a href="/102596-nematjon/2021/06/15" class="button"><span class="icon"><i aria-hidden="true"
+                                                                                                                                            class="slicon slicon-fa-calendar-day"></i></span> <span>View Workout</span></a>
+                        </div>
+                    </div>
+                    <div class="column is-half"><h2 class="title is-3 is-size-4-mobile">How did we calculate this?</h2>
+                        <div class="content"><h3 class="subtitle is-4 is-size-5-mobile">Step 1 - Compare to all male lifters</h3>
+                            <p>
+                                We estimated that your <strong>one-rep max is 66.7 kg</strong>
+                                as you lifted 50 kg for 10 repetitions.
+                            </p>
+                            <p>
+                                We then compared you to other
+                                male
+                                lifters who tested with Strength Level.
+                            </p>
+                            <p class="has-text-weight-bold">
+                                Result: stronger than 18%
+                                <span class="stars"><span class="star__full">★</span><span class="star__half">★</span><span class="star__empty">★★★</span></span></p>
+                            <h3 class="subtitle is-4 is-size-5-mobile">Step 2 - Adjust for age</h3>
+                            <p>
+                                At age 25 you are at a prime age for lifting and therefore
+                                <strong>did not get an age bonus</strong>.
+                            </p>
+                            <h3 class="subtitle is-4 is-size-5-mobile">Step 3 - Adjust for bodyweight</h3>
+                            <p>
+                                We then compared you to other lifters at your
+                                <strong>bodyweight of 67 kg</strong>
+                                to find your relative strength.
+                            </p>
+                            <p class="has-text-weight-bold">
+                                Result: stronger than 31%
+                                <span class="stars"><span class="star__full">★★</span><!----><span class="star__empty">★★★</span></span></p>
+                            <h3 class="subtitle is-4 is-size-5-mobile">Step 4 - Find Strength Level boundary</h3>
+                            <p>
+                                Your Strength Level is <strong>Novice</strong>.
+                            </p>
+                            <p>
+                                Novice lifters are stronger than at least
+                                20% of lifters.
+                            </p></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script>
+        StrengthLevel.setupAnalysisPage({
+            "analysisPageViewModel": {
+                "name": "Bench Press",
+                "analysis": {
+                    "age": 25.765913757700204,
+                    "ageDescription": "age 25",
+                    "gender": "male",
+                    "bodyMassKg": 67,
+                    "repetitions": 10,
+                    "liftMassKg": 50,
+                    "maxLiftKg": 66.667,
+                    "maxLiftKgAtAge": 66.667,
+                    "percentile": 0.3137623090417957,
+                    "percentileBoundary": 0.2,
+                    "levelDescription": "Novice",
+                    "overallPercentile": 0.18440787829250146,
+                    "overallPercentileAtAge": 0.18440787829250146,
+                    "ratio": 0.746268656716418
+                },
+                "date": "2021-06-15",
+                "userBaseUrl": "\/102596-nematjon"
+            },
+            "otherUserViewModel": null,
+            "layoutViewModel": {
+                "title": "Analyse Lift - Strength Level",
+                "menuSelection": "Workouts",
+                "gender": "male",
+                "analyticsPage": "\/analyse-lift\/bench-press",
+                "fingerprint": null,
+                "isLoggedIn": true,
+                "gravatarUrl": "https:\/\/www.gravatar.com\/avatar\/7a5c55da08fae356d1064251175ccc34?s=96&d=retro&r=pg",
+                "name": "Nematjon",
+                "profileUrl": "\/102596-nematjon",
+                "isAdmin": false,
+                "useGoogleAnalytics": true,
+                "useSentryErrorReporting": true,
+                "useInspectlet": true,
+                "facebookAppId": "731465336900630"
+            },
+            "settingsViewModel": {"bodyMassUnit": "kg", "liftMassUnit": "kg"}
+        });
+    </script>
+{% endblock %}

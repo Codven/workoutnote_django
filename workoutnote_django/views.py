@@ -70,3 +70,7 @@ def handle_profile_main(request):
 
 def handle_settings(request):
     return render(request=request, template_name='profile/settings.html')
+
+
+def handle_analyse_lift(request):
+    return render(request=request, template_name='profile/analyse lift.html')

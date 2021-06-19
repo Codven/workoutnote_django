@@ -4,18 +4,12 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>kobiljon - Strength Level</title>
-
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     {% load static %}
     <link rel="stylesheet" href="{% static 'profile.css' %}">
-
     <link rel="shortcut icon" href="https://strengthlevel.com/favicon.ico" type="image/x-icon">
-
     <meta property="fb:admins" content="651600295">
     <meta property="fb:app_id" content="731465336900630">
-
     <link rel="apple-touch-icon" sizes="57x57" href="https://strengthlevel.com/images/touch-icon-iphone-114.png">
     <link rel="apple-touch-icon" sizes="114x114" href="https://strengthlevel.com/images/touch-icon-iphone-114.png">
     <link rel="apple-touch-icon" sizes="72x72" href="https://strengthlevel.com/images/touch-icon-ipad-144.png">
@@ -77,9 +71,10 @@
 </head>
 <body data-new-gr-c-s-check-loaded="14.1015.0" data-gr-ext-installed="">
 <nav role="navigation" aria-label="main navigation" class="navbar is-fixed-top is-strengthlevel">
+    {% load static %}
     <div class="navbar-brand">
-        <a href="https://strengthlevel.com/103795-kobiljon" aria-current="page" class="navbar-item">
-            <img alt="Strength Level" src="./profile_files/title-strength-level.svg" width="114" height="28">
+        <a href="{% url 'profile main' %}" aria-current="page" class="navbar-item">
+            <img alt="Strength Level" src="{% static 'deltoid.png' %}" width="50" height="28">
         </a>
         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
             <span aria-hidden="true"></span>
@@ -89,7 +84,7 @@
     </div>
     <div id="navbarBasicExample" class="navbar-menu">
         <div class="navbar-start">
-            <a href="https://strengthlevel.com/103795-kobiljon/workouts" aria-current="page" class="navbar-item ">
+            <a href="{% url 'workouts' %}" aria-current="page" class="navbar-item ">
                 <span class="icon"><i class="slicon slicon-fa-dumbbell"></i></span>
                 <span>Workouts</span>
             </a>
@@ -111,11 +106,11 @@
                     <span>kobiljon</span>
                 </a>
                 <div class="navbar-dropdown is-right">
-                    <a href="https://strengthlevel.com/103795-kobiljon" class="navbar-item">
+                    <a href="{% url 'profile main' %}" class="navbar-item">
                         <span class="icon"><i class="slicon slicon-fa-user"></i></span>
                         <span>My Profile</span>
                     </a>
-                    <a href="https://strengthlevel.com/find-lifters" class="navbar-item ">
+                    <a href="{% url 'find lifters' %}" class="navbar-item ">
                         <span class="icon"><i class="slicon slicon-fa-users"></i></span>
                         <span>Find Lifters</span>
                     </a>
@@ -123,11 +118,11 @@
                         <span class="icon"><i class="slicon slicon-fa-cog"></i></span>
                         <span>Settings</span>
                     </a>
-                    <a href="https://strengthlevel.com/" class="navbar-item">
+                    <a href="{% url 'index' %}" class="navbar-item">
                         <span class="icon"><i class="slicon slicon-fa-external-link-alt"></i></span>
                         <span>Back to Homepage</span>
                     </a>
-                    <a href="https://strengthlevel.com/logout" class="navbar-item">
+                    <a href="{% url 'logout' %}" class="navbar-item">
                         <span class="icon"><i class="slicon slicon-fa-sign-out-alt"></i></span>
                         <span>Sign Out</span>
                     </a>

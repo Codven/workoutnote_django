@@ -1,30 +1,18 @@
 {% extends 'index/base.html' %}
 {% block content %}
     <section class="section">
-        <div class="container is-max-desktop">
-
-            <div class="mobile_sticky_ad mobile_sticky_ad--top">
-                <!-- 71161633/mobile_sticky_footer/mobile_sticky_footer -->
-                <div data-fuse="22025437133" data-fuse-code="fuse-slot-22025437133-1" data-fuse-slot="71161633/STRENGTHLEVEL_strengthlevel/mobile_sticky_footer">
-                    <div id="fuse-slot-22025437133-1" class="fuse-slot" style="display: none;"></div>
-                </div>
-            </div>
-
+        <div class="container">
             {% include 'index/sub authentication header.html' %}
-
             {% include 'index/sub html index navtabs.html' %}
             <script>
                 StrengthLevel.setupNavigation();
             </script>
-            
             <div class="section-box">
                 <h1 class="title is-2 is-size-3-mobile">One Rep Max Calculator</h1>
-
                 <p>
                     Calculate your one-rep max (1RM) for any lift. Your one-rep max is the max weight you can lift
                     for a single repetition for a given exercise.
                 </p>
-
                 <form id="oneRepMaxCalculator" action="https://strengthlevel.com/one-rep-max-calculator" method="post">
                     <div class="field is-horizontal">
                         <div class="field-label is-normal"><label for="liftmass" class="label">

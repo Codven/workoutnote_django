@@ -1,23 +1,12 @@
 {% extends 'index/base.html' %}
 {% block content %}
     <section class="section">
-        <div class="container is-max-desktop">
-
-            <div class="mobile_sticky_ad mobile_sticky_ad--top">
-                <!-- 71161633/mobile_sticky_footer/mobile_sticky_footer -->
-                <div data-fuse="22025437133" data-fuse-code="fuse-slot-22025437133-1" data-fuse-slot="71161633/STRENGTHLEVEL_strengthlevel/mobile_sticky_footer">
-                    <div id="fuse-slot-22025437133-1" class="fuse-slot" style="display: none;"></div>
-                </div>
-            </div>
-
+        <div class="container">
             {% include 'index/sub authentication header.html' %}
-
             {% include 'index/sub html index navtabs.html' %}
             <script>
                 StrengthLevel.setupNavigation();
             </script>
-
-
             <div id="plateContainer">
                 <div class="section-box"><h1 class="title is-2 is-size-3-mobile is-spaced">Plate Barbell Racking Calculator</h1>
                     <h2 class="subtitle is-3 is-size-4-mobile">
@@ -179,7 +168,6 @@
                     </form>
                 </div>
             </div>
-
             <script>
                 StrengthLevel.addPlateCalculator({
                     "liftMass": "",

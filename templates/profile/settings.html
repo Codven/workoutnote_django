@@ -1,0 +1,1419 @@
+{% extends 'profile/base.html' %}
+{% block content %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Get all "navbar-burger" elements
+            const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+            // Check if there are any navbar burgers
+            if ($navbarBurgers.length > 0) {
+
+                // Add a click event on each of them
+                $navbarBurgers.forEach(el => {
+                    el.addEventListener('click', () => {
+
+                        // Get the target from the "data-target" attribute
+                        const target = el.dataset.target;
+                        const $target = document.getElementById(target);
+
+                        // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+                        el.classList.toggle('is-active');
+                        $target.classList.toggle('is-active');
+
+                    });
+                });
+            }
+
+        });
+    </script>
+    <div id="settingsPageContainer">
+        <section class="hero is-primary is-translucent">
+            <div class="hero-body">
+                <div class="container is-max-desktop"><h1 class="title is-2 is-size-3-mobile">
+                    Settings
+                </h1></div>
+            </div>
+        </section>
+        <section class="section has-background-white">
+            <div class="container is-max-desktop"><!----> <!---->
+                <form method="post" action="/settings" class="mt-5"><h2 class="title is-3 is-size-4-mobile">Personal Details</h2>
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal"><label for="name" class="label">Name</label></div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control"><input id="name" name="name" type="text" placeholder="Enter Your Name" minlength="3" maxlength="32" required="required" class="input"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal"><label for="gender" class="label">Gender</label></div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <div class="select is-fullwidth"><select id="gender" name="gender">
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                    </select></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal"><label for="birthday" class="label">Date of Birth</label></div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <div>
+                                        <div class="field is-grouped">
+                                            <div class="control is-expanded"><input id="birthday" type="text" readonly="readonly" placeholder="Select date..." class="input is-clickable"></div>
+                                            <div class="control">
+                                                <button type="button" class="button">Clear</button>
+                                            </div>
+                                        </div>
+                                        <div class="vdp-datepicker" style="display: none;">
+                                            <div class=""><!----> <input type="hidden" open-date="Tue Jan 01 1991 16:42:49 GMT+0600 (Uzbekistan Standard Time)" readonly="readonly" autocomplete="off"
+                                                                         class="input" value="09 Sep 1995"> <!----> </div>
+                                            <div class="is-fullwidth vdp-datepicker__calendar" style="position: static;">
+                                                <header><span class="prev">&lt;</span> <span class="day__month_btn up">Sep 1995</span> <span class="next">&gt;</span></header>
+                                                <div class=""><span class="cell day-header">Sun</span><span class="cell day-header">Mon</span><span class="cell day-header">Tue</span><span
+                                                        class="cell day-header">Wed</span><span class="cell day-header">Thu</span><span class="cell day-header">Fri</span><span class="cell day-header">Sat</span>
+                                                    <span class="cell day blank"></span><span class="cell day blank"></span><span class="cell day blank"></span><span
+                                                            class="cell day blank"></span><span class="cell day blank"></span><span class="cell day">1</span><span class="cell day weekend sat">2</span><span
+                                                            class="cell day weekend sun">3</span><span class="cell day">4</span><span class="cell day">5</span><span class="cell day">6</span><span
+                                                            class="cell day">7</span><span class="cell day">8</span><span class="cell day selected weekend sat">9</span><span
+                                                            class="cell day weekend sun">10</span><span class="cell day">11</span><span class="cell day">12</span><span class="cell day">13</span><span
+                                                            class="cell day">14</span><span class="cell day">15</span><span class="cell day weekend sat">16</span><span
+                                                            class="cell day weekend sun">17</span><span class="cell day">18</span><span class="cell day">19</span><span class="cell day">20</span><span
+                                                            class="cell day">21</span><span class="cell day">22</span><span class="cell day weekend sat">23</span><span
+                                                            class="cell day weekend sun">24</span><span class="cell day">25</span><span class="cell day">26</span><span class="cell day">27</span><span
+                                                            class="cell day">28</span><span class="cell day">29</span><span class="cell day weekend sat">30</span></div>
+                                            </div>
+                                            <div class="is-fullwidth vdp-datepicker__calendar" style="position: static; display: none;">
+                                                <header><span class="prev">&lt;</span> <span class="month__year_btn up">1995</span> <span class="next">&gt;</span></header>
+                                                <span class="cell month">January</span><span class="cell month">February</span><span class="cell month">March</span><span
+                                                    class="cell month">April</span><span class="cell month">May</span><span class="cell month">June</span><span class="cell month">July</span><span
+                                                    class="cell month">August</span><span class="cell month selected">September</span><span class="cell month">October</span><span class="cell month">November</span><span
+                                                    class="cell month">December</span></div>
+                                            <div class="is-fullwidth vdp-datepicker__calendar" style="position: static; display: none;">
+                                                <header><span class="prev">&lt;</span> <span>1990 - 1999</span> <span class="next">&gt;</span></header>
+                                                <span class="cell year">1990</span><span class="cell year">1991</span><span class="cell year">1992</span><span class="cell year">1993</span><span
+                                                    class="cell year">1994</span><span class="cell year selected">1995</span><span class="cell year">1996</span><span class="cell year">1997</span><span
+                                                    class="cell year">1998</span><span class="cell year">1999</span></div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="birthday" value="1995-09-09"></div>
+                                <p class="help">
+                                    We calculate your age from your date of birth and use it to adapt our ratings for your
+                                    lifts.
+                                    You may be stronger than you think!
+                                </p></div>
+                        </div>
+                    </div>
+                    <div id="heightSettings" class="field is-horizontal">
+                        <div class="field-label is-normal"><label for="height" class="label">Height</label></div>
+                        <div class="field-body">
+                            <div class="field has-addons">
+                                <div class="control is-expanded"><input type="number" id="height" name="height" min="1" max="300" step="0.5" class="input"></div>
+                                <div class="control">
+                                    <div class="select"><select id="heightunit" name="heightunit">
+                                        <option>cm</option>
+                                        <option>ft</option>
+                                    </select></div>
+                                </div> <!----></div>
+                        </div>
+                    </div>
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal"><label for="nationality" class="label">Nationality</label></div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <div class="select is-fullwidth"><select id="nationality" name="nationality">
+                                        <option value="" selected="selected">-- Not specified --</option>
+                                        <option value="AF">
+                                            Afghanistan
+                                        </option>
+                                        <option value="AX">
+                                            Åland Islands
+                                        </option>
+                                        <option value="AL">
+                                            Albania
+                                        </option>
+                                        <option value="DZ">
+                                            Algeria
+                                        </option>
+                                        <option value="AS">
+                                            American Samoa
+                                        </option>
+                                        <option value="AD">
+                                            Andorra
+                                        </option>
+                                        <option value="AO">
+                                            Angola
+                                        </option>
+                                        <option value="AI">
+                                            Anguilla
+                                        </option>
+                                        <option value="AQ">
+                                            Antarctica
+                                        </option>
+                                        <option value="AG">
+                                            Antigua &amp; Barbuda
+                                        </option>
+                                        <option value="AR">
+                                            Argentina
+                                        </option>
+                                        <option value="AM">
+                                            Armenia
+                                        </option>
+                                        <option value="AW">
+                                            Aruba
+                                        </option>
+                                        <option value="AC">
+                                            Ascension Island
+                                        </option>
+                                        <option value="AU">
+                                            Australia
+                                        </option>
+                                        <option value="AT">
+                                            Austria
+                                        </option>
+                                        <option value="AZ">
+                                            Azerbaijan
+                                        </option>
+                                        <option value="BS">
+                                            Bahamas
+                                        </option>
+                                        <option value="BH">
+                                            Bahrain
+                                        </option>
+                                        <option value="BD">
+                                            Bangladesh
+                                        </option>
+                                        <option value="BB">
+                                            Barbados
+                                        </option>
+                                        <option value="BY">
+                                            Belarus
+                                        </option>
+                                        <option value="BE">
+                                            Belgium
+                                        </option>
+                                        <option value="BZ">
+                                            Belize
+                                        </option>
+                                        <option value="BJ">
+                                            Benin
+                                        </option>
+                                        <option value="BM">
+                                            Bermuda
+                                        </option>
+                                        <option value="BT">
+                                            Bhutan
+                                        </option>
+                                        <option value="BO">
+                                            Bolivia
+                                        </option>
+                                        <option value="BA">
+                                            Bosnia &amp; Herzegovina
+                                        </option>
+                                        <option value="BW">
+                                            Botswana
+                                        </option>
+                                        <option value="BR">
+                                            Brazil
+                                        </option>
+                                        <option value="IO">
+                                            British Indian Ocean Territory
+                                        </option>
+                                        <option value="VG">
+                                            British Virgin Islands
+                                        </option>
+                                        <option value="BN">
+                                            Brunei
+                                        </option>
+                                        <option value="BG">
+                                            Bulgaria
+                                        </option>
+                                        <option value="BF">
+                                            Burkina Faso
+                                        </option>
+                                        <option value="BI">
+                                            Burundi
+                                        </option>
+                                        <option value="KH">
+                                            Cambodia
+                                        </option>
+                                        <option value="CM">
+                                            Cameroon
+                                        </option>
+                                        <option value="CA">
+                                            Canada
+                                        </option>
+                                        <option value="IC">
+                                            Canary Islands
+                                        </option>
+                                        <option value="CV">
+                                            Cape Verde
+                                        </option>
+                                        <option value="BQ">
+                                            Caribbean Netherlands
+                                        </option>
+                                        <option value="KY">
+                                            Cayman Islands
+                                        </option>
+                                        <option value="CF">
+                                            Central African Republic
+                                        </option>
+                                        <option value="EA">
+                                            Ceuta &amp; Melilla
+                                        </option>
+                                        <option value="TD">
+                                            Chad
+                                        </option>
+                                        <option value="CL">
+                                            Chile
+                                        </option>
+                                        <option value="CN">
+                                            China
+                                        </option>
+                                        <option value="CX">
+                                            Christmas Island
+                                        </option>
+                                        <option value="CC">
+                                            Cocos (Keeling) Islands
+                                        </option>
+                                        <option value="CO">
+                                            Colombia
+                                        </option>
+                                        <option value="KM">
+                                            Comoros
+                                        </option>
+                                        <option value="CG">
+                                            Congo - Brazzaville
+                                        </option>
+                                        <option value="CD">
+                                            Congo - Kinshasa
+                                        </option>
+                                        <option value="CK">
+                                            Cook Islands
+                                        </option>
+                                        <option value="CR">
+                                            Costa Rica
+                                        </option>
+                                        <option value="CI">
+                                            Côte d’Ivoire
+                                        </option>
+                                        <option value="HR">
+                                            Croatia
+                                        </option>
+                                        <option value="CU">
+                                            Cuba
+                                        </option>
+                                        <option value="CW">
+                                            Curaçao
+                                        </option>
+                                        <option value="CY">
+                                            Cyprus
+                                        </option>
+                                        <option value="CZ">
+                                            Czech Republic
+                                        </option>
+                                        <option value="DK">
+                                            Denmark
+                                        </option>
+                                        <option value="DG">
+                                            Diego Garcia
+                                        </option>
+                                        <option value="DJ">
+                                            Djibouti
+                                        </option>
+                                        <option value="DM">
+                                            Dominica
+                                        </option>
+                                        <option value="DO">
+                                            Dominican Republic
+                                        </option>
+                                        <option value="EC">
+                                            Ecuador
+                                        </option>
+                                        <option value="EG">
+                                            Egypt
+                                        </option>
+                                        <option value="SV">
+                                            El Salvador
+                                        </option>
+                                        <option value="GQ">
+                                            Equatorial Guinea
+                                        </option>
+                                        <option value="ER">
+                                            Eritrea
+                                        </option>
+                                        <option value="EE">
+                                            Estonia
+                                        </option>
+                                        <option value="ET">
+                                            Ethiopia
+                                        </option>
+                                        <option value="FK">
+                                            Falkland Islands
+                                        </option>
+                                        <option value="FO">
+                                            Faroe Islands
+                                        </option>
+                                        <option value="FJ">
+                                            Fiji
+                                        </option>
+                                        <option value="FI">
+                                            Finland
+                                        </option>
+                                        <option value="FR">
+                                            France
+                                        </option>
+                                        <option value="GF">
+                                            French Guiana
+                                        </option>
+                                        <option value="PF">
+                                            French Polynesia
+                                        </option>
+                                        <option value="TF">
+                                            French Southern Territories
+                                        </option>
+                                        <option value="GA">
+                                            Gabon
+                                        </option>
+                                        <option value="GM">
+                                            Gambia
+                                        </option>
+                                        <option value="GE">
+                                            Georgia
+                                        </option>
+                                        <option value="DE">
+                                            Germany
+                                        </option>
+                                        <option value="GH">
+                                            Ghana
+                                        </option>
+                                        <option value="GI">
+                                            Gibraltar
+                                        </option>
+                                        <option value="GR">
+                                            Greece
+                                        </option>
+                                        <option value="GL">
+                                            Greenland
+                                        </option>
+                                        <option value="GD">
+                                            Grenada
+                                        </option>
+                                        <option value="GP">
+                                            Guadeloupe
+                                        </option>
+                                        <option value="GU">
+                                            Guam
+                                        </option>
+                                        <option value="GT">
+                                            Guatemala
+                                        </option>
+                                        <option value="GG">
+                                            Guernsey
+                                        </option>
+                                        <option value="GN">
+                                            Guinea
+                                        </option>
+                                        <option value="GW">
+                                            Guinea-Bissau
+                                        </option>
+                                        <option value="GY">
+                                            Guyana
+                                        </option>
+                                        <option value="HT">
+                                            Haiti
+                                        </option>
+                                        <option value="HN">
+                                            Honduras
+                                        </option>
+                                        <option value="HK">
+                                            Hong Kong SAR China
+                                        </option>
+                                        <option value="HU">
+                                            Hungary
+                                        </option>
+                                        <option value="IS">
+                                            Iceland
+                                        </option>
+                                        <option value="IN">
+                                            India
+                                        </option>
+                                        <option value="ID">
+                                            Indonesia
+                                        </option>
+                                        <option value="IR">
+                                            Iran
+                                        </option>
+                                        <option value="IQ">
+                                            Iraq
+                                        </option>
+                                        <option value="IE">
+                                            Ireland
+                                        </option>
+                                        <option value="IM">
+                                            Isle of Man
+                                        </option>
+                                        <option value="IL">
+                                            Israel
+                                        </option>
+                                        <option value="IT">
+                                            Italy
+                                        </option>
+                                        <option value="JM">
+                                            Jamaica
+                                        </option>
+                                        <option value="JP">
+                                            Japan
+                                        </option>
+                                        <option value="JE">
+                                            Jersey
+                                        </option>
+                                        <option value="JO">
+                                            Jordan
+                                        </option>
+                                        <option value="KZ">
+                                            Kazakhstan
+                                        </option>
+                                        <option value="KE">
+                                            Kenya
+                                        </option>
+                                        <option value="KI">
+                                            Kiribati
+                                        </option>
+                                        <option value="XK">
+                                            Kosovo
+                                        </option>
+                                        <option value="KW">
+                                            Kuwait
+                                        </option>
+                                        <option value="KG">
+                                            Kyrgyzstan
+                                        </option>
+                                        <option value="LA">
+                                            Laos
+                                        </option>
+                                        <option value="LV">
+                                            Latvia
+                                        </option>
+                                        <option value="LB">
+                                            Lebanon
+                                        </option>
+                                        <option value="LS">
+                                            Lesotho
+                                        </option>
+                                        <option value="LR">
+                                            Liberia
+                                        </option>
+                                        <option value="LY">
+                                            Libya
+                                        </option>
+                                        <option value="LI">
+                                            Liechtenstein
+                                        </option>
+                                        <option value="LT">
+                                            Lithuania
+                                        </option>
+                                        <option value="LU">
+                                            Luxembourg
+                                        </option>
+                                        <option value="MO">
+                                            Macau SAR China
+                                        </option>
+                                        <option value="MK">
+                                            Macedonia
+                                        </option>
+                                        <option value="MG">
+                                            Madagascar
+                                        </option>
+                                        <option value="MW">
+                                            Malawi
+                                        </option>
+                                        <option value="MY">
+                                            Malaysia
+                                        </option>
+                                        <option value="MV">
+                                            Maldives
+                                        </option>
+                                        <option value="ML">
+                                            Mali
+                                        </option>
+                                        <option value="MT">
+                                            Malta
+                                        </option>
+                                        <option value="MH">
+                                            Marshall Islands
+                                        </option>
+                                        <option value="MQ">
+                                            Martinique
+                                        </option>
+                                        <option value="MR">
+                                            Mauritania
+                                        </option>
+                                        <option value="MU">
+                                            Mauritius
+                                        </option>
+                                        <option value="YT">
+                                            Mayotte
+                                        </option>
+                                        <option value="MX">
+                                            Mexico
+                                        </option>
+                                        <option value="FM">
+                                            Micronesia
+                                        </option>
+                                        <option value="MD">
+                                            Moldova
+                                        </option>
+                                        <option value="MC">
+                                            Monaco
+                                        </option>
+                                        <option value="MN">
+                                            Mongolia
+                                        </option>
+                                        <option value="ME">
+                                            Montenegro
+                                        </option>
+                                        <option value="MS">
+                                            Montserrat
+                                        </option>
+                                        <option value="MA">
+                                            Morocco
+                                        </option>
+                                        <option value="MZ">
+                                            Mozambique
+                                        </option>
+                                        <option value="MM">
+                                            Myanmar (Burma)
+                                        </option>
+                                        <option value="NA">
+                                            Namibia
+                                        </option>
+                                        <option value="NR">
+                                            Nauru
+                                        </option>
+                                        <option value="NP">
+                                            Nepal
+                                        </option>
+                                        <option value="NL">
+                                            Netherlands
+                                        </option>
+                                        <option value="NC">
+                                            New Caledonia
+                                        </option>
+                                        <option value="NZ">
+                                            New Zealand
+                                        </option>
+                                        <option value="NI">
+                                            Nicaragua
+                                        </option>
+                                        <option value="NE">
+                                            Niger
+                                        </option>
+                                        <option value="NG">
+                                            Nigeria
+                                        </option>
+                                        <option value="NU">
+                                            Niue
+                                        </option>
+                                        <option value="NF">
+                                            Norfolk Island
+                                        </option>
+                                        <option value="KP">
+                                            North Korea
+                                        </option>
+                                        <option value="MP">
+                                            Northern Mariana Islands
+                                        </option>
+                                        <option value="NO">
+                                            Norway
+                                        </option>
+                                        <option value="OM">
+                                            Oman
+                                        </option>
+                                        <option value="PK">
+                                            Pakistan
+                                        </option>
+                                        <option value="PW">
+                                            Palau
+                                        </option>
+                                        <option value="PS">
+                                            Palestinian Territories
+                                        </option>
+                                        <option value="PA">
+                                            Panama
+                                        </option>
+                                        <option value="PG">
+                                            Papua New Guinea
+                                        </option>
+                                        <option value="PY">
+                                            Paraguay
+                                        </option>
+                                        <option value="PE">
+                                            Peru
+                                        </option>
+                                        <option value="PH">
+                                            Philippines
+                                        </option>
+                                        <option value="PN">
+                                            Pitcairn Islands
+                                        </option>
+                                        <option value="PL">
+                                            Poland
+                                        </option>
+                                        <option value="PT">
+                                            Portugal
+                                        </option>
+                                        <option value="PR">
+                                            Puerto Rico
+                                        </option>
+                                        <option value="QA">
+                                            Qatar
+                                        </option>
+                                        <option value="RE">
+                                            Réunion
+                                        </option>
+                                        <option value="RO">
+                                            Romania
+                                        </option>
+                                        <option value="RU">
+                                            Russia
+                                        </option>
+                                        <option value="RW">
+                                            Rwanda
+                                        </option>
+                                        <option value="WS">
+                                            Samoa
+                                        </option>
+                                        <option value="SM">
+                                            San Marino
+                                        </option>
+                                        <option value="ST">
+                                            São Tomé &amp; Príncipe
+                                        </option>
+                                        <option value="SA">
+                                            Saudi Arabia
+                                        </option>
+                                        <option value="SN">
+                                            Senegal
+                                        </option>
+                                        <option value="RS">
+                                            Serbia
+                                        </option>
+                                        <option value="SC">
+                                            Seychelles
+                                        </option>
+                                        <option value="SL">
+                                            Sierra Leone
+                                        </option>
+                                        <option value="SG">
+                                            Singapore
+                                        </option>
+                                        <option value="SX">
+                                            Sint Maarten
+                                        </option>
+                                        <option value="SK">
+                                            Slovakia
+                                        </option>
+                                        <option value="SI">
+                                            Slovenia
+                                        </option>
+                                        <option value="SB">
+                                            Solomon Islands
+                                        </option>
+                                        <option value="SO">
+                                            Somalia
+                                        </option>
+                                        <option value="ZA">
+                                            South Africa
+                                        </option>
+                                        <option value="GS">
+                                            South Georgia &amp; South Sandwich Islands
+                                        </option>
+                                        <option value="KR">
+                                            South Korea
+                                        </option>
+                                        <option value="SS">
+                                            South Sudan
+                                        </option>
+                                        <option value="ES">
+                                            Spain
+                                        </option>
+                                        <option value="LK">
+                                            Sri Lanka
+                                        </option>
+                                        <option value="BL">
+                                            St. Barthélemy
+                                        </option>
+                                        <option value="SH">
+                                            St. Helena
+                                        </option>
+                                        <option value="KN">
+                                            St. Kitts &amp; Nevis
+                                        </option>
+                                        <option value="LC">
+                                            St. Lucia
+                                        </option>
+                                        <option value="MF">
+                                            St. Martin
+                                        </option>
+                                        <option value="PM">
+                                            St. Pierre &amp; Miquelon
+                                        </option>
+                                        <option value="VC">
+                                            St. Vincent &amp; Grenadines
+                                        </option>
+                                        <option value="SD">
+                                            Sudan
+                                        </option>
+                                        <option value="SR">
+                                            Suriname
+                                        </option>
+                                        <option value="SJ">
+                                            Svalbard &amp; Jan Mayen
+                                        </option>
+                                        <option value="SZ">
+                                            Swaziland
+                                        </option>
+                                        <option value="SE">
+                                            Sweden
+                                        </option>
+                                        <option value="CH">
+                                            Switzerland
+                                        </option>
+                                        <option value="SY">
+                                            Syria
+                                        </option>
+                                        <option value="TW">
+                                            Taiwan
+                                        </option>
+                                        <option value="TJ">
+                                            Tajikistan
+                                        </option>
+                                        <option value="TZ">
+                                            Tanzania
+                                        </option>
+                                        <option value="TH">
+                                            Thailand
+                                        </option>
+                                        <option value="TL">
+                                            Timor-Leste
+                                        </option>
+                                        <option value="TG">
+                                            Togo
+                                        </option>
+                                        <option value="TK">
+                                            Tokelau
+                                        </option>
+                                        <option value="TO">
+                                            Tonga
+                                        </option>
+                                        <option value="TT">
+                                            Trinidad &amp; Tobago
+                                        </option>
+                                        <option value="TA">
+                                            Tristan da Cunha
+                                        </option>
+                                        <option value="TN">
+                                            Tunisia
+                                        </option>
+                                        <option value="TR">
+                                            Turkey
+                                        </option>
+                                        <option value="TM">
+                                            Turkmenistan
+                                        </option>
+                                        <option value="TC">
+                                            Turks &amp; Caicos Islands
+                                        </option>
+                                        <option value="TV">
+                                            Tuvalu
+                                        </option>
+                                        <option value="UM">
+                                            U.S. Outlying Islands
+                                        </option>
+                                        <option value="VI">
+                                            U.S. Virgin Islands
+                                        </option>
+                                        <option value="UG">
+                                            Uganda
+                                        </option>
+                                        <option value="UA">
+                                            Ukraine
+                                        </option>
+                                        <option value="AE">
+                                            United Arab Emirates
+                                        </option>
+                                        <option value="GB">
+                                            United Kingdom
+                                        </option>
+                                        <option value="US">
+                                            United States
+                                        </option>
+                                        <option value="UY">
+                                            Uruguay
+                                        </option>
+                                        <option value="UZ">
+                                            Uzbekistan
+                                        </option>
+                                        <option value="VU">
+                                            Vanuatu
+                                        </option>
+                                        <option value="VA">
+                                            Vatican City
+                                        </option>
+                                        <option value="VE">
+                                            Venezuela
+                                        </option>
+                                        <option value="VN">
+                                            Vietnam
+                                        </option>
+                                        <option value="WF">
+                                            Wallis &amp; Futuna
+                                        </option>
+                                        <option value="EH">
+                                            Western Sahara
+                                        </option>
+                                        <option value="YE">
+                                            Yemen
+                                        </option>
+                                        <option value="ZM">
+                                            Zambia
+                                        </option>
+                                        <option value="ZW">
+                                            Zimbabwe
+                                        </option>
+                                    </select></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal"></div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <button type="submit" class="button is-primary">Update Profile</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <form id="profilePhoto" method="post" action="/settings" class="mt-5"><h2 class="title is-3 is-size-4-mobile">Profile Photo</h2>
+                    <div class="columns">
+                        <div class="column is-one-fifth">
+                            <figure class="image is-128x128"><!----> <img src="https://www.gravatar.com/avatar/7a5c55da08fae356d1064251175ccc34?s=256&amp;d=retro&amp;r=pg" width="128" height="128"
+                                                                          class="is-rounded"></figure>
+                        </div>
+                        <div class="column">
+                            <div class="field">
+                                <div class="control"><label class="radio"><input type="radio" name="avatarStyle" value="email">
+                                    Show Gravatar
+                                </label>
+                                    <p class="help">
+                                        Follow this link to <a href="https://gravatar.com/">change the Gravatar photo</a>
+                                        for your email address
+                                        <!----></p></div>
+                            </div>
+                            <div class="field">
+                                <div class="control"><label class="radio"><input type="radio" name="avatarStyle" value="random">
+                                    Show random pattern
+                                </label></div>
+                            </div>
+                            <div class="field">
+                                <div class="control">
+                                    <button type="submit" name="updateProfilePhoto" class="button is-primary">
+                                        Update Profile Photo
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <form id="profileSharing" method="post" action="/settings" class="mt-5"><h2 class="title is-3 is-size-4-mobile">Sharing Settings</h2>
+                    <div class="field">
+                        <div>
+                            <div class="field">
+                                <div class="control"><label class="radio"><input type="radio" name="share" value="public">
+                                    Share my profile with everyone
+                                </label>
+                                    <p class="help">
+                                        Anyone can see your workout progress, similar to Bodybuilding.com's BodySpace
+                                    </p></div>
+                            </div>
+                            <div class="field">
+                                <div class="control"><label class="radio"><input type="radio" name="share" value="site">
+                                    Share my profile with Strength Level users
+                                </label>
+                                    <p class="help">
+                                        You can compete with other lifters on Strength Level but your profile
+                                        will not be visible on the internet
+                                    </p></div>
+                            </div>
+                            <div class="field">
+                                <div class="control"><label class="radio"><input type="radio" name="share" value="friends">
+                                    Do not share my profile
+                                </label>
+                                    <p class="help">
+                                        This means you will not be able to compete with other lifters
+                                    </p></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <button type="submit" class="button is-primary">Update Sharing Settings</button>
+                        </div>
+                    </div>
+                </form>
+                <form method="post" action="/settings" class="mt-5"><h2 class="title is-3 is-size-4-mobile">Units of Measure</h2>
+                    <div class="field">
+                        <div>
+                            <div class="field">
+                                <div class="control"><label class="radio"><input type="radio" name="unit" value="lb">
+                                    Use <strong>pounds (lb)</strong> for both body weight and lift weight
+                                </label></div>
+                            </div>
+                            <div class="field">
+                                <div class="control"><label class="radio"><input type="radio" name="unit" value="kg">
+                                    Use <strong>kilograms (kg)</strong> for both body weight and lift weight
+                                </label></div>
+                            </div>
+                            <div class="field">
+                                <div class="control"><label class="radio"><input type="radio" name="unit" value="st">
+                                    Use <strong>stone (st)</strong> for body weight and <strong>kilograms (kg)</strong> for lift
+                                    weight (UK &amp; Ireland)
+                                </label></div>
+                            </div>
+                        </div>
+                    </div>
+                    <a id="setEmailSection"></a>
+                    <div class="field">
+                        <div class="control">
+                            <button type="submit" class="button is-primary">Update Unit Settings</button>
+                        </div>
+                    </div>
+                </form>
+                <form method="post" action="/settings" class="mt-5"><h2 class="title is-3 is-size-4-mobile">Account Email</h2>
+                    <div class="field"><label for="email" class="label">
+                        Email <!----></label>
+                        <div class="control"><input name="email" id="email" type="email" placeholder="Email" required="required" class="input"></div>
+                    </div>
+                    <a id="setPasswordSection"></a>
+                    <div class="buttons">
+                        <button type="submit" name="changeemail" class="button is-primary">Change Email</button> <!----></div>
+                </form>
+                <form method="post" action="/settings" class="mt-5"><h2 class="title is-3 is-size-4-mobile">Change Password</h2>
+                    <div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal"><label for="oldPassword" class="label">Old Password</label></div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control"><input name="oldpassword" id="oldPassword" type="password" required="required" class="input"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal"><label for="newPassword" class="label">New Password</label></div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control"><input name="newpassword" id="newPassword" type="password" required="required" class="input"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal"><label for="repeatPassword" class="label">Repeat Password</label></div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control"><input name="repeatpassword" id="repeatPassword" type="password" required="required" class="input"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal"></div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <button type="submit" class="button is-primary">Change Password</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <form method="post" action="/settings" class="mt-5"><h2 class="title is-3 is-size-4-mobile is-spaced">Connected Accounts</h2>
+                    <h3 class="subtitle is-4 is-size-5-mobile">Facebook Account</h3>
+                    <div class="content"><p>You are not linked to a Facebook account.</p>
+                        <p>If you add a Facebook account, then you can login using Facebook with one click instead of an
+                            email/password.</p></div>
+                    <div class="field">
+                        <div class="control"><a
+                                href="https://www.facebook.com/v2.10/dialog/oauth?client_id=731465336900630&amp;state=15d07fddd91659197923fc0f37735c82&amp;response_type=code&amp;sdk=php-sdk-5.7.0&amp;redirect_uri=https%3A%2F%2Fstrengthlevel.com%2Ffacebook-link&amp;scope=email%2Cuser_friends%2Cuser_gender"
+                                class="button is-facebook"><span class="icon"><i class="slicon slicon-fa-facebook-square"></i></span> <span>Add Facebook Account</span></a></div>
+                    </div>
+                </form>
+                <form method="post" action="/settings" class="mt-5"><h2 class="title is-3 is-size-4-mobile">Training Archive</h2>
+                    <div class="content"><p>
+                        Archive lifts older than this date so they aren't included in your statistics. This is a better
+                        option
+                        than creating a new account if you have a long break. You can still browse archived lifts as
+                        normal but
+                        your
+                        level and achievements will only be calculated on or after this date.
+                    </p></div>
+                    <div class="field"><label for="archive_date" class="label">Archive Date</label>
+                        <div class="control">
+                            <div>
+                                <div class="field is-grouped">
+                                    <div class="control is-expanded"><input id="archive_date" type="text" readonly="readonly" placeholder="Select date..." class="input is-clickable"></div>
+                                    <div class="control">
+                                        <button type="button" class="button">Clear</button>
+                                    </div>
+                                </div>
+                                <div class="vdp-datepicker" style="display: none;">
+                                    <div class=""><!----> <input type="hidden" readonly="readonly" autocomplete="off" class="input"> <!----> </div>
+                                    <div class="is-fullwidth vdp-datepicker__calendar" style="position: static;">
+                                        <header><span class="prev">&lt;</span> <span class="day__month_btn up">Jun 2021</span> <span class="next disabled">&gt;</span></header>
+                                        <div class=""><span class="cell day-header">Sun</span><span class="cell day-header">Mon</span><span class="cell day-header">Tue</span><span
+                                                class="cell day-header">Wed</span><span class="cell day-header">Thu</span><span class="cell day-header">Fri</span><span
+                                                class="cell day-header">Sat</span> <span class="cell day blank"></span><span class="cell day blank"></span><span class="cell day">1</span><span
+                                                class="cell day">2</span><span class="cell day">3</span><span class="cell day">4</span><span class="cell day weekend sat">5</span><span
+                                                class="cell day weekend sun">6</span><span class="cell day">7</span><span class="cell day">8</span><span class="cell day">9</span><span
+                                                class="cell day">10</span><span class="cell day">11</span><span class="cell day weekend sat">12</span><span class="cell day weekend sun">13</span><span
+                                                class="cell day">14</span><span class="cell day">15</span><span class="cell day">16</span><span class="cell day">17</span><span
+                                                class="cell day">18</span><span class="cell day today weekend sat">19</span><span class="cell day disabled weekend sun">20</span><span
+                                                class="cell day disabled">21</span><span class="cell day disabled">22</span><span class="cell day disabled">23</span><span
+                                                class="cell day disabled">24</span><span class="cell day disabled">25</span><span class="cell day disabled weekend sat">26</span><span
+                                                class="cell day disabled weekend sun">27</span><span class="cell day disabled">28</span><span class="cell day disabled">29</span><span
+                                                class="cell day disabled">30</span></div>
+                                    </div>
+                                    <div class="is-fullwidth vdp-datepicker__calendar" style="position: static; display: none;">
+                                        <header><span class="prev">&lt;</span> <span class="month__year_btn up">2021</span> <span class="next disabled">&gt;</span></header>
+                                        <span class="cell month">January</span><span class="cell month">February</span><span class="cell month">March</span><span class="cell month">April</span><span
+                                            class="cell month">May</span><span class="cell month">June</span><span class="cell month disabled">July</span><span
+                                            class="cell month disabled">August</span><span class="cell month disabled">September</span><span class="cell month disabled">October</span><span
+                                            class="cell month disabled">November</span><span class="cell month disabled">December</span></div>
+                                    <div class="is-fullwidth vdp-datepicker__calendar" style="position: static; display: none;">
+                                        <header><span class="prev">&lt;</span> <span>2020 - 2029</span> <span class="next disabled">&gt;</span></header>
+                                        <span class="cell year">2020</span><span class="cell year">2021</span><span class="cell year disabled">2022</span><span
+                                            class="cell year disabled">2023</span><span class="cell year disabled">2024</span><span class="cell year disabled">2025</span><span
+                                            class="cell year disabled">2026</span><span class="cell year disabled">2027</span><span class="cell year disabled">2028</span><span
+                                            class="cell year disabled">2029</span></div>
+                                </div>
+                            </div>
+                            <input type="hidden" name="trainingArchiveDate"></div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <button type="submit" name="trainingArchiveSet" class="button is-primary">
+                                Set Archive Date
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+    <script>
+        StrengthLevel.setupSettingsPage({
+            "updates": [],
+            "responses": [],
+            "name": "Nematjon",
+            "gender": "male",
+            "email": "nnarziev@gmail.com",
+            "emailConfirmed": true,
+            "birthday": "1995-09-09",
+            "heightViewModel": {"quantity": 169, "symbol": "cm", "step": 0.1, "remainderQuantity": null, "remainderSymbol": null, "remainderStep": null},
+            "countries": {
+                "AF": "Afghanistan",
+                "AX": "\u00c5land Islands",
+                "AL": "Albania",
+                "DZ": "Algeria",
+                "AS": "American Samoa",
+                "AD": "Andorra",
+                "AO": "Angola",
+                "AI": "Anguilla",
+                "AQ": "Antarctica",
+                "AG": "Antigua & Barbuda",
+                "AR": "Argentina",
+                "AM": "Armenia",
+                "AW": "Aruba",
+                "AC": "Ascension Island",
+                "AU": "Australia",
+                "AT": "Austria",
+                "AZ": "Azerbaijan",
+                "BS": "Bahamas",
+                "BH": "Bahrain",
+                "BD": "Bangladesh",
+                "BB": "Barbados",
+                "BY": "Belarus",
+                "BE": "Belgium",
+                "BZ": "Belize",
+                "BJ": "Benin",
+                "BM": "Bermuda",
+                "BT": "Bhutan",
+                "BO": "Bolivia",
+                "BA": "Bosnia & Herzegovina",
+                "BW": "Botswana",
+                "BR": "Brazil",
+                "IO": "British Indian Ocean Territory",
+                "VG": "British Virgin Islands",
+                "BN": "Brunei",
+                "BG": "Bulgaria",
+                "BF": "Burkina Faso",
+                "BI": "Burundi",
+                "KH": "Cambodia",
+                "CM": "Cameroon",
+                "CA": "Canada",
+                "IC": "Canary Islands",
+                "CV": "Cape Verde",
+                "BQ": "Caribbean Netherlands",
+                "KY": "Cayman Islands",
+                "CF": "Central African Republic",
+                "EA": "Ceuta & Melilla",
+                "TD": "Chad",
+                "CL": "Chile",
+                "CN": "China",
+                "CX": "Christmas Island",
+                "CC": "Cocos (Keeling) Islands",
+                "CO": "Colombia",
+                "KM": "Comoros",
+                "CG": "Congo - Brazzaville",
+                "CD": "Congo - Kinshasa",
+                "CK": "Cook Islands",
+                "CR": "Costa Rica",
+                "CI": "C\u00f4te d\u2019Ivoire",
+                "HR": "Croatia",
+                "CU": "Cuba",
+                "CW": "Cura\u00e7ao",
+                "CY": "Cyprus",
+                "CZ": "Czech Republic",
+                "DK": "Denmark",
+                "DG": "Diego Garcia",
+                "DJ": "Djibouti",
+                "DM": "Dominica",
+                "DO": "Dominican Republic",
+                "EC": "Ecuador",
+                "EG": "Egypt",
+                "SV": "El Salvador",
+                "GQ": "Equatorial Guinea",
+                "ER": "Eritrea",
+                "EE": "Estonia",
+                "ET": "Ethiopia",
+                "FK": "Falkland Islands",
+                "FO": "Faroe Islands",
+                "FJ": "Fiji",
+                "FI": "Finland",
+                "FR": "France",
+                "GF": "French Guiana",
+                "PF": "French Polynesia",
+                "TF": "French Southern Territories",
+                "GA": "Gabon",
+                "GM": "Gambia",
+                "GE": "Georgia",
+                "DE": "Germany",
+                "GH": "Ghana",
+                "GI": "Gibraltar",
+                "GR": "Greece",
+                "GL": "Greenland",
+                "GD": "Grenada",
+                "GP": "Guadeloupe",
+                "GU": "Guam",
+                "GT": "Guatemala",
+                "GG": "Guernsey",
+                "GN": "Guinea",
+                "GW": "Guinea-Bissau",
+                "GY": "Guyana",
+                "HT": "Haiti",
+                "HN": "Honduras",
+                "HK": "Hong Kong SAR China",
+                "HU": "Hungary",
+                "IS": "Iceland",
+                "IN": "India",
+                "ID": "Indonesia",
+                "IR": "Iran",
+                "IQ": "Iraq",
+                "IE": "Ireland",
+                "IM": "Isle of Man",
+                "IL": "Israel",
+                "IT": "Italy",
+                "JM": "Jamaica",
+                "JP": "Japan",
+                "JE": "Jersey",
+                "JO": "Jordan",
+                "KZ": "Kazakhstan",
+                "KE": "Kenya",
+                "KI": "Kiribati",
+                "XK": "Kosovo",
+                "KW": "Kuwait",
+                "KG": "Kyrgyzstan",
+                "LA": "Laos",
+                "LV": "Latvia",
+                "LB": "Lebanon",
+                "LS": "Lesotho",
+                "LR": "Liberia",
+                "LY": "Libya",
+                "LI": "Liechtenstein",
+                "LT": "Lithuania",
+                "LU": "Luxembourg",
+                "MO": "Macau SAR China",
+                "MK": "Macedonia",
+                "MG": "Madagascar",
+                "MW": "Malawi",
+                "MY": "Malaysia",
+                "MV": "Maldives",
+                "ML": "Mali",
+                "MT": "Malta",
+                "MH": "Marshall Islands",
+                "MQ": "Martinique",
+                "MR": "Mauritania",
+                "MU": "Mauritius",
+                "YT": "Mayotte",
+                "MX": "Mexico",
+                "FM": "Micronesia",
+                "MD": "Moldova",
+                "MC": "Monaco",
+                "MN": "Mongolia",
+                "ME": "Montenegro",
+                "MS": "Montserrat",
+                "MA": "Morocco",
+                "MZ": "Mozambique",
+                "MM": "Myanmar (Burma)",
+                "NA": "Namibia",
+                "NR": "Nauru",
+                "NP": "Nepal",
+                "NL": "Netherlands",
+                "NC": "New Caledonia",
+                "NZ": "New Zealand",
+                "NI": "Nicaragua",
+                "NE": "Niger",
+                "NG": "Nigeria",
+                "NU": "Niue",
+                "NF": "Norfolk Island",
+                "KP": "North Korea",
+                "MP": "Northern Mariana Islands",
+                "NO": "Norway",
+                "OM": "Oman",
+                "PK": "Pakistan",
+                "PW": "Palau",
+                "PS": "Palestinian Territories",
+                "PA": "Panama",
+                "PG": "Papua New Guinea",
+                "PY": "Paraguay",
+                "PE": "Peru",
+                "PH": "Philippines",
+                "PN": "Pitcairn Islands",
+                "PL": "Poland",
+                "PT": "Portugal",
+                "PR": "Puerto Rico",
+                "QA": "Qatar",
+                "RE": "R\u00e9union",
+                "RO": "Romania",
+                "RU": "Russia",
+                "RW": "Rwanda",
+                "WS": "Samoa",
+                "SM": "San Marino",
+                "ST": "S\u00e3o Tom\u00e9 & Pr\u00edncipe",
+                "SA": "Saudi Arabia",
+                "SN": "Senegal",
+                "RS": "Serbia",
+                "SC": "Seychelles",
+                "SL": "Sierra Leone",
+                "SG": "Singapore",
+                "SX": "Sint Maarten",
+                "SK": "Slovakia",
+                "SI": "Slovenia",
+                "SB": "Solomon Islands",
+                "SO": "Somalia",
+                "ZA": "South Africa",
+                "GS": "South Georgia & South Sandwich Islands",
+                "KR": "South Korea",
+                "SS": "South Sudan",
+                "ES": "Spain",
+                "LK": "Sri Lanka",
+                "BL": "St. Barth\u00e9lemy",
+                "SH": "St. Helena",
+                "KN": "St. Kitts & Nevis",
+                "LC": "St. Lucia",
+                "MF": "St. Martin",
+                "PM": "St. Pierre & Miquelon",
+                "VC": "St. Vincent & Grenadines",
+                "SD": "Sudan",
+                "SR": "Suriname",
+                "SJ": "Svalbard & Jan Mayen",
+                "SZ": "Swaziland",
+                "SE": "Sweden",
+                "CH": "Switzerland",
+                "SY": "Syria",
+                "TW": "Taiwan",
+                "TJ": "Tajikistan",
+                "TZ": "Tanzania",
+                "TH": "Thailand",
+                "TL": "Timor-Leste",
+                "TG": "Togo",
+                "TK": "Tokelau",
+                "TO": "Tonga",
+                "TT": "Trinidad & Tobago",
+                "TA": "Tristan da Cunha",
+                "TN": "Tunisia",
+                "TR": "Turkey",
+                "TM": "Turkmenistan",
+                "TC": "Turks & Caicos Islands",
+                "TV": "Tuvalu",
+                "UM": "U.S. Outlying Islands",
+                "VI": "U.S. Virgin Islands",
+                "UG": "Uganda",
+                "UA": "Ukraine",
+                "AE": "United Arab Emirates",
+                "GB": "United Kingdom",
+                "US": "United States",
+                "UY": "Uruguay",
+                "UZ": "Uzbekistan",
+                "VU": "Vanuatu",
+                "VA": "Vatican City",
+                "VE": "Venezuela",
+                "VN": "Vietnam",
+                "WF": "Wallis & Futuna",
+                "EH": "Western Sahara",
+                "YE": "Yemen",
+                "ZM": "Zambia",
+                "ZW": "Zimbabwe"
+            },
+            "nationality": null,
+            "avatarStyle": "random",
+            "emailGravatarUrl": "https:\/\/www.gravatar.com\/avatar\/b5f3fefaddf5f73766eabd81d3084a31?s=256&d=mm&r=pg",
+            "randomGravatarUrl": "https:\/\/www.gravatar.com\/avatar\/7a5c55da08fae356d1064251175ccc34?s=256&d=retro&r=pg",
+            "share": "public",
+            "bodyMassUnit": "kg",
+            "hasPassword": true,
+            "facebookId": null,
+            "facebookLinkUrl": "https:\/\/www.facebook.com\/v2.10\/dialog\/oauth?client_id=731465336900630&state=15d07fddd91659197923fc0f37735c82&response_type=code&sdk=php-sdk-5.7.0&redirect_uri=https%3A%2F%2Fstrengthlevel.com%2Ffacebook-link&scope=email%2Cuser_friends%2Cuser_gender",
+            "trainingArchiveDate": null,
+            "settingsUrl": "\/settings",
+            "layoutViewModel": {
+                "title": "Account Settings - Strength Level",
+                "menuSelection": "Settings",
+                "gender": "male",
+                "analyticsPage": null,
+                "fingerprint": null,
+                "isLoggedIn": true,
+                "gravatarUrl": "https:\/\/www.gravatar.com\/avatar\/7a5c55da08fae356d1064251175ccc34?s=96&d=retro&r=pg",
+                "name": "Nematjon",
+                "profileUrl": "\/102596-nematjon",
+                "isAdmin": false,
+                "useGoogleAnalytics": true,
+                "useSentryErrorReporting": true,
+                "useInspectlet": true,
+                "facebookAppId": "731465336900630"
+            }
+        });
+    </script>
+
+{% endblock %}

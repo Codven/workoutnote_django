@@ -66,3 +66,7 @@ def handle_register(request):
 
 def handle_profile_main(request):
     return render(request=request, template_name='profile/main.html')
+
+
+def handle_settings(request):
+    return render(request=request, template_name='profile/settings.html')

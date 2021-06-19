@@ -27,8 +27,9 @@ urlpatterns = [
     path('plate-barbell-racking-calculator/', views.handle_plate_barbell_racking_calculator, name='plate barbell racking calculator'),
     path('powerlifting-calculator/', views.handle_powerlifting_calculator, name='powerlifting calculator'),
     path('wilks-calculator/', views.handle_wilks_calculator, name='wilks calculator'),
-    path('profile-main/', views.handle_profile_main, name='profile main'),
-
     path('login/', views.handle_login, name='login'),
     path('register/', views.handle_register, name='register'),
+
+    path('profile-main/', views.handle_profile_main, name='profile main'),
+    path('settings/', views.handle_settings, name='settings'),
 ]

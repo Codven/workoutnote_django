@@ -1,0 +1,414 @@
+{% extends 'profile/base.html' %}
+{% block content %}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Get all "navbar-burger" elements
+            const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+            // Check if there are any navbar burgers
+            if ($navbarBurgers.length > 0) {
+
+                // Add a click event on each of them
+                $navbarBurgers.forEach(el => {
+                    el.addEventListener('click', () => {
+
+                        // Get the target from the "data-target" attribute
+                        const target = el.dataset.target;
+                        const $target = document.getElementById(target);
+
+                        // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+                        el.classList.toggle('is-active');
+                        $target.classList.toggle('is-active');
+
+                    });
+                });
+            }
+
+        });
+    </script>
+    <div id="workoutPageContainer"><!---->
+        <section class="hero is-primary is-translucent">
+            <div class="hero-body">
+                <div class="container">
+                    <div class="field is-grouped is-grouped-multiline">
+                        <div class="control" style="flex-shrink: 1;"><h1 class="title is-3 is-size-4-mobile mb-2"><a class="is-dropdown-title-link"><span class="icon mr-1"><i aria-hidden="true"
+                                                                                                                                                                               class="slicon slicon-fa-calendar-day"></i></span>
+                            <span class="is-dropdown-title-underline">
+                  15 June 2021
+                  <span class="icon"><i aria-hidden="true" class="slicon slicon-fa-angle-down"></i></span></span></a></h1></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="section has-background-white">
+            <div class="container">
+                <div class="buttons">
+                    <button class="button is-primary is-large"><span class="icon"><i aria-hidden="true" class="slicon slicon-fa-dumbbell"></i></span> <span>Add Lift</span></button>
+                </div>
+                <div class="block">
+                    <div><!---->
+                        <div class="workout mb-6">
+                            <div class="columns">
+                                <div class="column is-one-third"><h3 class="title is-4 is-size-5-mobile">
+                                    15 June 2021
+                                </h3></div>
+                                <div class="column">
+                                    <div class="field is-grouped is-grouped-multiline"><!---->
+                                        <div class="control">
+                                            <div class="tags has-addons are-medium"><span class="tag"><abbr title="Bodyweight"><span>BW</span></abbr></span> <span class="tag is-primary">
+                67 kg
+              </span></div>
+                                        </div>
+                                        <div class="control">
+                                            <div class="tags has-addons are-medium"><span class="tag">
+                Sets
+              </span> <span class="tag is-primary">
+                11
+              </span> <!----></div>
+                                        </div>
+                                        <div class="control">
+                                            <div class="tags has-addons are-medium"><span class="tag">
+                Reps
+              </span> <span class="tag is-primary">
+                110
+              </span> <!----></div>
+                                        </div>
+                                        <div class="control">
+                                            <div class="tags has-addons are-medium"><span class="tag">
+                Volume
+              </span> <span class="tag is-primary">
+                5500 kg
+              </span> <!----></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <table class="table is-fullwidth is-narrow mb-2 table--mobilesmall">
+                                <thead>
+                                <tr>
+                                    <th>Exercise</th>
+                                    <th>Lift</th>
+                                    <th>Reps</th>
+                                    <th><abbr title="Percentile"><span>&gt; %</span></abbr></th>
+                                    <th>Level</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="workout__set workout__set--best">
+                                    <td><a href="/102596-nematjon/bench-press">Bench Press</a></td>
+                                    <td>50 kg</td>
+                                    <td>10</td>
+                                    <td>31%</td>
+                                    <td><span class="stars"><span class="star__full">★★</span><!----><span class="star__empty">★★★</span></span></td>
+                                    <td class="is-vcentered">
+                                        <div class="dropdown is-right has-text-left">
+                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i
+                                                    class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
+                                            <div role="menu" class="dropdown-menu">
+                                                <div class="dropdown-content"><a href="/102596-nematjon/bench-press/8896920" class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="workout__set">
+                                    <td><a href="/102596-nematjon/bench-press">Bench Press</a></td>
+                                    <td>50 kg</td>
+                                    <td>10</td>
+                                    <td>31%</td>
+                                    <td><span class="stars"><span class="star__full">★★</span><!----><span class="star__empty">★★★</span></span></td>
+                                    <td class="is-vcentered">
+                                        <div class="dropdown is-right has-text-left">
+                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i
+                                                    class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
+                                            <div role="menu" class="dropdown-menu">
+                                                <div class="dropdown-content"><a href="/102596-nematjon/bench-press/8896921" class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="workout__set">
+                                    <td><a href="/102596-nematjon/bench-press">Bench Press</a></td>
+                                    <td>50 kg</td>
+                                    <td>10</td>
+                                    <td>31%</td>
+                                    <td><span class="stars"><span class="star__full">★★</span><!----><span class="star__empty">★★★</span></span></td>
+                                    <td class="is-vcentered">
+                                        <div class="dropdown is-right has-text-left">
+                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i
+                                                    class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
+                                            <div role="menu" class="dropdown-menu">
+                                                <div class="dropdown-content"><a href="/102596-nematjon/bench-press/8896922" class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="workout__set">
+                                    <td><a href="/102596-nematjon/bench-press">Bench Press</a></td>
+                                    <td>50 kg</td>
+                                    <td>10</td>
+                                    <td>31%</td>
+                                    <td><span class="stars"><span class="star__full">★★</span><!----><span class="star__empty">★★★</span></span></td>
+                                    <td class="is-vcentered">
+                                        <div class="dropdown is-right has-text-left">
+                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i
+                                                    class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
+                                            <div role="menu" class="dropdown-menu">
+                                                <div class="dropdown-content"><a href="/102596-nematjon/bench-press/8896923" class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="workout__set">
+                                    <td><a href="/102596-nematjon/bench-press">Bench Press</a></td>
+                                    <td>50 kg</td>
+                                    <td>10</td>
+                                    <td>31%</td>
+                                    <td><span class="stars"><span class="star__full">★★</span><!----><span class="star__empty">★★★</span></span></td>
+                                    <td class="is-vcentered">
+                                        <div class="dropdown is-right has-text-left">
+                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i
+                                                    class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
+                                            <div role="menu" class="dropdown-menu">
+                                                <div class="dropdown-content"><a href="/102596-nematjon/bench-press/8896924" class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="workout__set">
+                                    <td><a href="/102596-nematjon/bench-press">Bench Press</a></td>
+                                    <td>50 kg</td>
+                                    <td>10</td>
+                                    <td>31%</td>
+                                    <td><span class="stars"><span class="star__full">★★</span><!----><span class="star__empty">★★★</span></span></td>
+                                    <td class="is-vcentered">
+                                        <div class="dropdown is-right has-text-left">
+                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i
+                                                    class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
+                                            <div role="menu" class="dropdown-menu">
+                                                <div class="dropdown-content"><a href="/102596-nematjon/bench-press/8896925" class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="workout__set">
+                                    <td><a href="/102596-nematjon/bench-press">Bench Press</a></td>
+                                    <td>50 kg</td>
+                                    <td>10</td>
+                                    <td>31%</td>
+                                    <td><span class="stars"><span class="star__full">★★</span><!----><span class="star__empty">★★★</span></span></td>
+                                    <td class="is-vcentered">
+                                        <div class="dropdown is-right has-text-left">
+                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i
+                                                    class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
+                                            <div role="menu" class="dropdown-menu">
+                                                <div class="dropdown-content"><a href="/102596-nematjon/bench-press/8896926" class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="workout__set">
+                                    <td><a href="/102596-nematjon/bench-press">Bench Press</a></td>
+                                    <td>50 kg</td>
+                                    <td>10</td>
+                                    <td>31%</td>
+                                    <td><span class="stars"><span class="star__full">★★</span><!----><span class="star__empty">★★★</span></span></td>
+                                    <td class="is-vcentered">
+                                        <div class="dropdown is-right has-text-left">
+                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i
+                                                    class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
+                                            <div role="menu" class="dropdown-menu">
+                                                <div class="dropdown-content"><a href="/102596-nematjon/bench-press/8896927" class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="workout__set">
+                                    <td><a href="/102596-nematjon/bench-press">Bench Press</a></td>
+                                    <td>50 kg</td>
+                                    <td>10</td>
+                                    <td>31%</td>
+                                    <td><span class="stars"><span class="star__full">★★</span><!----><span class="star__empty">★★★</span></span></td>
+                                    <td class="is-vcentered">
+                                        <div class="dropdown is-right has-text-left">
+                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i
+                                                    class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
+                                            <div role="menu" class="dropdown-menu">
+                                                <div class="dropdown-content"><a href="/102596-nematjon/bench-press/8896928" class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="workout__set">
+                                    <td><a href="/102596-nematjon/bench-press">Bench Press</a></td>
+                                    <td>50 kg</td>
+                                    <td>10</td>
+                                    <td>31%</td>
+                                    <td><span class="stars"><span class="star__full">★★</span><!----><span class="star__empty">★★★</span></span></td>
+                                    <td class="is-vcentered">
+                                        <div class="dropdown is-right has-text-left">
+                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i
+                                                    class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
+                                            <div role="menu" class="dropdown-menu">
+                                                <div class="dropdown-content"><a href="/102596-nematjon/bench-press/8896929" class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="workout__set">
+                                    <td><a href="/102596-nematjon/bench-press">Bench Press</a></td>
+                                    <td>50 kg</td>
+                                    <td>10</td>
+                                    <td>31%</td>
+                                    <td><span class="stars"><span class="star__full">★★</span><!----><span class="star__empty">★★★</span></span></td>
+                                    <td class="is-vcentered">
+                                        <div class="dropdown is-right has-text-left">
+                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i
+                                                    class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
+                                            <div role="menu" class="dropdown-menu">
+                                                <div class="dropdown-content"><a href="/102596-nematjon/bench-press/8896931" class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table> <!----></div> <!----></div>
+                </div>
+                <div class="buttons"><a href="/102596-nematjon/2021/06/15/export" class="button">Export CSV</a></div>
+                <div class="block">
+                    <button class="button is-primary"><span class="icon"><i aria-hidden="true" class="slicon slicon-fa-exchange-alt"></i></span> <span>Switch Workout</span></button>
+                </div>
+            </div>
+        </section> <!---->
+        <form method="post"><!----></form> <!----></div>
+    <script>
+        StrengthLevel.setupWorkoutPage({
+            "userId": 102596,
+            "otherUserViewModel": null,
+            "layoutViewModel": {
+                "title": "Nematjon Workout - Strength Level",
+                "menuSelection": "Workouts",
+                "gender": "male",
+                "analyticsPage": "\/my-workout",
+                "fingerprint": ":username",
+                "isLoggedIn": true,
+                "gravatarUrl": "https:\/\/www.gravatar.com\/avatar\/7a5c55da08fae356d1064251175ccc34?s=96&d=retro&r=pg",
+                "name": "Nematjon",
+                "profileUrl": "\/102596-nematjon",
+                "isAdmin": false,
+                "useGoogleAnalytics": true,
+                "useSentryErrorReporting": true,
+                "useInspectlet": false,
+                "facebookAppId": "731465336900630"
+            },
+            "settingsViewModel": {"bodyMassUnit": "kg", "liftMassUnit": "kg"},
+            "date": "2021-06-15",
+            "userUrl": "\/102596-nematjon",
+            "workoutDates": ["2021-06-15", "2021-04-14"],
+            "addLiftViewModel": {
+                "date": {"date": "2021-06-15 00:00:00.000000", "timezone_type": 3, "timezone": "UTC"},
+                "dateString": "2021-06-15",
+                "exerciseId": 1,
+                "exerciseStringId": "bench-press",
+                "exerciseType": "barbell",
+                "liftMassUnit": {"symbol": "kg", "conversionToBaseUnit": 1, "step": 0.1, "remainderSymbol": null, "remainderMultiple": null, "remainderStep": null},
+                "liftMass": 50,
+                "repetitions": 10,
+                "sets": 1,
+                "minRepetitions": 1,
+                "maxRepetitions": 500,
+                "minSets": 1,
+                "maxSets": 10,
+                "variationType": "bodyweight",
+                "assistanceMass": "",
+                "extraMass": ""
+            },
+            "addedLiftViewModel": null,
+            "workoutTableViewModel": {
+                "userBaseUrl": "\/102596-nematjon", "workoutViewModels": [{
+                    "date": "2021-06-15",
+                    "bodyweight": 67,
+                    "summary": {"sets": 11, "reps": 110, "volume": 5500, "percentile": 0.3137623090417957},
+                    "sets": [{"id": 8896920, "exercise": "Bench Press", "weight": 50, "reps": 10, "percentile": 0.3137623090417957}, {
+                        "id": 8896921,
+                        "exercise": "Bench Press",
+                        "weight": 50,
+                        "reps": 10,
+                        "percentile": 0.3137623090417957
+                    }, {"id": 8896922, "exercise": "Bench Press", "weight": 50, "reps": 10, "percentile": 0.3137623090417957}, {
+                        "id": 8896923,
+                        "exercise": "Bench Press",
+                        "weight": 50,
+                        "reps": 10,
+                        "percentile": 0.3137623090417957
+                    }, {"id": 8896924, "exercise": "Bench Press", "weight": 50, "reps": 10, "percentile": 0.3137623090417957}, {
+                        "id": 8896925,
+                        "exercise": "Bench Press",
+                        "weight": 50,
+                        "reps": 10,
+                        "percentile": 0.3137623090417957
+                    }, {"id": 8896926, "exercise": "Bench Press", "weight": 50, "reps": 10, "percentile": 0.3137623090417957}, {
+                        "id": 8896927,
+                        "exercise": "Bench Press",
+                        "weight": 50,
+                        "reps": 10,
+                        "percentile": 0.3137623090417957
+                    }, {"id": 8896928, "exercise": "Bench Press", "weight": 50, "reps": 10, "percentile": 0.3137623090417957}, {
+                        "id": 8896929,
+                        "exercise": "Bench Press",
+                        "weight": 50,
+                        "reps": 10,
+                        "percentile": 0.3137623090417957
+                    }, {"id": 8896931, "exercise": "Bench Press", "weight": 50, "reps": 10, "percentile": 0.3137623090417957}]
+                }]
+            },
+            "isCurrentUser": true,
+            "exportCsvUrl": "\/102596-nematjon\/2021\/06\/15\/export"
+        });
+    </script>
+{% endblock %}

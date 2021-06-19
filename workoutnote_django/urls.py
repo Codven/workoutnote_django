@@ -42,6 +42,7 @@ urlpatterns = [
     path('analyse-lift/', views.handle_analyse_lift, name='analyse lift'),
     path('find-lifters/', views.handle_find_lifters, name='find lifters'),
     path('workouts/', views.handle_workouts, name='workouts'),
+    path('lifts/', views.handle_lifts, name='lifts'),
     path('exercises/', views.handle_exercises, name='exercises'),
     path('bodyweight/', views.handle_bodyweight, name='bodyweight'),
 ]

@@ -33,18 +33,24 @@ def handle_login(request):
 @require_http_methods(['GET', 'POST'])
 def handle_register(request):
     if request.user.is_authenticated:
+        print('1')
         return redirect(to='index')
     elif request.method == 'GET':
+        print('2')
         return render(request=request, template_name='index/auth register.html')
     elif 'email' in request.POST and 'password' in request.POST:
         email = request.POST['email']
         password = request.POST['password']
+        print('3')
         if User.objects.filter(username=email).exists() or len(password) < 4 or models.EmailVerificationRequests.objects.filter(email=email).exists():
+            print('4')
             return redirect(to='register')
         else:
+            print('5')
             User.objects.create_user(username=email, password=password).save()
             user = authenticate(request, username=email, password=password)
             if user:
+                print('6')
                 verification_code = ''.join([str(randint(0, 9)) for _ in range(6)])
                 message = utils.create_message(
                     sender='deltoidsoft@gmail.com',
@@ -55,10 +61,13 @@ def handle_register(request):
                 utils.send_email(target_email=user.username, message=message)
                 models.EmailVerificationRequests.objects.create(email=email, verification_code=verification_code).save()
                 login(request=request, user=user)
+                print('7')
                 return redirect(to='email confirmation')
             else:
+                print('8')
                 return redirect(to='register')  # whatever the reason could be
     else:
+        print('9')
         return redirect(to='index')
 
 

@@ -4,8 +4,6 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from random import randint
-from utils import utils
-from . import models
 
 
 # region authentication
@@ -33,66 +31,27 @@ def handle_login(request):
 @require_http_methods(['GET', 'POST'])
 def handle_register(request):
     if request.user.is_authenticated:
-        print('1')
         return redirect(to='index')
     elif request.method == 'GET':
-        print('2')
         return render(request=request, template_name='index/auth register.html')
     elif 'email' in request.POST and 'password' in request.POST:
         email = request.POST['email']
         password = request.POST['password']
-        print('3')
-        if User.objects.filter(username=email).exists() or len(password) < 4 or models.EmailVerificationRequests.objects.filter(email=email).exists():
-            print('4')
-            if User.objects.filter(username=email).exists():
-                print('user : ', User.objects.get(username=email).username)
-                User.objects.get(username=email).delete()
-            if models.EmailVerificationRequests.objects.filter(email=email).exists():
-                print('code : ', models.EmailVerificationRequests.objects.get(email=email).verification_code)
+        if User.objects.filter(username=email).exists() or len(password) < 4:
             return redirect(to='register')
         else:
-            print('5')
             User.objects.create_user(username=email, password=password).save()
             user = authenticate(request, username=email, password=password)
             if user:
-                print('6')
-                verification_code = ''.join([str(randint(0, 9)) for _ in range(6)])
-                message = utils.create_message(
-                    sender='deltoidsoft@gmail.com',
-                    to=request.user.username,
-                    subject='[Workoutnote registration] email verification code',
-                    message_text=f'Your email verification code is : {verification_code}'
-                )
-                utils.send_email(target_email=user.username, message=message)
-                models.EmailVerificationRequests.objects.create(email=email, verification_code=verification_code).save()
                 login(request=request, user=user)
-                print('7')
-                return redirect(to='email confirmation')
+                if 'next' in request.POST and len(request.POST['next']) > 0:
+                    return redirect(to=request.POST['next'])
+                else:
+                    return redirect(to='profile main')
             else:
-                print('8')
                 return redirect(to='register')  # whatever the reason could be
     else:
-        print('9')
         return redirect(to='index')
-
-
-@login_required
-@require_http_methods(['GET', 'POST'])
-def handle_email_confirmation(request):
-    if request.method == 'GET':
-        return render(request=request, template_name='index/email confirmation.html')
-    elif 'code' in request.POST and models.EmailVerificationRequests.objects.filter(email=request.user.username).exists():
-        verification = models.EmailVerificationRequests.objects.get(email=request.user.username)
-        if verification.verification_code == request.POST['code']:
-            request.user.email = request.user.username
-            request.user.save()
-            if 'next' in request.POST and len(request.POST['next']) > 0:
-                return redirect(to=request.POST['next'])
-            else:
-                return redirect(to='profile main')
-        else:
-            return redirect(to='email confirmation')
-    return redirect(to='index')
 
 
 @login_required

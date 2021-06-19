@@ -1,0 +1,140 @@
+{% extends 'index/base.html' %}
+{% block content %}
+    <section class="section">
+        <div class="container is-max-desktop">
+            {% include 'index/sub authentication header.html' %}
+
+            {% include 'index/sub html index navtabs.html' %}
+            <script>
+                StrengthLevel.setupNavigation();
+            </script>
+
+
+            <script src="https://www.google.com/recaptcha/api.js"></script>
+            <div class="section-box">
+                <h1 class="title is-2 is-size-3-mobile">Register</h1>
+                <div class="columns">
+                    <div class="column">
+                        <div class="content">
+                            <p>
+                                Already have an account?
+                                <a href="/login">Log In</a>
+                            </p>
+                        </div>
+
+                        <script>
+                            function onRegisterFormSubmit(token) {
+                                document.getElementById("registerForm").submit();
+                            }
+                        </script>
+                        <form method="post" id="registerForm"
+                              action="/register" style="margin-top: 0;">
+                            <div class="field">
+                                <label for="register_email" class="label">Email</label>
+                                <div class="control has-icons-left">
+                                    <input name="email" id="register_email" type="email" placeholder="Email"
+                                           class="input"
+                                           value=""
+                                           required autofocus>
+                                    <span class="icon is-small is-left">
+                            <i class="slicon slicon-fa-envelope"></i>
+                        </span>
+                                </div>
+                                <p class="help" id="register_email_suggestion" style="display: none;">
+                                    Did you mean <a id="register_email_suggestion_link" href="#"></a>?
+                                </p>
+                            </div>
+
+                            <div class="field">
+                                <label for="register_password" class="label">Password</label>
+                                <div class="control has-icons-left">
+                                    <input name="password" id="register_password" type="password" placeholder="Password"
+                                           class="input" required>
+                                    <span class="icon is-small is-left">
+                            <i class="slicon slicon-fa-lock"></i>
+                        </span>
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <div class="control">
+                                    <input name="timezone" id="register_timezone" type="hidden" value="-5">
+                                    <button data-sitekey="6LfEtI8aAAAAAFYy1g5MRTcy0hksIwkwnqkpkOXW"
+                                            data-callback="onRegisterFormSubmit"
+                                            data-action="register"
+                                            class="g-recaptcha button is-primary is-medium">Register
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="content mt-4">
+                            <p><strong>Or</strong></p>
+
+                            <p>
+                                <a href="https://www.facebook.com/v2.10/dialog/oauth?client_id=731465336900630&amp;state=15d07fddd91659197923fc0f37735c82&amp;response_type=code&amp;sdk=php-sdk-5.7.0&amp;redirect_uri=https%3A%2F%2Fstrengthlevel.com%2Ffacebook-login&amp;scope=email%2Cuser_friends%2Cuser_gender"
+                                   class="button is-facebook">
+                        <span class="icon">
+                            <i class="slicon slicon-fa-facebook-square"></i>
+                        </span>
+                                    <span>Continue with Facebook</span>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="column">
+                        <div class="content">
+                            <h2 class="title is-3 is-size-4-mobile">Welcome to the Strength Level community</h2>
+                            <ul>
+                                <li>Log your lifts at the gym</li>
+                                <li>Keep track of your workouts</li>
+                                <li>Track your progress over time</li>
+                                <li>Find and follow other lifters</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                StrengthLevel.addRegisterForm();
+            </script>
+            <div class="footer content">
+                <p>
+                    Post your feedback and suggestions on our Facebook page:
+                </p>
+                <p>
+                    <a href="https://www.facebook.com/strengthlevel" class="button is-facebook">
+                    <span class="icon">
+                        <i class="slicon slicon-fa-facebook-square"></i>
+                    </span>
+                        <span>Find us on Facebook</span>
+                    </a>
+                </p>
+                <p>
+                    <a href="/about">About</a>
+                    -
+                    <a href="/faq">FAQ</a>
+                    -
+                    <a href="/privacy-policy">Privacy Policy</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+
+    <div class="desktop_sticky_ad">
+        <!-- 71161633/desktop_sticky/desktop_sticky -->
+        <div data-fuse="22296323458"></div>
+    </div>
+
+
+    <script>
+        var addthis_config =
+            {
+                ui_tabindex: 100,
+            };
+    </script>
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5a9ad390d92277fe"></script>
+
+{% endblock %}

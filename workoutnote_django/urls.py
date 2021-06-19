@@ -30,5 +30,5 @@ urlpatterns = [
     path('profile-main/', views.handle_profile_main, name='profile main'),
 
     path('login/', views.handle_login, name='login'),
-    path('register/', views.handle_login, name='register'),
+    path('register/', views.handle_register, name='register'),
 ]

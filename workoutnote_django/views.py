@@ -60,5 +60,9 @@ def handle_login(request):
     return render(request=request, template_name='index/login.html')
 
 
+def handle_register(request):
+    return render(request=request, template_name='index/register.html')
+
+
 def handle_profile_main(request):
     return render(request=request, template_name='profile/main.html')

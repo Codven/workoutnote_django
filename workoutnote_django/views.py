@@ -74,3 +74,6 @@ def handle_settings(request):
 
 def handle_analyse_lift(request):
     return render(request=request, template_name='profile/analyse lift.html')
+
+def handle_bodyweight(request):
+    return render(request=request, template_name='profile/bodyweight.html')

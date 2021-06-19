@@ -1,0 +1,295 @@
+{% extends 'base.html' %}
+{% block content %}
+    <section class="section">
+        <div class="container is-max-desktop">
+
+            <div class="mobile_sticky_ad mobile_sticky_ad--top">
+                <!-- 71161633/mobile_sticky_footer/mobile_sticky_footer -->
+                <div data-fuse="22025437133" data-fuse-code="fuse-slot-22025437133-1" data-fuse-slot="71161633/STRENGTHLEVEL_strengthlevel/mobile_sticky_footer">
+                    <div id="fuse-slot-22025437133-1" class="fuse-slot" style="display: none;"></div>
+                </div>
+            </div>
+
+            {% include 'index/sub authentication header.html' %}
+
+            {% include 'index/sub html index navtabs.html' %}
+            <script>
+                StrengthLevel.setupNavigation();
+            </script>
+
+
+            <div id="plateContainer">
+                <div class="section-box"><h1 class="title is-2 is-size-3-mobile is-spaced">Plate Barbell Racking Calculator</h1>
+                    <h2 class="subtitle is-3 is-size-4-mobile">
+                        Calculate the plates you need to load on your barbell
+                    </h2>
+                    <h3 class="subtitle is-4 is-size-5-mobile">
+                        Enter the lift you want to perform:
+                    </h3>
+                    <form action="https://strengthlevel.com/plate-barbell-racking-calculator#plateCalculatorResults" method="post">
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal"><label for="liftmass" class="label">
+                                Total Lift
+                            </label></div>
+                            <div class="field-body">
+                                <div class="field has-addons">
+                                    <div class="control is-expanded"><input type="number" id="liftmass" name="liftmass" min="1" max="4000" required="required" step="0.1" class="input"></div>
+                                    <div class="control">
+                                        <div class="select"><select name="liftmassunit">
+                                            <option>
+                                                kg
+                                            </option>
+                                            <option>
+                                                lb
+                                            </option>
+                                        </select></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal"><label for="barliftmass" class="label">
+                                Bar Weight
+                            </label></div>
+                            <div class="field-body">
+                                <div class="field has-addons">
+                                    <div class="control is-expanded"><input type="number" id="barliftmass" name="barliftmass" min="1" max="4000" required="required" step="0.1" class="input"></div>
+                                    <div class="control">
+                                        <div class="select"><select name="liftmassunit">
+                                            <option>
+                                                kg
+                                            </option>
+                                            <option>
+                                                lb
+                                            </option>
+                                        </select></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal"></div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control"><input type="submit" value="Calculate Plates" name="calculateTotal" class="button is-primary is-medium"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="subtitle is-4 is-size-5-mobile mt-5">
+                            Customize the plates you have available at your gym (optional):
+                        </h3>
+                        <table class="table is-fullwidth is-striped">
+                            <thead>
+                            <tr>
+                                <th width="50%">Plate Weight</th>
+                                <th>Quantity (each side)</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>100 lb</td>
+                                <td>
+                                    <div class="field">
+                                        <div class="control"><input name="plateQuantities[]" type="number" min="0" max="10" class="input"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tbody>
+                            <tr>
+                                <td>55 lb</td>
+                                <td>
+                                    <div class="field">
+                                        <div class="control"><input name="plateQuantities[]" type="number" min="0" max="10" class="input"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tbody>
+                            <tr>
+                                <td>45 lb</td>
+                                <td>
+                                    <div class="field">
+                                        <div class="control"><input name="plateQuantities[]" type="number" min="0" max="10" class="input"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tbody>
+                            <tr>
+                                <td>35 lb</td>
+                                <td>
+                                    <div class="field">
+                                        <div class="control"><input name="plateQuantities[]" type="number" min="0" max="10" class="input"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tbody>
+                            <tr>
+                                <td>25 lb</td>
+                                <td>
+                                    <div class="field">
+                                        <div class="control"><input name="plateQuantities[]" type="number" min="0" max="10" class="input"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tbody>
+                            <tr>
+                                <td>15 lb</td>
+                                <td>
+                                    <div class="field">
+                                        <div class="control"><input name="plateQuantities[]" type="number" min="0" max="10" class="input"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tbody>
+                            <tr>
+                                <td>10 lb</td>
+                                <td>
+                                    <div class="field">
+                                        <div class="control"><input name="plateQuantities[]" type="number" min="0" max="10" class="input"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tbody>
+                            <tr>
+                                <td>5 lb</td>
+                                <td>
+                                    <div class="field">
+                                        <div class="control"><input name="plateQuantities[]" type="number" min="0" max="10" class="input"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tbody>
+                            <tr>
+                                <td>2.5 lb</td>
+                                <td>
+                                    <div class="field">
+                                        <div class="control"><input name="plateQuantities[]" type="number" min="0" max="10" class="input"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+
+            <script>
+                StrengthLevel.addPlateCalculator({
+                    "liftMass": "",
+                    "liftMassUnitSymbol": "lb",
+                    "unitDefinitions": [{"symbol": "kg", "conversionToBaseUnit": 1, "step": 0.1, "remainderSymbol": null, "remainderMultiple": null, "remainderStep": null}, {"symbol": "lb", "conversionToBaseUnit": 0.45359237, "step": 0.1, "remainderSymbol": null, "remainderMultiple": null, "remainderStep": null}],
+                    "liftMassUnits": ["kg", "lb"],
+                    "plates": {"kg": [25, 20, 15, 10, 5, 2.5, 1.25], "lb": [100, 55, 45, 35, 25, 15, 10, 5, 2.5]},
+                    "plateQuantities": {"kg": [0, 10, 10, 10, 10, 10, 10], "lb": [0, 0, 10, 10, 10, 10, 10, 10, 10]},
+                    "barMass": 45
+                });
+
+            </script>
+            <div class="footer content">
+                <p>
+                    Post your feedback and suggestions on our Facebook page:
+                </p>
+                <p>
+                    <a href="https://www.facebook.com/strengthlevel" class="button is-facebook">
+                    <span class="icon">
+                        <i class="slicon slicon-fa-facebook-square"></i>
+                    </span>
+                        <span>Find us on Facebook</span>
+                    </a>
+                </p>
+                <p>
+                    <a href="https://strengthlevel.com/about">About</a>
+                    -
+                    <a href="https://strengthlevel.com/faq">FAQ</a>
+                    -
+                    <a href="https://strengthlevel.com/privacy-policy">Privacy Policy</a>
+                </p>
+            </div>
+        </div>
+    </section>
+    <iframe name="__tcfapiLocator" style="display: none;" src="./plate barbell racking calculator_files/saved_resource.html"></iframe>
+    <script>
+        var addthis_config =
+            {
+                ui_tabindex: 100,
+            };
+    </script>
+    <script type="text/javascript" src="./plate barbell racking calculator_files/addthis_widget.js"></script>
+    <div id="_atssh" style="visibility: hidden; height: 1px; width: 1px; position: absolute; top: -9999px; z-index: 100000;">
+        <iframe id="_atssh953" title="AddThis utility frame" src="./plate barbell racking calculator_files/sh.f48a1a04fe8dbf021b4cda1d.html" style="height: 1px; width: 1px; position: absolute; top: 0px; z-index: 100000; border: 0px; left: 0px;"></iframe>
+    </div>
+    <style id="service-icons-0"></style>
+    <img src="./plate barbell racking calculator_files/favicon.ico" style="display: none !important; width: 1px !important; height: 1px !important;"><img src="./plate barbell racking calculator_files/px.gif" style="display: none !important; width: 1px !important; height: 1px !important;">
+    <div class="addthis-smartlayers addthis-smartlayers-desktop" aria-labelledby="at4-share-label" role="region">
+        <div id="at4-share-label">AddThis Sharing Sidebar</div>
+        <div id="at4-share" class="at4-share addthis_32x32_style atss atss-left addthis-animated slideInLeft"><a role="button" tabindex="100" class="at-share-btn at-svc-facebook"><span class="at4-visually-hidden">Share to Facebook</span><span class="at-icon-wrapper" style="background-color: rgb(59, 89, 152);"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                                                                                                                                                                                                                                                                            viewBox="0 0 32 32" version="1.1" role="img" aria-labelledby="at-svg-facebook-1"
+                                                                                                                                                                                                                                                                                                                            class="at-icon at-icon-facebook" style="fill: rgb(255, 255, 255);"><title
+                id="at-svg-facebook-1">Facebook</title><g><path d="M22 5.16c-.406-.054-1.806-.16-3.43-.16-3.4 0-5.733 1.825-5.733 5.17v2.882H9v3.913h3.837V27h4.604V16.965h3.823l.587-3.913h-4.41v-2.5c0-1.123.347-1.903 2.198-1.903H22V5.16z" fill-rule="evenodd"></path></g></svg><div class="at4-share-count-container"><span class="at4-share-count"><span
+                class="at4-visually-hidden">, Number of shares</span></span></div></span></a><a
+                role="button" tabindex="100" class="at-share-btn at-svc-twitter"><span class="at4-visually-hidden">Share to Twitter</span><span class="at-icon-wrapper" style="background-color: rgb(29, 161, 242);"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" version="1.1" role="img" aria-labelledby="at-svg-twitter-2"
+                                                                                                                                                                                                                          class="at-icon at-icon-twitter" style="fill: rgb(255, 255, 255);"><title id="at-svg-twitter-2">Twitter</title><g><path
+                d="M27.996 10.116c-.81.36-1.68.602-2.592.71a4.526 4.526 0 0 0 1.984-2.496 9.037 9.037 0 0 1-2.866 1.095 4.513 4.513 0 0 0-7.69 4.116 12.81 12.81 0 0 1-9.3-4.715 4.49 4.49 0 0 0-.612 2.27 4.51 4.51 0 0 0 2.008 3.755 4.495 4.495 0 0 1-2.044-.564v.057a4.515 4.515 0 0 0 3.62 4.425 4.52 4.52 0 0 1-2.04.077 4.517 4.517 0 0 0 4.217 3.134 9.055 9.055 0 0 1-5.604 1.93A9.18 9.18 0 0 1 6 23.85a12.773 12.773 0 0 0 6.918 2.027c8.3 0 12.84-6.876 12.84-12.84 0-.195-.005-.39-.014-.583a9.172 9.172 0 0 0 2.252-2.336"
+                fill-rule="evenodd"></path></g></svg></span></a><a role="button" tabindex="100" class="at-share-btn at-svc-print"><span class="at4-visually-hidden">Share to Print</span><span class="at-icon-wrapper" style="background-color: rgb(115, 138, 141);"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" version="1.1" role="img"
+                                                                                                                                                                                                                                                                          aria-labelledby="at-svg-print-3" class="at-icon at-icon-print" style="fill: rgb(255, 255, 255);"><title
+                id="at-svg-print-3">Print</title><g><path
+                d="M24.67 10.62h-2.86V7.49H10.82v3.12H7.95c-.5 0-.9.4-.9.9v7.66h3.77v1.31L15 24.66h6.81v-5.44h3.77v-7.7c-.01-.5-.41-.9-.91-.9zM11.88 8.56h8.86v2.06h-8.86V8.56zm10.98 9.18h-1.05v-2.1h-1.06v7.96H16.4c-1.58 0-.82-3.74-.82-3.74s-3.65.89-3.69-.78v-3.43h-1.06v2.06H9.77v-3.58h13.09v3.61zm.75-4.91c-.4 0-.72-.32-.72-.72s.32-.72.72-.72c.4 0 .72.32.72.72s-.32.72-.72.72zm-4.12 2.96h-6.1v1.06h6.1v-1.06zm-6.11 3.15h6.1v-1.06h-6.1v1.06z"></path></g></svg></span></a><a
+                role="button" tabindex="100" class="at-share-btn at-svc-email"><span class="at4-visually-hidden">Share to Email</span><span class="at-icon-wrapper" style="background-color: rgb(132, 132, 132);"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" version="1.1" role="img" aria-labelledby="at-svg-email-4" class="at-icon at-icon-email"
+                                                                                                                                                                                                                       style="fill: rgb(255, 255, 255);"><title id="at-svg-email-4">Email</title><g><g fill-rule="evenodd"></g><path
+                d="M27 22.757c0 1.24-.988 2.243-2.19 2.243H7.19C5.98 25 5 23.994 5 22.757V13.67c0-.556.39-.773.855-.496l8.78 5.238c.782.467 1.95.467 2.73 0l8.78-5.238c.472-.28.855-.063.855.495v9.087z"></path><path d="M27 9.243C27 8.006 26.02 7 24.81 7H7.19C5.988 7 5 8.004 5 9.243v.465c0 .554.385 1.232.857 1.514l9.61 5.733c.267.16.8.16 1.067 0l9.61-5.733c.473-.283.856-.96.856-1.514v-.465z"></path></g></svg></span></a><a
+                role="button" tabindex="100" class="at-share-btn at-svc-compact at4-share-count-anchor"><span class="at4-visually-hidden">More AddThis Share options</span><span class="at-icon-wrapper" style="background-color: rgb(255, 101, 80);"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" version="1.1" role="img"
+                                                                                                                                                                                                                                                           aria-labelledby="at-svg-addthis-5" class="at-icon at-icon-addthis" style="fill: rgb(255, 255, 255);"><title id="at-svg-addthis-5">AddThis</title><g><path
+                d="M18 14V8h-4v6H8v4h6v6h4v-6h6v-4h-6z" fill-rule="evenodd"></path></g></svg><div class="at4-share-count-container"><span class="at4-share-count"><span class="at4-visually-hidden">, Number of shares</span>60</span></div></span></a>
+            <div id="at4-scc" class="at-share-close-control ats-transparent at4-hide-content at4-show" title="Hide">
+                <div class="at4-arrow at-left">Hide</div>
+            </div>
+        </div>
+        <div id="at4-soc" class="at-share-open-control at-share-open-control-left ats-transparent at4-hide" title="Show">
+            <div class="at4-arrow at-right">Show</div>
+        </div>
+    </div>
+    <div id="at4-thankyou" class="at4-thankyou at4-thankyou-background at4-hide ats-transparent at4-thankyou-desktop addthis-smartlayers addthis-animated fadeIn at4-show" role="dialog" aria-labelledby="at-thankyou-label">
+        <div class="at4lb-inner">
+            <button class="at4x" title="Close">Close</button>
+            <a id="at4-palogo">
+                <div><a class="at-branding-logo" href="https://www.addthis.com/website-tools/overview?utm_source=AddThis%20Tools&amp;utm_medium=image" title="Powered by AddThis" target="_blank">
+                    <div class="at-branding-icon"></div>
+                    <span class="at-branding-addthis">AddThis</span></a></div>
+            </a>
+            <div class="at4-thankyou-inner">
+                <div id="at-thankyou-label" class="thankyou-title"></div>
+                <div class="thankyou-description"></div>
+                <div class="at4-thankyou-layer"></div>
+            </div>
+        </div>
+    </div>
+    <div class="at-share-dock-outer at4-hide addthis-smartlayers at4-visually-hidden addthis-smartlayers-mobile" aria-labelledby="at-share-dock-label" role="region">
+        <div id="at-share-dock-label" class="at4-hide">AddThis Sharing</div>
+        <div id="at-share-dock" class="at-share-dock atss atss-bottom at-shfs-large addthis-animated slideInUp at4-show at4-hide"><a href="https://strengthlevel.com/plate-barbell-racking-calculator#" class="at4-count" style="width: 16.6667%;"><span class="at4-counter"></span><span class="at4-share-label">SHARES</span></a><a role="button" tabindex="100" title="Facebook"
+                                                                                                                                                                                                                                                                                                                                      class="at-share-btn at-svc-facebook" style="width: 16.6667%;"><span
+                class="at-icon-wrapper" style="background-color: rgb(59, 89, 152);"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" version="1.1" role="img" aria-labelledby="at-svg-facebook-6" title="Facebook" alt="Facebook" style="fill: rgb(255, 255, 255); width: 32px; height: 32px;" class="at-icon at-icon-facebook"><title
+                id="at-svg-facebook-6">Facebook</title><g><path
+                d="M22 5.16c-.406-.054-1.806-.16-3.43-.16-3.4 0-5.733 1.825-5.733 5.17v2.882H9v3.913h3.837V27h4.604V16.965h3.823l.587-3.913h-4.41v-2.5c0-1.123.347-1.903 2.198-1.903H22V5.16z" fill-rule="evenodd"></path></g></svg></span></a><a role="button" tabindex="100" title="Twitter" class="at-share-btn at-svc-twitter" style="width: 16.6667%;"><span class="at-icon-wrapper"
+                                                                                                                                                                                                                                                                                                                                                                  style="background-color: rgb(29, 161, 242);"><svg
+                xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" version="1.1" role="img" aria-labelledby="at-svg-twitter-7" title="Twitter" alt="Twitter" style="fill: rgb(255, 255, 255); width: 32px; height: 32px;" class="at-icon at-icon-twitter"><title id="at-svg-twitter-7">Twitter</title><g><path
+                d="M27.996 10.116c-.81.36-1.68.602-2.592.71a4.526 4.526 0 0 0 1.984-2.496 9.037 9.037 0 0 1-2.866 1.095 4.513 4.513 0 0 0-7.69 4.116 12.81 12.81 0 0 1-9.3-4.715 4.49 4.49 0 0 0-.612 2.27 4.51 4.51 0 0 0 2.008 3.755 4.495 4.495 0 0 1-2.044-.564v.057a4.515 4.515 0 0 0 3.62 4.425 4.52 4.52 0 0 1-2.04.077 4.517 4.517 0 0 0 4.217 3.134 9.055 9.055 0 0 1-5.604 1.93A9.18 9.18 0 0 1 6 23.85a12.773 12.773 0 0 0 6.918 2.027c8.3 0 12.84-6.876 12.84-12.84 0-.195-.005-.39-.014-.583a9.172 9.172 0 0 0 2.252-2.336"
+                fill-rule="evenodd"></path></g></svg></span></a><a role="button" tabindex="100" title="Print" class="at-share-btn at-svc-print" style="width: 16.6667%;"><span class="at-icon-wrapper" style="background-color: rgb(115, 138, 141);"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" version="1.1" role="img"
+                                                                                                                                                                                                                                                          aria-labelledby="at-svg-print-8" title="Print" alt="Print" style="fill: rgb(255, 255, 255); width: 32px; height: 32px;"
+                                                                                                                                                                                                                                                          class="at-icon at-icon-print"><title id="at-svg-print-8">Print</title><g><path
+                d="M24.67 10.62h-2.86V7.49H10.82v3.12H7.95c-.5 0-.9.4-.9.9v7.66h3.77v1.31L15 24.66h6.81v-5.44h3.77v-7.7c-.01-.5-.41-.9-.91-.9zM11.88 8.56h8.86v2.06h-8.86V8.56zm10.98 9.18h-1.05v-2.1h-1.06v7.96H16.4c-1.58 0-.82-3.74-.82-3.74s-3.65.89-3.69-.78v-3.43h-1.06v2.06H9.77v-3.58h13.09v3.61zm.75-4.91c-.4 0-.72-.32-.72-.72s.32-.72.72-.72c.4 0 .72.32.72.72s-.32.72-.72.72zm-4.12 2.96h-6.1v1.06h6.1v-1.06zm-6.11 3.15h6.1v-1.06h-6.1v1.06z"></path></g></svg></span></a><a
+                role="button" tabindex="100" title="Email" class="at-share-btn at-svc-email" style="width: 16.6667%;"><span class="at-icon-wrapper" style="background-color: rgb(132, 132, 132);"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" version="1.1" role="img" aria-labelledby="at-svg-email-9" title="Email" alt="Email"
+                                                                                                                                                                                                       style="fill: rgb(255, 255, 255); width: 32px; height: 32px;" class="at-icon at-icon-email"><title id="at-svg-email-9">Email</title><g><g fill-rule="evenodd"></g><path
+                d="M27 22.757c0 1.24-.988 2.243-2.19 2.243H7.19C5.98 25 5 23.994 5 22.757V13.67c0-.556.39-.773.855-.496l8.78 5.238c.782.467 1.95.467 2.73 0l8.78-5.238c.472-.28.855-.063.855.495v9.087z"></path><path d="M27 9.243C27 8.006 26.02 7 24.81 7H7.19C5.988 7 5 8.004 5 9.243v.465c0 .554.385 1.232.857 1.514l9.61 5.733c.267.16.8.16 1.067 0l9.61-5.733c.473-.283.856-.96.856-1.514v-.465z"></path></g></svg></span></a><a
+                role="button" tabindex="100" title="More" class="at-share-btn at-svc-compact" style="width: 16.6667%;"><span class="at-icon-wrapper" style="background-color: rgb(255, 101, 80);"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" version="1.1" role="img" aria-labelledby="at-svg-addthis-10" title="More" alt="More"
+                                                                                                                                                                                                       style="fill: rgb(255, 255, 255); width: 32px; height: 32px;" class="at-icon at-icon-addthis"><title id="at-svg-addthis-10">AddThis</title><g><path d="M18 14V8h-4v6H8v4h6v6h4v-6h6v-4h-6z"
+                                                                                                                                                                                                                                                                                                                                                          fill-rule="evenodd"></path></g></svg></span></a></div>
+    </div>
+    <iframe src="./plate barbell racking calculator_files/safeFrame.html" style="width: 0px; height: 0px; display: none;"></iframe>
+{% endblock %}

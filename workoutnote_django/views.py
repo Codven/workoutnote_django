@@ -23,3 +23,15 @@ def handle_login(request):
 
 def handle_one_rep_max_calculator(request):
     return render(request=request, template_name='index/one rep max calculator.html')
+
+
+def handle_plate_barbell_racking_calculator(request):
+    return render(request=request, template_name='index/plate barbell racking calculator.html')
+
+
+def handle_powerlifting_calculator(request):
+    return render(request=request, template_name='index/powerlifting calculator.html')
+
+
+def handle_wilks_calculator(request):
+    return render(request=request, template_name='index/wilks calculator.html')

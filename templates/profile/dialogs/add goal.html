@@ -1,0 +1,114 @@
+<div class="modal is-active is-datemodal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head"><p class="modal-card-title">Add Goal</p>
+            <button aria-label="close" type="button" class="delete"></button>
+        </header>
+        <section class="modal-card-body">
+            <div>
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal"><label for="goal_bodymass" class="label">Bodyweight</label></div>
+                    <div class="field-body">
+                        <div class="field has-addons">
+                            <div class="control is-expanded"><input type="number" id="goal_bodymass" name="bodymass" required="required" min="5" max="400" step="0.1" class="input"></div>
+                            <div class="control"><span class="button is-static">
+                      kg
+                  </span></div> <!----></div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal"><label for="goal_start_date" class="label">Start Date</label></div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <div>
+                                    <div class="field is-grouped">
+                                        <div class="control is-expanded"><input id="goal_start_date" type="text" readonly="readonly" placeholder="Select date..." class="input is-clickable"></div>
+                                        <!----></div>
+                                    <div class="vdp-datepicker" style="display: none;">
+                                        <div class=""><!----> <input type="hidden" readonly="readonly" autocomplete="off" class="input" value="19 Jun 2021"> <!----> </div>
+                                        <div class="is-fullwidth vdp-datepicker__calendar" style="position: static;">
+                                            <header><span class="prev">&lt;</span> <span class="day__month_btn up">Jun 2021</span> <span class="next">&gt;</span></header>
+                                            <div class=""><span class="cell day-header">Sun</span><span class="cell day-header">Mon</span><span class="cell day-header">Tue</span><span
+                                                    class="cell day-header">Wed</span><span class="cell day-header">Thu</span><span class="cell day-header">Fri</span><span
+                                                    class="cell day-header">Sat</span> <span class="cell day blank"></span><span class="cell day blank"></span><span class="cell day">1</span><span
+                                                    class="cell day">2</span><span class="cell day">3</span><span class="cell day">4</span><span class="cell day weekend sat">5</span><span
+                                                    class="cell day weekend sun">6</span><span class="cell day">7</span><span class="cell day">8</span><span class="cell day">9</span><span
+                                                    class="cell day">10</span><span class="cell day">11</span><span class="cell day weekend sat">12</span><span
+                                                    class="cell day weekend sun">13</span><span class="cell day">14</span><span class="cell day">15</span><span class="cell day">16</span><span
+                                                    class="cell day">17</span><span class="cell day">18</span><span class="cell day selected today weekend sat">19</span><span
+                                                    class="cell day weekend sun">20</span><span class="cell day">21</span><span class="cell day">22</span><span class="cell day">23</span><span
+                                                    class="cell day">24</span><span class="cell day">25</span><span class="cell day weekend sat">26</span><span
+                                                    class="cell day weekend sun">27</span><span class="cell day">28</span><span class="cell day">29</span><span class="cell day">30</span></div>
+                                        </div>
+                                        <div class="is-fullwidth vdp-datepicker__calendar" style="position: static; display: none;">
+                                            <header><span class="prev">&lt;</span> <span class="month__year_btn up">2021</span> <span class="next">&gt;</span></header>
+                                            <span class="cell month">January</span><span class="cell month">February</span><span class="cell month">March</span><span
+                                                class="cell month">April</span><span class="cell month">May</span><span class="cell month selected">June</span><span class="cell month">July</span><span
+                                                class="cell month">August</span><span class="cell month">September</span><span class="cell month">October</span><span class="cell month">November</span><span
+                                                class="cell month">December</span></div>
+                                        <div class="is-fullwidth vdp-datepicker__calendar" style="position: static; display: none;">
+                                            <header><span class="prev">&lt;</span> <span>2020 - 2029</span> <span class="next disabled">&gt;</span></header>
+                                            <span class="cell year">2020</span><span class="cell year selected">2021</span><span class="cell year">2022</span><span class="cell year">2023</span><span
+                                                class="cell year">2024</span><span class="cell year">2025</span><span class="cell year">2026</span><span class="cell year disabled">2027</span><span
+                                                class="cell year disabled">2028</span><span class="cell year disabled">2029</span></div>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="startDate" value="2021-06-19"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal"><label for="goal_target_date" class="label">Target Date</label></div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <div>
+                                    <div class="field is-grouped">
+                                        <div class="control is-expanded"><input id="goal_target_date" type="text" readonly="readonly" placeholder="Select date..." class="input is-clickable"></div>
+                                        <!----></div>
+                                    <div class="vdp-datepicker" style="display: none;">
+                                        <div class=""><!----> <input type="hidden" readonly="readonly" autocomplete="off" class="input" value="19 Jul 2021"> <!----> </div>
+                                        <div class="is-fullwidth vdp-datepicker__calendar" style="position: static;">
+                                            <header><span class="prev">&lt;</span> <span class="day__month_btn up">Jul 2021</span> <span class="next">&gt;</span></header>
+                                            <div class=""><span class="cell day-header">Sun</span><span class="cell day-header">Mon</span><span class="cell day-header">Tue</span><span
+                                                    class="cell day-header">Wed</span><span class="cell day-header">Thu</span><span class="cell day-header">Fri</span><span
+                                                    class="cell day-header">Sat</span> <span class="cell day blank"></span><span class="cell day blank"></span><span class="cell day blank"></span><span
+                                                    class="cell day blank"></span><span class="cell day">1</span><span class="cell day">2</span><span class="cell day weekend sat">3</span><span
+                                                    class="cell day weekend sun">4</span><span class="cell day">5</span><span class="cell day">6</span><span class="cell day">7</span><span
+                                                    class="cell day">8</span><span class="cell day">9</span><span class="cell day weekend sat">10</span><span
+                                                    class="cell day weekend sun">11</span><span class="cell day">12</span><span class="cell day">13</span><span class="cell day">14</span><span
+                                                    class="cell day">15</span><span class="cell day">16</span><span class="cell day weekend sat">17</span><span
+                                                    class="cell day weekend sun">18</span><span class="cell day selected">19</span><span class="cell day">20</span><span class="cell day">21</span><span
+                                                    class="cell day">22</span><span class="cell day">23</span><span class="cell day weekend sat">24</span><span
+                                                    class="cell day weekend sun">25</span><span class="cell day">26</span><span class="cell day">27</span><span class="cell day">28</span><span
+                                                    class="cell day">29</span><span class="cell day">30</span><span class="cell day weekend sat">31</span></div>
+                                        </div>
+                                        <div class="is-fullwidth vdp-datepicker__calendar" style="position: static; display: none;">
+                                            <header><span class="prev">&lt;</span> <span class="month__year_btn up">2021</span> <span class="next">&gt;</span></header>
+                                            <span class="cell month">January</span><span class="cell month">February</span><span class="cell month">March</span><span
+                                                class="cell month">April</span><span class="cell month">May</span><span class="cell month">June</span><span class="cell month selected">July</span><span
+                                                class="cell month">August</span><span class="cell month">September</span><span class="cell month">October</span><span class="cell month">November</span><span
+                                                class="cell month">December</span></div>
+                                        <div class="is-fullwidth vdp-datepicker__calendar" style="position: static; display: none;">
+                                            <header><span class="prev">&lt;</span> <span>2020 - 2029</span> <span class="next disabled">&gt;</span></header>
+                                            <span class="cell year">2020</span><span class="cell year selected">2021</span><span class="cell year">2022</span><span class="cell year">2023</span><span
+                                                class="cell year">2024</span><span class="cell year">2025</span><span class="cell year">2026</span><span class="cell year disabled">2027</span><span
+                                                class="cell year disabled">2028</span><span class="cell year disabled">2029</span></div>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="targetDate" value="2021-07-19"></div>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="timezone" value="5"> <input type="hidden" name="bodymassunit" value="kg"></div>
+        </section>
+        <footer class="modal-card-foot">
+            <div class="buttons">
+                <button type="submit" name="action" value="addbodyweightgoal" class="button is-primary">
+                    Save
+                </button>
+                <a class="button">Close</a></div>
+        </footer>
+    </div>
+</div>

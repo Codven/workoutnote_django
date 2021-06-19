@@ -3,212 +3,86 @@
     <section class="section">
         <div class="container is-max-desktop">
 
-            <div class="mobile_sticky_ad mobile_sticky_ad--top">
-                <!-- 71161633/mobile_sticky_footer/mobile_sticky_footer -->
-                <div data-fuse="22025437133" data-fuse-code="fuse-slot-22025437133-1" data-fuse-slot="71161633/STRENGTHLEVEL_strengthlevel/mobile_sticky_footer">
-                    <div id="fuse-slot-22025437133-1" class="fuse-slot" style="display: none;"></div>
-                </div>
-            </div>
-
             {% include 'index/sub authentication header.html' %}
 
             {% include 'index/sub html index navtabs.html' %}
+
             <script>
                 StrengthLevel.setupNavigation();
             </script>
 
+            <div class="section-box">
+                <h1 class="title is-2 is-size-3-mobile">Log In</h1>
+                <div class="columns">
+                    <div class="column">
 
-            <div class="section-box" id="wilksContainer">
-                <h1 class="title is-2 is-size-3-mobile is-spaced">Wilks Calculator for Powerlifting</h1>
+                        <div class="content">
+                            <p>
+                                Need an account?
+                                <a href="https://strengthlevel.com/register">Register</a>
+                            </p>
+                        </div>
 
-                <h2 class="subtitle is-4 is-size-5-mobile">
-                    Calculate the Wilks Score for your gender/bodyweight in lb/kg
-                </h2>
+                        <form method="post" action="{% url 'profile main' %}" style="margin-top: 0;">
+                            {% csrf_token %}
+                            <div class="field">
+                                <label for="email" class="label">Email</label>
+                                <div class="control has-icons-left">
+                                    <input name="email" id="email" type="email" placeholder="Email" class="input" value="" required="" autofocus="">
+                                    <span class="icon is-small is-left">
+                <i class="slicon slicon-fa-envelope"></i>
+            </span>
+                                </div>
+                            </div>
 
-                <div class="content">
-                    <p>
-                        The Wilks Score (also known as Wilks Coefficient) measures your strength in powerlifting against
-                        other
-                        powerlifters with different bodyweights across both genders. It was invented by Robert Wilks of
-                        Powerlifting
-                        Australia.
-                    </p>
+                            <div class="field">
+                                <label for="password" class="label">Password</label>
+                                <div class="control has-icons-left">
+                                    <input name="password" id="password" type="password" placeholder="Password" class="input" required="">
+                                    <span class="icon is-small is-left">
+                <i class="slicon slicon-fa-lock"></i>
+            </span>
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <div class="control">
+                                    <button type="submit" class="button is-primary is-medium">Log In</button>
+                                </div>
+                            </div>
+
+                            <p>
+                                <a href="https://strengthlevel.com/forgot-password">
+                                    Forgot your password?
+                                </a>
+                            </p>
+                        </form>
+
+                        <div class="content mt-4">
+                            <p><strong>Or</strong></p>
+                            <p>
+                                <a href="https://www.facebook.com/v2.10/dialog/oauth?client_id=731465336900630&amp;state=5b353421e25edef8cbd12938215bfd50&amp;response_type=code&amp;sdk=php-sdk-5.7.0&amp;redirect_uri=https%3A%2F%2Fstrengthlevel.com%2Ffacebook-login&amp;scope=email%2Cuser_friends%2Cuser_gender" class="button is-facebook">
+            <span class="icon">
+                <i class="slicon slicon-fa-facebook-square"></i>
+            </span>
+                                    <span>Continue with Facebook</span>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="column">
+                        <div class="content">
+                            <h2 class="title is-3 is-size-4-mobile">Welcome to the Strength Level community</h2>
+                            <ul>
+                                <li>Log your lifts at the gym</li>
+                                <li>Keep track of your workouts</li>
+                                <li>Track your progress over time</li>
+                                <li>Find and follow other lifters</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-
-                <form action="https://strengthlevel.com/wilks-calculator#wilksScoreResults" method="post" id="powerliftingForm" class="powerliftingcalculator__form">
-                    <div class="field is-horizontal">
-                        <div class="field-label is-normal"><label for="splitform_gender" class="label">Gender</label></div>
-                        <div class="field-body">
-                            <div class="field">
-                                <div class="control">
-                                    <div class="select"><select id="splitform_gender" name="gender">
-                                        <option value="male">
-                                            Male
-                                        </option>
-                                        <option value="female">
-                                            Female
-                                        </option>
-                                    </select></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="field is-horizontal">
-                        <div class="field-label is-normal"><label for="splitform_bodymass" class="label">Bodyweight</label></div>
-                        <div class="field-body">
-                            <div class="field has-addons">
-                                <div class="control is-expanded"><input type="number" id="splitform_bodymass" name="bodymass" required="required" min="5" max="400" step="0.1" class="input"></div>
-                                <div class="control">
-                                    <div class="select"><select name="bodymassunit">
-                                        <option>
-                                            kg
-                                        </option>
-                                        <option>
-                                            lb
-                                        </option>
-                                        <option>
-                                            st
-                                        </option>
-                                    </select></div>
-                                </div> <!----></div>
-                        </div>
-                    </div>
-                    <div class="field is-horizontal">
-                        <div class="field-label"><label class="label">Method</label></div>
-                        <div class="field-body">
-                            <div class="field">
-                                <div class="control"><label class="radio"><input type="radio" name="method" value="split">
-                                    Separately</label> <label class="radio"><input type="radio" name="method" value="total"> Added
-                                    Up</label></div>
-                                <p class="help">
-                                    Enter your best bench press, squat and deadlift (conventional or sumo)
-                                </p></div>
-                        </div>
-                    </div>
-                    <div class="field is-horizontal">
-                        <div class="field-label is-normal"><label for="benchliftmass" class="label">
-                            Bench Press </label></div>
-                        <div class="field-body">
-                            <div class="field has-addons">
-                                <div class="control is-expanded"><input type="number" id="benchliftmass" name="benchliftmass" min="1" max="1500" required="required" step="0.1" class="input"></div>
-                                <div class="control">
-                                    <div class="select"><select name="liftmassunit">
-                                        <option>
-                                            kg
-                                        </option>
-                                        <option>
-                                            lb
-                                        </option>
-                                    </select></div>
-                                </div>
-                                <div class="control is-expanded"><input type="number" name="benchrepetitions" min="1" max="500" class="input"></div>
-                                <div class="control"><span class="button is-static">
-                            rep
-                        </span></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="field is-horizontal">
-                        <div class="field-label is-normal"><label for="squatliftmass" class="label">
-                            Back Squat </label></div>
-                        <div class="field-body">
-                            <div class="field has-addons">
-                                <div class="control is-expanded"><input type="number" id="squatliftmass" name="squatliftmass" min="1" max="1500" required="required" step="0.1" class="input"></div>
-                                <div class="control">
-                                    <div class="select"><select name="liftmassunit">
-                                        <option>
-                                            kg
-                                        </option>
-                                        <option>
-                                            lb
-                                        </option>
-                                    </select></div>
-                                </div>
-                                <div class="control is-expanded"><input type="number" name="squatrepetitions" min="1" max="500" class="input"></div>
-                                <div class="control"><span class="button is-static">
-                            rep
-                        </span></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="field is-horizontal">
-                        <div class="field-label is-normal"><label for="deadliftliftmass" class="label">
-                            Deadlift </label></div>
-                        <div class="field-body">
-                            <div class="field has-addons">
-                                <div class="control is-expanded"><input type="number" id="deadliftliftmass" name="deadliftliftmass" min="1" max="1500" required="required" step="0.1" class="input"></div>
-                                <div class="control">
-                                    <div class="select"><select name="liftmassunit">
-                                        <option>
-                                            kg
-                                        </option>
-                                        <option>
-                                            lb
-                                        </option>
-                                    </select></div>
-                                </div>
-                                <div class="control is-expanded"><input type="number" name="deadliftrepetitions" min="1" max="500" class="input"></div>
-                                <div class="control"><span class="button is-static">
-                            rep
-                        </span></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="field is-horizontal">
-                        <div class="field-label is-normal"></div>
-                        <div class="field-body">
-                            <div class="field">
-                                <div class="control">
-                                    <button type="submit" class="button is-primary is-medium">Calculate Score</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                <script>
-                    StrengthLevel.addPowerliftingCalculator({
-                        "method": "split",
-                        "liftMass": "",
-                        "bodyMass": "",
-                        "bodymass_minor": "",
-                        "bodyMassKg": null,
-                        "benchMass": "",
-                        "benchRepetitions": 1,
-                        "squatMass": "",
-                        "squatRepetitions": 1,
-                        "deadliftMass": "",
-                        "deadliftRepetitions": 1,
-                        "liftMassUnits": ["kg", "lb"],
-                        "bodyMassUnits": ["kg", "lb", "st"],
-                        "liftMassUnitSymbol": "lb",
-                        "bodyMassUnitSymbol": "lb",
-                        "unitDefinitions": [{"symbol": "kg", "conversionToBaseUnit": 1, "step": 0.1, "remainderSymbol": null, "remainderMultiple": null, "remainderStep": null}, {"symbol": "lb", "conversionToBaseUnit": 0.45359237, "step": 0.1, "remainderSymbol": null, "remainderMultiple": null, "remainderStep": null}, {
-                            "symbol": "st",
-                            "conversionToBaseUnit": 6.35029318,
-                            "step": 1,
-                            "remainderSymbol": "lb",
-                            "remainderMultiple": 14,
-                            "remainderStep": 0.5
-                        }],
-                        "minRepetitions": 1,
-                        "maxRepetitions": 500,
-                        "genders": [{"id": "male", "name": "Male"}, {"id": "female", "name": "Female"}],
-                        "gender": "male",
-                        "calculatedTotalLiftMassKg": null
-                    }, '#powerliftingForm');
-                </script>
-            </div>
-
-            <div class="section-box content">
-                <h2 class="title is-3 is-size-4-mobile">Rate Your Lifts Against Other People</h2>
-                <p>
-                    The Strength Level Calculator can show your exact level of strength at any bodyweight.
-                </p>
-                <p>
-                    <a href="https://strengthlevel.com/" class="button is-primary">
-                        Calculate Your Strength
-                    </a>
-                </p>
             </div>
             <div class="footer content">
                 <p>
@@ -232,19 +106,18 @@
             </div>
         </div>
     </section>
+    <iframe name="__tcfapiLocator" style="display: none;" src="./login_files/saved_resource.html"></iframe>
     <script>
         var addthis_config =
             {
                 ui_tabindex: 100,
             };
     </script>
-    <script type="text/javascript" src="./wilks-calculator_files/addthis_widget.js"></script>
+    <script type="text/javascript" src="./login_files/addthis_widget.js"></script>
     <div id="_atssh" style="visibility: hidden; height: 1px; width: 1px; position: absolute; top: -9999px; z-index: 100000;">
-        <iframe id="_atssh947" title="AddThis utility frame" src="./wilks-calculator_files/sh.f48a1a04fe8dbf021b4cda1d.html" style="height: 1px; width: 1px; position: absolute; top: 0px; z-index: 100000; border: 0px; left: 0px;"></iframe>
+        <iframe id="_atssh125" title="AddThis utility frame" src="./login_files/sh.f48a1a04fe8dbf021b4cda1d.html" style="height: 1px; width: 1px; position: absolute; top: 0px; z-index: 100000; border: 0px; left: 0px;"></iframe>
     </div>
     <style id="service-icons-0"></style>
-    <iframe name="__tcfapiLocator" style="display: none;" src="./wilks-calculator_files/saved_resource.html"></iframe>
-    <img src="./wilks-calculator_files/favicon.ico" style="display: none !important; width: 1px !important; height: 1px !important;"><img src="./wilks-calculator_files/px.gif" style="display: none !important; width: 1px !important; height: 1px !important;">
     <div class="addthis-smartlayers addthis-smartlayers-desktop" aria-labelledby="at4-share-label" role="region">
         <div id="at4-share-label">AddThis Sharing Sidebar</div>
         <div id="at4-share" class="at4-share addthis_32x32_style atss atss-left addthis-animated slideInLeft"><a role="button" tabindex="100" class="at-share-btn at-svc-facebook"><span class="at4-visually-hidden">Share to Facebook</span><span class="at-icon-wrapper" style="background-color: rgb(59, 89, 152);"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -264,7 +137,7 @@
                 d="M27 22.757c0 1.24-.988 2.243-2.19 2.243H7.19C5.98 25 5 23.994 5 22.757V13.67c0-.556.39-.773.855-.496l8.78 5.238c.782.467 1.95.467 2.73 0l8.78-5.238c.472-.28.855-.063.855.495v9.087z"></path><path d="M27 9.243C27 8.006 26.02 7 24.81 7H7.19C5.988 7 5 8.004 5 9.243v.465c0 .554.385 1.232.857 1.514l9.61 5.733c.267.16.8.16 1.067 0l9.61-5.733c.473-.283.856-.96.856-1.514v-.465z"></path></g></svg></span></a><a
                 role="button" tabindex="100" class="at-share-btn at-svc-compact at4-share-count-anchor"><span class="at4-visually-hidden">More AddThis Share options</span><span class="at-icon-wrapper" style="background-color: rgb(255, 101, 80);"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" version="1.1" role="img"
                                                                                                                                                                                                                                                            aria-labelledby="at-svg-addthis-5" class="at-icon at-icon-addthis" style="fill: rgb(255, 255, 255);"><title id="at-svg-addthis-5">AddThis</title><g><path
-                d="M18 14V8h-4v6H8v4h6v6h4v-6h6v-4h-6z" fill-rule="evenodd"></path></g></svg><div class="at4-share-count-container"><span class="at4-share-count"><span class="at4-visually-hidden">, Number of shares</span>142</span></div></span></a>
+                d="M18 14V8h-4v6H8v4h6v6h4v-6h6v-4h-6z" fill-rule="evenodd"></path></g></svg><div class="at4-share-count-container"><span class="at4-share-count"><span class="at4-visually-hidden">, Number of shares</span>437</span></div></span></a>
             <div id="at4-scc" class="at-share-close-control ats-transparent at4-hide-content at4-show" title="Hide">
                 <div class="at4-arrow at-left">Hide</div>
             </div>
@@ -288,11 +161,11 @@
             </div>
         </div>
     </div>
-    <div class="at-share-dock-outer addthis-smartlayers at4-visually-hidden addthis-smartlayers-mobile at4-hide" aria-labelledby="at-share-dock-label" role="region">
+    <div class="at-share-dock-outer addthis-smartlayers at4-visually-hidden addthis-smartlayers-mobile" aria-labelledby="at-share-dock-label" role="region">
         <div id="at-share-dock-label" class="at4-hide">AddThis Sharing</div>
-        <div id="at-share-dock" class="at-share-dock atss atss-bottom at-shfs-large addthis-animated slideInUp at4-hide"><a href="https://strengthlevel.com/wilks-calculator#" class="at4-count" style="width: 16.6667%;"><span class="at4-counter"></span><span class="at4-share-label">SHARES</span></a><a role="button" tabindex="100" title="Facebook" class="at-share-btn at-svc-facebook"
-                                                                                                                                                                                                                                                                                                             style="width: 16.6667%;"><span class="at-icon-wrapper" style="background-color: rgb(59, 89, 152);"><svg
-                xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" version="1.1" role="img" aria-labelledby="at-svg-facebook-6" title="Facebook" alt="Facebook" class="at-icon at-icon-facebook" style="fill: rgb(255, 255, 255); width: 32px; height: 32px;"><title id="at-svg-facebook-6">Facebook</title><g><path
+        <div id="at-share-dock" class="at-share-dock atss atss-bottom at-shfs-large addthis-animated slideInUp"><a href="https://strengthlevel.com/login#" class="at4-count" style="width: 16.6667%;"><span class="at4-counter"></span><span class="at4-share-label">SHARES</span></a><a role="button" tabindex="100" title="Facebook" class="at-share-btn at-svc-facebook" style="width: 16.6667%;"><span
+                class="at-icon-wrapper" style="background-color: rgb(59, 89, 152);"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" version="1.1" role="img" aria-labelledby="at-svg-facebook-6" title="Facebook" alt="Facebook" class="at-icon at-icon-facebook" style="fill: rgb(255, 255, 255); width: 32px; height: 32px;"><title
+                id="at-svg-facebook-6">Facebook</title><g><path
                 d="M22 5.16c-.406-.054-1.806-.16-3.43-.16-3.4 0-5.733 1.825-5.733 5.17v2.882H9v3.913h3.837V27h4.604V16.965h3.823l.587-3.913h-4.41v-2.5c0-1.123.347-1.903 2.198-1.903H22V5.16z" fill-rule="evenodd"></path></g></svg></span></a><a role="button" tabindex="100" title="Twitter" class="at-share-btn at-svc-twitter" style="width: 16.6667%;"><span class="at-icon-wrapper"
                                                                                                                                                                                                                                                                                                                                                                   style="background-color: rgb(29, 161, 242);"><svg
                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" version="1.1" role="img" aria-labelledby="at-svg-twitter-7" title="Twitter" alt="Twitter" class="at-icon at-icon-twitter" style="fill: rgb(255, 255, 255); width: 32px; height: 32px;"><title id="at-svg-twitter-7">Twitter</title><g><path
@@ -308,5 +181,6 @@
                                                                                                                                                                                                        class="at-icon at-icon-addthis" style="fill: rgb(255, 255, 255); width: 32px; height: 32px;"><title id="at-svg-addthis-10">AddThis</title><g><path d="M18 14V8h-4v6H8v4h6v6h4v-6h6v-4h-6z"
                                                                                                                                                                                                                                                                                                                                                           fill-rule="evenodd"></path></g></svg></span></a></div>
     </div>
-    <iframe src="./wilks-calculator_files/safeFrame.html" style="width: 0px; height: 0px; display: none;"></iframe>
+    <img src="./login_files/favicon.ico" style="display: none !important; width: 1px !important; height: 1px !important;"><img src="./login_files/px.gif" style="display: none !important; width: 1px !important; height: 1px !important;">
+    <iframe src="./login_files/safeFrame.html" style="width: 0px; height: 0px; display: none;"></iframe>
 {% endblock %}

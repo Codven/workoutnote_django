@@ -1,0 +1,120 @@
+{% extends 'profile/base.html' %}
+{% block content %}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Get all "navbar-burger" elements
+            const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+            // Check if there are any navbar burgers
+            if ($navbarBurgers.length > 0) {
+
+                // Add a click event on each of them
+                $navbarBurgers.forEach(el => {
+                    el.addEventListener('click', () => {
+
+                        // Get the target from the "data-target" attribute
+                        const target = el.dataset.target;
+                        const $target = document.getElementById(target);
+
+                        // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+                        el.classList.toggle('is-active');
+                        $target.classList.toggle('is-active');
+
+                    });
+                });
+            }
+
+        });
+    </script>
+    <div id="profilePageContainer"><!---->
+        <section class="hero is-primary is-translucent">
+            <div class="hero-body">
+                <div class="container">
+                    <div class="media" style="align-items: center;">
+                        <div class="media-left">
+                            <figure class="image is-96x96"><a href="https://strengthlevel.com/103795-kobiljon"><img src="./profile_files/b22177542a4b74ac6e8f2f04a8c099d0(1)" class="is-rounded"></a></figure>
+                        </div>
+                        <div class="media-content">
+                            <div class="field is-grouped is-grouped-multiline">
+                                <div class="control" style="flex-shrink: 1;"><h1 class="title is-2 is-size-3-mobile">
+                                    kobiljon
+                                </h1></div>
+                            </div>
+                            <div class="is-size-5"><a class="has-text-white"><strong>0</strong> Following
+                            </a> <a class="has-text-white ml-1"><strong>0</strong> Followers
+                            </a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="section has-background-white">
+            <div class="container"><!---->
+                <div class="block">
+                    <div class="tags are-medium has-addons"><span class="tag">
+            Powerlifting Level
+          </span> <span class="tag is-primary"><span class="stars"><span class="star__full">★</span><!----><span class="star__empty">★★★★</span></span></span> <span class="tag is-primary">
+            6%
+          </span></div>
+                </div>
+                <div class="buttons mb-6"><a href="https://strengthlevel.com/103795-kobiljon/workouts" class="button is-primary is-large"><span class="icon"><i class="slicon slicon-fa-dumbbell"></i></span> <span>Workouts</span></a> <a href="https://strengthlevel.com/103795-kobiljon/exercises" class="button is-primary is-large"><span class="icon"><i class="slicon slicon-fa-chart-bar"></i></span>
+                    <span>Exercises</span></a>
+                    <a href="https://strengthlevel.com/103795-kobiljon/bodyweight" class="button is-primary is-large"><span class="icon"><i class="slicon slicon-fa-weight"></i></span> <span>Bodyweight</span></a></div>
+                <div class="notification is-info" style="background-color: rgb(114, 137, 218);">
+                    <article class="media">
+                        <figure class="media-left"><span class="icon" style="margin-top: 0.5rem;"><i class="slicon slicon-fa-discord" style="font-size: 2.5rem;"></i></span></figure>
+                        <div class="media-content"><h3 class="title is-5">
+                            Join our Discord Community
+                        </h3> <h4 class="subtitle is-6">
+                            We've created a <a href="https://discord.gg/m9sayhBQaC" target="_blank">Discord Community
+                            for Strength Level</a> so that you can learn from experienced lifters by sharing
+                            goals, routines and progress photos. Introduce yourself on #introductions and don't forget
+                            to link to your Strength Level profile.
+                        </h4>
+                            <div class="buttons"><a href="https://discord.gg/m9sayhBQaC" target="_blank" class="button"><span class="icon"><i class="slicon slicon-fa-discord"></i></span> <span>Join Discord Community</span></a></div>
+                        </div>
+                    </article>
+                </div>
+                <div class="notification"><h3 class="title is-5">
+                    We love your feedback
+                </h3> <h4 class="subtitle is-6">
+                    If you are interested in a Strength Level app, please fill out the app survey below.
+                    We also have a survey to gather feedback for this website and learn
+                    how we can help your progression in the gym.
+                </h4>
+                    <div class="buttons"><a href="https://forms.gle/MvuDqc1dkFobKzyMA" target="_blank" class="button is-primary is-small">
+                        Website Survey
+                    </a> <a href="https://forms.gle/JBwGhBPoHVoxpXzj9" target="_blank" class="button is-primary is-small">
+                        App Survey
+                    </a></div>
+                </div>
+            </div>
+        </section> <!----> <!----></div>
+    <script>
+        StrengthLevel.setupProfilePage({
+            "followViewModel": {"user": {}, "following": [], "followers": []},
+            "emailVerificationViewModel": null,
+            "profileHeaderViewModel": {"profileUrl": "\/103795-kobiljon", "gravatarUrl": "https:\/\/www.gravatar.com\/avatar\/b22177542a4b74ac6e8f2f04a8c099d0?s=192&d=retro&r=pg", "name": "kobiljon", "percentile": 0.0590755},
+            "otherUserViewModel": null,
+            "layoutViewModel": {
+                "title": "kobiljon - Strength Level",
+                "menuSelection": "My Profile",
+                "gender": "male",
+                "analyticsPage": "\/my-profile",
+                "fingerprint": ":username",
+                "isLoggedIn": true,
+                "gravatarUrl": "https:\/\/www.gravatar.com\/avatar\/b22177542a4b74ac6e8f2f04a8c099d0?s=96&d=retro&r=pg",
+                "name": "kobiljon",
+                "profileUrl": "\/103795-kobiljon",
+                "isAdmin": false,
+                "useGoogleAnalytics": true,
+                "useSentryErrorReporting": true,
+                "useInspectlet": true,
+                "facebookAppId": "731465336900630"
+            },
+            "followChange": null,
+            "settingsViewModel": {"bodyMassUnit": "kg", "liftMassUnit": "kg"}
+        });
+    </script>
+{% endblock %}

@@ -54,3 +54,11 @@ def handle_powerlifting_calculator(request):
 
 def handle_wilks_calculator(request):
     return render(request=request, template_name='index/wilks calculator.html')
+
+
+def handle_login(request):
+    return render(request=request, template_name='index/login.html')
+
+
+def handle_profile_main(request):
+    return render(request=request, template_name='profile/main.html')

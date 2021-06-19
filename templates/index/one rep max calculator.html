@@ -6,14 +6,17 @@
             Calculate your one-rep max (1RM) for any lift. Your one-rep max is the max weight you can lift
             for a single repetition for a given exercise.
         </p>
-        <form id="oneRepMaxCalculator" action="https://strengthlevel.com/one-rep-max-calculator" method="post">
+        <form id="oneRepMaxCalculator" action="{% url 'one rep max calculator' %}" method="post">
+            {% csrf_token %}
             <div class="field is-horizontal">
                 <div class="field-label is-normal"><label for="liftmass" class="label">
                     Lift
                 </label></div>
                 <div class="field-body">
                     <div class="field has-addons">
-                        <div class="control is-expanded"><input type="number" id="liftmass" name="liftmass" min="1" max="1500" required="required" step="0.1" class="input"></div>
+                        <div class="control is-expanded">
+                            <input type="number" id="liftmass" name="liftmass" min="1" max="1500" required="required" step="0.1" class="input">
+                        </div>
                         <div class="control">
                             <div class="select"><select name="liftmassunit">
                                 <option>
@@ -29,19 +32,66 @@
             </div>
             <div class="field is-horizontal">
                 <div class="field-label is-normal"><label for="repetitions" class="label">Repetitions</label></div>
-                <div class="field-body"><input type="number" name="repetitions" id="repetitions" min="1" max="500" class="input"></div>
+                <div class="field-body">
+                    <input type="number" name="repetitions" id="repetitions" min="1" max="500" class="input" required="required">
+                </div>
             </div>
             <div class="field is-horizontal">
                 <div class="field-label is-normal"></div>
                 <div class="field-body">
                     <div class="field">
-                        <div class="control"><input type="submit" value="Calculate One Rep Max" class="button is-primary is-medium"></div>
+                        <div class="control">
+                            <input type="submit" value="Calculate One Rep Max" class="button is-primary is-medium">
+                        </div>
                     </div>
                 </div>
             </div>
         </form>
     </div>
+    {% if result_number %}
+        <div class="section-box">
+            <h2 class="title is-3 is-size-4-mobile">
+                Your one rep max is
+                <strong>{{ result_number }} kg</strong>
+            </h2>
+            <table class="table is-fullwidth is-striped">
+                <thead>
+                <tr>
+                    <th style="width: 33%">Percentage of 1RM</th>
+                    <th style="width: 33%">Lift Weight</th>
+                    <th>Repetitions of 1RM</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for result_item in result_table %}
+                    <tr>
+                        <td>{{ result_item.percentage }}%</td>
+                        <td>{{ result_item.liftmass }} kg</td>
+                        <td>{{ result_item.reps_of_1rm }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
 
+            <div class="notification " style="background-color: #f0d500;">
+                <table>
+                    <tbody>
+                    <tr>
+                        <td style="vertical-align: middle; width: 124px;" class="pr-2">
+                            <a href="https://runninglevel.com/?utm_source=runninglevel&amp;utm_medium=banner&amp;utm_campaign=launch&amp;utm_content=1rm_result" class="is-text" target="_blank">
+                                <img src="/images/runninglevel.svg" width="112" height="28" alt="Running Level">
+                            </a>
+                        </td>
+                        <td style="vertical-align: middle">
+                            <strong>New!</strong> <a href="https://runninglevel.com/?utm_source=runninglevel&amp;utm_medium=banner&amp;utm_campaign=launch&amp;utm_content=1rm_result" class="is-text"
+                                                     target="_blank">Calculate your Running Level</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
     <div class="section-box">
         <h2 class="title is-3 is-size-4-mobile">Repetition Percentages of 1RM</h2>
         <table class="table is-fullwidth is-striped">
@@ -175,7 +225,6 @@
             </tbody>
         </table>
     </div>
-
     <div class="section-box content">
         <h2 class="title is-3 is-size-4-mobile">Rate Your Lifts Against Other People</h2>
         <p>

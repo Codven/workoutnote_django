@@ -2,6 +2,7 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.template.response import TemplateResponse
 from django.contrib.auth.models import User
 from random import randint
 
@@ -88,8 +89,26 @@ def handle_training_log_tutorial(request):
     return render(request=request, template_name='index/training log tutorial.html')
 
 
+@require_http_methods(['GET', 'POST'])
 def handle_one_rep_max_calculator(request):
-    return render(request=request, template_name='index/one rep max calculator.html')
+    if request.method == 'GET':
+        return render(request=request, template_name='index/one rep max calculator.html')
+    elif request.method == 'POST':
+        liftmass = float(request.POST['liftmass'])
+        repetitions = float(request.POST['repetitions'])
+        result = round(liftmass / (1.0278 - 0.0278 * repetitions), 1)
+        result_reps_of_1rm = [1, 2, 4, 6, 8, 10, 12, 16, 20, 24, 30]
+        max_percentage = 100
+        data = {
+            'result_number': result,
+            'result_table': []
+        }
+        for item in result_reps_of_1rm:
+            data['result_table'].append(
+                {'percentage': max_percentage, 'liftmass': result * max_percentage / 100, 'reps_of_1rm': item}
+            )
+            max_percentage -= 5
+        return TemplateResponse(request=request, template='index/one rep max calculator.html', context=data)
 
 
 def handle_plate_barbell_racking_calculator(request):

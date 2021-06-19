@@ -1,6 +1,7 @@
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
+from google.oauth2 import service_account
 from email.mime.text import MIMEText
 from googleapiclient import errors
 import base64
@@ -14,18 +15,22 @@ def get_timestamp_ms():
 
 
 def get_credentials():
-    credentials = None
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
-            credentials = pickle.load(token)
-    if not credentials or not credentials.valid:
-        if credentials and credentials.expired and credentials.refresh_token:
-            credentials.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file('email_verification_credentials.json', ['https://www.googleapis.com/auth/gmail.send'])
-            credentials = flow.run_local_server(port=0)
-        with open('token.pickle', 'wb') as token:
-            pickle.dump(credentials, token)
+    # credentials = None
+    # if os.path.exists('token.pickle'):
+    #     with open('token.pickle', 'rb') as token:
+    #         credentials = pickle.load(token)
+    # if not credentials or not credentials.valid:
+    #     if credentials and credentials.expired and credentials.refresh_token:
+    #         credentials.refresh(Request())
+    #     else:
+    #         flow = InstalledAppFlow.from_client_secrets_file('email_verification_credentials.json', ['https://www.googleapis.com/auth/gmail.send'])
+    #         credentials = flow.run_local_server(port=0)
+    #     with open('token.pickle', 'wb') as token:
+    #         pickle.dump(credentials, token)
+    # return credentials
+    scopes = ['https://www.googleapis.com/auth/gmail.send']
+    service_account_file = 'email_verification_service_account_credentials.json'
+    credentials = service_account.Credentials.from_service_account_file(service_account_file, scopes=scopes)
     return credentials
 
 

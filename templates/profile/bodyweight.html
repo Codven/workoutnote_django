@@ -1,0 +1,230 @@
+{% extends 'profile/base.html' %}
+{% block content %}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Get all "navbar-burger" elements
+            const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+            // Check if there are any navbar burgers
+            if ($navbarBurgers.length > 0) {
+
+                // Add a click event on each of them
+                $navbarBurgers.forEach(el => {
+                    el.addEventListener('click', () => {
+
+                        // Get the target from the "data-target" attribute
+                        const target = el.dataset.target;
+                        const $target = document.getElementById(target);
+
+                        // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+                        el.classList.toggle('is-active');
+                        $target.classList.toggle('is-active');
+
+                    });
+                });
+            }
+
+        });
+    </script>
+    <div id="bodyweightContainer">
+        <section class="hero is-primary is-translucent">
+            <div class="hero-body">
+                <div class="container"><h1 class="title is-1 is-size-2-mobile">
+                    Bodyweight
+                </h1></div>
+            </div>
+        </section>
+        <section class="section has-background-white">
+            <div class="container">
+                <div class="columns">
+                    <div class="column is-two-thirds-desktop">
+                        <nav class="level is-mobile" style="overflow: scroll hidden;">
+                            <div class="level-item has-text-centered">
+                                <div><p class="heading">Bodyweight</p>
+                                    <p class="title"><span>
+                  67 kg
+                  </span></p></div>
+                            </div>
+                            <div class="level-item has-text-centered">
+                                <div><p class="heading"><!---->
+                                    Goal
+                                </p>
+                                    <p class="title"><span>
+                    Not Set
+                  </span></p></div>
+                            </div>
+                            <div class="level-item has-text-centered">
+                                <div><p class="heading">Body Fat</p>
+                                    <p class="title"><span>
+                    Not Set
+                  </span></p></div>
+                            </div>
+                        </nav>
+                    </div>
+                    <div class="column is-one-third-desktop"><!----> <!---->
+                        <div class="buttons"><a class="button is-primary"><span class="icon"><i aria-hidden="true" class="slicon slicon-fa-weight"></i></span> <span>Add Bodyweight</span></a> <a
+                                class="button"><span class="icon"><i aria-hidden="true" class="slicon slicon-fa-chart-line"></i></span> <span>Add Goal</span></a></div>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column is-two-thirds-desktop mt-5">
+                        <div class="block">
+                            <div class="">
+                                <div class="columns">
+                                    <div class="column">
+                                        <div class="field"><label for="undefinedType" class="label">Graph Type</label>
+                                            <div class="control">
+                                                <div class="select"><select id="undefinedType">
+                                                    <option value="bodyMass">
+                                                        Bodyweight
+                                                    </option>
+                                                    <option value="bodyFatPercentage">
+                                                        Body Fat Percentage
+                                                    </option>
+                                                    <option value="bodyFatMass">
+                                                        Body Fat Mass
+                                                    </option>
+                                                    <option value="leanMass">
+                                                        Lean Body Mass
+                                                    </option>
+                                                    <option value="bodyMassIndex">
+                                                        Body Mass Index (BMI)
+                                                    </option>
+                                                    <option value="fatFreeMassIndex">
+                                                        Fat Free Mass Index (FFMI)
+                                                    </option>
+                                                    <option value="adjustedFatFreeMassIndex">
+                                                        Adjusted FFMI
+                                                    </option>
+                                                </select></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="column">
+                                        <div class="field"><label for="undefinedDateRange" class="label">Date Range</label>
+                                            <div class="control">
+                                                <div class="select"><select id="undefinedDateRange">
+                                                    <option value="3">
+                                                        3 months
+                                                    </option>
+                                                    <option value="6">
+                                                        6 months
+                                                    </option>
+                                                    <option value="12">
+                                                        12 months
+                                                    </option>
+                                                    <option value="">
+                                                        All time
+                                                    </option>
+                                                </select></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="graph-container">
+                                    <div class="chartjs-size-monitor">
+                                        <div class="chartjs-size-monitor-expand">
+                                            <div class=""></div>
+                                        </div>
+                                        <div class="chartjs-size-monitor-shrink">
+                                            <div class=""></div>
+                                        </div>
+                                    </div>
+                                    <canvas class="graph chartjs-render-monitor" width="413" height="250" style="display: block; width: 413px; height: 250px;"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column is-one-third-desktop mt-5">
+                        <div class="tabs mb-2 is-boxed">
+                            <ul>
+                                <li class="is-active"><a><span class="icon is-small"><i aria-hidden="true" class="slicon slicon-fa-weight"></i></span> <span>Bodyweights</span></a></li>
+                                <li class=""><a><span class="icon is-small"><i aria-hidden="true" class="slicon slicon-fa-chart-line"></i></span> <span>Goals</span></a></li>
+                            </ul>
+                        </div>
+                        <div class="table-container is-overflow-visible">
+                            <table class="table is-fullwidth is-striped is-narrow">
+                                <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th class="has-text-right">Bodyweight</th>
+                                    <th class="has-text-right">Body Fat</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        Apr 12
+                                        <div class="is-size-7">
+                                            2021
+                                        </div>
+                                    </td>
+                                    <td class="has-text-right">67 kg</td>
+                                    <td class="has-text-right">-</td>
+                                    <td class="is-vcentered">
+                                        <div class="dropdown is-right has-text-left">
+                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i
+                                                    class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
+                                            <div role="menu" class="dropdown-menu">
+                                                <div class="dropdown-content"><a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody> <!----></table> <!----></div>
+                        <div class="table-container is-overflow-visible" style="display: none;">
+                            <table class="table is-fullwidth is-striped is-narrow">
+                                <thead>
+                                <tr>
+                                    <th>Start</th>
+                                    <th>Finish</th>
+                                    <th class="has-text-right">Bodyweight</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="4">No goals found</td>
+                                </tr>
+                                </tfoot>
+                            </table> <!----></div>
+                    </div>
+                </div>
+                <div class="buttons"><a class="button">Show Energy Needs</a></div>
+            </div>
+        </section>
+        <form method="post"><!----></form>
+        <form method="post"><!----></form> <!----></div>
+    <script>
+        StrengthLevel.setupBodyweightPage({
+            "addedBodyweight": false,
+            "addedBodyweightGoal": false,
+            "bmrCalories": 1602.3582203653002,
+            "bodyMassViewModel": {"quantity": 67, "symbol": "kg", "step": 0.1, "remainderQuantity": null, "remainderSymbol": null, "remainderStep": null},
+            "bodyweightViewModels": [{"id": 248503, "dateMeasured": "2021-04-12", "bodyMassKg": 67, "bodyFatPercentage": null, "bodyFatTechnique": null}],
+            "bodyweightGoalSectionViewModel": null,
+            "bodyMassGraph": {"name": "Nematjon", "gender": "male", "unitSymbol": "kg", "results": [{"date": "2021-04-12", "bodyMass": 67, "bodyMassIndex": 23.458562375266975}], "goalSeries": []},
+            "otherUserViewModel": null,
+            "layoutViewModel": {
+                "title": "Nematjon Bodyweight - Strength Level",
+                "menuSelection": "Bodyweight",
+                "gender": "male",
+                "analyticsPage": "\/my-bodyweight",
+                "fingerprint": ":username\/bodyweight",
+                "isLoggedIn": true,
+                "gravatarUrl": "https:\/\/www.gravatar.com\/avatar\/7a5c55da08fae356d1064251175ccc34?s=96&d=retro&r=pg",
+                "name": "Nematjon",
+                "profileUrl": "\/102596-nematjon",
+                "isAdmin": false,
+                "useGoogleAnalytics": true,
+                "useSentryErrorReporting": true,
+                "useInspectlet": true,
+                "facebookAppId": "731465336900630"
+            },
+            "settingsViewModel": {"bodyMassUnit": "kg", "liftMassUnit": "kg"}
+        });
+    </script>
+{% endblock %}

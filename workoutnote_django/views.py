@@ -34,11 +34,11 @@ def handle_wilks_calculator(request):
 
 
 def handle_login(request):
-    return render(request=request, template_name='index/auth login.html')
+    return render(request=request, template_name='index/login.html')
 
 
 def handle_register(request):
-    return render(request=request, template_name='index/auth register.html')
+    return render(request=request, template_name='index/register.html')
 
 
 def handle_logout(request):
@@ -55,6 +55,10 @@ def handle_settings(request):
 
 def handle_analyse_lift(request):
     return render(request=request, template_name='profile/analyse lift.html')
+
+
+def handle_bodyweight(request):
+    return render(request=request, template_name='profile/bodyweight.html')
 
 
 def handle_find_lifters(request):

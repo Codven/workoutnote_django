@@ -37,7 +37,7 @@ def handle_login_register(request):
         data['forgot_password_link'] = ''
         data['forgot_password_text'] = ''
 
-    return TemplateResponse(request=request, template='login.html', context=data)
+    return TemplateResponse(request=request, template='index/sub html authentication.html', context=data)
 
 
 def handle_one_rep_max_calculator(request):

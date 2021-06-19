@@ -653,7 +653,7 @@ body, button, input, optgroup, select, textarea {
 
 code, pre {
     -moz-osx-font-smoothing: auto;
-    -webkit-font-smoothing: auto;
+    -webkit-font-smoothing: inherit;
     font-family: monospace
 }
 
@@ -661,7 +661,7 @@ body {
     color: #0a0a0a;
     font-size: 1em;
     font-weight: 400;
-    line-height: 1.5
+    line-height: 1.5;
 }
 
 a {
@@ -9682,7 +9682,7 @@ a.has-text-strengthlevel-dark:hover, a.has-text-strengthlevel-dark:focus {
 }
 
 html {
-    background: #004977 url(../images/squatbar.jpg) no-repeat center top fixed;
+    background: #004977 url('background.jpeg') no-repeat center top fixed;
     background-size: 100%
 }
 
@@ -9693,7 +9693,7 @@ html {
 }
 
 html.page--female {
-    background-image: url(../images/squatbar-female.jpg)
+    background-image: url('background.jpeg')
 }
 
 @media screen and (max-width: 768px) {
@@ -10034,65 +10034,6 @@ abbr[title] {
 
 .liftresult__standards abbr span {
     display: inline
-}
-
-.publift_adunit {
-    margin: 1em 0
-}
-
-.publift_adunit--sticky.advert__fakecontent {
-    height: 100px
-}
-
-.mobile_sticky_ad {
-    visibility: hidden
-}
-
-@media screen and (max-width: 1022px) {
-    .mobile_sticky_ad {
-        height: fit-content;
-        min-height: 60px;
-        width: 100%;
-        background-color: transparent;
-        bottom: 0;
-        margin: 0 auto;
-        visibility: visible;
-        position: sticky;
-        position: -webkit-sticky;
-        position: -moz-sticky;
-        position: -ms-sticky;
-        position: -o-sticky;
-        z-index: 999
-    }
-
-    .mobile_sticky_ad--top {
-        bottom: auto;
-        top: 0
-    }
-}
-
-.desktop_sticky_ad {
-    height: fit-content;
-    min-height: 60px;
-    width: 100%;
-    background-color: transparent;
-    bottom: 0;
-    margin: 0 auto;
-    position: sticky;
-    position: -webkit-sticky;
-    position: -moz-sticky;
-    position: -ms-sticky;
-    position: -o-sticky;
-    z-index: 999;
-    display: none;
-    visibility: hidden
-}
-
-@media screen and (min-width: 769px), print {
-    .desktop_sticky_ad {
-        visibility: visible;
-        display: block
-    }
 }
 
 .steps {

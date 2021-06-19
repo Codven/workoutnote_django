@@ -1,26 +1,24 @@
 from django.shortcuts import render
-
-
-def handle_index(request):
-    return render(request=request, template_name='index.html')
-
-
-def handle_calculators(request):
-    return render(request=request, template_name='calculators.html')
-
-
-def handle_strength_standards(request):
-    return render(request=request, template_name='strength_standards.html')
-
-
-def handle_training_log_tutorial(request):
-    return render(request=request, template_name='training-log-tutorial.html')
-
-
 from django.template.response import TemplateResponse
 
 
-def login_register(request):
+def handle_index(request):
+    return render(request=request, template_name='index/index.html')
+
+
+def handle_calculators(request):
+    return render(request=request, template_name='index/calculators.html')
+
+
+def handle_strength_standards(request):
+    return render(request=request, template_name='index/strength standards.html')
+
+
+def handle_training_log_tutorial(request):
+    return render(request=request, template_name='index/training log tutorial.html')
+
+
+def handle_login_register(request):
     data = {
         'title': 'Log In',
         'subtitle': 'Need an account?',
@@ -40,3 +38,7 @@ def login_register(request):
         data['forgot_password_text'] = ''
 
     return TemplateResponse(request=request, template='login.html', context=data)
+
+
+def handle_one_rep_max_calculator(request):
+    return render(request=request, template_name='index/one rep max calculator.html')

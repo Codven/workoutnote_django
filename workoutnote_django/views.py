@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.template.response import TemplateResponse
 
 
 def handle_index(request):
@@ -17,8 +18,26 @@ def handle_training_log_tutorial(request):
     return render(request=request, template_name='index/training log tutorial.html')
 
 
-def handle_login(request):
-    return render(request=request, template_name='index/sub html authentication.html')
+def handle_login_register(request):
+    data = {
+        'title': 'Log In',
+        'subtitle': 'Need an account?',
+        'subtitle_link': '/register',
+        'subtitle_link_text': 'Register',
+        'button_text': 'Log In',
+        'forgot_password_link': '/forgot-password',
+        'forgot_password_text': 'Forgot password?'
+    }
+    if request.path == '/register/':
+        data['title'] = 'Register'
+        data['subtitle'] = 'Already have an account?'
+        data['subtitle_link'] = '/login'
+        data['subtitle_link_text'] = 'Log In'
+        data['button_text'] = 'Register'
+        data['forgot_password_link'] = ''
+        data['forgot_password_text'] = ''
+
+    return TemplateResponse(request=request, template='index/sub html authentication.html', context=data)
 
 
 def handle_one_rep_max_calculator(request):

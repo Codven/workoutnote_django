@@ -21,7 +21,8 @@
                                 <div class="menudropdown__section__title">Strength Calculators</div>
                                 <ol class="menudropdown__section__links">
                                     <li><a href="/">Strength Level
-                                        Calculator <span class="stars"><span class="star__full">★</span><span class="star__empty">★★★★</span></span></a></li>
+                                        Calculator <span class="stars"><span class="star__full">★</span><span
+                                                class="star__empty">★★★★</span></span></a></li>
                                     <li><a href="/one-rep-max-calculator">One Rep Max
                                         Calculator</a></li>
                                     <li><a href="/plate-barbell-racking-calculator">Plate
@@ -58,14 +59,14 @@
 
 
             <div class="section-box">
-                <h1 class="title is-2 is-size-3-mobile">Log In</h1>
+                <h1 class="title is-2 is-size-3-mobile">{{ title }}</h1>
                 <div class="columns">
                     <div class="column">
 
                         <div class="content">
                             <p>
-                                Need an account?
-                                <a href="/register">Register</a>
+                                {{ subtitle }}
+                                <a href="{{ subtitle_link }}">{{ subtitle_link_text }}</a>
                             </p>
                         </div>
 
@@ -86,7 +87,8 @@
                             <div class="field">
                                 <label for="password" class="label">Password</label>
                                 <div class="control has-icons-left">
-                                    <input name="password" id="password" type="password" placeholder="Password" class="input"
+                                    <input name="password" id="password" type="password" placeholder="Password"
+                                           class="input"
                                            required>
                                     <span class="icon is-small is-left">
                 <i class="slicon slicon-fa-lock"></i>
@@ -96,13 +98,13 @@
 
                             <div class="field">
                                 <div class="control">
-                                    <button type="submit" class="button is-primary is-medium">Log In</button>
+                                    <button type="submit" class="button is-primary is-medium">{{ button_text }}</button>
                                 </div>
                             </div>
 
                             <p>
-                                <a href="/forgot-password">
-                                    Forgot your password?
+                                <a href="{{ forgot_password_link }}">
+                                    {{ forgot_password_text }}
                                 </a>
                             </p>
                         </form>

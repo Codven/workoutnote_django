@@ -29,4 +29,5 @@ urlpatterns = [
     path('wilks-calculator/', views.handle_wilks_calculator, name='wilks calculator'),
 
     path('login/', views.handle_login, name='login'),
+    path('register/', views.handle_login_register, name='register'),
 ]

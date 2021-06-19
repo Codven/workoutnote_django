@@ -1,0 +1,118 @@
+{% extends 'index/base.html' %}
+{% block content %}
+    <div class="section-box content">
+        <h1 class="title is-2 is-size-3-mobile">Frequently Asked Questions (FAQ)</h1>
+
+        <h2 class="title is-3 is-size-4-mobile is-spaced">Rating lifts using the calculator</h2>
+        <h3 class="subtitle is-4 is-size-5-mobile">How do I ask for more exercises?</h3>
+        <p>
+            Send us a message via our
+            <a href="https://www.facebook.com/strengthlevel">Facebook page</a>
+            and we will add your exercise to our list of exercises to consider adding.
+        </p>
+
+        <h3 class="subtitle is-4 is-size-5-mobile">Should I include the weight of the bar?</h3>
+        <p>
+            Yes, include the weight of the bar. Report the total amount you lift.
+            If you lift 30 kg and the bar weights 20 kg, then you should report the total amount 30 kg not 10 kg.
+        </p>
+
+        <h3 class="subtitle is-4 is-size-5-mobile">Should I enter all repetitions done in a workout?</h3>
+        <p>
+            No, just enter the number of repetitions done in a single set into the calculator. If you do 5 sets of 5
+            repetitions,
+            put in 5 repetitions not 25.
+        </p>
+        <p>
+            When logged in, we recommend putting in both the sets and repetitions so that you can track your progress.
+        </p>
+
+        <h3 class="subtitle is-4 is-size-5-mobile">Do the number of sets impact the number of repetitions in a given
+            set?</h3>
+        <p>
+            Yes, to a small degree. With experienced lifters, muscles recover fast during strength training so if you can do
+            5 reps at maximum effort at a certain weight, you can normally do another set of 4-5 reps after 2 minutes rest.
+        </p>
+
+        <h3 class="subtitle is-4 is-size-5-mobile">Should I stand or sit when performing exercises?</h3>
+        <p>
+            Our exercises standards cover both standing and sitting. Sitting is often stricter so some lifters find that
+            they can lift more standing. If you are performing a upwards pressing motion, like barbell dumbbell press, you
+            should have a vertical or near vertical back rest otherwise it is more like incline dumbbell press.
+        </p>
+
+        <h2 class="title is-3 is-size-4-mobile is-spaced">Barbell exercises</h2>
+        <h3 class="subtitle is-4 is-size-5-mobile">Should lifts be paused or touch-and-go?</h3>
+        <p>
+            At the moment we don't take into account how you complete the movement. Feel free to rate both paused and
+            touch-and-go lifts.
+        </p>
+
+        <h2 class="title is-3 is-size-4-mobile is-spaced">Dumbbell exercises</h2>
+        <h3 class="subtitle is-4 is-size-5-mobile">Should I double the weight for dumbbell exercises?</h3>
+        <p>
+            Put in the weight of what you have in one hand not both hands. For example if you can
+            dumbbell press 90 lb in each arm, put in 90 lb not 180 lb.
+        </p>
+
+        <h3 class="subtitle is-4 is-size-5-mobile">Should I double the reps for dumbbell exercises?</h3>
+        <p>
+            No, log the amount of reps done for each arm and do not add them up.
+            If you are logging dumbbell front raises and do 10 reps with each arm, then you would log 10 reps total not 20
+            reps.
+        </p>
+
+        <h3 class="subtitle is-4 is-size-5-mobile">Should I use both arms on one dumbbell?</h3>
+        <p>
+            No, the dumbbell standards are set for one dumbbell per arm. If you want to log lifts where you use both
+            arms on a single dumbbell then treat them as barbell lifts, or ask us to add additional exercises on
+            <a href="https://www.facebook.com/strengthlevel">Facebook</a>.
+        </p>
+
+        <h2 class="title is-3 is-size-4-mobile is-spaced">Bodyweight exercises</h2>
+        <h3 class="subtitle is-4 is-size-5-mobile">Why is additional weight rated better than higher bodyweight when the
+            total weight is the
+            same?</h3>
+        <p>
+            A lifter is better if they can lift the same weight at less bodyweight. Like at the Olympics where you have
+            weight categories — heavier lifters have to lift more. That is why if you record bodyweight plus extra weight
+            your performance is intermediate, whereas if you put all the weight into the bodyweight box your performance is
+            classed as novice even though the total weight lifted is the same.
+        </p>
+
+        <h2 class="title is-3 is-size-4-mobile is-spaced">Cable exercises</h2>
+        <h3 class="subtitle is-4 is-size-5-mobile">Do some cable machines have an advantage over others?</h3>
+        <p>
+            Some machines have a 2:1 mechanical advantage on the pulley so you can lift double what you could with a
+            dumbbell/barbell. Use machines with 1:1 pulleys or divide the weight lifted by 2 so that you do not look
+            stronger than you are.
+        </p>
+
+        <h2 class="title is-3 is-size-4-mobile is-spaced">One-rep-max calculator</h2>
+
+        <h3 class="subtitle is-4 is-size-5-mobile">What formula do you use on the 1RM calculator?</h3>
+        <p>
+            Under 8 reps we use the Brzycki formula and over 10 reps we use the Epley formula.
+            We found Brzycki is more accurate at lower rep ranges.
+        </p>
+        <p>
+            Between 8 and 10 repetitions we use a linear interpolation of Brzycki and Epley so 9 repetitions is 50-50.
+        </p>
+
+        <h2 class="title is-3 is-size-4-mobile is-spaced">Strength Level standards</h2>
+
+        <h3 class="subtitle is-4 is-size-5-mobile">Are the strength standards based on lifts entered?</h3>
+        <p>Yes, we take all the lifts entered into Strength Level and calculate standards for each exercise.</p>
+
+        <h3 class="subtitle is-4 is-size-5-mobile">How do you stop strength standards being affected by false lifts?</h3>
+        <p>We perform analysis on the lifts entered and filter out robots and lifters who enter too many lifts.</p>
+
+        <h2 class="title is-3 is-size-4-mobile is-spaced">Strength Level accounts</h2>
+
+        <h3 class="subtitle is-4 is-size-5-mobile">How do I delete my account?</h3>
+        <p>
+            Send an email to <a href="mailto:support@strengthlevel.com">support@strengthlevel.com</a> and we will
+            delete your account as soon as possible.
+        </p>
+    </div>
+{% endblock %}

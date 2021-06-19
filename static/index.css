@@ -1,10 +1,3 @@
-@font-face {
-    font-family: "strengthlevelfont";
-    src: url("strengthlevelfont.eot?fabf82305d499377a01e24d7bb5fb30d?#iefix") format("embedded-opentype"),
-    url("strengthlevelfont.woff2?fabf82305d499377a01e24d7bb5fb30d") format("woff2"),
-    url("strengthlevelfont.woff?fabf82305d499377a01e24d7bb5fb30d") format("woff");
-}
-
 .slicon {
     line-height: 1;
 }

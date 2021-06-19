@@ -33,7 +33,7 @@ def handle_login(request):
 @require_http_methods(['GET', 'POST'])
 def handle_register(request):
     if request.user.is_authenticated:
-        return redirect(to='index')
+        return redirect(to='profile main')
     elif request.method == 'GET':
         return render(request=request, template_name='index/auth register.html')
     elif 'email' in request.POST and 'password' in request.POST:
@@ -122,6 +122,10 @@ def handle_powerlifting_calculator(request):
 
 def handle_wilks_calculator(request):
     return render(request=request, template_name='index/wilks calculator.html')
+
+
+def handle_powerlifting_standards(request):
+    return render(request=request, template_name='index/powerlifting standards.html')
 
 
 def handle_profile_main(request):

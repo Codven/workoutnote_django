@@ -1,5 +1,6 @@
 {% extends 'profile/base.html' %}
 {% block content %}
+    {% load static %}
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
@@ -33,12 +34,12 @@
                 <div class="container">
                     <div class="media" style="align-items: center;">
                         <div class="media-left">
-                            <figure class="image is-96x96"><a href="https://strengthlevel.com/103795-kobiljon"><img src="./profile_files/b22177542a4b74ac6e8f2f04a8c099d0(1)" class="is-rounded"></a></figure>
+                            <img width="96" height="96" style="margin-right: 10px" src="{% static 'user-white.svg' %}" alt="Dumbbell"/>
                         </div>
                         <div class="media-content">
                             <div class="field is-grouped is-grouped-multiline">
                                 <div class="control" style="flex-shrink: 1;"><h1 class="title is-2 is-size-3-mobile">
-                                    kobiljon
+                                    {{ request.user.username }}
                                 </h1></div>
                             </div>
                             <div class="is-size-5"><a class="has-text-white"><strong>0</strong> Following

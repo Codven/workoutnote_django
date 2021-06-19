@@ -10,7 +10,8 @@
                         Join 1758026+ Lifters and Calculate your Relative Strength:
                     </h2>
 
-                    <form id="formCalc" action="https://strengthlevel.com/" method="post"><!---->
+                    <form id="formCalc" action="{% url 'index' %}" method="post"><!---->
+                        {% csrf_token %}
                         <div class="field is-horizontal">
                             <div class="field-label is-normal"><label for="gender" class="label">Gender/Age</label></div>
                             <div class="field-body">
@@ -3230,7 +3231,7 @@
             bench press, squat, deadlift, shoulder press, pull ups, dumbbell bench press, dumbbell curl, push ups, barbell curl, dumbbell shoulder press.
         </p>
         <p>
-            <a class="button is-primary" href="https://strengthlevel.com/strength-standards">View
+            <a class="button is-primary" href="{% url 'strength standards' %}">View
                 Strength Standards</a>
         </p>
     </div>
@@ -3239,8 +3240,8 @@
         <p>Join the Strength Level community today! Track your workouts and compare with your friends and other
             lifters.</p>
         <p class="buttons">
-            <a href="https://strengthlevel.com/register" class="button is-primary">Register</a>
-            <a href="https://strengthlevel.com/training-log" class="button">Learn more</a>
+            <a href="{% url 'register' %}" class="button is-primary">Register</a>
+            <a href="{% url 'profile main' %}" class="button">Learn more</a>
         </p>
     </div>
     <div class="section-box content">
@@ -3249,7 +3250,7 @@
             If you want to calculate your one rep max, or see percentages of your 1RM, check out our one rep max calculator:
         </p>
         <p>
-            <a class="button is-primary" href="https://strengthlevel.com/one-rep-max-calculator">One Rep
+            <a class="button is-primary" href="{% url 'one rep max calculator' %}">One Rep
                 Max Calculator</a>
         </p>
     </div>

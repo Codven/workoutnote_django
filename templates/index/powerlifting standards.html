@@ -1,23 +1,1101 @@
 {% extends 'index/base.html' %}
 {% block content %}
-    {% load static %}
-    <script>
-        StrengthLevel.setupNavigation();
-    </script>
-    <div class="section-box content">
-        <h1 class="title is-2 is-size-3-mobile">
-            Weightlifting Strength Standards
-        </h1>
+
+    <div class="section-box">
+        <div class="columns is-gapless is-mobile">
+            <div class="column is-narrow">
+                <div class="title is-1 mr-2">
+                    <i class="slicon slicon-exercise-squat"></i>
+                </div>
+            </div>
+            <div class="column">
+                <h1 class="title is-2 is-size-3-mobile is-grouped">
+                    Powerlifting Standards
+                </h1>
+                <h2 class="subtitle is-3">Measured in lb</h2>
+            </div>
+        </div>
+
+        <div class="content">
+            <p>
+                Powerlifting strength standards help you compare your one-rep max lifts in bench press, squat and
+                deadlift (conventional or sumo) with other lifters at your bodyweight.
+            </p>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label">Gender</label>
+            </div>
+            <div class="field-body">
+                <div class="field has-addons">
+                    <div class="control">
+                        <a href="#standardsMale" class="button ">♂ Male</a>
+                    </div>
+                    <div class="control">
+                        <a href="#standardsFemale" class="button ">♀ Female</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label">Weight Unit</label>
+            </div>
+            <div class="field-body">
+                <div class="field has-addons">
+                    <div class="control">
+                        <a href="/powerlifting-standards/kg" class="button ">Kilograms (kg)</a>
+                    </div>
+                    <div class="control">
+                        <a href="/powerlifting-standards/lb" class="button  is-active">Pounds (lb)</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label">Age Range</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <div class="select">
+                            <select id="age" name="age" autocomplete="off">
+                                <option value="" selected="">Any</option>
+                                <option data-bonus="1.1491761508293">
+                                    14-17
+                                </option>
+                                <option data-bonus="1.021160426321">
+                                    18-23
+                                </option>
+                                <option data-bonus="1">
+                                    24-39
+                                </option>
+                                <option data-bonus="1.048398081924">
+                                    40-49
+                                </option>
+                                <option data-bonus="1.2041410191161">
+                                    50-59
+                                </option>
+                                <option data-bonus="1.4571705027539">
+                                    60-69
+                                </option>
+                                <option data-bonus="1.8145856798421">
+                                    70-79
+                                </option>
+                                <option data-bonus="2.265204586936">
+                                    80-89
+                                </option>
+                            </select>
+                        </div>
+                        <p class="help agebonus" style="display: none;"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            StrengthLevel.addAgeSelect();
+        </script>
+        <script>
+            StrengthLevel.trackChange('age', 'standards-powerlifting', 'age-change');
+        </script>
+    </div>
+
+    <div class="section-box">
+        <h2 class="title is-3 is-size-4-mobile" id="standardsMale">Male Powerlifting Standards (lb )</h2>
+        <div class="field">
+            <div class="control">
+                <label class="label">
+                    <input id="ratioId60ce6ac47f08e" type="checkbox">
+                    Show bodyweight ratios
+                </label>
+            </div>
+        </div>
+
+        <table class="table is-fullwidth is-striped is-narrow standards__table" id="tableId60ce6ac47f090">
+            <thead>
+            <tr>
+                <th style="width: 25%;">
+                    <abbr title="Bodyweight"><span>BW</span></abbr>
+                </th>
+                <th style="width: 15%;">
+                    <abbr title="Beginner"><span>Beg.</span></abbr>
+                </th>
+                <th style="width: 15%;">
+                    <abbr title="Novice"><span>Nov.</span></abbr>
+                </th>
+                <th style="width: 15%;">
+                    <abbr title="Intermediate"><span>Int.</span></abbr>
+                </th>
+                <th style="width: 15%;">
+                    <abbr title="Advanced"><span>Adv.</span></abbr>
+                </th>
+                <th style="width: 15%;">
+                    <abbr title="Elite"><span>Elite</span></abbr>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    110 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    292 <span class="standards__ratio">x2.65</span>
+                </td>
+                <td>
+                    394 <span class="standards__ratio">x3.58</span>
+                </td>
+                <td>
+                    518 <span class="standards__ratio">x4.71</span>
+                </td>
+                <td>
+                    658 <span class="standards__ratio">x5.99</span>
+                </td>
+                <td>
+                    808 <span class="standards__ratio">x7.35</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    120 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    334 <span class="standards__ratio">x2.78</span>
+                </td>
+                <td>
+                    443 <span class="standards__ratio">x3.69</span>
+                </td>
+                <td>
+                    573 <span class="standards__ratio">x4.78</span>
+                </td>
+                <td>
+                    721 <span class="standards__ratio">x6.01</span>
+                </td>
+                <td>
+                    877 <span class="standards__ratio">x7.31</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    130 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    375 <span class="standards__ratio">x2.88</span>
+                </td>
+                <td>
+                    490 <span class="standards__ratio">x3.77</span>
+                </td>
+                <td>
+                    627 <span class="standards__ratio">x4.82</span>
+                </td>
+                <td>
+                    781 <span class="standards__ratio">x6</span>
+                </td>
+                <td>
+                    943 <span class="standards__ratio">x7.26</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    140 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    415 <span class="standards__ratio">x2.96</span>
+                </td>
+                <td>
+                    535 <span class="standards__ratio">x3.82</span>
+                </td>
+                <td>
+                    678 <span class="standards__ratio">x4.85</span>
+                </td>
+                <td>
+                    838 <span class="standards__ratio">x5.99</span>
+                </td>
+                <td>
+                    1006 <span class="standards__ratio">x7.19</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    150 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    454 <span class="standards__ratio">x3.03</span>
+                </td>
+                <td>
+                    580 <span class="standards__ratio">x3.87</span>
+                </td>
+                <td>
+                    728 <span class="standards__ratio">x4.86</span>
+                </td>
+                <td>
+                    894 <span class="standards__ratio">x5.96</span>
+                </td>
+                <td>
+                    1067 <span class="standards__ratio">x7.11</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    160 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    492 <span class="standards__ratio">x3.08</span>
+                </td>
+                <td>
+                    623 <span class="standards__ratio">x3.89</span>
+                </td>
+                <td>
+                    777 <span class="standards__ratio">x4.85</span>
+                </td>
+                <td>
+                    947 <span class="standards__ratio">x5.92</span>
+                </td>
+                <td>
+                    1125 <span class="standards__ratio">x7.03</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    170 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    530 <span class="standards__ratio">x3.12</span>
+                </td>
+                <td>
+                    665 <span class="standards__ratio">x3.91</span>
+                </td>
+                <td>
+                    823 <span class="standards__ratio">x4.84</span>
+                </td>
+                <td>
+                    999 <span class="standards__ratio">x5.87</span>
+                </td>
+                <td>
+                    1182 <span class="standards__ratio">x6.95</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    180 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    566 <span class="standards__ratio">x3.15</span>
+                </td>
+                <td>
+                    706 <span class="standards__ratio">x3.92</span>
+                </td>
+                <td>
+                    869 <span class="standards__ratio">x4.83</span>
+                </td>
+                <td>
+                    1049 <span class="standards__ratio">x5.83</span>
+                </td>
+                <td>
+                    1236 <span class="standards__ratio">x6.87</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    190 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    602 <span class="standards__ratio">x3.17</span>
+                </td>
+                <td>
+                    746 <span class="standards__ratio">x3.92</span>
+                </td>
+                <td>
+                    913 <span class="standards__ratio">x4.8</span>
+                </td>
+                <td>
+                    1097 <span class="standards__ratio">x5.77</span>
+                </td>
+                <td>
+                    1288 <span class="standards__ratio">x6.78</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    200 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    637 <span class="standards__ratio">x3.18</span>
+                </td>
+                <td>
+                    784 <span class="standards__ratio">x3.92</span>
+                </td>
+                <td>
+                    956 <span class="standards__ratio">x4.78</span>
+                </td>
+                <td>
+                    1144 <span class="standards__ratio">x5.72</span>
+                </td>
+                <td>
+                    1339 <span class="standards__ratio">x6.69</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    210 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    671 <span class="standards__ratio">x3.19</span>
+                </td>
+                <td>
+                    822 <span class="standards__ratio">x3.92</span>
+                </td>
+                <td>
+                    997 <span class="standards__ratio">x4.75</span>
+                </td>
+                <td>
+                    1189 <span class="standards__ratio">x5.66</span>
+                </td>
+                <td>
+                    1388 <span class="standards__ratio">x6.61</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    220 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    704 <span class="standards__ratio">x3.2</span>
+                </td>
+                <td>
+                    859 <span class="standards__ratio">x3.9</span>
+                </td>
+                <td>
+                    1038 <span class="standards__ratio">x4.72</span>
+                </td>
+                <td>
+                    1233 <span class="standards__ratio">x5.61</span>
+                </td>
+                <td>
+                    1436 <span class="standards__ratio">x6.53</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    230 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    737 <span class="standards__ratio">x3.2</span>
+                </td>
+                <td>
+                    895 <span class="standards__ratio">x3.89</span>
+                </td>
+                <td>
+                    1077 <span class="standards__ratio">x4.68</span>
+                </td>
+                <td>
+                    1276 <span class="standards__ratio">x5.55</span>
+                </td>
+                <td>
+                    1482 <span class="standards__ratio">x6.44</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    240 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    769 <span class="standards__ratio">x3.2</span>
+                </td>
+                <td>
+                    930 <span class="standards__ratio">x3.88</span>
+                </td>
+                <td>
+                    1116 <span class="standards__ratio">x4.65</span>
+                </td>
+                <td>
+                    1318 <span class="standards__ratio">x5.49</span>
+                </td>
+                <td>
+                    1527 <span class="standards__ratio">x6.36</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    250 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    800 <span class="standards__ratio">x3.2</span>
+                </td>
+                <td>
+                    964 <span class="standards__ratio">x3.86</span>
+                </td>
+                <td>
+                    1153 <span class="standards__ratio">x4.61</span>
+                </td>
+                <td>
+                    1359 <span class="standards__ratio">x5.44</span>
+                </td>
+                <td>
+                    1571 <span class="standards__ratio">x6.28</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    260 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    830 <span class="standards__ratio">x3.19</span>
+                </td>
+                <td>
+                    998 <span class="standards__ratio">x3.84</span>
+                </td>
+                <td>
+                    1190 <span class="standards__ratio">x4.58</span>
+                </td>
+                <td>
+                    1399 <span class="standards__ratio">x5.38</span>
+                </td>
+                <td>
+                    1614 <span class="standards__ratio">x6.21</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    270 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    860 <span class="standards__ratio">x3.19</span>
+                </td>
+                <td>
+                    1031 <span class="standards__ratio">x3.82</span>
+                </td>
+                <td>
+                    1226 <span class="standards__ratio">x4.54</span>
+                </td>
+                <td>
+                    1438 <span class="standards__ratio">x5.32</span>
+                </td>
+                <td>
+                    1655 <span class="standards__ratio">x6.13</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    280 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    890 <span class="standards__ratio">x3.18</span>
+                </td>
+                <td>
+                    1063 <span class="standards__ratio">x3.8</span>
+                </td>
+                <td>
+                    1261 <span class="standards__ratio">x4.5</span>
+                </td>
+                <td>
+                    1475 <span class="standards__ratio">x5.27</span>
+                </td>
+                <td>
+                    1696 <span class="standards__ratio">x6.06</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    290 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    918 <span class="standards__ratio">x3.17</span>
+                </td>
+                <td>
+                    1094 <span class="standards__ratio">x3.77</span>
+                </td>
+                <td>
+                    1295 <span class="standards__ratio">x4.47</span>
+                </td>
+                <td>
+                    1512 <span class="standards__ratio">x5.22</span>
+                </td>
+                <td>
+                    1736 <span class="standards__ratio">x5.99</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    300 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    947 <span class="standards__ratio">x3.16</span>
+                </td>
+                <td>
+                    1125 <span class="standards__ratio">x3.75</span>
+                </td>
+                <td>
+                    1328 <span class="standards__ratio">x4.43</span>
+                </td>
+                <td>
+                    1549 <span class="standards__ratio">x5.16</span>
+                </td>
+                <td>
+                    1775 <span class="standards__ratio">x5.92</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    310 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    974 <span class="standards__ratio">x3.14</span>
+                </td>
+                <td>
+                    1155 <span class="standards__ratio">x3.73</span>
+                </td>
+                <td>
+                    1361 <span class="standards__ratio">x4.39</span>
+                </td>
+                <td>
+                    1584 <span class="standards__ratio">x5.11</span>
+                </td>
+                <td>
+                    1812 <span class="standards__ratio">x5.85</span>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot class="standards__footer">
+            <tr>
+                <td>
+                    All
+                </td>
+                <td>
+                    507
+                </td>
+                <td>
+                    669
+                </td>
+                <td>
+                    863
+                </td>
+                <td>
+                    1081
+                </td>
+                <td>
+                    1313
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+
+        <div class="content">
+            <p>
+                These male standards were last updated June and
+                are based on 254,000 filtered lifts.
+            </p>
+
+            <p class="standards__note">
+                Note: these barbell standards include the weight of the bar, normally 20 kg / 44 lb.
+            </p>
+        </div>
+
+        <script>
+            StrengthLevel.addRatioSwitcher(document.getElementById("ratioId60ce6ac47f08e"),
+                document.getElementById("tableId60ce6ac47f090"));
+        </script>
+    </div>
+
+    <div class="section-box">
+        <h2 class="title is-3 is-size-4-mobile" id="standardsFemale">Female Powerlifting Standards
+            (lb)</h2>
+        <div class="field">
+            <div class="control">
+                <label class="label">
+                    <input id="ratioId60ce6ac47f15c" type="checkbox">
+                    Show bodyweight ratios
+                </label>
+            </div>
+        </div>
+
+        <table class="table is-fullwidth is-striped is-narrow standards__table" id="tableId60ce6ac47f15d">
+            <thead>
+            <tr>
+                <th style="width: 25%;">
+                    <abbr title="Bodyweight"><span>BW</span></abbr>
+                </th>
+                <th style="width: 15%;">
+                    <abbr title="Beginner"><span>Beg.</span></abbr>
+                </th>
+                <th style="width: 15%;">
+                    <abbr title="Novice"><span>Nov.</span></abbr>
+                </th>
+                <th style="width: 15%;">
+                    <abbr title="Intermediate"><span>Int.</span></abbr>
+                </th>
+                <th style="width: 15%;">
+                    <abbr title="Advanced"><span>Adv.</span></abbr>
+                </th>
+                <th style="width: 15%;">
+                    <abbr title="Elite"><span>Elite</span></abbr>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    90 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    188 <span class="standards__ratio">x2.09</span>
+                </td>
+                <td>
+                    265 <span class="standards__ratio">x2.95</span>
+                </td>
+                <td>
+                    361 <span class="standards__ratio">x4.01</span>
+                </td>
+                <td>
+                    472 <span class="standards__ratio">x5.24</span>
+                </td>
+                <td>
+                    591 <span class="standards__ratio">x6.57</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    100 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    208 <span class="standards__ratio">x2.08</span>
+                </td>
+                <td>
+                    289 <span class="standards__ratio">x2.89</span>
+                </td>
+                <td>
+                    389 <span class="standards__ratio">x3.89</span>
+                </td>
+                <td>
+                    503 <span class="standards__ratio">x5.03</span>
+                </td>
+                <td>
+                    626 <span class="standards__ratio">x6.26</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    110 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    226 <span class="standards__ratio">x2.06</span>
+                </td>
+                <td>
+                    311 <span class="standards__ratio">x2.83</span>
+                </td>
+                <td>
+                    414 <span class="standards__ratio">x3.76</span>
+                </td>
+                <td>
+                    532 <span class="standards__ratio">x4.84</span>
+                </td>
+                <td>
+                    658 <span class="standards__ratio">x5.98</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    120 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    244 <span class="standards__ratio">x2.04</span>
+                </td>
+                <td>
+                    332 <span class="standards__ratio">x2.77</span>
+                </td>
+                <td>
+                    438 <span class="standards__ratio">x3.65</span>
+                </td>
+                <td>
+                    559 <span class="standards__ratio">x4.66</span>
+                </td>
+                <td>
+                    688 <span class="standards__ratio">x5.74</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    130 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    261 <span class="standards__ratio">x2.01</span>
+                </td>
+                <td>
+                    352 <span class="standards__ratio">x2.71</span>
+                </td>
+                <td>
+                    461 <span class="standards__ratio">x3.55</span>
+                </td>
+                <td>
+                    585 <span class="standards__ratio">x4.5</span>
+                </td>
+                <td>
+                    717 <span class="standards__ratio">x5.51</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    140 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    278 <span class="standards__ratio">x1.98</span>
+                </td>
+                <td>
+                    371 <span class="standards__ratio">x2.65</span>
+                </td>
+                <td>
+                    482 <span class="standards__ratio">x3.45</span>
+                </td>
+                <td>
+                    609 <span class="standards__ratio">x4.35</span>
+                </td>
+                <td>
+                    744 <span class="standards__ratio">x5.31</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    150 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    293 <span class="standards__ratio">x1.95</span>
+                </td>
+                <td>
+                    389 <span class="standards__ratio">x2.59</span>
+                </td>
+                <td>
+                    503 <span class="standards__ratio">x3.35</span>
+                </td>
+                <td>
+                    632 <span class="standards__ratio">x4.21</span>
+                </td>
+                <td>
+                    769 <span class="standards__ratio">x5.13</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    160 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    308 <span class="standards__ratio">x1.93</span>
+                </td>
+                <td>
+                    406 <span class="standards__ratio">x2.54</span>
+                </td>
+                <td>
+                    523 <span class="standards__ratio">x3.27</span>
+                </td>
+                <td>
+                    654 <span class="standards__ratio">x4.09</span>
+                </td>
+                <td>
+                    793 <span class="standards__ratio">x4.96</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    170 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    323 <span class="standards__ratio">x1.9</span>
+                </td>
+                <td>
+                    422 <span class="standards__ratio">x2.48</span>
+                </td>
+                <td>
+                    541 <span class="standards__ratio">x3.18</span>
+                </td>
+                <td>
+                    675 <span class="standards__ratio">x3.97</span>
+                </td>
+                <td>
+                    816 <span class="standards__ratio">x4.8</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    180 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    337 <span class="standards__ratio">x1.87</span>
+                </td>
+                <td>
+                    438 <span class="standards__ratio">x2.43</span>
+                </td>
+                <td>
+                    559 <span class="standards__ratio">x3.11</span>
+                </td>
+                <td>
+                    695 <span class="standards__ratio">x3.86</span>
+                </td>
+                <td>
+                    838 <span class="standards__ratio">x4.66</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    190 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    350 <span class="standards__ratio">x1.84</span>
+                </td>
+                <td>
+                    454 <span class="standards__ratio">x2.39</span>
+                </td>
+                <td>
+                    577 <span class="standards__ratio">x3.03</span>
+                </td>
+                <td>
+                    714 <span class="standards__ratio">x3.76</span>
+                </td>
+                <td>
+                    859 <span class="standards__ratio">x4.52</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    200 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    363 <span class="standards__ratio">x1.81</span>
+                </td>
+                <td>
+                    468 <span class="standards__ratio">x2.34</span>
+                </td>
+                <td>
+                    593 <span class="standards__ratio">x2.97</span>
+                </td>
+                <td>
+                    733 <span class="standards__ratio">x3.66</span>
+                </td>
+                <td>
+                    880 <span class="standards__ratio">x4.4</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    210 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    375 <span class="standards__ratio">x1.79</span>
+                </td>
+                <td>
+                    483 <span class="standards__ratio">x2.3</span>
+                </td>
+                <td>
+                    609 <span class="standards__ratio">x2.9</span>
+                </td>
+                <td>
+                    750 <span class="standards__ratio">x3.57</span>
+                </td>
+                <td>
+                    899 <span class="standards__ratio">x4.28</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    220 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    388 <span class="standards__ratio">x1.76</span>
+                </td>
+                <td>
+                    496 <span class="standards__ratio">x2.26</span>
+                </td>
+                <td>
+                    625 <span class="standards__ratio">x2.84</span>
+                </td>
+                <td>
+                    768 <span class="standards__ratio">x3.49</span>
+                </td>
+                <td>
+                    918 <span class="standards__ratio">x4.17</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    230 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    399 <span class="standards__ratio">x1.74</span>
+                </td>
+                <td>
+                    510 <span class="standards__ratio">x2.22</span>
+                </td>
+                <td>
+                    640 <span class="standards__ratio">x2.78</span>
+                </td>
+                <td>
+                    784 <span class="standards__ratio">x3.41</span>
+                </td>
+                <td>
+                    936 <span class="standards__ratio">x4.07</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    240 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    411 <span class="standards__ratio">x1.71</span>
+                </td>
+                <td>
+                    523 <span class="standards__ratio">x2.18</span>
+                </td>
+                <td>
+                    654 <span class="standards__ratio">x2.73</span>
+                </td>
+                <td>
+                    800 <span class="standards__ratio">x3.33</span>
+                </td>
+                <td>
+                    953 <span class="standards__ratio">x3.97</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    250 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    422 <span class="standards__ratio">x1.69</span>
+                </td>
+                <td>
+                    535 <span class="standards__ratio">x2.14</span>
+                </td>
+                <td>
+                    668 <span class="standards__ratio">x2.67</span>
+                </td>
+                <td>
+                    816 <span class="standards__ratio">x3.26</span>
+                </td>
+                <td>
+                    970 <span class="standards__ratio">x3.88</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    260 <span class="standards__ratio"></span>
+                </td>
+                <td>
+                    433 <span class="standards__ratio">x1.67</span>
+                </td>
+                <td>
+                    547 <span class="standards__ratio">x2.11</span>
+                </td>
+                <td>
+                    682 <span class="standards__ratio">x2.62</span>
+                </td>
+                <td>
+                    831 <span class="standards__ratio">x3.2</span>
+                </td>
+                <td>
+                    987 <span class="standards__ratio">x3.8</span>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot class="standards__footer">
+            <tr>
+                <td>
+                    All
+                </td>
+                <td>
+                    271
+                </td>
+                <td>
+                    371
+                </td>
+                <td>
+                    492
+                </td>
+                <td>
+                    630
+                </td>
+                <td>
+                    778
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+
+        <div class="content">
+            <p>
+                These female standards were last updated June and
+                are based on 46,000 filtered lifts.
+            </p>
+
+            <p class="standards__note">
+                Note: these barbell standards include the weight of the bar, normally 20 kg / 44 lb.
+            </p>
+        </div>
+
+        <script>
+            StrengthLevel.addRatioSwitcher(document.getElementById("ratioId60ce6ac47f15c"),
+                document.getElementById("tableId60ce6ac47f15d"));
+        </script>
+    </div>
+
+    <div class="section-box">
+        <h2 class="title is-3 is-size-4-mobile">Powerlifting Calculator</h2>
         <p>
-            The strength standards on this page grade your one-rep max performance against other
-            adult lifters at your bodyweight.
+            Our powerlifting calculator can show your exact level of all round strength in bench press, squat and deadlift
+            at any bodyweight.
         </p>
         <p>
-            Our strength standards are based on millions of lifts entered by Strength Level users.
+            <a class="button is-primary" href="/powerlifting-calculator">
+                Powerlifting Calculator
+            </a>
         </p>
     </div>
+    <div class="section-box">
+        <h2 class="title is-3 is-size-4-mobile">What do the strength standards mean?</h2>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th>Beginner</th>
+                <td>
+                    Stronger than 5% of lifters. A beginner lifter can perform the movement correctly and has practiced it
+                    for at least a month.
+                </td>
+            </tr>
+
+            <tr>
+                <th>Novice</th>
+                <td>
+                    Stronger than 20% of lifters. A novice lifter has trained regularly in the technique for at least six
+                    months.
+                </td>
+            </tr>
+
+            <tr>
+                <th>Intermediate</th>
+                <td>
+                    Stronger than 50% of lifters. An intermediate lifter has trained regularly in the technique for at least
+                    two years.
+                </td>
+            </tr>
+
+            <tr>
+                <th>Advanced</th>
+                <td>Stronger than 80% of lifters. An advanced lifter has progressed for over five years.</td>
+            </tr>
+
+            <tr>
+                <th>Elite</th>
+                <td>
+                    Stronger than 95% of lifters. An elite lifter has dedicated over five years to become competitive at
+                    strength sports.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
     <div class="section-box inline-exercise-modal" id="exerciseSelectorContainer" style="display: block;">
-        <header class="modal-card-head"><h2 class="title is-3 is-size-4-mobile collapsible__title"><span>By Exercise</span></h2></header>
+        <header class="modal-card-head"><h2 class="title is-3 is-size-4-mobile collapsible__title"><span>Individual Exercises</span></h2></header>
         <section class="modal-card-search">
             <div class="field">
                 <div class="control is-expanded has-icons-left"><input type="text" placeholder="Search..." autocomplete="off" class="input"> <span class="icon is-small is-left"><i class="slicon slicon-fa-search"></i></span></div>
@@ -82,18 +1160,17 @@
         </section>
         <section class="modal-card-body is-paddingless">
             <div class="px-4 py-3"><a href="/strength-standards/bench-press" class="button exerciseitem is-active-IGNORED"><span class="exerciseitem__inner"><i class="exerciseitem__icon slicon slicon-exercise-bench-press"></i> <span class="exerciseitem__name__container"><span class="exerciseitem__name">Bench Press</span> <div class="pt-1"><span
-                    class="exerciseitem__count">13,354,162 lifts</span></div></span></span></a><a href="/strength-standards/deadlift" class="button exerciseitem is-active-IGNORED"><span class="exerciseitem__inner"><i class="exerciseitem__icon slicon slicon-exercise-deadlift"></i> <span class="exerciseitem__name__container"><span class="exerciseitem__name">Deadlift</span> <div class="pt-1"><span
-                    class="exerciseitem__count">7,724,948 lifts</span></div></span></span></a><a href="/strength-standards/squat" class="button exerciseitem is-active-IGNORED"><span class="exerciseitem__inner"><i class="exerciseitem__icon slicon slicon-exercise-squat"></i> <span class="exerciseitem__name__container"><span class="exerciseitem__name">Squat</span> <div class="pt-1"><span
-                    class="exerciseitem__count">7,651,637 lifts</span></div></span></span></a><a href="/strength-standards/shoulder-press" class="button exerciseitem is-active-IGNORED"><span class="exerciseitem__inner"><i class="exerciseitem__icon slicon slicon-exercise-shoulder-press"></i> <span class="exerciseitem__name__container"><span class="exerciseitem__name">Shoulder Press</span> <div
+                    class="exerciseitem__count">13,354,162 lifts</span></div></span></span></a><a href="/strength-standards/deadlift" class="button exerciseitem is-active-IGNORED"><span class="exerciseitem__inner"><i class="exerciseitem__icon slicon slicon-exercise-deadlift"></i> <span class="exerciseitem__name__container"><span class="exerciseitem__name">Deadlift</span> <div
+                    class="pt-1"><span class="exerciseitem__count">7,724,948 lifts</span></div></span></span></a><a href="/strength-standards/squat" class="button exerciseitem is-active-IGNORED"><span class="exerciseitem__inner"><i class="exerciseitem__icon slicon slicon-exercise-squat"></i> <span class="exerciseitem__name__container"><span class="exerciseitem__name">Squat</span> <div
+                    class="pt-1"><span class="exerciseitem__count">7,651,637 lifts</span></div></span></span></a><a href="/strength-standards/shoulder-press" class="button exerciseitem is-active-IGNORED"><span class="exerciseitem__inner"><i class="exerciseitem__icon slicon slicon-exercise-shoulder-press"></i> <span class="exerciseitem__name__container"><span class="exerciseitem__name">Shoulder Press</span> <div
                     class="pt-1"><span class="exerciseitem__count">1,915,786 lifts</span></div></span></span></a><a href="/strength-standards/pull-ups" class="button exerciseitem is-active-IGNORED"><span class="exerciseitem__inner"><i class="exerciseitem__icon slicon slicon-exercise-pull-ups"></i> <span class="exerciseitem__name__container"><span class="exerciseitem__name">Pull Ups</span> <div
                     class="pt-1"><span class="exerciseitem__count">1,097,769 lifts</span></div></span></span></a><a href="/strength-standards/dumbbell-bench-press" class="button exerciseitem is-active-IGNORED"><span class="exerciseitem__inner"><i class="exerciseitem__icon slicon slicon-exercise-dumbbell-bench-press"></i> <span class="exerciseitem__name__container"><span
                     class="exerciseitem__name">Dumbbell Bench Press</span> <div class="pt-1"><span class="exerciseitem__count">986,718 lifts</span></div></span></span></a><a href="/strength-standards/barbell-curl" class="button exerciseitem is-active-IGNORED"><span class="exerciseitem__inner"><i class="exerciseitem__icon slicon slicon-exercise-barbell-curl"></i> <span
                     class="exerciseitem__name__container"><span class="exerciseitem__name">Barbell Curl</span> <div class="pt-1"><span class="exerciseitem__count">916,536 lifts</span></div></span></span></a><a href="/strength-standards/dumbbell-curl" class="button exerciseitem is-active-IGNORED"><span class="exerciseitem__inner"><i
                     class="exerciseitem__icon slicon slicon-exercise-dumbbell-curl"></i> <span class="exerciseitem__name__container"><span class="exerciseitem__name">Dumbbell Curl</span> <div class="pt-1"><span class="exerciseitem__count">782,061 lifts</span></div></span></span></a><a href="/strength-standards/front-squat" class="button exerciseitem is-active-IGNORED"><span
                     class="exerciseitem__inner"><i class="exerciseitem__icon slicon slicon-exercise-front-squat"></i> <span class="exerciseitem__name__container"><span class="exerciseitem__name">Front Squat</span> <div class="pt-1"><span class="exerciseitem__count">645,762 lifts</span></div></span></span></a><a href="/strength-standards/bent-over-row"
-                                                                                                                                                                                                                                                                                                                         class="button exerciseitem is-active-IGNORED"><span
-                    class="exerciseitem__inner"><i class="exerciseitem__icon slicon slicon-exercise-bent-over-row"></i> <span class="exerciseitem__name__container"><span class="exerciseitem__name">Bent Over Row</span> <div class="pt-1"><span class="exerciseitem__count">605,088 lifts</span></div></span></span></a><a href="/strength-standards/push-ups"
-                                                                                                                                                                                                                                                                                                                             class="button exerciseitem is-active-IGNORED"><span
+                                                                                                                                                                                                                                                                                                                         class="button exerciseitem is-active-IGNORED"><span class="exerciseitem__inner"><i
+                    class="exerciseitem__icon slicon slicon-exercise-bent-over-row"></i> <span class="exerciseitem__name__container"><span class="exerciseitem__name">Bent Over Row</span> <div class="pt-1"><span class="exerciseitem__count">605,088 lifts</span></div></span></span></a><a href="/strength-standards/push-ups" class="button exerciseitem is-active-IGNORED"><span
                     class="exerciseitem__inner"><i class="exerciseitem__icon slicon slicon-exercise-push-ups"></i> <span class="exerciseitem__name__container"><span class="exerciseitem__name">Push Ups</span> <div class="pt-1"><span class="exerciseitem__count">564,613 lifts</span></div></span></span></a><a href="/strength-standards/dumbbell-shoulder-press"
                                                                                                                                                                                                                                                                                                                    class="button exerciseitem is-active-IGNORED"><span class="exerciseitem__inner"><i
                     class="exerciseitem__icon slicon slicon-exercise-dumbbell-shoulder-press"></i> <span class="exerciseitem__name__container"><span class="exerciseitem__name  exerciseitem__name--long">Dumbbell Shoulder Press</span> <div class="pt-1"><span class="exerciseitem__count">486,383 lifts</span></div></span></span></a>
@@ -105,7 +1182,7 @@
             </div> <!----></section>
     </div>
     <script>
-        StrengthLevel.addExerciseSelectorViewModel("By Exercise", {
+        StrengthLevel.addExerciseSelectorViewModel("Individual Exercises", {
             "exerciseGroups": [{
                 "id": 1,
                 "name": "Barbell",
@@ -1618,8 +2695,9 @@
             }], "bodyParts": ["Back", "Biceps", "Chest", "Core", "Forearms", "Legs", "Shoulders", "Triceps", "Whole Body"]
         }, "\/strength-standards", "\/suggest-exercise");
     </script>
+
     <div class="section-box exercisesection" id="exerciseSelectorNoJs" style="display: none;">
-        <h2 class="title is-3 is-size-4-mobile">By Exercise</h2>
+        <h2 class="title is-3 is-size-4-mobile">Individual Exercises</h2>
         <script>
             document.getElementById('exerciseSelectorNoJs').style.display = 'none';
         </script>
@@ -4944,41 +6022,7 @@
                   </span>
         </a>
     </div>
-    <div class="section-box">
-        <h2 class="title is-3 is-size-4-mobile">Printable Sheets</h2>
-        <div class="columns">
-            <div class="column">
-                <h3 class="subtitle is-4 is-size-5-mobile">Pounds (lb)</h3>
-                <div class="buttons">
-                    <a href="/strength-standards/male/lb" class="button">♂ Male
-                        Strength
-                        Standards (lb)</a>
-                    <a href="/strength-standards/female/lb" class="button">♀ Female
-                        Strength Standards (lb)</a>
-                </div>
-            </div>
-            <div class="column">
-                <h3 class="subtitle is-4 is-size-5-mobile">Kilograms (kg)</h3>
-                <div class="buttons">
-                    <a href="/strength-standards/male/kg" class="button">♂ Male
-                        Strength
-                        Standards (kg)</a>
-                    <a href="/strength-standards/female/kg" class="button">♀ Female
-                        Strength Standards (kg)</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="section-box content">
-        <h2 class="title is-3 is-size-4-mobile">Powerlifting Standards</h2>
-        <p>
-            We have powerlifting standards so that you can compare the total of your bench/squat/deadlift against
-            other lifters who use Strength Level.
-        </p>
-        <p>
-            <a href="{% url 'powerlifting standards' %}" class="button">Powerlifting Standards</a>
-        </p>
-    </div>
+
     <div class="section-box content">
         <h2 class="title is-3 is-size-4-mobile">Rate Your Lifts Against Other People</h2>
         <p>

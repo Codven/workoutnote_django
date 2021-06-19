@@ -5481,9 +5481,7 @@
         height: 50px
     }</style>
 </head>
-
-<body data-new-gr-c-s-check-loaded="14.1015.0" data-gr-ext-installed="" data-new-gr-c-s-loaded="14.1015.0">
-
+<body>
 <section class="section">
     <div class="container">
         <div class="header">
@@ -5495,7 +5493,7 @@
             <div class="header__login" id="headerLoginSection">
                 {% if request.user.is_authenticated %}
                     <a class="button" href="{% url 'profile main' %}">
-                        <span class="icon"><i class="slicon slicon-fa-dumbbell"></i></span>
+                        <img width="20" height="20" style="margin-right: 10px" src="{% static 'dumbbell.svg' %}" alt="Dumbbell"/>
                         <span>Training Log</span>
                     </a>
                 {% else %}
@@ -5526,9 +5524,7 @@
             </p>
             <p>
                 <a href="https://www.facebook.com/strengthlevel" class="button is-facebook">
-                    <span class="icon">
-                        <i class="slicon slicon-fa-facebook-square"></i>
-                    </span>
+                    <img width="20" height="20" style="margin-right: 20px" src="{% static 'facebook.svg' %}" alt="Dumbbell"/>
                     <span>Find us on Facebook</span>
                 </a>
             </p>
@@ -5542,12 +5538,9 @@
         </div>
     </div>
 </section>
-
 <script>
     var addthis_config = {ui_tabindex: 100,};
 </script>
-<style id="service-icons-0"></style>
-
 <div class="addthis-smartlayers addthis-smartlayers-desktop" aria-labelledby="at4-share-label" role="region">
     <div id="at4-share-label">AddThis Sharing Sidebar</div>
     <div id="at4-share" class="at4-share addthis_32x32_style atss atss-left addthis-animated slideInLeft"><a role="button" tabindex="100" class="at-share-btn at-svc-facebook"><span class="at4-visually-hidden">Share to Facebook</span><span class="at-icon-wrapper" style="background-color: rgb(59, 89, 152);"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"

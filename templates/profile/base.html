@@ -85,45 +85,45 @@
     <div id="navbarBasicExample" class="navbar-menu">
         <div class="navbar-start">
             <a href="{% url 'workouts' %}" aria-current="page" class="navbar-item ">
-                <span class="icon"><i class="slicon slicon-fa-dumbbell"></i></span>
+                <img width="20" height="20" style="margin-right: 10px" src="{% static 'dumbbell-white.svg' %}" alt="Dumbbell"/>
                 <span>Workouts</span>
             </a>
 
             <a href="{% url 'exercises' %}" aria-current="page" class="navbar-item ">
-                <span class="icon"><i class="slicon slicon-fa-chart-bar"></i></span>
+                <img width="20" height="20" style="margin-right: 10px" src="{% static 'exercises-white.svg' %}" alt="Dumbbell"/>
                 <span>Exercises</span>
             </a>
 
             <a href="{% url 'bodyweight' %}" aria-current="page" class="navbar-item ">
-                <span class="icon"><i class="slicon slicon-fa-weight"></i></span>
+                <img width="20" height="20" style="margin-right: 10px" src="{% static 'bodyweight-white.svg' %}" alt="Dumbbell"/>
                 <span>Bodyweight</span>
             </a>
         </div>
         <div class="navbar-end">
             <div class="navbar-item has-dropdown is-hoverable">
                 <a class="navbar-link">
-                    <span class="icon"><img src="./profile_files/b22177542a4b74ac6e8f2f04a8c099d0" class="profile-icon" width="48" height="48"></span>
+                    <img width="20" height="20" style="margin-right: 10px" src="{% static 'user-white.svg' %}" alt="Dumbbell"/>
                     <span>kobiljon</span>
                 </a>
                 <div class="navbar-dropdown is-right">
                     <a href="{% url 'profile main' %}" class="navbar-item">
-                        <span class="icon"><i class="slicon slicon-fa-user"></i></span>
+                        <img width="20" height="20" style="margin-right: 10px" src="{% static 'user.svg' %}"/>
                         <span>My Profile</span>
                     </a>
                     <a href="{% url 'find lifters' %}" class="navbar-item ">
-                        <span class="icon"><i class="slicon slicon-fa-users"></i></span>
+                        <img width="20" height="20" style="margin-right: 10px" src="{% static 'users.svg' %}"/>
                         <span>Find Lifters</span>
                     </a>
                     <a href="{% url 'settings' %}" class="navbar-item">
-                        <span class="icon"><i class="slicon slicon-fa-cog"></i></span>
+                        <img width="20" height="20" style="margin-right: 10px" src="{% static 'settings.svg' %}"/>
                         <span>Settings</span>
                     </a>
                     <a href="{% url 'index' %}" class="navbar-item">
-                        <span class="icon"><i class="slicon slicon-fa-external-link-alt"></i></span>
+                        <img width="20" height="20" style="margin-right: 10px" src="{% static 'home.svg' %}"/>
                         <span>Back to Homepage</span>
                     </a>
                     <a href="{% url 'logout' %}" class="navbar-item">
-                        <span class="icon"><i class="slicon slicon-fa-sign-out-alt"></i></span>
+                        <img width="20" height="20" style="margin-right: 10px" src="{% static 'leave.svg' %}"/>
                         <span>Sign Out</span>
                     </a>
                 </div>

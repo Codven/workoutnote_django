@@ -15,3 +15,7 @@ def handle_strength_standards(request):
 
 def handle_training_log_tutorial(request):
     return render(request=request, template_name='training-log-tutorial.html')
+
+
+def login(request):
+    return render(request=request, template_name='login.html')

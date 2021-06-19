@@ -11,21 +11,7 @@
                 </div>
             </div>
 
-            <div class="header">
-                <div class="header__logo" id="headerLogoSection">
-                    <a href="{% url 'index' %}">
-                        <img alt="Strength Level" src="{% static 'deltoid.png' %}" width="162" height="40">
-                    </a>
-                </div>
-                <div class="header__login" id="headerLoginSection">
-                    <a class="button is-primary" href="https://strengthlevel.com/register">
-                        Register
-                    </a>
-                    <a class="button" href="https://strengthlevel.com/login">
-                        Log In
-                    </a>
-                </div>
-            </div>
+            {% include 'header.html' %}
 
             {% include 'index_menu_tab_buttons.html' %}
 

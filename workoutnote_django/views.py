@@ -69,5 +69,9 @@ def handle_workouts(request):
     return render(request=request, template_name='profile/workouts.html')
 
 
+def handle_lifts(request):
+    return render(request=request, template_name='profile/lifts.html')
+
+
 def handle_exercises(request):
     return render(request=request, template_name='profile/exercises.html')

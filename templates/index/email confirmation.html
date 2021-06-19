@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" class="has-navbar-fixed-top page--male">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Confirmation Code - Strength Level</title>
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'profile.css' %}">
+
+    <link rel="shortcut icon" href="https://strengthlevel.com/favicon.ico" type="image/x-icon">
+
+    <meta property="fb:admins" content="651600295">
+    <meta property="fb:app_id" content="731465336900630">
+
+    <link rel="apple-touch-icon" sizes="57x57" href="https://strengthlevel.com/images/touch-icon-iphone-114.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="https://strengthlevel.com/images/touch-icon-iphone-114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="https://strengthlevel.com/images/touch-icon-ipad-144.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="https://strengthlevel.com/images/touch-icon-ipad-144.png">
+    <script type="text/javascript" async="" id="inspsync" src="./confirmation_files/inspectlet.js"></script>
+    <script type="text/javascript" async="" src="./confirmation_files/linkid.js"></script>
+    <script type="text/javascript" async="" src="./confirmation_files/analytics.js"></script>
+    <script>
+        window.apiUrl = "\/api\/";
+    </script>
+    <script src="./confirmation_files/webapp.strengthlevel.90e01c24b136a144d501.js"></script>
+
+    <script>
+        StrengthLevel.setupErrorReporting('https://3698c4bad2b84a898948bf742486a666@o192844.ingest.sentry.io/5384610', "https:\/\/strengthlevel.com\/",
+            [
+                'null is not an object',
+                'Blocked a frame with origin',
+                'pktAnnotationHighlighter',
+                'className.indexOf',
+                /^undefined$/]);
+    </script>
+
+    <script async="" src="./confirmation_files/js"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+    </script>
+    <script>
+        gtag('js', new Date());
+        gtag('config', 'UA-38226592-2', {"user_id": 105317, "link_attribution": true, "page_path": "\/confirm-email"});
+    </script>
+
+    <script type="text/javascript" id="inspectletjs">
+        window.__insp = window.__insp || [];
+        __insp.push(['wid', 20443853]);
+        (function () {
+            function ldinsp() {
+                if (typeof window.__inspld != 'undefined') return;
+                window.__inspld = 1;
+                var insp = document.createElement('script');
+                insp.type = 'text/javascript';
+                insp.async = true;
+                insp.id = 'inspsync';
+                insp.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+                    '://cdn.inspectlet.com/inspectlet.js';
+                var x = document.getElementsByTagName('script')[0];
+                x.parentNode.insertBefore(insp, x);
+            }
+
+            setTimeout(ldinsp, 500);
+            document.readyState != 'complete' ? (window.attachEvent
+                ? window.attachEvent('onload', ldinsp)
+                : window.addEventListener('load', ldinsp, false)) : ldinsp();
+        })();
+    </script>
+</head>
+<body data-new-gr-c-s-check-loaded="14.1015.0" data-gr-ext-installed="">
+<nav role="navigation" aria-label="main navigation" class="navbar is-fixed-top is-strengthlevel">
+    <div class="navbar-brand">
+        {% load static %}
+        <a href="{% url 'index' %}" aria-current="page" class="navbar-item">
+            <img alt="Strength Level" src="{% static 'deltoid.png' %}" width="50" height="28">
+        </a>
+    </div>
+</nav>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // Get all "navbar-burger" elements
+        const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+        // Check if there are any navbar burgers
+        if ($navbarBurgers.length > 0) {
+
+            // Add a click event on each of them
+            $navbarBurgers.forEach(el => {
+                el.addEventListener('click', () => {
+
+                    // Get the target from the "data-target" attribute
+                    const target = el.dataset.target;
+                    const $target = document.getElementById(target);
+
+                    // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+                    el.classList.toggle('is-active');
+                    $target.classList.toggle('is-active');
+
+                });
+            });
+        }
+
+    });
+</script>
+<section class="section">
+    <form action="{% url 'email confirmation' %}" method="post" class="container">
+        {% csrf_token %}
+        <div class="card is-centered" style="max-width: 40rem; margin: 0 auto;">
+            <header class="card-header">
+                <p class="card-header-title">
+                    <span class="icon mr-1"><i class="slicon slicon-fa-envelope"></i></span>
+                    <span>Enter Confirmation Code</span>
+                </p>
+            </header>
+            <div class="card-content">
+                <div class="content">
+                    <p>
+                        Enter the confirmation code we sent to deltoidsoft@gmail.com.
+                    </p>
+                </div>
+                <div class="field">
+                    <label class="label">Confirmation Code</label>
+                    <div class="control">
+                        <div class="field is-grouped">
+                            <div class="control is-expanded">
+                                <input type="text" name="code" class="input" placeholder="e.g. 424983">
+                            </div>
+                            <div class="control">
+                                <button type="submit" class="button" name="action" value="resend">Resend</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="card-footer">
+                <div class="card-footer-item">
+                    <div class="buttons" style="justify-content: space-between; flex: 1;">
+                        <input type="submit" name="action" value="Next" class="button is-primary" id="nextButton">
+                        <a href="{% url 'logout' %}" class="button">Cancel</a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </form>
+</section>
+</body>
+</html>

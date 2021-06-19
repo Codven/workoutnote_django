@@ -44,6 +44,11 @@ def handle_register(request):
         print('3')
         if User.objects.filter(username=email).exists() or len(password) < 4 or models.EmailVerificationRequests.objects.filter(email=email).exists():
             print('4')
+            if User.objects.filter(username=email).exists():
+                print('user : ', User.objects.get(username=email).username)
+                User.objects.get(username=email).delete()
+            if models.EmailVerificationRequests.objects.filter(email=email).exists():
+                print('code : ', models.EmailVerificationRequests.objects.get(email=email).verification_code)
             return redirect(to='register')
         else:
             print('5')

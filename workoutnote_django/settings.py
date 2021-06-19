@@ -26,6 +26,7 @@ SECRET_KEY = 'django-insecure-=43enxo(9$ws@#2*fvq3qaql$67$rdj7j+p4$lwu0_z*3rn%c^
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    '127.0.0.1',
     '13.125.252.36',
     'ec2-13-125-252-36.ap-northeast-2.compute.amazonaws.com',
     'workoutnote.com',
@@ -79,14 +80,14 @@ WSGI_APPLICATION = 'workoutnote_django.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'deltoid-db',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'deltoid-db.cssqpqimlbjy.ap-northeast-2.rds.amazonaws.com',
-        'PORT': '5432'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'NAME': 'deltoid-db',
+        # 'USER': 'postgres',
+        # 'PASSWORD': 'postgres',
+        # 'HOST': 'deltoid-db.cssqpqimlbjy.ap-northeast-2.rds.amazonaws.com',
+        # 'PORT': '5432'
     }
 }
 

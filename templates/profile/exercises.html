@@ -1,0 +1,201 @@
+{% extends 'profile/base.html' %}
+{% block content %}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Get all "navbar-burger" elements
+            const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+            // Check if there are any navbar burgers
+            if ($navbarBurgers.length > 0) {
+
+                // Add a click event on each of them
+                $navbarBurgers.forEach(el => {
+                    el.addEventListener('click', () => {
+
+                        // Get the target from the "data-target" attribute
+                        const target = el.dataset.target;
+                        const $target = document.getElementById(target);
+
+                        // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+                        el.classList.toggle('is-active');
+                        $target.classList.toggle('is-active');
+
+                    });
+                });
+            }
+
+        });
+    </script>
+    <div id="exercisesPageContainer"><!---->
+        <section class="hero is-primary is-translucent">
+            <div class="hero-body">
+                <div class="container"><h1 class="title is-1 is-size-2-mobile">
+                    Exercises
+                </h1></div>
+            </div>
+        </section>
+        <section class="section has-background-white">
+            <div class="container">
+                <div class="buttons mb-6"><a class="button is-primary is-large"><span>Select Exercise</span> <span class="icon"><i aria-hidden="true" class="slicon slicon-fa-angle-down"></i></span></a></div>
+                <div class="block mb-6"><h2 class="title is-3 is-size-4-mobile">Exercise Comparison</h2>
+                    <div class="buttons">
+                        <button type="button" class="button">Customize Exercises
+                        </button>
+                    </div>
+                    <div class="" ga-event-label="exercise-graph">
+                        <div class="columns">
+                            <div class="column">
+                                <div class="field"><label for="undefinedType" class="label">Graph Type</label>
+                                    <div class="control">
+                                        <div class="select"><select id="undefinedType">
+                                            <option value="percentile">
+                                                Lifter Percentile
+                                            </option>
+                                            <option value="oneRepMax">
+                                                Estimated 1-Rep Max
+                                            </option>
+                                            <option value="liftMass">
+                                                Max Lift Weight
+                                            </option>
+                                            <option value="repetitions">
+                                                Total Repetitions
+                                            </option>
+                                            <option value="volume">
+                                                Total Volume
+                                            </option>
+                                        </select></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="field"><label for="undefinedDateRange" class="label">Date Range</label>
+                                    <div class="control">
+                                        <div class="select"><select id="undefinedDateRange">
+                                            <option value="3">
+                                                3 months
+                                            </option>
+                                            <option value="6">
+                                                6 months
+                                            </option>
+                                            <option value="12">
+                                                12 months
+                                            </option>
+                                            <option value="">
+                                                All time
+                                            </option>
+                                        </select></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="graph-container">
+                            <div class="chartjs-size-monitor">
+                                <div class="chartjs-size-monitor-expand">
+                                    <div class=""></div>
+                                </div>
+                                <div class="chartjs-size-monitor-shrink">
+                                    <div class=""></div>
+                                </div>
+                            </div>
+                            <canvas class="graph chartjs-render-monitor" style="display: block; height: 400px; width: 960px;" width="1920" height="800"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="block"><h2 class="title is-3 is-size-4-mobile">Powerlifting</h2> <!---->
+                    <div class="tags are-medium has-addons"><span class="tag">
+            Powerlifting Level
+          </span> <span class="tag is-primary"><span class="stars"><span class="star__full">★</span><!----><span class="star__empty">★★★★</span></span></span> <span class="tag is-primary">
+            6%
+          </span></div>
+                    <div class="" ga-event-label="overall-graph">
+                        <div class="columns">
+                            <div class="column">
+                                <div class="field"><label for="overallGraphType" class="label">Graph Type</label>
+                                    <div class="control">
+                                        <div class="select"><select id="overallGraphType">
+                                            <option value="percentile">
+                                                Overall Lifter Percentile
+                                            </option>
+                                            <option value="wilks">
+                                                Estimated Wilks Score
+                                            </option>
+                                            <option value="totalLiftMass">
+                                                Estimated Lift Total
+                                            </option>
+                                        </select></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="field"><label for="overallGraphDateRange" class="label">Date Range</label>
+                                    <div class="control">
+                                        <div class="select"><select id="overallGraphDateRange">
+                                            <option value="3">
+                                                3 months
+                                            </option>
+                                            <option value="6">
+                                                6 months
+                                            </option>
+                                            <option value="12">
+                                                12 months
+                                            </option>
+                                            <option value="">
+                                                All time
+                                            </option>
+                                        </select></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="graph-container">
+                            <div class="chartjs-size-monitor">
+                                <div class="chartjs-size-monitor-expand">
+                                    <div class=""></div>
+                                </div>
+                                <div class="chartjs-size-monitor-shrink">
+                                    <div class=""></div>
+                                </div>
+                            </div>
+                            <canvas class="graph chartjs-render-monitor" width="1920" height="800" style="display: block; height: 400px; width: 960px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section> <!---->
+        <form method="post"><!----></form>
+    </div>
+    <script>
+        StrengthLevel.setupExercisesPage({
+            "userId": 103795,
+            "comparisonExercises": [{"id": 1, "name": "Bench Press", "isSelected": true}, {"id": 5, "name": "Deadlift", "isSelected": true}, {"id": 4, "name": "Squat", "isSelected": true}],
+            "exerciseGraph": [{"name": "Squat", "unitSymbol": "kg", "results": [{"date": "2021-05-12", "sets": 10, "repetitions": 100, "volume": 5000, "liftMass": 50, "oneRepMax": 66.67, "percentile": 0.05794662279629911}], "goalSeries": []}, {
+                "name": "Bench Press",
+                "unitSymbol": "kg",
+                "results": [{"date": "2021-05-12", "sets": 4, "repetitions": 40, "volume": 2000, "liftMass": 50, "oneRepMax": 66.67, "percentile": 0.19904845112708128}],
+                "goalSeries": []
+            }, {"name": "Deadlift", "unitSymbol": "kg", "results": [{"date": "2021-05-12", "sets": 4, "repetitions": 60, "volume": 4200, "liftMass": 70, "oneRepMax": 105, "percentile": 0.18489564496574315}], "goalSeries": []}],
+            "powerliftingGraph": [{"name": "kobiljon", "unitSymbol": "kg", "results": [{"date": "2021-05-12", "totalLiftMass": 238.33, "percentile": 0.059075541422443506, "wilks": 169.82738786505917}]}],
+            "powerliftingViewModel": {"percentile": 0.0590755},
+            "otherUserViewModel": null,
+            "layoutViewModel": {
+                "title": "kobiljon Exercises - Strength Level",
+                "menuSelection": "Exercises",
+                "gender": "male",
+                "analyticsPage": "\/my-exercises",
+                "fingerprint": ":username\/exercises",
+                "isLoggedIn": true,
+                "gravatarUrl": "https:\/\/www.gravatar.com\/avatar\/b22177542a4b74ac6e8f2f04a8c099d0?s=96&d=retro&r=pg",
+                "name": "kobiljon",
+                "profileUrl": "\/103795-kobiljon",
+                "isAdmin": false,
+                "useGoogleAnalytics": true,
+                "useSentryErrorReporting": true,
+                "useInspectlet": false,
+                "facebookAppId": "731465336900630"
+            },
+            "settingsViewModel": {"bodyMassUnit": "kg", "liftMassUnit": "kg"},
+            "profileUrl": "\/103795-kobiljon"
+        });
+    </script>
+{% endblock %}

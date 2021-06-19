@@ -67,3 +67,7 @@ def handle_find_lifters(request):
 
 def handle_workouts(request):
     return render(request=request, template_name='profile/workouts.html')
+
+
+def handle_exercises(request):
+    return render(request=request, template_name='profile/exercises.html')

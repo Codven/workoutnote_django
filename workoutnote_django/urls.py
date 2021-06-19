@@ -23,4 +23,5 @@ urlpatterns = [
     path('calculators/', views.handle_calculators, name='calculators'),
     path('strength-standards/', views.handle_strength_standards, name='strength-standards'),
     path('training-log-tutorial/', views.handle_training_log_tutorial, name='training-log-tutorial'),
+    path('login/', views.login, name='login'),
 ]

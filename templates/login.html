@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% load static %}
+    <section class="section">
+        <div class="container is-max-desktop">
+
+            <div class="mobile_sticky_ad mobile_sticky_ad--top">
+                <!-- 71161633/mobile_sticky_footer/mobile_sticky_footer -->
+                <div data-fuse="22025437133"></div>
+            </div>
+
+            {% include 'header.html' %}
+
+            <div id="menucontainer" class="sitemenu__container">
+                <nav class="sitemenu level is-mobile" :class="{ 'sitemenu--dropdownactive': activeName }">
+                    <div
+                            class="level-item has-text-centered ">
+                        <a href="/calculators"
+                           @click="showMenu('menuCalculators', $event)">
+                            Calculators
+                            <i class="arrow arrow--menu"
+                               :class="{ 'arrow--up': activeName === 'menuCalculators', 'arrow--down': activeName !== 'menuCalculators' }"></i>
+                        </a>
+                        <div class="menudropdown" ref="menuCalculators">
+                            <div class="menudropdown__section">
+                                <div class="menudropdown__section__title">Strength Calculators</div>
+                                <ol class="menudropdown__section__links">
+                                    <li><a href="/">Strength Level
+                                        Calculator <span class="stars"><span class="star__full">★</span><span class="star__empty">★★★★</span></span></a></li>
+                                    <li><a href="/one-rep-max-calculator">One Rep Max
+                                        Calculator</a></li>
+                                    <li><a href="/plate-barbell-racking-calculator">Plate
+                                        Barbell
+                                        Racking Calculator</a></li>
+                                    <li><a href="/powerlifting-calculator">Powerlifting
+                                        Calculator</a>
+                                    </li>
+                                    <li><a href="/wilks-calculator">Wilks Calculator</a></li>
+                                </ol>
+                                <div class="menudropdown__section__seeall">
+                                    <a href="/calculators">See All
+                                        Calculators</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                            class="level-item has-text-centered ">
+                        <a href="/strength-standards">Standards</a>
+                    </div>
+                    <div
+                            class="level-item has-text-centered  selected">
+                        <a href="/training-log">Training Log</a>
+                    </div>
+                </nav>
+
+                <div class="menudropdown__container" v-show="extendedHtml" v-html="extendedHtml"
+                     style="display: none;"></div>
+            </div>
+            <script>
+                StrengthLevel.setupNavigation();
+            </script>
+
+
+            <div class="section-box">
+                <h1 class="title is-2 is-size-3-mobile">Log In</h1>
+                <div class="columns">
+                    <div class="column">
+
+                        <div class="content">
+                            <p>
+                                Need an account?
+                                <a href="/register">Register</a>
+                            </p>
+                        </div>
+
+                        <form method="post"
+                              action="/login" style="margin-top: 0;">
+                            <div class="field">
+                                <label for="email" class="label">Email</label>
+                                <div class="control has-icons-left">
+                                    <input name="email" id="email" type="email" placeholder="Email" class="input"
+                                           value=""
+                                           required autofocus>
+                                    <span class="icon is-small is-left">
+                <i class="slicon slicon-fa-envelope"></i>
+            </span>
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <label for="password" class="label">Password</label>
+                                <div class="control has-icons-left">
+                                    <input name="password" id="password" type="password" placeholder="Password" class="input"
+                                           required>
+                                    <span class="icon is-small is-left">
+                <i class="slicon slicon-fa-lock"></i>
+            </span>
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <div class="control">
+                                    <button type="submit" class="button is-primary is-medium">Log In</button>
+                                </div>
+                            </div>
+
+                            <p>
+                                <a href="/forgot-password">
+                                    Forgot your password?
+                                </a>
+                            </p>
+                        </form>
+
+                        <div class="content mt-4">
+                            <p><strong>Or</strong></p>
+                            <p>
+                                <a href="https://www.facebook.com/v2.10/dialog/oauth?client_id=731465336900630&amp;state=fbdd281db15b48cb32c91ccd8762e8e2&amp;response_type=code&amp;sdk=php-sdk-5.7.0&amp;redirect_uri=https%3A%2F%2Fstrengthlevel.com%2Ffacebook-login&amp;scope=email%2Cuser_friends%2Cuser_gender"
+                                   class="button is-facebook">
+            <span class="icon">
+                <i class="slicon slicon-fa-facebook-square"></i>
+            </span>
+                                    <span>Continue with Facebook</span>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="column">
+                        <div class="content">
+                            <h2 class="title is-3 is-size-4-mobile">Welcome to the Strength Level community</h2>
+                            <ul>
+                                <li>Log your lifts at the gym</li>
+                                <li>Keep track of your workouts</li>
+                                <li>Track your progress over time</li>
+                                <li>Find and follow other lifters</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer content">
+                <p>
+                    Post your feedback and suggestions on our Facebook page:
+                </p>
+                <p>
+                    <a href="https://www.facebook.com/strengthlevel" class="button is-facebook">
+                    <span class="icon">
+                        <i class="slicon slicon-fa-facebook-square"></i>
+                    </span>
+                        <span>Find us on Facebook</span>
+                    </a>
+                </p>
+                <p>
+                    <a href="/about">About</a>
+                    -
+                    <a href="/faq">FAQ</a>
+                    -
+                    <a href="/privacy-policy">Privacy Policy</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+
+    <div class="desktop_sticky_ad">
+        <!-- 71161633/desktop_sticky/desktop_sticky -->
+        <div data-fuse="22296323458"></div>
+    </div>
+
+
+    <script>
+        var addthis_config =
+            {
+                ui_tabindex: 100,
+            };
+    </script>
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5a9ad390d92277fe"></script>
+{% endblock %}

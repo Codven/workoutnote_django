@@ -1,9 +1,14 @@
+@font-face {
+    font-family: "strengthlevelfont";
+    src: url("strengthlevelfont.woff2?fabf82305d499377a01e24d7bb5fb30d") format("woff2");
+}
+
 .slicon {
     line-height: 1;
 }
 
 .slicon:before {
-    font-family: strengthlevelfont !important;
+    font-family: strengthlevelfont, serif !important;
     font-style: normal;
     font-weight: normal !important;
     vertical-align: top;

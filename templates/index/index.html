@@ -268,7 +268,7 @@
                 <div class="column" id="liftResults">
                     <h2 class="title is-3 is-size-4-mobile">
                         Your Strength Level for
-                        {{ exercise.name }} is {{ lvl_txt }}</h2>
+                        {{ selected_exercise.name }} is {{ lvl_txt }}</h2>
                     <div class="subtitle is-1">
                         <span class="stars"><span class="star__full">★★★★</span><span class="star__empty">★</span></span></div>
                     <div class="content">
@@ -505,7 +505,7 @@
             </section>
             <section class="modal-card-body is-paddingless">
                 <div id="exercisesListDiv" style="min-height: 415px;">
-                    {% for exercise in exercises_filter %}
+                    {% for exercise in exercises %}
                         <div class="card">
                             <a onclick="selectExerciseClick('{{ exercise.name }}')" class="card-content px-4 py-3" style="display: block;">
                                 <span class="media">

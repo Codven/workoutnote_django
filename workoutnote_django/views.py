@@ -109,8 +109,8 @@ def handle_index(request):
         'lift_mass': None,
         'body_weight_ratio': None,
         'lvl_boundaries': None,
-        'exercise': models.Exercise.objects.all(),
-        'exercises_filter': models.Exercise.objects.all()
+        'selected_exercise': models.Exercise.objects.all(),
+        'exercises': models.Exercise.objects.all()
     }
     if request.method == 'POST':
         gender = request.POST['gender']

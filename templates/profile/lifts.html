@@ -1,16 +1,10 @@
 {% extends 'profile/base.html' %}
 {% block content %}
     <script>
-        let addLiftForm, selectExerciseDiv, exercisesListDiv;
-        let allExercises = [], displayedExercises;
-        let selectedBodyPart, selectedCategory, filterText;
-        let selectedExercise = {
-            name: '{{ exercises.0.name }}',
-            icon: '{{ exercises.0.icon }}',
-            bodyPart: '{{ exercises.0.body_part }}',
-            category: '{{ exercises.0.category }}'
-        };
-        let selectedExerciseName, selectedExerciseIcon;
+        let addLiftForm;
+        let selectExerciseDiv, exercisesListDiv, filterExerciseBodyPart, filterExerciseCategory, filterText, selectedExerciseName, selectedExerciseIcon;
+        let allExercises = [{% for exercise in exercises %}{name: '{{ exercise.name }}',icon: '{{ exercise.icon }}',bodyPart: '{{ exercise.body_part }}',category: '{{ exercise.category }}'},{% endfor %}];
+        let selectedExercise = {name: '{{ exercises.0.name }}', icon: '{{ exercises.0.icon }}', bodyPart: '{{ exercises.0.body_part }}', category: '{{ exercises.0.category }}'};
         document.addEventListener('DOMContentLoaded', () => {
             addLiftForm = document.getElementById('addLiftForm');
             selectExerciseDiv = document.getElementById('selectExerciseDiv');
@@ -18,22 +12,12 @@
             selectedExerciseName = document.getElementById('selectedExerciseName');
             selectedExerciseIcon = document.getElementById('selectedExerciseIcon');
 
-            // init all exercises
-            {% for exercise in exercises %}
-                allExercises.push({
-                    name: '{{ exercise.name }}',
-                    icon: '{{ exercise.icon }}',
-                    bodyPart: '{{ exercise.body_part }}',
-                    category: '{{ exercise.category }}'
-                });
-            {% endfor %}
-
-            document.getElementById('bodyPartSelector').addEventListener('change', (event) => {
-                selectedBodyPart = event.target.value === 'none' ? null : event.target.value;
+            document.getElementById('filterExerciseBodyPart').addEventListener('change', (event) => {
+                filterExerciseBodyPart = event.target.value === 'none' ? null : event.target.value;
                 filterExercises();
             });
-            document.getElementById('categorySelector').addEventListener('change', (event) => {
-                selectedCategory = event.target.value === 'none' ? null : event.target.value;
+            document.getElementById('filterExerciseCategory').addEventListener('change', (event) => {
+                filterExerciseCategory = event.target.value === 'none' ? null : event.target.value;
                 filterExercises();
             });
         });
@@ -62,7 +46,7 @@
         }
 
         function filterExercises() {
-            displayedExercises = allExercises.slice();
+            let displayedExercises = allExercises.slice();
 
             if (filterText != null) {
                 let filterTextLower = filterText.toLowerCase();
@@ -82,15 +66,15 @@
                 displayedExercises = newArray.concat(displayedExercises);
             }
 
-            if (selectedBodyPart != null)
+            if (filterExerciseBodyPart != null)
                 for (let i = 0; i < displayedExercises.length; i++)
-                    if (displayedExercises[i].bodyPart !== selectedBodyPart) {
+                    if (displayedExercises[i].bodyPart !== filterExerciseBodyPart) {
                         displayedExercises.splice(i, 1);
                         i--;
                     }
-            if (selectedCategory != null)
+            if (filterExerciseCategory != null)
                 for (let i = 0; i < displayedExercises.length; i++)
-                    if (displayedExercises[i].category !== selectedCategory) {
+                    if (displayedExercises[i].category !== filterExerciseCategory) {
                         displayedExercises.splice(i, 1);
                         i--;
                     }
@@ -265,7 +249,7 @@
                     <div class="field is-grouped is-grouped-multiline">
                         <div class="control">
                             <div class="select is-small">
-                                <select id="bodyPartSelector">
+                                <select id="filterExerciseBodyPart">
                                     <option value="none">Any Body Part</option>
                                     <option value="Back">
                                         Back
@@ -299,7 +283,7 @@
                         </div>
                         <div class="control">
                             <div class="select is-small">
-                                <select id="categorySelector">
+                                <select id="filterExerciseCategory">
                                     <option value="none">Any Category</option>
                                     <option value="Barbell">Barbell</option>
                                     <option value="Bodyweight">Bodyweight</option>

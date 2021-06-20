@@ -77,7 +77,11 @@ def handle_about(request):
 
 
 def handle_index(request):
-    return render(request=request, template_name='index/index.html')
+    return render(
+        request=request,
+        template_name='index/index.html',
+        context={'exercises': models.Exercise.objects.all()}
+    )
 
 
 def handle_calculators(request):

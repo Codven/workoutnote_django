@@ -2,15 +2,12 @@
 {% block content %}
     {% load static %}
     <script>
+        let selectExerciseDiv, exercisesListDiv, filterExerciseBodyPart, filterExerciseCategory, filterText, selectedExerciseName, selectedExerciseIcon;
+        let allExercises = [{% for exercise in exercises %}{name: '{{ exercise.name }}',icon: '{{ exercise.icon }}',bodyPart: '{{ exercise.body_part }}',category: '{{ exercise.category }}'},{% endfor %}];
+        let selectedExercise = {name: '{{ exercises.0.name }}', icon: '{{ exercises.0.icon }}', bodyPart: '{{ exercises.0.body_part }}', category: '{{ exercises.0.category }}'};
         document.addEventListener('DOMContentLoaded', () => {
-
-            // Get all "navbar-burger" elements
             const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-
-            // Check if there are any navbar burgers
-            if ($navbarBurgers.length > 0) {
-
-                // Add a click event on each of them
+            if ($navbarBurgers.length > 0)
                 $navbarBurgers.forEach(el => {
                     el.addEventListener('click', () => {
 
@@ -24,11 +21,108 @@
 
                     });
                 });
+
+            selectExerciseDiv = document.getElementById('selectExerciseDiv');
+            exercisesListDiv = document.getElementById('exercisesListDiv');
+            selectedExerciseName = document.getElementById('selectedExerciseName');
+            selectedExerciseIcon = document.getElementById('selectedExerciseIcon');
+
+            document.getElementById('filterExerciseBodyPart').addEventListener('change', (event) => {
+                filterExerciseBodyPart = event.target.value === 'none' ? null : event.target.value;
+                filterExercises();
+            });
+            document.getElementById('filterExerciseCategory').addEventListener('change', (event) => {
+                filterExerciseCategory = event.target.value === 'none' ? null : event.target.value;
+                filterExercises();
+            });
+        });
+
+        function addLiftClick() {
+            if (document.readyState === "complete")
+                addLiftForm.style.display = 'block';
+        }
+
+        function hideAddLiftFormClick() {
+            addLiftForm.style.display = 'none';
+        }
+
+        function showExerciseSelectorDivClick() {
+            if (document.readyState === "complete")
+                selectExerciseDiv.style.display = 'block';
+        }
+
+        function hideExerciseSelectorDivClick() {
+            selectExerciseDiv.style.display = 'none';
+        }
+
+        function onFilterTextChanged(input) {
+            filterText = input.value.length > 0 ? input.value : null;
+            filterExercises();
+        }
+
+        function filterExercises() {
+            let displayedExercises = allExercises.slice();
+
+            if (filterText != null) {
+                let filterTextLower = filterText.toLowerCase();
+                for (let i = 0; i < displayedExercises.length; i++)
+                    if (!displayedExercises[i].name.toLowerCase().includes(filterTextLower)) {
+                        displayedExercises.splice(i, 1);
+                        i--;
+                    }
+                let newArray = [];
+                for (let i = 0; i < displayedExercises.length; i++) {
+                    if (displayedExercises[i].name.toLowerCase().startsWith(filterTextLower)) {
+                        newArray.push(displayedExercises[i]);
+                        displayedExercises.splice(i, 1);
+                        i--;
+                    }
+                }
+                displayedExercises = newArray.concat(displayedExercises);
             }
 
-        });
+            if (filterExerciseBodyPart != null)
+                for (let i = 0; i < displayedExercises.length; i++)
+                    if (displayedExercises[i].bodyPart !== filterExerciseBodyPart) {
+                        displayedExercises.splice(i, 1);
+                        i--;
+                    }
+            if (filterExerciseCategory != null)
+                for (let i = 0; i < displayedExercises.length; i++)
+                    if (displayedExercises[i].category !== filterExerciseCategory) {
+                        displayedExercises.splice(i, 1);
+                        i--;
+                    }
+
+            exercisesListDiv.innerHTML = '';
+            for (let i = 0; i < displayedExercises.length; i++) {
+                let newElementHtml = '<a onclick="selectExerciseClick(\'' + displayedExercises[i].name + '\');" class="card-content px-4 py-3" style="display: block;"><span class="media"><span class="media-left"><span class="icon is-left has-text-dark"><i class="slicon slicon-2x ' + displayedExercises[i].icon + '"></i></span></span><span class="media-content"><span>' + displayedExercises[i].name + '</span> <span class="tag is-small ml-1">' + displayedExercises[i].bodyPart + '</span> <span class="tag is-small"> <span class="stars"> <span class="star__full">★</span> <span class="star__empty">★★★★</span> </span></span> </span> </span> </a>';
+                let newElement = document.createElement('div');
+                newElement.className = 'card';
+                newElement.innerHTML = newElementHtml;
+                exercisesListDiv.appendChild(newElement);
+            }
+        }
+
+        function selectExerciseClick(name) {
+            let newExercise = null;
+            let nameLower = name.toLowerCase();
+            for (let i = 0; i < allExercises.length; i++)
+                if (allExercises[i].name.toLowerCase() === nameLower) {
+                    newExercise = allExercises[i];
+                    break;
+                }
+
+            if (newExercise != null) {
+                selectedExerciseName.value = newExercise.name;
+                selectedExerciseIcon.classList.remove(selectedExercise.icon);
+                selectedExerciseIcon.classList.add(newExercise.icon);
+                selectedExercise = newExercise;
+                hideExerciseSelectorDivClick();
+            }
+        }
     </script>
-    <div id="profilePageContainer"><!---->
+    <div id="profilePageContainer">
         <section class="hero is-primary is-translucent">
             <div class="hero-body">
                 <div class="container">
@@ -51,11 +145,11 @@
             </div>
         </section>
         <section class="section has-background-white">
-            <div class="container"><!---->
+            <div class="container">
                 <div class="block">
                     <div class="tags are-medium has-addons"><span class="tag">
             Powerlifting Level
-          </span> <span class="tag is-primary"><span class="stars"><span class="star__full">★</span><!----><span class="star__empty">★★★★</span></span></span> <span class="tag is-primary">
+          </span> <span class="tag is-primary"><span class="stars"><span class="star__full">★</span><span class="star__empty">★★★★</span></span></span> <span class="tag is-primary">
             6%
           </span></div>
                 </div>
@@ -94,31 +188,6 @@
                     </a></div>
                 </div>
             </div>
-        </section> <!----> <!----></div>
-    <script>
-        StrengthLevel.setupProfilePage({
-            "followViewModel": {"user": {}, "following": [], "followers": []},
-            "emailVerificationViewModel": null,
-            "profileHeaderViewModel": {"profileUrl": "\/103795-kobiljon", "gravatarUrl": "https:\/\/www.gravatar.com\/avatar\/b22177542a4b74ac6e8f2f04a8c099d0?s=192&d=retro&r=pg", "name": "kobiljon", "percentile": 0.0590755},
-            "otherUserViewModel": null,
-            "layoutViewModel": {
-                "title": "kobiljon - Strength Level",
-                "menuSelection": "My Profile",
-                "gender": "male",
-                "analyticsPage": "\/my-profile",
-                "fingerprint": ":username",
-                "isLoggedIn": true,
-                "gravatarUrl": "https:\/\/www.gravatar.com\/avatar\/b22177542a4b74ac6e8f2f04a8c099d0?s=96&d=retro&r=pg",
-                "name": "kobiljon",
-                "profileUrl": "\/103795-kobiljon",
-                "isAdmin": false,
-                "useGoogleAnalytics": true,
-                "useSentryErrorReporting": true,
-                "useInspectlet": true,
-                "facebookAppId": "731465336900630"
-            },
-            "followChange": null,
-            "settingsViewModel": {"bodyMassUnit": "kg", "liftMassUnit": "kg"}
-        });
-    </script>
+        </section>
+    </div>
 {% endblock %}

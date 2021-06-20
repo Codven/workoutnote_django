@@ -4,8 +4,8 @@ class Tools:
         return round(lift_mass / (1.0278 - 0.0278 * repetitions), 1)
 
     @staticmethod
-    def get_power_level_in_percentage(sorted_lifts_for_body_weight: list,
-                                      total_lift_mass: float) -> float:
+    def get_level_in_percentage(sorted_lifts_for_body_weight: list,
+                                total_lift_mass: float) -> float:
         list_copy = sorted_lifts_for_body_weight[:]
         data_length = len(list_copy)
         list_copy.append(total_lift_mass)
@@ -46,3 +46,7 @@ class Tools:
     def get_wilks_score_boundaries():
         # TODO: make a logic for finding boundaries
         pass
+
+    @staticmethod
+    def calculate_body_weight_ratio(lift_mass: float, body_weight: float):
+        return lift_mass / body_weight

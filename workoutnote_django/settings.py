@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'workoutnote_django.workoutnote_django',
+    'workoutnote_django',
 ]
 
 MIDDLEWARE = [

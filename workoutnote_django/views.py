@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.template.response import TemplateResponse
 from django.contrib.auth.models import User
-from random import randint
+from workoutnote_django import models
 
 
 # region authentication
@@ -67,6 +67,7 @@ def handle_logout(request):
 
 
 def handle_faq(request):
+    # models.Exercise.init_from_csv()
     return render(request=request, template_name='index/faq.html')
 
 
@@ -83,7 +84,11 @@ def handle_calculators(request):
 
 
 def handle_strength_standards(request):
-    return render(request=request, template_name='index/strength standards.html')
+    return render(
+        request=request,
+        template_name='index/strength standards.html',
+        context={'exercises': models.Exercise.objects.all()}
+    )
 
 
 def handle_training_log_tutorial(request):

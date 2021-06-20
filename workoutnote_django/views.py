@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.template.response import TemplateResponse
 from django.contrib.auth.models import User
 from workoutnote_django import models
+from utils.tools import Tools
 
 
 # region authentication
@@ -102,7 +103,10 @@ def handle_one_rep_max_calculator(request):
         'result_table_1': [],
         'result_table_2': []
     }
-    table_2_percentages = [100, 97, 94, 92, 89, 86, 83, 81, 78, 75, 73, 71, 70, 68, 67, 65, 64, 63, 61, 60, 59, 58, 57, 56, 55, 54, 53, 52, 51, 50, ]
+    table_1_reps = [1, 2, 4, 6, 8, 10, 12, 16, 20, 24, 30]
+    table_2_percentages = [
+        100, 97, 94, 92, 89, 86, 83, 81, 78, 75, 73, 71, 70, 68, 67, 65, 64, 63, 61, 60, 59, 58, 57, 56, 55, 54, 53, 52, 51, 50
+    ]
     if request.method == 'GET':
         for index, item in enumerate(table_2_percentages):
             data['result_table_2'].append(
@@ -111,18 +115,21 @@ def handle_one_rep_max_calculator(request):
 
         return TemplateResponse(request=request, template='index/one rep max calculator.html', context=data)
     elif request.method == 'POST':
-        liftmass = float(request.POST['liftmass'])
-        repetitions = float(request.POST['repetitions'])
-        result = round(liftmass / (1.0278 - 0.0278 * repetitions), 1)
-        table_1_reps = [1, 2, 4, 6, 8, 10, 12, 16, 20, 24, 30]
+        result = Tools.calculate_one_rep_max(
+            float(request.POST['liftmass']),
+            int((request.POST['repetitions']))
+        )
         max_percentage = 100
         data['result_number'] = result
+
+        # Populate Table 1 with content
         for item in table_1_reps:
             data['result_table_1'].append(
                 {'percentage': max_percentage, 'liftmass': round(result * max_percentage / 100, 1), 'reps_of_1rm': item}
             )
             max_percentage -= 5
 
+        # Populate Table 2 with content
         for index, item in enumerate(table_2_percentages):
             data['result_table_2'].append(
                 {'percentage': item, 'liftmass': round(result * item / 100, 1), 'reps_of_1rm': index + 1}
@@ -134,8 +141,71 @@ def handle_plate_barbell_racking_calculator(request):
     return render(request=request, template_name='index/plate barbell racking calculator.html')
 
 
+@require_http_methods(['GET', 'POST'])
 def handle_powerlifting_calculator(request):
-    return render(request=request, template_name='index/powerlifting calculator.html')
+    # TODO: remove following fake data after model for lifts is set
+    TMP_POWERLIFTING_FAKE_DATA = [
+        {'body_weight': 70, 'reps': 10, "lift_mass": 30},
+        {'body_weight': 70, 'reps': 10, "lift_mass": 20},
+        {'body_weight': 70, 'reps': 10, "lift_mass": 50},
+        {'body_weight': 70, 'reps': 10, "lift_mass": 41},
+        {'body_weight': 70, 'reps': 10, "lift_mass": 32},
+        {'body_weight': 70, 'reps': 10, "lift_mass": 35},
+        {'body_weight': 70, 'reps': 10, "lift_mass": 16},
+        {'body_weight': 70, 'reps': 10, "lift_mass": 105},
+        {'body_weight': 70, 'reps': 10, "lift_mass": 85},
+        {'body_weight': 70, 'reps': 10, "lift_mass": 102},
+        {'body_weight': 70, 'reps': 10, "lift_mass": 50},
+        {'body_weight': 70, 'reps': 10, "lift_mass": 58},
+        {'body_weight': 70, 'reps': 10, "lift_mass": 25},
+    ]
+
+    data = {
+        'lvl_txt': None,
+        'lvl_stars_number': None,
+        'lvl_percentage': None,
+        'gender': None,
+        'body_weight': None,
+        'total_lift': None,
+        'wilks_score': None,
+        'lvl_boundaries': None
+    }
+    if request.method == 'POST':
+        gender = request.POST['gender']
+        body_weight = float(request.POST['bodymass'])
+        # TODO: instead of following fake data get real data from db for given bodyweight and gender
+        sorted_fake_lift_mass = sorted([i['lift_mass'] for i in TMP_POWERLIFTING_FAKE_DATA])
+        total_lift_mass = float(request.POST['totalliftmass'])
+        if request.POST['method'] == 'split':
+            bench_1rm = Tools.calculate_one_rep_max(
+                float(request.POST['benchliftmass']),
+                int(request.POST['benchrepetitions'])
+            )
+            squat_1rm = Tools.calculate_one_rep_max(
+                float(request.POST['squatliftmass']),
+                int(request.POST['squatrepetitions'])
+            )
+            deadlift_1rm = Tools.calculate_one_rep_max(
+                float(request.POST['deadliftliftmass']),
+                int(request.POST['deadliftrepetitions'])
+            )
+            total_lift_mass = bench_1rm + squat_1rm + deadlift_1rm
+
+        lvl_in_percentage = Tools.get_power_level_in_percentage(sorted_fake_lift_mass, total_lift_mass)
+        lvl_in_text = Tools.get_string_power_level(lvl_in_percentage)
+        lvl_boundaries = Tools.get_level_boundaries_for_bodyweight(sorted_fake_lift_mass)
+
+        # Construct the resulting data
+        data['lvl_txt'] = lvl_in_text
+        data['lvl_stars_number'] = None  # TODO: make a function to calculate number of stars
+        data['lvl_percentage'] = round(lvl_in_percentage, 1)
+        data['body_weight'] = body_weight
+        data['gender'] = gender
+        data['total_lift'] = total_lift_mass
+        data['wilks_score'] = None  # TODO: make a function to calculate Wilks Score
+        data['lvl_boundaries'] = lvl_boundaries
+
+    return TemplateResponse(request=request, template='index/powerlifting calculator.html', context=data)
 
 
 def handle_wilks_calculator(request):

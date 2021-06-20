@@ -2,10 +2,10 @@
 {% block content %}
     <div class="section-box">
         <h1 class="title is-2 is-size-3-mobile">Powerlifting Calculator</h1>
-
         <div class="columns">
             <div class="column">
-                <form action="https://strengthlevel.com/powerlifting-calculator#powerliftingResults" method="post" id="powerliftingForm" class="powerliftingcalculator__form">
+                <form action="{% url 'powerlifting calculator' %}" method="post" id="powerliftingForm" class="powerliftingcalculator__form">
+                    {% csrf_token %}
                     <div class="field is-horizontal">
                         <div class="field-label is-normal"><label for="splitform_gender" class="label">Gender</label></div>
                         <div class="field-body">
@@ -71,7 +71,7 @@
                                         </option>
                                     </select></div>
                                 </div>
-                                <div class="control is-expanded"><input type="number" name="benchrepetitions" min="1" max="500" class="input"></div>
+                                <div class="control is-expanded"><input type="number" name="benchrepetitions" required="required" min="1" max="500" class="input"></div>
                                 <div class="control"><span class="button is-static">
                             rep
                         </span></div>
@@ -94,7 +94,7 @@
                                         </option>
                                     </select></div>
                                 </div>
-                                <div class="control is-expanded"><input type="number" name="squatrepetitions" min="1" max="500" class="input"></div>
+                                <div class="control is-expanded"><input type="number" name="squatrepetitions" required="required" min="1" max="500" class="input"></div>
                                 <div class="control"><span class="button is-static">
                             rep
                         </span></div>
@@ -106,7 +106,8 @@
                             Deadlift </label></div>
                         <div class="field-body">
                             <div class="field has-addons">
-                                <div class="control is-expanded"><input type="number" id="deadliftliftmass" name="deadliftliftmass" min="1" max="1500" required="required" step="0.1" class="input"></div>
+                                <div class="control is-expanded"><input type="number" id="deadliftliftmass" name="deadliftliftmass" min="1" max="1500" required="required" step="0.1" class="input">
+                                </div>
                                 <div class="control">
                                     <div class="select"><select name="liftmassunit">
                                         <option>
@@ -117,10 +118,32 @@
                                         </option>
                                     </select></div>
                                 </div>
-                                <div class="control is-expanded"><input type="number" name="deadliftrepetitions" min="1" max="500" class="input"></div>
+                                <div class="control is-expanded"><input type="number" name="deadliftrepetitions" required="required" min="1" max="500" class="input"></div>
                                 <div class="control"><span class="button is-static">
                             rep
                         </span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field is-horizontal">
+                        <div class="field-label"><label for="totalform_liftmass" class="label">
+                            Total Lift
+                        </label></div>
+                        <div class="field-body">
+                            <div class="field has-addons">
+                                <div class="control is-expanded">
+                                    <input type="number" id="totalform_liftmass" name="totalliftmass" min="1" max="4000" required="required" step="0.1" class="input">
+                                </div>
+                                <div class="control">
+                                    <div class="select"><select name="liftmassunit">
+                                        <option>
+                                            kg
+                                        </option>
+                                        <option>
+                                            lb
+                                        </option>
+                                    </select></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -134,6 +157,7 @@
                             </div>
                         </div>
                     </div>
+
                 </form>
                 <script>
                     StrengthLevel.addPowerliftingCalculator({
@@ -152,7 +176,14 @@
                         "bodyMassUnits": ["kg", "lb", "st"],
                         "liftMassUnitSymbol": "lb",
                         "bodyMassUnitSymbol": "lb",
-                        "unitDefinitions": [{"symbol": "kg", "conversionToBaseUnit": 1, "step": 0.1, "remainderSymbol": null, "remainderMultiple": null, "remainderStep": null}, {"symbol": "lb", "conversionToBaseUnit": 0.45359237, "step": 0.1, "remainderSymbol": null, "remainderMultiple": null, "remainderStep": null}, {
+                        "unitDefinitions": [{"symbol": "kg", "conversionToBaseUnit": 1, "step": 0.1, "remainderSymbol": null, "remainderMultiple": null, "remainderStep": null}, {
+                            "symbol": "lb",
+                            "conversionToBaseUnit": 0.45359237,
+                            "step": 0.1,
+                            "remainderSymbol": null,
+                            "remainderMultiple": null,
+                            "remainderStep": null
+                        }, {
                             "symbol": "st",
                             "conversionToBaseUnit": 6.35029318,
                             "step": 1,
@@ -180,6 +211,123 @@
             </div>
         </div>
     </div>
+    {% if lvl_txt %}
+        <div class="section-box" id="powerliftingResults">
+            <div class="columns">
+                <div class="column">
+                    <h2 class="title is-3 is-size-4-mobile">
+                        Your Powerlifting Strength Level is
+                        {{ lvl_txt }} </h2>
+                    <div class="subtitle is-1">
+                        <span class="stars"><span class="star__full">★</span><span class="star__empty">★★★★</span></span></div>
+
+                    <div class="content">
+                        <p>
+                            Based on a total lift of
+                            <strong>
+                                {{ total_lift }} kg </strong>
+                        </p>
+                    </div>
+
+                    <div class="columns">
+                        <div class="column">
+                            <h3 class="subtitle is-5 mb-2">You're stronger than</h3>
+                            <p>
+                                <strong>{{ lvl_percentage }}%</strong>
+                                of {{ gender }} lifters weighing {{ body_weight }} kg </p>
+                        </div>
+
+                        <div class="column">
+                            <h3 class="subtitle is-5 mb-2">Wilks Score</h3>
+                            <div class="content">
+                                <p>
+                                    Your Wilks Score is <strong>{{ wilks_score }}</strong>
+                                </p>
+                                <p>
+                                    Get more information on Wilks Score using our <a href="{% url 'wilks calculator' %}">Wilks
+                                    Calculator</a>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="liftresult__standards">
+                        <h3 class="subtitle is-4 is-size-5-mobile">Strength Level boundaries</h3>
+                        <p>These are our strength standards
+                            in kg for
+                            lifters at
+                            your bodyweight:</p>
+
+                        <table class="table is-fullwidth is-striped is-narrow standards__table" id="tableId60cf04ea55f0c">
+                            <thead>
+                            <tr>
+                                <th style="width: 25%;">
+                                    <abbr title="Bodyweight"><span>BW</span></abbr>
+                                </th>
+                                <th style="width: 15%;">
+                                    <abbr title="Beginner"><span>Beg.</span></abbr>
+                                </th>
+                                <th style="width: 15%;">
+                                    <abbr title="Novice"><span>Nov.</span></abbr>
+                                </th>
+                                <th style="width: 15%;">
+                                    <abbr title="Intermediate"><span>Int.</span></abbr>
+                                </th>
+                                <th style="width: 15%;">
+                                    <abbr title="Advanced"><span>Adv.</span></abbr>
+                                </th>
+                                <th style="width: 15%;">
+                                    <abbr title="Elite"><span>Elite</span></abbr>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    {{ body_weight }} <span class="standards__ratio"></span>
+                                </td>
+                                <td class="standards__cell--highlight">
+                                    {{ lvl_boundaries.beginner }} <span class="standards__ratio">x2.65</span>
+                                </td>
+                                <td>
+                                    {{ lvl_boundaries.novice }} <span class="standards__ratio">x3.58</span>
+                                </td>
+                                <td>
+                                    {{ lvl_boundaries.intermediate }} <span class="standards__ratio">x4.71</span>
+                                </td>
+                                <td>
+                                    {{ lvl_boundaries.advanced }} <span class="standards__ratio">x5.99</span>
+                                </td>
+                                <td>
+                                    {{ lvl_boundaries.elite }} <span class="standards__ratio">x7.35</span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="content">
+                            <p>
+                                These male standards were last updated June and
+                                are based on 254,000 filtered lifts.
+                            </p>
+
+                            <p class="standards__note">
+                                Note: these barbell standards include the weight of the bar, normally 20 kg / 44 lb.
+                            </p>
+                        </div>
+
+
+                        <p>
+                            <a class="button" href="{% url 'powerlifting standards' %}">
+                                Powerlifting Strength Standards
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
     <div class="section-box content">
         <h2 class="title is-3 is-size-4-mobile">Powerlifting Strength Standards</h2>
         <p>

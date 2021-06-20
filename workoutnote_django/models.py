@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Exercise(models.Model):
@@ -15,3 +16,16 @@ class Exercise(models.Model):
             for line in r.readlines()[1:]:
                 exercise_name, icon, body_part, category = line[:-1].split(',')
                 Exercise.objects.create(name=exercise_name, icon=icon, body_part=body_part, category=category).save()
+
+
+class Lift(models.Model):
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE)
+    body_weight = models.FloatField()
+    lift_mass = models.FloatField()
+    repetitions = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.exercise.name

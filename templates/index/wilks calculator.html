@@ -2,6 +2,20 @@
 {% block content %}
     <script>
         StrengthLevel.setupNavigation();
+
+        function splitTotalCheck() {
+            if (document.getElementById('splitCheck').checked) {
+                document.getElementById('totalLiftInputBlock').style.display = 'none';
+                document.getElementById('splitLiftInputBlock').style.display = 'block';
+            } else {
+                document.getElementById('totalLiftInputBlock').style.display = 'block';
+                document.getElementById('splitLiftInputBlock').style.display = 'none';
+            }
+        }
+
+        function submit() {
+            document.theForm.submit();
+        }
     </script>
     <div class="section-box" id="wilksContainer">
         <h1 class="title is-2 is-size-3-mobile is-spaced">Wilks Calculator for Powerlifting</h1>
@@ -20,7 +34,8 @@
             </p>
         </div>
 
-        <form action="https://strengthlevel.com/wilks-calculator#wilksScoreResults" method="post" id="powerliftingForm" class="powerliftingcalculator__form">
+        <form action="{% url 'wilks calculator' %}" method="post" id="powerliftingForm" class="powerliftingcalculator__form">
+            {% csrf_token %}
             <div class="field is-horizontal">
                 <div class="field-label is-normal"><label for="splitform_gender" class="label">Gender</label></div>
                 <div class="field-body">
@@ -62,89 +77,119 @@
                 <div class="field-label"><label class="label">Method</label></div>
                 <div class="field-body">
                     <div class="field">
-                        <div class="control"><label class="radio"><input type="radio" name="method" value="split">
-                            Separately</label> <label class="radio"><input type="radio" name="method" value="total"> Added
-                            Up</label></div>
+                        <div class="control">
+                            <label class="radio">
+                                <input type="radio" onclick="splitTotalCheck()" name="method" value="split" checked id="splitCheck"> Separately
+                            </label>
+                            <label class="radio">
+                                <input type="radio" onclick="splitTotalCheck()" name="method" value="total" id="totalCheck"> AddedUp
+                            </label>
+                        </div>
                         <p class="help">
                             Enter your best bench press, squat and deadlift (conventional or sumo)
                         </p></div>
                 </div>
             </div>
-            <div class="field is-horizontal">
-                <div class="field-label is-normal"><label for="benchliftmass" class="label">
-                    Bench Press </label></div>
-                <div class="field-body">
-                    <div class="field has-addons">
-                        <div class="control is-expanded"><input type="number" id="benchliftmass" name="benchliftmass" min="1" max="1500" required="required" step="0.1" class="input"></div>
-                        <div class="control">
-                            <div class="select"><select name="liftmassunit">
-                                <option>
-                                    kg
-                                </option>
-                                <option>
-                                    lb
-                                </option>
-                            </select></div>
-                        </div>
-                        <div class="control is-expanded"><input type="number" name="benchrepetitions" min="1" max="500" class="input"></div>
-                        <div class="control"><span class="button is-static">
+            <div id="splitLiftInputBlock">
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal"><label for="benchliftmass" class="label">
+                        Bench Press </label></div>
+                    <div class="field-body">
+                        <div class="field has-addons">
+                            <div class="control is-expanded"><input type="number" id="benchliftmass" name="benchliftmass" min="1" max="1500" required="required" step="0.1" class="input"></div>
+                            <div class="control">
+                                <div class="select"><select name="liftmassunit">
+                                    <option>
+                                        kg
+                                    </option>
+                                    <option>
+                                        lb
+                                    </option>
+                                </select></div>
+                            </div>
+                            <div class="control is-expanded"><input type="number" name="benchrepetitions" min="1" max="500" class="input"></div>
+                            <div class="control"><span class="button is-static">
                             rep
                         </span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal"><label for="squatliftmass" class="label">
+                        Back Squat </label></div>
+                    <div class="field-body">
+                        <div class="field has-addons">
+                            <div class="control is-expanded"><input type="number" id="squatliftmass" name="squatliftmass" min="1" max="1500" required="required" step="0.1" class="input"></div>
+                            <div class="control">
+                                <div class="select"><select name="liftmassunit">
+                                    <option>
+                                        kg
+                                    </option>
+                                    <option>
+                                        lb
+                                    </option>
+                                </select></div>
+                            </div>
+                            <div class="control is-expanded"><input type="number" name="squatrepetitions" min="1" max="500" class="input"></div>
+                            <div class="control"><span class="button is-static">
+                            rep
+                        </span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal"><label for="deadliftliftmass" class="label">
+                        Deadlift </label></div>
+                    <div class="field-body">
+                        <div class="field has-addons">
+                            <div class="control is-expanded"><input type="number" id="deadliftliftmass" name="deadliftliftmass" min="1" max="1500" required="required" step="0.1" class="input"></div>
+                            <div class="control">
+                                <div class="select"><select name="liftmassunit">
+                                    <option>
+                                        kg
+                                    </option>
+                                    <option>
+                                        lb
+                                    </option>
+                                </select></div>
+                            </div>
+                            <div class="control is-expanded"><input type="number" name="deadliftrepetitions" min="1" max="500" class="input"></div>
+                            <div class="control"><span class="button is-static">
+                            rep
+                        </span></div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="field is-horizontal">
-                <div class="field-label is-normal"><label for="squatliftmass" class="label">
-                    Back Squat </label></div>
-                <div class="field-body">
-                    <div class="field has-addons">
-                        <div class="control is-expanded"><input type="number" id="squatliftmass" name="squatliftmass" min="1" max="1500" required="required" step="0.1" class="input"></div>
-                        <div class="control">
-                            <div class="select"><select name="liftmassunit">
-                                <option>
-                                    kg
-                                </option>
-                                <option>
-                                    lb
-                                </option>
-                            </select></div>
+            <div id="totalLiftInputBlock" style="display: none">
+                <div class="field is-horizontal">
+                    <div class="field-label"><label for="totalform_liftmass" class="label">
+                        Total Lift
+                    </label></div>
+                    <div class="field-body">
+                        <div class="field has-addons">
+                            <div class="control is-expanded"><input type="number" id="totalform_liftmass" name="totalliftmass" min="1" max="4000" required="required" step="0.1" class="input"></div>
+                            <div class="control">
+                                <div class="select"><select name="liftmassunit">
+                                    <option>
+                                        kg
+                                    </option>
+                                    <option>
+                                        lb
+                                    </option>
+                                </select></div>
+                            </div>
                         </div>
-                        <div class="control is-expanded"><input type="number" name="squatrepetitions" min="1" max="500" class="input"></div>
-                        <div class="control"><span class="button is-static">
-                            rep
-                        </span></div>
                     </div>
                 </div>
             </div>
-            <div class="field is-horizontal">
-                <div class="field-label is-normal"><label for="deadliftliftmass" class="label">
-                    Deadlift </label></div>
-                <div class="field-body">
-                    <div class="field has-addons">
-                        <div class="control is-expanded"><input type="number" id="deadliftliftmass" name="deadliftliftmass" min="1" max="1500" required="required" step="0.1" class="input"></div>
-                        <div class="control">
-                            <div class="select"><select name="liftmassunit">
-                                <option>
-                                    kg
-                                </option>
-                                <option>
-                                    lb
-                                </option>
-                            </select></div>
-                        </div>
-                        <div class="control is-expanded"><input type="number" name="deadliftrepetitions" min="1" max="500" class="input"></div>
-                        <div class="control"><span class="button is-static">
-                            rep
-                        </span></div>
-                    </div>
-                </div>
-            </div>
+            <br>
             <div class="field is-horizontal">
                 <div class="field-label is-normal"></div>
                 <div class="field-body">
                     <div class="field">
                         <div class="control">
-                            <button type="submit" class="button is-primary is-medium">Calculate Score</button>
+                            <button type="submit" class="button is-primary is-medium" onclick="submit()">Calculate Score</button>
                         </div>
                     </div>
                 </div>
@@ -167,7 +212,14 @@
                 "bodyMassUnits": ["kg", "lb", "st"],
                 "liftMassUnitSymbol": "lb",
                 "bodyMassUnitSymbol": "lb",
-                "unitDefinitions": [{"symbol": "kg", "conversionToBaseUnit": 1, "step": 0.1, "remainderSymbol": null, "remainderMultiple": null, "remainderStep": null}, {"symbol": "lb", "conversionToBaseUnit": 0.45359237, "step": 0.1, "remainderSymbol": null, "remainderMultiple": null, "remainderStep": null}, {
+                "unitDefinitions": [{"symbol": "kg", "conversionToBaseUnit": 1, "step": 0.1, "remainderSymbol": null, "remainderMultiple": null, "remainderStep": null}, {
+                    "symbol": "lb",
+                    "conversionToBaseUnit": 0.45359237,
+                    "step": 0.1,
+                    "remainderSymbol": null,
+                    "remainderMultiple": null,
+                    "remainderStep": null
+                }, {
                     "symbol": "st",
                     "conversionToBaseUnit": 6.35029318,
                     "step": 1,
@@ -183,6 +235,55 @@
             }, '#powerliftingForm');
         </script>
     </div>
+    {% if wilks_score %}
+        <div class="section-box" id="wilksScoreResults">
+            <h2 class="title is-3 is-size-4-mobile">Your Wilks Score is
+                <strong>{{ wilks_score }}</strong>
+            </h2>
+
+            <div class="content">
+                <p>
+                    Based on a total lift of
+                    <strong>
+                        {{ total_lift }} kg </strong>
+                    in bench press, squat and deadlift at a bodyweight of
+                    <strong>
+                        {{ body_weight }} kg </strong>
+                </p>
+            </div>
+
+            <table class="table is-fullwidth is-striped">
+                <thead>
+                <tr>
+                    <th width="50%">Level</th>
+                    <th>Score</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Untrained</td>
+                    <td>{{ wilks_score_boundaries.untrained }}</td>
+                </tr>
+                <tr>
+                    <td>Novice</td>
+                    <td>{{ wilks_score_boundaries.novice }}</td>
+                </tr>
+                <tr>
+                    <td>Intermediate</td>
+                    <td>{{ wilks_score_boundaries.intermediate }}</td>
+                </tr>
+                <tr>
+                    <td>Advanced</td>
+                    <td>{{ wilks_score_boundaries.advanced }}</td>
+                </tr>
+                <tr>
+                    <td>Elite</td>
+                    <td>{{ wilks_score_boundaries.elite }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
     <div class="section-box content">
         <h2 class="title is-3 is-size-4-mobile">Rate Your Lifts Against Other People</h2>
         <p>

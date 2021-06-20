@@ -36,3 +36,13 @@ class Tools:
         if total_lift_mass > boundaries['advanced']:
             level = 'Advanced'
         return level
+
+    @staticmethod
+    def calculate_wilks_score(total_lift_mass: float):
+        # TODO: make a calculation formula
+        pass
+
+    @staticmethod
+    def get_wilks_score_boundaries():
+        # TODO: make a logic for finding boundaries
+        pass

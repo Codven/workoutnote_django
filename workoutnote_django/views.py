@@ -8,6 +8,13 @@ from workoutnote_django import models
 from utils.tools import Tools
 
 
+@login_required
+def handle_init_exercises(request):
+    if request.user.is_superuser:
+        models.Exercise.init_from_csv()
+    return redirect(to='index')
+
+
 # region authentication
 @require_http_methods(['GET', 'POST'])
 def handle_login(request):
@@ -46,6 +53,7 @@ def handle_register(request):
             User.objects.create_user(username=email, password=password).save()
             user = authenticate(request, username=email, password=password)
             if user:
+                models.Preferences.objects.create(user=user)
                 login(request=request, user=user)
                 if 'next' in request.POST and len(request.POST['next']) > 0:
                     return redirect(to=request.POST['next'])
@@ -262,8 +270,18 @@ def handle_profile_main(request):
     return render(request=request, template_name='profile/main.html')
 
 
+@login_required
 def handle_settings(request):
-    return render(request=request, template_name='profile/settings.html')
+    return render(
+        request=request,
+        template_name='profile/settings.html',
+        context={
+            'preferences': models.Preferences.objects.get(user=request.user),
+            'gender': models.Preferences.Gender,
+            'sharing': models.Preferences.ProfileSharing,
+            'unit': models.Preferences.MeasurementUnit,
+        }
+    )
 
 
 def handle_analyse_lift(request):

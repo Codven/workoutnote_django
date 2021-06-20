@@ -252,11 +252,11 @@ def handle_lifts(request):
     )
 
 
-def handle_exercises(request):
-    return render(request=request, template_name='profile/exercises.html')
-
-
 @login_required
 @require_http_methods(['POST'])
 def handle_add_lift(request):
     pass
+
+
+def handle_exercises(request):
+    return render(request=request, template_name='profile/exercises.html')

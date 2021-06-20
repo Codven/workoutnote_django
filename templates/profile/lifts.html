@@ -10,10 +10,13 @@
             bodyPart: '{{ exercises.0.body_part }}',
             category: '{{ exercises.0.category }}'
         };
+        let selectedExerciseName, selectedExerciseIcon;
         document.addEventListener('DOMContentLoaded', () => {
             addLiftForm = document.getElementById('addLiftForm');
             selectExerciseDiv = document.getElementById('selectExerciseDiv');
             exercisesListDiv = document.getElementById('exercisesListDiv');
+            selectedExerciseName = document.getElementById('selectedExerciseName');
+            selectedExerciseIcon = document.getElementById('selectedExerciseIcon');
 
             // init all exercises
             {% for exercise in exercises %}
@@ -44,7 +47,7 @@
             addLiftForm.style.display = 'none';
         }
 
-        function selectExerciseClick() {
+        function showExerciseSelectorDivClick() {
             if (document.readyState === "complete")
                 selectExerciseDiv.style.display = 'block';
         }
@@ -94,11 +97,29 @@
 
             exercisesListDiv.innerHTML = '';
             for (let i = 0; i < displayedExercises.length; i++) {
-                let newElementHtml = '<a class="card-content px-4 py-3" style="display: block;"><span class="media"><span class="media-left"><span class="icon is-left has-text-dark"><i class="slicon slicon-2x ' + displayedExercises[i].icon + '"></i></span></span><span class="media-content"><span>' + displayedExercises[i].name + '</span> <span class="tag is-small ml-1">' + displayedExercises[i].bodyPart + '</span> <span class="tag is-small"> <span class="stars"> <span class="star__full">★</span> <span class="star__empty">★★★★</span> </span></span> </span> </span> </a>';
+                let newElementHtml = '<a onclick="selectExerciseClick(\'' + displayedExercises[i].name + '\');" class="card-content px-4 py-3" style="display: block;"><span class="media"><span class="media-left"><span class="icon is-left has-text-dark"><i class="slicon slicon-2x ' + displayedExercises[i].icon + '"></i></span></span><span class="media-content"><span>' + displayedExercises[i].name + '</span> <span class="tag is-small ml-1">' + displayedExercises[i].bodyPart + '</span> <span class="tag is-small"> <span class="stars"> <span class="star__full">★</span> <span class="star__empty">★★★★</span> </span></span> </span> </span> </a>';
                 let newElement = document.createElement('div');
                 newElement.className = 'card';
                 newElement.innerHTML = newElementHtml;
                 exercisesListDiv.appendChild(newElement);
+            }
+        }
+
+        function selectExerciseClick(name) {
+            let newExercise = null;
+            let nameLower = name.toLowerCase();
+            for (let i = 0; i < allExercises.length; i++)
+                if (allExercises[i].name.toLowerCase() === nameLower) {
+                    newExercise = allExercises[i];
+                    break;
+                }
+
+            if (newExercise != null) {
+                selectedExerciseName.value = newExercise.name;
+                selectedExerciseIcon.classList.remove(selectedExercise.icon);
+                selectedExerciseIcon.classList.add(newExercise.icon);
+                selectedExercise = newExercise;
+                hideExerciseSelectorDivClick();
             }
         }
     </script>
@@ -397,13 +418,9 @@
                                 </tbody>
                             </table> <!----></div> <!----></div>
                 </div>
-                <div class="buttons"><a href="/102596-nematjon/2021/06/15/export" class="button">Export CSV</a></div>
-                <div class="block">
-                    <button class="button is-primary"><span class="icon"><i aria-hidden="true" class="slicon slicon-fa-exchange-alt"></i></span> <span>Switch Workout</span></button>
-                </div>
             </div>
         </section> <!---->
-        <form id="addLiftForm" method="post" style="display: none;">
+        <form action="{% url 'add lift' %}" id="addLiftForm" method="post" style="display: none;" autocomplete="off">
             <div class="modal is-active">
                 <div class="modal-background" onclick="hideAddLiftFormClick();"></div>
                 <div class="modal-card">
@@ -416,10 +433,9 @@
                             <div class="field-body">
                                 <div class="field">
                                     <div class="control control--modal has-icons-left has-icons-right">
-                                        <input type="hidden" name="exercise" value="bench-press">
-                                        <input id="selectedExerciseName" onclick="selectExerciseClick();" type="text" class="input">
+                                        <input id="selectedExerciseName" onclick="showExerciseSelectorDivClick();" name="exercise" type="text" class="input" value="{{ exercises.0.name }}">
                                         <span class="icon is-left has-text-dark">
-                                            <i class="slicon slicon-2x slicon-exercise-bench-press"></i>
+                                            <i id="selectedExerciseIcon" class="slicon slicon-2x {{ exercises.0.icon }}"></i>
                                         </span>
                                     </div>
                                 </div>
@@ -453,10 +469,13 @@
                                         <div class="control"><input type="number" name="sets" id="sets" tabindex="3" min="1" max="10" class="input"></div>
                                     </div>
                                 </div>
-                            </div> <!----> <input name="liftmassunit" type="hidden" value="kg"> <input name="timezone" type="hidden" value="9"> <input type="hidden" name="action" value="addlift"></div>
+                            </div><input name="liftmassunit" type="hidden" value="kg"> <input name="timezone" type="hidden" value="9"> <input type="hidden" name="action" value="addlift"></div>
                     </section>
                     <footer class="modal-card-foot">
-                        <div class="buttons"><input type="hidden" name="date" value="2021-06-20"> <input type="submit" name="addlift" value="Add Lift" tabindex="4" class="button is-primary"> <input type="submit" name="addwarmup" value="Add Warmup" tabindex="5" class="button"> <a class="button">Close</a></div>
+                        <div class="buttons">
+                            <input type="submit" name="addlift" value="Add Lift" tabindex="4" class="button is-primary">
+                            <a class="button">Close</a>
+                        </div>
                     </footer>
                 </div>
             </div>
@@ -528,7 +547,7 @@
                     <div id="exercisesListDiv" style="min-height: 415px;">
                         {% for exercise in exercises %}
                             <div class="card">
-                                <a class="card-content px-4 py-3" style="display: block;">
+                                <a onclick="selectExerciseClick('{{ exercise.name }}')" class="card-content px-4 py-3" style="display: block;">
                                 <span class="media">
                                     <span class="media-left">
                                         <span class="icon is-left has-text-dark">

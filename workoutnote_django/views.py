@@ -5,6 +5,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from workoutnote_django import models
 from utils.tools import Tools
+from datetime import datetime
+import re
 
 
 @login_required
@@ -314,17 +316,49 @@ def handle_powerlifting_standards(request):
     return render(request=request, template_name='index/powerlifting standards.html')
 
 
+@login_required
 def handle_profile_main(request):
-    return render(request=request, template_name='profile/main.html')
+    return render(
+        request=request,
+        template_name='profile/main.html',
+        context={'preferences': models.Preferences.objects.get(user=request.user)}
+    )
 
 
 @login_required
+@require_http_methods(['GET', 'POST'])
 def handle_settings(request):
+    preferences = models.Preferences.objects.get(user=request.user)
+    if request.method == 'POST':
+        print(request.POST)
+        # personal data
+        if 'name' in request.POST:
+            preferences.name = request.POST['name']
+        if 'gender' in request.POST and request.POST['gender'] in models.Preferences.Gender.ALL:
+            preferences.gender = request.POST['gender']
+        if 'birthday' in request.POST and re.match(r'^\d{8}$', request.POST['birthday']):
+            year = int(request.POST['birthday'][:4])
+            month = int(request.POST['birthday'][4:6])
+            day = int(request.POST['birthday'][6:])
+            if 1930 < year < datetime.now().year and 0 < month < 13 and 0 < day < 32:
+                preferences.date_of_birth = request.POST['birthday']
+        if 'height' in request.POST and 30 < int(request.POST['height']) < 300:
+            preferences.height = int(request.POST['height'])
+        if 'measurement_unit' in request.POST and request.POST['measurement_unit'] in models.Preferences.MeasurementUnit.ALL:
+            preferences.unit_of_measure = request.POST['measurement_unit']
+        if 'profile_sharing' in request.POST and request.POST['profile_sharing'] in models.Preferences.ProfileSharing.ALL:
+            preferences.profile_sharing = request.POST['profile_sharing']
+        if 'oldpassword' in request.POST and 'newpassword' in request.POST and 'repeatpassword' in request.POST and request.POST['newpassword'] == request.POST['repeatpassword']:
+            if request.user.check_password(raw_password=request.POST['oldpassword']):
+                request.user.set_password(request.POST['newpassword'])
+                request.user.save()
+        preferences.save()
+
     return render(
         request=request,
         template_name='profile/settings.html',
         context={
-            'preferences': models.Preferences.objects.get(user=request.user),
+            'preferences': preferences,
             'gender': models.Preferences.Gender,
             'sharing': models.Preferences.ProfileSharing,
             'unit': models.Preferences.MeasurementUnit,

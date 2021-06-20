@@ -133,7 +133,7 @@
                         <div class="media-content">
                             <div class="field is-grouped is-grouped-multiline">
                                 <div class="control" style="flex-shrink: 1;"><h1 class="title is-2 is-size-3-mobile">
-                                    {{ request.user.username }}
+                                    {% if preferences.name is not None %}{{ preferences.name }}{% else %}{{ request.user.username }}{% endif %}
                                 </h1></div>
                             </div>
                             <div class="is-size-5"><a class="has-text-white"><strong>0</strong> Following

@@ -26,11 +26,12 @@
         <section class="section has-background-white">
             <div class="container is-max-desktop">
                 <form method="post" action="{% url 'settings' %}" class="mt-5"><h2 class="title is-3 is-size-4-mobile">Personal Details</h2>
+                    {% csrf_token %}
                     <div class="field is-horizontal">
                         <div class="field-label is-normal"><label for="name" class="label">Name</label></div>
                         <div class="field-body">
                             <div class="field">
-                                <div class="control"><input id="name" name="name" type="text" placeholder="Enter Your Name" minlength="3" maxlength="32" required="required" class="input" value="{% if preferences.name is not None %}{{ preferences.name }}{% endif %}"></div>
+                                <div class="control"><input id="name" name="name" type="text" placeholder="Enter Your Name" minlength="3" maxlength="32" class="input" required value="{% if preferences.name is not None %}{{ preferences.name }}{% endif %}"></div>
                             </div>
                         </div>
                     </div>
@@ -40,8 +41,8 @@
                             <div class="field">
                                 <div class="control">
                                     <div class="select is-fullwidth"><select id="gender" name="gender">
-                                        <option value="{{ gender.MALE }}" {% if preferences.gender == gender.MALE %}selected{% endif %}>Male</option>
-                                        <option value="{{ gender.FEMALE }}" {% if preferences.gender == gender.FEMALE %}selected{% endif %}>Female</option>
+                                        <option value="{{ gender.MALE }}" {% if preferences.gender_str == gender.MALE %}selected{% endif %}>Male</option>
+                                        <option value="{{ gender.FEMALE }}" {% if preferences.gender_str == gender.FEMALE %}selected{% endif %}>Female</option>
                                     </select></div>
                                 </div>
                             </div>
@@ -53,44 +54,9 @@
                             <div class="field">
                                 <div class="control">
                                     <div>
-                                        <div class="field is-grouped">
-                                            <div class="control is-expanded"><input id="birthday" type="text" readonly="readonly" placeholder="Select date..." class="input is-clickable"></div>
-                                            <div class="control">
-                                                <button type="button" class="button">Clear</button>
-                                            </div>
-                                        </div>
-                                        <div class="vdp-datepicker" style="display: none;">
-                                            <div class=""><!----> <input type="hidden" open-date="Tue Jan 01 1991 16:42:49 GMT+0600 (Uzbekistan Standard Time)" readonly="readonly" autocomplete="off"
-                                                                         class="input" value="09 Sep 1995"> <!----> </div>
-                                            <div class="is-fullwidth vdp-datepicker__calendar" style="position: static;">
-                                                <header><span class="prev">&lt;</span> <span class="day__month_btn up">Sep 1995</span> <span class="next">&gt;</span></header>
-                                                <div class=""><span class="cell day-header">Sun</span><span class="cell day-header">Mon</span><span class="cell day-header">Tue</span><span
-                                                        class="cell day-header">Wed</span><span class="cell day-header">Thu</span><span class="cell day-header">Fri</span><span class="cell day-header">Sat</span>
-                                                    <span class="cell day blank"></span><span class="cell day blank"></span><span class="cell day blank"></span><span
-                                                            class="cell day blank"></span><span class="cell day blank"></span><span class="cell day">1</span><span class="cell day weekend sat">2</span><span
-                                                            class="cell day weekend sun">3</span><span class="cell day">4</span><span class="cell day">5</span><span class="cell day">6</span><span
-                                                            class="cell day">7</span><span class="cell day">8</span><span class="cell day selected weekend sat">9</span><span
-                                                            class="cell day weekend sun">10</span><span class="cell day">11</span><span class="cell day">12</span><span class="cell day">13</span><span
-                                                            class="cell day">14</span><span class="cell day">15</span><span class="cell day weekend sat">16</span><span
-                                                            class="cell day weekend sun">17</span><span class="cell day">18</span><span class="cell day">19</span><span class="cell day">20</span><span
-                                                            class="cell day">21</span><span class="cell day">22</span><span class="cell day weekend sat">23</span><span
-                                                            class="cell day weekend sun">24</span><span class="cell day">25</span><span class="cell day">26</span><span class="cell day">27</span><span
-                                                            class="cell day">28</span><span class="cell day">29</span><span class="cell day weekend sat">30</span></div>
-                                            </div>
-                                            <div class="is-fullwidth vdp-datepicker__calendar" style="position: static; display: none;">
-                                                <header><span class="prev">&lt;</span> <span class="month__year_btn up">1995</span> <span class="next">&gt;</span></header>
-                                                <span class="cell month">January</span><span class="cell month">February</span><span class="cell month">March</span><span
-                                                    class="cell month">April</span><span class="cell month">May</span><span class="cell month">June</span><span class="cell month">July</span><span
-                                                    class="cell month">August</span><span class="cell month selected">September</span><span class="cell month">October</span><span class="cell month">November</span><span
-                                                    class="cell month">December</span></div>
-                                            <div class="is-fullwidth vdp-datepicker__calendar" style="position: static; display: none;">
-                                                <header><span class="prev">&lt;</span> <span>1990 - 1999</span> <span class="next">&gt;</span></header>
-                                                <span class="cell year">1990</span><span class="cell year">1991</span><span class="cell year">1992</span><span class="cell year">1993</span><span
-                                                    class="cell year">1994</span><span class="cell year selected">1995</span><span class="cell year">1996</span><span class="cell year">1997</span><span
-                                                    class="cell year">1998</span><span class="cell year">1999</span></div>
-                                        </div>
+                                        <div class="control is-expanded"><input id="birthday" name="birthday" type="number" placeholder="MMDDYYYY" required class="input" maxlength="8" value="{% if preferences.date_of_birth is not None %}{{ preferences.date_of_birth }}{% endif %}"></div>
                                     </div>
-                                    <input type="hidden" name="birthday" value="1995-09-09"></div>
+                                </div>
                                 <p class="help">
                                     We calculate your age from your date of birth and use it to adapt our ratings for your
                                     lifts.
@@ -102,13 +68,12 @@
                         <div class="field-label is-normal"><label for="height" class="label">Height</label></div>
                         <div class="field-body">
                             <div class="field has-addons">
-                                <div class="control is-expanded"><input type="number" id="height" name="height" min="1" max="300" step="0.5" class="input"></div>
+                                <div class="control is-expanded"><input type="number" id="height" name="height" min="1" max="300" step="0.5" required class="input" placeholder="e.g. 187" value="{% if preferences.height is not None %}{{ preferences.height }}{% endif %}"></div>
                                 <div class="control">
                                     <div class="select"><select id="heightunit" name="heightunit">
-                                        <option>cm</option>
-                                        <option>ft</option>
+                                        <option>Centimeters (cm)</option>
                                     </select></div>
-                                </div> <!----></div>
+                                </div></div>
                         </div>
                     </div>
                     <div class="field is-horizontal">
@@ -123,11 +88,42 @@
                     </div>
                 </form>
 
-                <form id="profileSharing" method="post" action="{% url 'settings' %}" class="mt-5"><h2 class="title is-3 is-size-4-mobile">Sharing Settings</h2>
+                <form method="post" action="{% url 'settings' %}" class="mt-5"><h2 class="title is-3 is-size-4-mobile">Units of Measure</h2>
+                    {% csrf_token %}
                     <div class="field">
                         <div>
                             <div class="field">
-                                <div class="control"><label class="radio"><input type="radio" name="share" value="public">
+                                <div class="control"><label class="radio"><input type="radio" name="measurement_unit" value="{{ unit.KILOGRAMS }}" {% if preferences.unit_of_measure_str == unit.KILOGRAMS %}checked{% endif %}>
+                                    Use <strong>kilograms (kg)</strong> for both body weight and lift weight
+                                </label></div>
+                            </div>
+                            <div class="field">
+                                <div class="control"><label class="radio"><input type="radio" name="measurement_unit" value="{{ unit.POUNDS }}" {% if preferences.unit_of_measure_str == unit.POUNDS %}checked{% endif %}>
+                                    Use <strong>pounds (lb)</strong> for both body weight and lift weight
+                                </label></div>
+                            </div>
+                            <div class="field">
+                                <div class="control"><label class="radio"><input type="radio" name="measurement_unit" value="{{ unit.STONE }}" {% if preferences.unit_of_measure_str == unit.STONE %}checked{% endif %}>
+                                    Use <strong>stone (st)</strong> for body weight and <strong>kilograms (kg)</strong> for lift
+                                    weight (UK &amp; Ireland)
+                                </label></div>
+                            </div>
+                        </div>
+                    </div>
+                    <a id="setEmailSection"></a>
+                    <div class="field">
+                        <div class="control">
+                            <button type="submit" class="button is-primary">Update Unit Settings</button>
+                        </div>
+                    </div>
+                </form>
+
+                <form method="post" action="{% url 'settings' %}" id="profileSharing" class="mt-5"><h2 class="title is-3 is-size-4-mobile">Sharing Settings</h2>
+                    {% csrf_token %}
+                    <div class="field">
+                        <div>
+                            <div class="field">
+                                <div class="control"><label class="radio"><input type="radio" name="profile_sharing" value="{{ sharing.SHARED_WITH_PUBLIC }}" {% if preferences.profile_sharing_str == sharing.SHARED_WITH_PUBLIC %}checked{% endif %}>
                                     Share my profile with everyone
                                 </label>
                                     <p class="help">
@@ -135,7 +131,7 @@
                                     </p></div>
                             </div>
                             <div class="field">
-                                <div class="control"><label class="radio"><input type="radio" name="share" value="site">
+                                <div class="control"><label class="radio"><input type="radio" name="profile_sharing" value="{{ sharing.SHARED_WITH_USERS }}" {% if preferences.profile_sharing_str == sharing.SHARED_WITH_USERS %}checked{% endif %}>
                                     Share my profile with Workoutnote users
                                 </label>
                                     <p class="help">
@@ -144,7 +140,7 @@
                                     </p></div>
                             </div>
                             <div class="field">
-                                <div class="control"><label class="radio"><input type="radio" name="share" value="friends">
+                                <div class="control"><label class="radio"><input type="radio" name="profile_sharing" value="{{ sharing.PRIVATE }}" {% if preferences.profile_sharing_str == sharing.PRIVATE %}checked{% endif %}>
                                     Do not share my profile
                                 </label>
                                     <p class="help">
@@ -160,36 +156,8 @@
                     </div>
                 </form>
 
-                <form method="post" action="{% url 'settings' %}" class="mt-5"><h2 class="title is-3 is-size-4-mobile">Units of Measure</h2>
-                    <div class="field">
-                        <div>
-                            <div class="field">
-                                <div class="control"><label class="radio"><input type="radio" name="unit" value="lb">
-                                    Use <strong>pounds (lb)</strong> for both body weight and lift weight
-                                </label></div>
-                            </div>
-                            <div class="field">
-                                <div class="control"><label class="radio"><input type="radio" name="unit" value="kg">
-                                    Use <strong>kilograms (kg)</strong> for both body weight and lift weight
-                                </label></div>
-                            </div>
-                            <div class="field">
-                                <div class="control"><label class="radio"><input type="radio" name="unit" value="st">
-                                    Use <strong>stone (st)</strong> for body weight and <strong>kilograms (kg)</strong> for lift
-                                    weight (UK &amp; Ireland)
-                                </label></div>
-                            </div>
-                        </div>
-                    </div>
-                    <a id="setEmailSection"></a>
-                    <div class="field">
-                        <div class="control">
-                            <button type="submit" class="button is-primary">Update Unit Settings</button>
-                        </div>
-                    </div>
-                </form>
-
                 <form method="post" action="{% url 'settings' %}" class="mt-5"><h2 class="title is-3 is-size-4-mobile">Change Password</h2>
+                    {% csrf_token %}
                     <div>
                         <div class="field is-horizontal">
                             <div class="field-label is-normal"><label for="oldPassword" class="label">Old Password</label></div>

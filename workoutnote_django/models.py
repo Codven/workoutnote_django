@@ -4,27 +4,39 @@ import enum
 
 
 class Preferences(models.Model):
-    class Gender(enum.Enum):
+    class Gender:
         MALE = "MALE"
         FEMALE = "FEMALE"
+        ALL = [MALE, FEMALE]
 
-    class ProfileSharing(enum.Enum):
+    class ProfileSharing:
         SHARED_WITH_PUBLIC = "SHARED_WITH_PUBLIC"
         SHARED_WITH_USERS = "SHARED_WITH_USERS"
         PRIVATE = "PRIVATE"
+        ALL = [SHARED_WITH_PUBLIC, SHARED_WITH_USERS, PRIVATE]
 
-    class MeasurementUnit(enum.Enum):
+    class MeasurementUnit:
         KILOGRAMS = "KG"
         POUNDS = "LB"
         STONE = "ST"
+        ALL = [KILOGRAMS, POUNDS, STONE]
 
     user = models.OneToOneField(to=django_User, on_delete=models.CASCADE, primary_key=True)
     name = models.CharField(max_length=128, default=None, null=True)
     gender = models.CharField(max_length=16, default=Gender.MALE)
-    date_of_birth = models.DateField(default=None, null=True)
+    date_of_birth = models.CharField(max_length=8, default=None, null=True)
     height = models.FloatField(default=None, null=True)
     profile_sharing = models.CharField(max_length=128, default=ProfileSharing.PRIVATE)
     unit_of_measure = models.CharField(max_length=128, default=MeasurementUnit.KILOGRAMS)
+
+    def gender_str(self):
+        return self.gender.__str__()
+
+    def profile_sharing_str(self):
+        return self.profile_sharing.__str__()
+
+    def unit_of_measure_str(self):
+        return self.unit_of_measure.__str__()
 
 
 class Exercise(models.Model):

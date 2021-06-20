@@ -2,7 +2,8 @@
 {% block content %}
     <script>
         let selectExerciseDiv, exercisesListDiv, filterExerciseBodyPart, filterExerciseCategory, filterText, selectedExerciseName, selectedExerciseIcon;
-        let allExercises = [{% for exercise in exercises %}{name: '{{ exercise.name }}',icon: '{{ exercise.icon }}',bodyPart: '{{ exercise.body_part }}',category: '{{ exercise.category }}'},{% endfor %}];
+        let allExercises = [{% for exercise in exercises %}{name: '{{ exercise.name }}',icon: '{{ exercise.icon }}',bodyPart: '{{ exercise.body_part }}',category: '{{ exercise.category }}'
+                },{% endfor %}];
         let selectedExercise = {name: '{{ exercises.0.name }}', icon: '{{ exercises.0.icon }}', bodyPart: '{{ exercises.0.body_part }}', category: '{{ exercises.0.category }}'};
         document.addEventListener('DOMContentLoaded', () => {
             selectExerciseDiv = document.getElementById('selectExerciseDiv');
@@ -261,6 +262,167 @@
             </div>
         </div>
     </div>
+    {% if lvl_txt %}
+        <div class="section-box liftresult">
+            <div class="columns">
+                <div class="column" id="liftResults">
+                    <h2 class="title is-3 is-size-4-mobile">
+                        Your Strength Level for
+                        {{ exercise.name }} is {{ lvl_txt }}</h2>
+                    <div class="subtitle is-1">
+                        <span class="stars"><span class="star__full">★★★★</span><span class="star__empty">★</span></span></div>
+                    <div class="content">
+                        <p>
+                            We estimate that your one-rep max is
+                            <strong>
+                                {{ one_rep_max }} kg </strong>
+                        </p>
+                    </div>
+
+                    <div class="columns">
+                        <div class="column">
+                            <h3 class="subtitle is-5 mb-2">You're stronger than</h3>
+                            <p>
+                                <strong>{{ lvl_percentage }}%</strong>
+                                of
+                                {{ gender }} lifters in your age group weighing
+                                {{ body_weight }} kg </p>
+                        </div>
+
+                        <div class="column">
+                            <h3 class="subtitle is-5 mb-2">Your lift is</h3>
+                            <p>
+                                <strong>{{ body_weight_ratio }}</strong>
+                                times your bodyweight
+                            </p>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <a id="facebookShare" class="button is-facebook">
+                    <span class="icon">
+                        <i class="slicon slicon-fa-facebook-square"></i>
+                    </span>
+                                <span>Share on Facebook</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="liftresult__standards content">
+                        <h3 class="subtitle is-4 is-size-5-mobile">Strength Level boundaries</h3>
+
+                        <p>These are our strength standards
+                            in kg for lifters at
+                            your bodyweight:</p>
+
+
+                        <table class="table is-fullwidth is-striped is-narrow standards__table" id="tableId60cf8aeca4202">
+                            <thead>
+                            <tr>
+                                <th style="width: 25%;">
+                                    <abbr title="Bodyweight"><span>BW</span></abbr>
+                                </th>
+                                <th style="width: 15%;">
+                                    <abbr title="Beginner"><span>Beg.</span></abbr>
+                                </th>
+                                <th style="width: 15%;">
+                                    <abbr title="Novice"><span>Nov.</span></abbr>
+                                </th>
+                                <th style="width: 15%;">
+                                    <abbr title="Intermediate"><span>Int.</span></abbr>
+                                </th>
+                                <th style="width: 15%;">
+                                    <abbr title="Advanced"><span>Adv.</span></abbr>
+                                </th>
+                                <th style="width: 15%;">
+                                    <abbr title="Elite"><span>Elite</span></abbr>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    {{ body_weight }} <span class="standards__ratio"></span>
+                                </td>
+                                <td>
+                                    {{ lvl_boundaries.beginner }} <span class="standards__ratio">x0.48</span>
+                                </td>
+                                <td>
+                                    {{ lvl_boundaries.novice }} <span class="standards__ratio">x0.78</span>
+                                </td>
+                                <td>
+                                    {{ lvl_boundaries.intermediate }} <span class="standards__ratio">x1.16</span>
+                                </td>
+                                <td class="standards__cell--highlight">
+                                    {{ lvl_boundaries.advanced }} <span class="standards__ratio">x1.63</span>
+                                </td>
+                                <td>
+                                    {{ lvl_boundaries.elite }} <span class="standards__ratio">x2.14</span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="content">
+                            <p>
+                                These male standards were last updated June and
+                                are based on 25,000 filtered lifts.
+                            </p>
+
+                            <p class="standards__note">
+                                Note: these barbell standards include the weight of the bar, normally 20 kg / 44 lb.
+                            </p>
+                        </div>
+
+
+                        <div class="field mt-3">
+                            <div class="control">
+                                <a class="button" href="/strength-standards/decline-bench-press/kg">
+                                    Full Strength Standards
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Now just used for Facebook share box -->
+                    <p id="liftResultDescription" style="display: none;">
+                        Lifting 50 kg for 15 repetitions
+                        in the
+                        Decline Bench Press is stronger than
+                        <strong>84%</strong>
+                        of
+                        male lifters in your age group weighing
+                        50 kg </p>
+                </div>
+            </div>
+            <script>
+                var shareApiUrl = "\/api\/share-lift";
+                var sharedApiUrl = "\/api\/shared-lift";
+                var sharedUrlWithoutGuid = "https:\/\/strengthlevel.com\/shared-lift";
+                var resultId = 65337031;
+                var source = "homepage";
+
+                StrengthLevel.addFormLiftResults(shareApiUrl, sharedApiUrl, sharedUrlWithoutGuid, resultId, source);
+            </script>
+            <div class="notification " style="background-color: #f0d500;">
+                <table>
+                    <tbody>
+                    <tr>
+                        <td style="vertical-align: middle; width: 124px;" class="pr-2">
+                            <a href="https://runninglevel.com/?utm_source=runninglevel&amp;utm_medium=banner&amp;utm_campaign=launch&amp;utm_content=calculator_result" class="is-text" target="_blank">
+                                <img src="/images/runninglevel.svg" width="112" height="28" alt="Running Level">
+                            </a>
+                        </td>
+                        <td style="vertical-align: middle">
+                            <strong>New!</strong> <a href="https://runninglevel.com/?utm_source=runninglevel&amp;utm_medium=banner&amp;utm_campaign=launch&amp;utm_content=calculator_result"
+                                                     class="is-text" target="_blank">Calculate your Running Level</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
     <div class="section-box content">
         <h2 class="title is-3 is-size-4-mobile">Strength Standards</h2>
         <p>
@@ -361,7 +523,7 @@
             </section>
             <section class="modal-card-body is-paddingless">
                 <div id="exercisesListDiv" style="min-height: 415px;">
-                    {% for exercise in exercises %}
+                    {% for exercise in exercises_filter %}
                         <div class="card">
                             <a onclick="selectExerciseClick('{{ exercise.name }}')" class="card-content px-4 py-3" style="display: block;">
                                 <span class="media">

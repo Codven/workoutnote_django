@@ -33,349 +33,48 @@
                 <div class="buttons mb-6"><a href="{% url 'lifts' %}" class="button is-primary is-large"><span class="icon"><i aria-hidden="true" class="slicon slicon-fa-calendar-plus"></i></span>
                     <span>Add Workout</span></a></div>
                 <div class="block">
-                    <div><!---->
-                        <div class="workout mb-6">
-                            <div class="columns">
-                                <div class="column is-one-third"><h3 class="title is-4 is-size-5-mobile"><a href="/103795-kobiljon/2021/05/12"><span class="icon"><i aria-hidden="true" class="slicon slicon-fa-calendar-day"></i></span> <span>12 May 2021</span></a></h3></div>
-                                <div class="column">
-                                    <div class="field is-grouped is-grouped-multiline"><!---->
-                                        <div class="control">
-                                            <div class="tags has-addons are-medium"><span class="tag"><abbr title="Bodyweight"><span>BW</span></abbr></span> <span class="tag is-primary">
-                75 kg
-              </span></div>
-                                        </div>
-                                        <div class="control">
-                                            <div class="tags has-addons are-medium"><span class="tag">
-                Sets
-              </span> <span class="tag is-primary">
-                18
-              </span> <!----></div>
-                                        </div>
-                                        <div class="control">
-                                            <div class="tags has-addons are-medium"><span class="tag">
-                Reps
-              </span> <span class="tag is-primary">
-                200
-              </span> <!----></div>
-                                        </div>
-                                        <div class="control">
-                                            <div class="tags has-addons are-medium"><span class="tag">
-                Volume
-              </span> <span class="tag is-primary">
-                11200 kg
-              </span> <!----></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <table class="table is-fullwidth is-narrow mb-2 table--mobilesmall">
-                                <thead>
-                                <tr>
-                                    <th>Exercise</th>
-                                    <th>Lift</th>
-                                    <th>Reps</th>
-                                    <th><abbr title="Percentile"><span>&gt; %</span></abbr></th>
-                                    <th>Level</th>
-                                    <th>&nbsp;</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr class="workout__set workout__set--best">
-                                    <td><a href="/103795-kobiljon/bench-press">Bench Press</a></td>
-                                    <td>50 kg</td>
-                                    <td>10</td>
-                                    <td>20%</td>
-                                    <td><span class="stars"><span class="star__full">★</span><span class="star__half">★</span><span class="star__empty">★★★</span></span></td>
-                                    <td class="is-vcentered">
-                                        <div class="dropdown is-right has-text-left">
-                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
-                                            <div role="menu" class="dropdown-menu">
-                                                <div class="dropdown-content"><a href="/103795-kobiljon/bench-press/8640779" class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span
-                                                        class="icon"><i class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                    <div class="workout mb-6">
+                        <div class="columns">
+                            <div class="column is-one-third"><h3 class="title is-4 is-size-5-mobile"><a href="/"><span class="icon"><i aria-hidden="true" class="slicon slicon-fa-calendar-day"></i></span> <span>12 May 2021</span></a></h3></div>
+                        </div>
+                        <table class="table is-fullwidth is-narrow mb-2 table--mobilesmall">
+                            <thead>
+                            <tr>
+                                <th>Exercise</th>
+                                <th>Lift</th>
+                                <th>Reps</th>
+                                <th><abbr title="Percentile"><span>&gt; %</span></abbr></th>
+                                <th>Level</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for lift in lifts %}
                                 <tr class="workout__set">
-                                    <td><a href="/103795-kobiljon/bench-press">Bench Press</a></td>
-                                    <td>50 kg</td>
-                                    <td>10</td>
-                                    <td>20%</td>
-                                    <td><span class="stars"><span class="star__full">★</span><span class="star__half">★</span><span class="star__empty">★★★</span></span></td>
+                                    <td>{{ lift.exercise.name }}</td>
+                                    <td>{{ lift.lift_mass }} kg</td>
+                                    <td>{{ lift.repetitions }}</td>
+                                    <td>31%</td>
+                                    <td><span class="stars"><span class="star__full">★★</span><!----><span class="star__empty">★★★</span></span></td>
                                     <td class="is-vcentered">
                                         <div class="dropdown is-right has-text-left">
-                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
+                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i
+                                                    class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
                                             <div role="menu" class="dropdown-menu">
-                                                <div class="dropdown-content"><a href="/103795-kobiljon/bench-press/8640780" class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span
-                                                        class="icon"><i class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
+                                                <div class="dropdown-content"><a href="/102596-nematjon/bench-press/8896921" class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i
+                                                        class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
                                             </div>
                                         </div>
                                     </td>
                                 </tr>
-                                <tr class="workout__set">
-                                    <td><a href="/103795-kobiljon/bench-press">Bench Press</a></td>
-                                    <td>50 kg</td>
-                                    <td>10</td>
-                                    <td>20%</td>
-                                    <td><span class="stars"><span class="star__full">★</span><span class="star__half">★</span><span class="star__empty">★★★</span></span></td>
-                                    <td class="is-vcentered">
-                                        <div class="dropdown is-right has-text-left">
-                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
-                                            <div role="menu" class="dropdown-menu">
-                                                <div class="dropdown-content"><a href="/103795-kobiljon/bench-press/8640781" class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span
-                                                        class="icon"><i class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="workout__set">
-                                    <td><a href="/103795-kobiljon/bench-press">Bench Press</a></td>
-                                    <td>50 kg</td>
-                                    <td>10</td>
-                                    <td>20%</td>
-                                    <td><span class="stars"><span class="star__full">★</span><span class="star__half">★</span><span class="star__empty">★★★</span></span></td>
-                                    <td class="is-vcentered">
-                                        <div class="dropdown is-right has-text-left">
-                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
-                                            <div role="menu" class="dropdown-menu">
-                                                <div class="dropdown-content"><a href="/103795-kobiljon/bench-press/8640782" class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span
-                                                        class="icon"><i class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="workout__set">
-                                    <td><a href="/103795-kobiljon/squat">Squat</a></td>
-                                    <td>50 kg</td>
-                                    <td>10</td>
-                                    <td>6%</td>
-                                    <td><span class="stars"><span class="star__full">★</span><!----><span class="star__empty">★★★★</span></span></td>
-                                    <td class="is-vcentered">
-                                        <div class="dropdown is-right has-text-left">
-                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
-                                            <div role="menu" class="dropdown-menu">
-                                                <div class="dropdown-content"><a href="/103795-kobiljon/squat/8640817" class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span
-                                                        class="icon"><i class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="workout__set">
-                                    <td><a href="/103795-kobiljon/squat">Squat</a></td>
-                                    <td>50 kg</td>
-                                    <td>10</td>
-                                    <td>6%</td>
-                                    <td><span class="stars"><span class="star__full">★</span><!----><span class="star__empty">★★★★</span></span></td>
-                                    <td class="is-vcentered">
-                                        <div class="dropdown is-right has-text-left">
-                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
-                                            <div role="menu" class="dropdown-menu">
-                                                <div class="dropdown-content"><a href="/103795-kobiljon/squat/8640818" class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span
-                                                        class="icon"><i class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="workout__set">
-                                    <td><a href="/103795-kobiljon/squat">Squat</a></td>
-                                    <td>50 kg</td>
-                                    <td>10</td>
-                                    <td>6%</td>
-                                    <td><span class="stars"><span class="star__full">★</span><!----><span class="star__empty">★★★★</span></span></td>
-                                    <td class="is-vcentered">
-                                        <div class="dropdown is-right has-text-left">
-                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
-                                            <div role="menu" class="dropdown-menu">
-                                                <div class="dropdown-content"><a href="/103795-kobiljon/squat/8640819" class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span
-                                                        class="icon"><i class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="workout__set">
-                                    <td><a href="/103795-kobiljon/squat">Squat</a></td>
-                                    <td>50 kg</td>
-                                    <td>10</td>
-                                    <td>6%</td>
-                                    <td><span class="stars"><span class="star__full">★</span><!----><span class="star__empty">★★★★</span></span></td>
-                                    <td class="is-vcentered">
-                                        <div class="dropdown is-right has-text-left">
-                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
-                                            <div role="menu" class="dropdown-menu">
-                                                <div class="dropdown-content"><a href="/103795-kobiljon/squat/8640820" class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span
-                                                        class="icon"><i class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="workout__set">
-                                    <td><a href="/103795-kobiljon/squat">Squat</a></td>
-                                    <td>50 kg</td>
-                                    <td>10</td>
-                                    <td>6%</td>
-                                    <td><span class="stars"><span class="star__full">★</span><!----><span class="star__empty">★★★★</span></span></td>
-                                    <td class="is-vcentered">
-                                        <div class="dropdown is-right has-text-left">
-                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
-                                            <div role="menu" class="dropdown-menu">
-                                                <div class="dropdown-content"><a href="/103795-kobiljon/squat/8640821" class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span
-                                                        class="icon"><i class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="workout__set">
-                                    <td><a href="/103795-kobiljon/squat">Squat</a></td>
-                                    <td>50 kg</td>
-                                    <td>10</td>
-                                    <td>6%</td>
-                                    <td><span class="stars"><span class="star__full">★</span><!----><span class="star__empty">★★★★</span></span></td>
-                                    <td class="is-vcentered">
-                                        <div class="dropdown is-right has-text-left">
-                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
-                                            <div role="menu" class="dropdown-menu">
-                                                <div class="dropdown-content"><a href="/103795-kobiljon/squat/8640822" class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span
-                                                        class="icon"><i class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="workout__set">
-                                    <td><a href="/103795-kobiljon/squat">Squat</a></td>
-                                    <td>50 kg</td>
-                                    <td>10</td>
-                                    <td>6%</td>
-                                    <td><span class="stars"><span class="star__full">★</span><!----><span class="star__empty">★★★★</span></span></td>
-                                    <td class="is-vcentered">
-                                        <div class="dropdown is-right has-text-left">
-                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
-                                            <div role="menu" class="dropdown-menu">
-                                                <div class="dropdown-content"><a href="/103795-kobiljon/squat/8640823" class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span
-                                                        class="icon"><i class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="workout__set">
-                                    <td><a href="/103795-kobiljon/squat">Squat</a></td>
-                                    <td>50 kg</td>
-                                    <td>10</td>
-                                    <td>6%</td>
-                                    <td><span class="stars"><span class="star__full">★</span><!----><span class="star__empty">★★★★</span></span></td>
-                                    <td class="is-vcentered">
-                                        <div class="dropdown is-right has-text-left">
-                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
-                                            <div role="menu" class="dropdown-menu">
-                                                <div class="dropdown-content"><a href="/103795-kobiljon/squat/8640824" class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span
-                                                        class="icon"><i class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="workout__set">
-                                    <td><a href="/103795-kobiljon/squat">Squat</a></td>
-                                    <td>50 kg</td>
-                                    <td>10</td>
-                                    <td>6%</td>
-                                    <td><span class="stars"><span class="star__full">★</span><!----><span class="star__empty">★★★★</span></span></td>
-                                    <td class="is-vcentered">
-                                        <div class="dropdown is-right has-text-left">
-                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
-                                            <div role="menu" class="dropdown-menu">
-                                                <div class="dropdown-content"><a href="/103795-kobiljon/squat/8640825" class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span
-                                                        class="icon"><i class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="workout__set">
-                                    <td><a href="/103795-kobiljon/squat">Squat</a></td>
-                                    <td>50 kg</td>
-                                    <td>10</td>
-                                    <td>6%</td>
-                                    <td><span class="stars"><span class="star__full">★</span><!----><span class="star__empty">★★★★</span></span></td>
-                                    <td class="is-vcentered">
-                                        <div class="dropdown is-right has-text-left">
-                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
-                                            <div role="menu" class="dropdown-menu">
-                                                <div class="dropdown-content"><a href="/103795-kobiljon/squat/8640826" class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span
-                                                        class="icon"><i class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="workout__set">
-                                    <td><a href="/103795-kobiljon/deadlift">Deadlift</a></td>
-                                    <td>70 kg</td>
-                                    <td>15</td>
-                                    <td>18%</td>
-                                    <td><span class="stars"><span class="star__full">★</span><span class="star__half">★</span><span class="star__empty">★★★</span></span></td>
-                                    <td class="is-vcentered">
-                                        <div class="dropdown is-right has-text-left">
-                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
-                                            <div role="menu" class="dropdown-menu">
-                                                <div class="dropdown-content"><a href="/103795-kobiljon/deadlift/8640833" class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span
-                                                        class="icon"><i class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="workout__set">
-                                    <td><a href="/103795-kobiljon/deadlift">Deadlift</a></td>
-                                    <td>70 kg</td>
-                                    <td>15</td>
-                                    <td>18%</td>
-                                    <td><span class="stars"><span class="star__full">★</span><span class="star__half">★</span><span class="star__empty">★★★</span></span></td>
-                                    <td class="is-vcentered">
-                                        <div class="dropdown is-right has-text-left">
-                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
-                                            <div role="menu" class="dropdown-menu">
-                                                <div class="dropdown-content"><a href="/103795-kobiljon/deadlift/8640834" class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span
-                                                        class="icon"><i class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="workout__set">
-                                    <td><a href="/103795-kobiljon/deadlift">Deadlift</a></td>
-                                    <td>70 kg</td>
-                                    <td>15</td>
-                                    <td>18%</td>
-                                    <td><span class="stars"><span class="star__full">★</span><span class="star__half">★</span><span class="star__empty">★★★</span></span></td>
-                                    <td class="is-vcentered">
-                                        <div class="dropdown is-right has-text-left">
-                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
-                                            <div role="menu" class="dropdown-menu">
-                                                <div class="dropdown-content"><a href="/103795-kobiljon/deadlift/8640835" class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span
-                                                        class="icon"><i class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="workout__set">
-                                    <td><a href="/103795-kobiljon/deadlift">Deadlift</a></td>
-                                    <td>70 kg</td>
-                                    <td>15</td>
-                                    <td>18%</td>
-                                    <td><span class="stars"><span class="star__full">★</span><span class="star__half">★</span><span class="star__empty">★★★</span></span></td>
-                                    <td class="is-vcentered">
-                                        <div class="dropdown is-right has-text-left">
-                                            <div class="dropdown-trigger"><a aria-haspopup="true" aria-controls="dropdown-menu"><span class="icon"><i class="slicon slicon-fa-ellipsis-v"></i></span></a></div>
-                                            <div role="menu" class="dropdown-menu">
-                                                <div class="dropdown-content"><a href="/103795-kobiljon/deadlift/8640836" class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-search"></i></span> <span>Analyse Lift</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-arrow-up"></i></span> <span>Move Earlier</span></a> <a class="dropdown-item"><span
-                                                        class="icon"><i class="slicon slicon-fa-arrow-down"></i></span> <span>Move Later</span></a> <a class="dropdown-item"><span class="icon"><i class="slicon slicon-fa-trash"></i></span> <span>Delete</span></a></div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            <div class="field">
-                                <div class="control"><a href="/103795-kobiljon/2021/05/12" class="button">See Full Workout</a></div>
-                            </div>
-                        </div> <!----></div>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="block"><a href="/103795-kobiljon/export" class="button">Export CSV</a></div>
             </div>
         </section>
     </div>

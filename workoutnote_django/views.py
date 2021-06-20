@@ -239,7 +239,13 @@ def handle_find_lifters(request):
 @login_required
 @require_http_methods(['GET'])
 def handle_workouts(request):
-    return render(request=request, template_name='profile/workouts.html')
+    return render(
+        request=request,
+        template_name='profile/workouts.html',
+        context={
+            'lifts': models.Lift.objects.filter(user=request.user)
+        }
+    )
 
 
 @login_required
@@ -250,7 +256,7 @@ def handle_lifts(request):
         template_name='profile/lifts.html',
         context={
             'exercises': models.Exercise.objects.all(),
-            'lifts': models.Lift.objects.all()
+            'lifts': models.Lift.objects.filter(user=request.user)
         }
     )
 

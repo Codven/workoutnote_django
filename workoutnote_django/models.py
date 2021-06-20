@@ -3,8 +3,7 @@ from django.db import models
 
 
 class Exercise(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=64)
+    name = models.CharField(max_length=64, primary_key=True)
     icon = models.CharField(max_length=128)
     body_part = models.CharField(max_length=16)
     category = models.CharField(max_length=16)

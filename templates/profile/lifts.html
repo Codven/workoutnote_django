@@ -4,6 +4,12 @@
         let addLiftForm, selectExerciseDiv, exercisesListDiv;
         let allExercises = [], displayedExercises;
         let selectedBodyPart, selectedCategory, filterText;
+        let selectedExercise = {
+            name: '{{ exercises.0.name }}',
+            icon: '{{ exercises.0.icon }}',
+            bodyPart: '{{ exercises.0.body_part }}',
+            category: '{{ exercises.0.category }}'
+        };
         document.addEventListener('DOMContentLoaded', () => {
             addLiftForm = document.getElementById('addLiftForm');
             selectExerciseDiv = document.getElementById('selectExerciseDiv');
@@ -12,7 +18,6 @@
             // init all exercises
             {% for exercise in exercises %}
                 allExercises.push({
-                    id: {{ exercise.id }},
                     name: '{{ exercise.name }}',
                     icon: '{{ exercise.icon }}',
                     bodyPart: '{{ exercise.body_part }}',
@@ -114,7 +119,10 @@
         <section class="section has-background-white">
             <div class="container">
                 <div class="buttons">
-                    <button onclick="addLiftClick();" class="button is-primary is-large"><span class="icon"><i aria-hidden="true" class="slicon slicon-fa-dumbbell"></i></span> <span>Add Lift</span></button>
+                    <button onclick="addLiftClick();" class="button is-primary is-large">
+                        <span class="icon"><i aria-hidden="true" class="slicon slicon-fa-dumbbell"></i></span>
+                        <span>Add Lift</span>
+                    </button>
                 </div>
                 <div class="block">
                     <div><!---->
@@ -409,7 +417,7 @@
                                 <div class="field">
                                     <div class="control control--modal has-icons-left has-icons-right">
                                         <input type="hidden" name="exercise" value="bench-press">
-                                        <input onclick="selectExerciseClick();" type="text" class="input">
+                                        <input id="selectedExerciseName" onclick="selectExerciseClick();" type="text" class="input">
                                         <span class="icon is-left has-text-dark">
                                             <i class="slicon slicon-2x slicon-exercise-bench-press"></i>
                                         </span>

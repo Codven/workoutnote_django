@@ -83,13 +83,13 @@
         <section class="modal-card-body is-paddingless">
             <div class="px-4 py-3">
                 {% for exercise in exercises %}
-                    <a href="{% url 'strength standards' %}?exercise_id={{ exercise.id }}" class="button exerciseitem">
+                    <a href="{% url 'strength standards' %}?exercise={{ exercise.name }}" class="button exerciseitem">
                         <span class="exerciseitem__inner">
                             <i class="exerciseitem__icon slicon {{ exercise.icon }}"></i>
                             <span class="exerciseitem__name__container">
                                 <span class="exerciseitem__name">{{ exercise.name }}</span>
                                 <div class="pt-1"><span
-                        class="exerciseitem__count">13,354,162 lifts</span></div>
+                                        class="exerciseitem__count">13,354,162 lifts</span></div>
                             </span>
                         </span>
                     </a>

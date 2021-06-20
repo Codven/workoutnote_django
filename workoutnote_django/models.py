@@ -1,5 +1,5 @@
+from django.contrib.auth.models import User as django_User
 from django.db import models
-from django.contrib.auth.models import User
 
 
 class Exercise(models.Model):
@@ -20,7 +20,7 @@ class Exercise(models.Model):
 
 class Lift(models.Model):
     id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(django_User, on_delete=models.CASCADE)
     exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE)
     body_weight = models.FloatField()
     lift_mass = models.FloatField()

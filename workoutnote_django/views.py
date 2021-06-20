@@ -236,13 +236,27 @@ def handle_find_lifters(request):
     return render(request=request, template_name='profile/find lifters.html')
 
 
+@login_required
+@require_http_methods(['GET'])
 def handle_workouts(request):
     return render(request=request, template_name='profile/workouts.html')
 
 
+@login_required
+@require_http_methods(['GET'])
 def handle_lifts(request):
-    return render(request=request, template_name='profile/lifts.html')
+    return render(
+        request=request,
+        template_name='profile/lifts.html',
+        context={'exercises': models.Exercise.objects.all()}
+    )
 
 
 def handle_exercises(request):
     return render(request=request, template_name='profile/exercises.html')
+
+
+@login_required
+@require_http_methods(['POST'])
+def handle_add_lift(request):
+    pass

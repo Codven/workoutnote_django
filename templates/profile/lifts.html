@@ -1,37 +1,101 @@
 {% extends 'profile/base.html' %}
 {% block content %}
     <script>
-        var addLiftForm;
+        let addLiftForm, selectExerciseDiv, exercisesListDiv;
+        let allExercises = [], displayedExercises;
+        let selectedBodyPart, selectedCategory, filterText;
         document.addEventListener('DOMContentLoaded', () => {
-            // Get all "navbar-burger" elements
-            const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-
-            // Check if there are any navbar burgers
-            if ($navbarBurgers.length > 0) {
-                // Add a click event on each of them
-                $navbarBurgers.forEach(el => {
-                    el.addEventListener('click', () => {
-                        // Get the target from the "data-target" attribute
-                        const target = el.dataset.target;
-                        const $target = document.getElementById(target);
-
-                        // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-                        el.classList.toggle('is-active');
-                        $target.classList.toggle('is-active');
-
-                    });
-                });
-            }
-
             addLiftForm = document.getElementById('addLiftForm');
-            let addLiftButton = document.getElementById('addLiftButton');
-            addLiftButton.addEventListener('click', () => {
-                if (addLiftForm.style.display === 'none')
-                    addLiftForm.style.display = 'block';
-                else
-                    addLiftForm.style.display = 'none';
+            selectExerciseDiv = document.getElementById('selectExerciseDiv');
+            exercisesListDiv = document.getElementById('exercisesListDiv');
+
+            // init all exercises
+            {% for exercise in exercises %}
+                allExercises.push({
+                    id: {{ exercise.id }},
+                    name: '{{ exercise.name }}',
+                    icon: '{{ exercise.icon }}',
+                    bodyPart: '{{ exercise.body_part }}',
+                    category: '{{ exercise.category }}'
+                });
+            {% endfor %}
+
+            document.getElementById('bodyPartSelector').addEventListener('change', (event) => {
+                selectedBodyPart = event.target.value === 'none' ? null : event.target.value;
+                filterExercises();
+            });
+            document.getElementById('categorySelector').addEventListener('change', (event) => {
+                selectedCategory = event.target.value === 'none' ? null : event.target.value;
+                filterExercises();
             });
         });
+
+        function addLiftClick() {
+            if (document.readyState === "complete")
+                addLiftForm.style.display = 'block';
+        }
+
+        function hideAddLiftFormClick() {
+            addLiftForm.style.display = 'none';
+        }
+
+        function selectExerciseClick() {
+            if (document.readyState === "complete")
+                selectExerciseDiv.style.display = 'block';
+        }
+
+        function hideExerciseSelectorDivClick() {
+            selectExerciseDiv.style.display = 'none';
+        }
+
+        function onFilterTextChanged(input) {
+            filterText = input.value.length > 0 ? input.value : null;
+            filterExercises();
+        }
+
+        function filterExercises() {
+            displayedExercises = allExercises.slice();
+
+            if (filterText != null) {
+                let filterTextLower = filterText.toLowerCase();
+                for (let i = 0; i < displayedExercises.length; i++)
+                    if (!displayedExercises[i].name.toLowerCase().includes(filterTextLower)) {
+                        displayedExercises.splice(i, 1);
+                        i--;
+                    }
+                let newArray = [];
+                for (let i = 0; i < displayedExercises.length; i++) {
+                    if (displayedExercises[i].name.toLowerCase().startsWith(filterTextLower)) {
+                        newArray.push(displayedExercises[i]);
+                        displayedExercises.splice(i, 1);
+                        i--;
+                    }
+                }
+                displayedExercises = newArray.concat(displayedExercises);
+            }
+
+            if (selectedBodyPart != null)
+                for (let i = 0; i < displayedExercises.length; i++)
+                    if (displayedExercises[i].bodyPart !== selectedBodyPart) {
+                        displayedExercises.splice(i, 1);
+                        i--;
+                    }
+            if (selectedCategory != null)
+                for (let i = 0; i < displayedExercises.length; i++)
+                    if (displayedExercises[i].category !== selectedCategory) {
+                        displayedExercises.splice(i, 1);
+                        i--;
+                    }
+
+            exercisesListDiv.innerHTML = '';
+            for (let i = 0; i < displayedExercises.length; i++) {
+                let newElementHtml = '<a class="card-content px-4 py-3" style="display: block;"><span class="media"><span class="media-left"><span class="icon is-left has-text-dark"><i class="slicon slicon-2x ' + displayedExercises[i].icon + '"></i></span></span><span class="media-content"><span>' + displayedExercises[i].name + '</span> <span class="tag is-small ml-1">' + displayedExercises[i].bodyPart + '</span> <span class="tag is-small"> <span class="stars"> <span class="star__full">★</span> <span class="star__empty">★★★★</span> </span></span> </span> </span> </a>';
+                let newElement = document.createElement('div');
+                newElement.className = 'card';
+                newElement.innerHTML = newElementHtml;
+                exercisesListDiv.appendChild(newElement);
+            }
+        }
     </script>
     <div id="workoutPageContainer"><!---->
         <section class="hero is-primary is-translucent">
@@ -50,7 +114,7 @@
         <section class="section has-background-white">
             <div class="container">
                 <div class="buttons">
-                    <button id="addLiftButton" class="button is-primary is-large"><span class="icon"><i aria-hidden="true" class="slicon slicon-fa-dumbbell"></i></span> <span>Add Lift</span></button>
+                    <button onclick="addLiftClick();" class="button is-primary is-large"><span class="icon"><i aria-hidden="true" class="slicon slicon-fa-dumbbell"></i></span> <span>Add Lift</span></button>
                 </div>
                 <div class="block">
                     <div><!---->
@@ -333,7 +397,7 @@
         </section> <!---->
         <form id="addLiftForm" method="post" style="display: none;">
             <div class="modal is-active">
-                <div class="modal-background" onclick="addLiftForm.style.display='none';"></div>
+                <div class="modal-background" onclick="hideAddLiftFormClick();"></div>
                 <div class="modal-card">
                     <header class="modal-card-head"><p class="modal-card-title">Add Lift</p>
                         <button aria-label="close" type="button" class="delete" onclick="addLiftForm.style.display='none';"></button>
@@ -343,7 +407,13 @@
                             <div class="field-label is-normal"><label class="label">Exercise</label></div>
                             <div class="field-body">
                                 <div class="field">
-                                    <div class="control control--modal has-icons-left has-icons-right"><input type="hidden" name="exercise" value="bench-press"> <input type="text" class="input"> <span class="icon is-left has-text-dark"><i class="slicon slicon-2x slicon-exercise-bench-press"></i></span></div>
+                                    <div class="control control--modal has-icons-left has-icons-right">
+                                        <input type="hidden" name="exercise" value="bench-press">
+                                        <input onclick="selectExerciseClick();" type="text" class="input">
+                                        <span class="icon is-left has-text-dark">
+                                            <i class="slicon slicon-2x slicon-exercise-bench-press"></i>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -383,90 +453,101 @@
                 </div>
             </div>
         </form>
+        <div id="selectExerciseDiv" class="modal" style="display: none; margin-top: 20px; padding-right: 50px;">
+            <div onclick="hideExerciseSelectorDivClick();" class="modal-background"></div>
+            <div class="modal-card">
+                <header class="modal-card-head"><p class="modal-card-title">Select Exercise</p>
+                    <button onclick="hideExerciseSelectorDivClick();" aria-label="close" type="button" class="delete"></button>
+                </header>
+                <section class="modal-card-search">
+                    <div class="field">
+                        <div class="control is-expanded has-icons-left">
+                            <input onchange="onFilterTextChanged(this);" type="text" placeholder="Search..." autocomplete="off" class="input">
+                            <span class="icon is-small is-left"><i class="slicon slicon-fa-search"></i></span>
+                        </div>
+                    </div>
+                    <div class="field is-grouped is-grouped-multiline">
+                        <div class="control">
+                            <div class="select is-small">
+                                <select id="bodyPartSelector">
+                                    <option value="none">Any Body Part</option>
+                                    <option value="Back">
+                                        Back
+                                    </option>
+                                    <option value="Biceps">
+                                        Biceps
+                                    </option>
+                                    <option value="Chest">
+                                        Chest
+                                    </option>
+                                    <option value="Core">
+                                        Core
+                                    </option>
+                                    <option value="Forearms">
+                                        Forearms
+                                    </option>
+                                    <option value="Legs">
+                                        Legs
+                                    </option>
+                                    <option value="Shoulders">
+                                        Shoulders
+                                    </option>
+                                    <option value="Triceps">
+                                        Triceps
+                                    </option>
+                                    <option value="Whole Body">
+                                        Whole Body
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control">
+                            <div class="select is-small">
+                                <select id="categorySelector">
+                                    <option value="none">Any Category</option>
+                                    <option value="Barbell">Barbell</option>
+                                    <option value="Bodyweight">Bodyweight</option>
+                                    <option value="Cable">Cable</option>
+                                    <option value="Dumbbell">Dumbbell</option>
+                                    <option value="Machine">Machine</option>
+                                    <option value="Olympic">Olympic</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="modal-card-body is-paddingless">
+                    <div id="exercisesListDiv" style="min-height: 415px;">
+                        {% for exercise in exercises %}
+                            <div class="card">
+                                <a class="card-content px-4 py-3" style="display: block;">
+                                <span class="media">
+                                    <span class="media-left">
+                                        <span class="icon is-left has-text-dark">
+                                            <i class="slicon slicon-2x {{ exercise.icon }}"></i>
+                                        </span>
+                                    </span>
+                                    <span class="media-content">
+                                        <span>{{ exercise.name }}</span>
+                                        <span class="tag is-small ml-1">{{ exercise.body_part }}</span>
+                                        <span class="tag is-small">
+                                            <span class="stars">
+                                                <span class="star__full">★</span>
+                                                <span class="star__empty">★★★★</span>
+                                            </span></span>
+                                    </span>
+                                </span>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </section>
+                <footer class="modal-card-foot">
+                    <div class="buttons">
+                        <a class="button" onclick="hideExerciseSelectorDivClick();">Close</a>
+                    </div>
+                </footer>
+            </div>
+        </div>
     </div>
-    <script>
-        StrengthLevel.setupWorkoutPage({
-            "userId": 102596,
-            "otherUserViewModel": null,
-            "layoutViewModel": {
-                "title": "Nematjon Workout - Strength Level",
-                "menuSelection": "Workouts",
-                "gender": "male",
-                "analyticsPage": "\/my-workout",
-                "fingerprint": ":username",
-                "isLoggedIn": true,
-                "gravatarUrl": "https:\/\/www.gravatar.com\/avatar\/7a5c55da08fae356d1064251175ccc34?s=96&d=retro&r=pg",
-                "name": "Nematjon",
-                "profileUrl": "\/102596-nematjon",
-                "isAdmin": false,
-                "useGoogleAnalytics": true,
-                "useSentryErrorReporting": true,
-                "useInspectlet": false,
-                "facebookAppId": "731465336900630"
-            },
-            "settingsViewModel": {"bodyMassUnit": "kg", "liftMassUnit": "kg"},
-            "date": "2021-06-15",
-            "userUrl": "\/102596-nematjon",
-            "workoutDates": ["2021-06-15", "2021-04-14"],
-            "addLiftViewModel": {
-                "date": {"date": "2021-06-15 00:00:00.000000", "timezone_type": 3, "timezone": "UTC"},
-                "dateString": "2021-06-15",
-                "exerciseId": 1,
-                "exerciseStringId": "bench-press",
-                "exerciseType": "barbell",
-                "liftMassUnit": {"symbol": "kg", "conversionToBaseUnit": 1, "step": 0.1, "remainderSymbol": null, "remainderMultiple": null, "remainderStep": null},
-                "liftMass": 50,
-                "repetitions": 10,
-                "sets": 1,
-                "minRepetitions": 1,
-                "maxRepetitions": 500,
-                "minSets": 1,
-                "maxSets": 10,
-                "variationType": "bodyweight",
-                "assistanceMass": "",
-                "extraMass": ""
-            },
-            "addedLiftViewModel": null,
-            "workoutTableViewModel": {
-                "userBaseUrl": "\/102596-nematjon", "workoutViewModels": [{
-                    "date": "2021-06-15",
-                    "bodyweight": 67,
-                    "summary": {"sets": 11, "reps": 110, "volume": 5500, "percentile": 0.3137623090417957},
-                    "sets": [{"id": 8896920, "exercise": "Bench Press", "weight": 50, "reps": 10, "percentile": 0.3137623090417957}, {
-                        "id": 8896921,
-                        "exercise": "Bench Press",
-                        "weight": 50,
-                        "reps": 10,
-                        "percentile": 0.3137623090417957
-                    }, {"id": 8896922, "exercise": "Bench Press", "weight": 50, "reps": 10, "percentile": 0.3137623090417957}, {
-                        "id": 8896923,
-                        "exercise": "Bench Press",
-                        "weight": 50,
-                        "reps": 10,
-                        "percentile": 0.3137623090417957
-                    }, {"id": 8896924, "exercise": "Bench Press", "weight": 50, "reps": 10, "percentile": 0.3137623090417957}, {
-                        "id": 8896925,
-                        "exercise": "Bench Press",
-                        "weight": 50,
-                        "reps": 10,
-                        "percentile": 0.3137623090417957
-                    }, {"id": 8896926, "exercise": "Bench Press", "weight": 50, "reps": 10, "percentile": 0.3137623090417957}, {
-                        "id": 8896927,
-                        "exercise": "Bench Press",
-                        "weight": 50,
-                        "reps": 10,
-                        "percentile": 0.3137623090417957
-                    }, {"id": 8896928, "exercise": "Bench Press", "weight": 50, "reps": 10, "percentile": 0.3137623090417957}, {
-                        "id": 8896929,
-                        "exercise": "Bench Press",
-                        "weight": 50,
-                        "reps": 10,
-                        "percentile": 0.3137623090417957
-                    }, {"id": 8896931, "exercise": "Bench Press", "weight": 50, "reps": 10, "percentile": 0.3137623090417957}]
-                }]
-            },
-            "isCurrentUser": true,
-            "exportCsvUrl": "\/102596-nematjon\/2021\/06\/15\/export"
-        });
-    </script>
 {% endblock %}

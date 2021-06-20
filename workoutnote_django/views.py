@@ -155,7 +155,6 @@ def handle_powerlifting_calculator(request):
         {'body_weight': 70, 'reps': 10, "lift_mass": 105},
         {'body_weight': 70, 'reps': 10, "lift_mass": 85},
         {'body_weight': 70, 'reps': 10, "lift_mass": 102},
-        {'body_weight': 70, 'reps': 10, "lift_mass": 50},
         {'body_weight': 70, 'reps': 10, "lift_mass": 58},
         {'body_weight': 70, 'reps': 10, "lift_mass": 25},
     ]
@@ -175,8 +174,9 @@ def handle_powerlifting_calculator(request):
         body_weight = float(request.POST['bodymass'])
         # TODO: instead of following fake data get real data from db for given bodyweight and gender
         sorted_fake_lift_mass = sorted([i['lift_mass'] for i in TMP_POWERLIFTING_FAKE_DATA])
-        total_lift_mass = float(request.POST['totalliftmass'])
-        if request.POST['method'] == 'split':
+        if request.POST['method'] == 'total':
+            total_lift_mass = float(request.POST['totalliftmass'])
+        else:
             bench_1rm = Tools.calculate_one_rep_max(
                 float(request.POST['benchliftmass']),
                 int(request.POST['benchrepetitions'])
@@ -192,8 +192,8 @@ def handle_powerlifting_calculator(request):
             total_lift_mass = bench_1rm + squat_1rm + deadlift_1rm
 
         lvl_in_percentage = Tools.get_power_level_in_percentage(sorted_fake_lift_mass, total_lift_mass)
-        lvl_in_text = Tools.get_string_power_level(lvl_in_percentage)
         lvl_boundaries = Tools.get_level_boundaries_for_bodyweight(sorted_fake_lift_mass)
+        lvl_in_text = Tools.get_string_level(lvl_boundaries, total_lift_mass)
 
         # Construct the resulting data
         data['lvl_txt'] = lvl_in_text

@@ -63,7 +63,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for result_item in result_table %}
+                {% for result_item in result_table_1 %}
                     <tr>
                         <td>{{ result_item.percentage }}%</td>
                         <td>{{ result_item.liftmass }} kg</td>
@@ -97,131 +97,25 @@
         <table class="table is-fullwidth is-striped">
             <thead>
             <tr>
-                <th style="width: 50%;">Repetitions</th>
-                <th style="width: 50%;">Percentage of 1RM</th>
+                {% if result_number %}
+                    <th style="width: 33%;">Repetitions</th>
+                    <th style="width: 33%;">Lift Weight</th>
+                {% else %}
+                    <th style="width: 50%;">Repetitions</th>
+                {% endif %}
+                <th>Percentage of 1RM</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>1</td>
-                <td>100%</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>97%</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>94%</td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td>92%</td>
-            </tr>
-            <tr>
-                <td>5</td>
-                <td>89%</td>
-            </tr>
-            <tr>
-                <td>6</td>
-                <td>86%</td>
-            </tr>
-            <tr>
-                <td>7</td>
-                <td>83%</td>
-            </tr>
-            <tr>
-                <td>8</td>
-                <td>81%</td>
-            </tr>
-            <tr>
-                <td>9</td>
-                <td>78%</td>
-            </tr>
-            <tr>
-                <td>10</td>
-                <td>75%</td>
-            </tr>
-            <tr>
-                <td>11</td>
-                <td>73%</td>
-            </tr>
-            <tr>
-                <td>12</td>
-                <td>71%</td>
-            </tr>
-            <tr>
-                <td>13</td>
-                <td>70%</td>
-            </tr>
-            <tr>
-                <td>14</td>
-                <td>68%</td>
-            </tr>
-            <tr>
-                <td>15</td>
-                <td>67%</td>
-            </tr>
-            <tr>
-                <td>16</td>
-                <td>65%</td>
-            </tr>
-            <tr>
-                <td>17</td>
-                <td>64%</td>
-            </tr>
-            <tr>
-                <td>18</td>
-                <td>63%</td>
-            </tr>
-            <tr>
-                <td>19</td>
-                <td>61%</td>
-            </tr>
-            <tr>
-                <td>20</td>
-                <td>60%</td>
-            </tr>
-            <tr>
-                <td>21</td>
-                <td>59%</td>
-            </tr>
-            <tr>
-                <td>22</td>
-                <td>58%</td>
-            </tr>
-            <tr>
-                <td>23</td>
-                <td>57%</td>
-            </tr>
-            <tr>
-                <td>24</td>
-                <td>56%</td>
-            </tr>
-            <tr>
-                <td>25</td>
-                <td>55%</td>
-            </tr>
-            <tr>
-                <td>26</td>
-                <td>54%</td>
-            </tr>
-            <tr>
-                <td>27</td>
-                <td>53%</td>
-            </tr>
-            <tr>
-                <td>28</td>
-                <td>52%</td>
-            </tr>
-            <tr>
-                <td>29</td>
-                <td>51%</td>
-            </tr>
-            <tr>
-                <td>30</td>
-                <td>50%</td>
-            </tr>
+            {% for result_item in result_table_2 %}
+                <tr>
+                    <td>{{ result_item.reps_of_1rm }}</td>
+                    {% if result_number %}
+                        <td>{{ result_item.liftmass }} kg</td>
+                    {% endif %}
+                    <td>{{ result_item.percentage }}%</td>
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
     </div>

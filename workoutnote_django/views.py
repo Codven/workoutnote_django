@@ -248,14 +248,30 @@ def handle_lifts(request):
     return render(
         request=request,
         template_name='profile/lifts.html',
-        context={'exercises': models.Exercise.objects.all()}
+        context={
+            'exercises': models.Exercise.objects.all(),
+            'lifts': models.Lift.objects.all()
+        }
     )
 
 
 @login_required
 @require_http_methods(['POST'])
 def handle_add_lift(request):
-    pass
+    exercise = models.Exercise.objects.get(name=request.POST['exercise']) if models.Exercise.objects.filter(name=request.POST['exercise']).exists() else None
+    lift_mass = float(request.POST['liftmass'])
+    repetitions = int(request.POST['repetitions'])
+    sets = int(request.POST['sets'])
+    if exercise is not None:
+        for _ in range(sets):
+            models.Lift.objects.create(
+                user=request.user,
+                exercise=exercise,
+                body_weight=70,
+                lift_mass=lift_mass,
+                repetitions=repetitions
+            )
+    return redirect(to='lifts')
 
 
 def handle_exercises(request):

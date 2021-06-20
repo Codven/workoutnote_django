@@ -2,8 +2,7 @@
 {% block content %}
     <script>
         let selectExerciseDiv, exercisesListDiv, filterExerciseBodyPart, filterExerciseCategory, filterText, selectedExerciseName, selectedExerciseIcon;
-        let allExercises = [{% for exercise in exercises %}{name: '{{ exercise.name }}',icon: '{{ exercise.icon }}',bodyPart: '{{ exercise.body_part }}',category: '{{ exercise.category }}'
-                },{% endfor %}];
+        let allExercises = [{% for exercise in exercises %}{name: '{{ exercise.name }}',icon: '{{ exercise.icon }}',bodyPart: '{{ exercise.body_part }}',category: '{{ exercise.category }}'},{% endfor %}];
         let selectedExercise = {name: '{{ exercises.0.name }}', icon: '{{ exercises.0.icon }}', bodyPart: '{{ exercises.0.body_part }}', category: '{{ exercises.0.category }}'};
         document.addEventListener('DOMContentLoaded', () => {
             selectExerciseDiv = document.getElementById('selectExerciseDiv');
@@ -505,7 +504,7 @@
             </section>
             <section class="modal-card-body is-paddingless">
                 <div id="exercisesListDiv" style="min-height: 415px;">
-                    {% for exercise in exercises_filter %}
+                    {% for exercise in exercises %}
                         <div class="card">
                             <a onclick="selectExerciseClick('{{ exercise.name }}')" class="card-content px-4 py-3" style="display: block;">
                                 <span class="media">

@@ -165,7 +165,7 @@ def handle_powerlifting_calculator(request):
         'lvl_percentage': None,
         'gender': None,
         'body_weight': None,
-        'total_lift': None,
+        'total_lift_mass': None,
         'wilks_score': None,
         'lvl_boundaries': None
     }
@@ -201,15 +201,53 @@ def handle_powerlifting_calculator(request):
         data['lvl_percentage'] = round(lvl_in_percentage, 1)
         data['body_weight'] = body_weight
         data['gender'] = gender
-        data['total_lift'] = total_lift_mass
-        data['wilks_score'] = None  # TODO: make a function to calculate Wilks Score
+        data['total_lift_mass'] = total_lift_mass
+        data['wilks_score'] = Tools.calculate_wilks_score(total_lift_mass)
         data['lvl_boundaries'] = lvl_boundaries
 
     return TemplateResponse(request=request, template='index/powerlifting calculator.html', context=data)
 
 
+@require_http_methods(['GET', 'POST'])
 def handle_wilks_calculator(request):
-    return render(request=request, template_name='index/wilks calculator.html')
+    data = {
+        'wilks_score': None,
+        'gender': None,
+        'body_weight': None,
+        'total_lift_mass': None,
+        'wilks_score_boundaries': None
+    }
+    if request.method == 'POST':
+        gender = request.POST['gender']
+        body_weight = float(request.POST['bodymass'])
+        if request.POST['method'] == 'total':
+            total_lift_mass = float(request.POST['totalliftmass'])
+        else:
+            bench_1rm = Tools.calculate_one_rep_max(
+                float(request.POST['benchliftmass']),
+                int(request.POST['benchrepetitions'])
+            )
+            squat_1rm = Tools.calculate_one_rep_max(
+                float(request.POST['squatliftmass']),
+                int(request.POST['squatrepetitions'])
+            )
+            deadlift_1rm = Tools.calculate_one_rep_max(
+                float(request.POST['deadliftliftmass']),
+                int(request.POST['deadliftrepetitions'])
+            )
+            total_lift_mass = bench_1rm + squat_1rm + deadlift_1rm
+
+        wilks_score = Tools.calculate_wilks_score(total_lift_mass)
+        wilks_score_boundaries = Tools.get_wilks_score_boundaries()
+
+        # Construct the resulting data
+        data['wilks_score'] = wilks_score
+        data['body_weight'] = body_weight
+        data['gender'] = gender
+        data['total_lift_mass'] = total_lift_mass
+        data['wilks_score_boundaries'] = wilks_score_boundaries
+
+    return TemplateResponse(request=request, template='index/wilks calculator.html', context=data)
 
 
 def handle_powerlifting_standards(request):

@@ -2,8 +2,7 @@
 {% block content %}
     <script>
         let selectExerciseDiv, exercisesListDiv, filterExerciseBodyPart, filterExerciseCategory, filterText, selectedExerciseName, selectedExerciseIcon;
-        let allExercises = [{% for exercise in exercises %}{name: '{{ exercise.name }}',icon: '{{ exercise.icon }}',bodyPart: '{{ exercise.body_part }}',category: '{{ exercise.category }}'
-                },{% endfor %}];
+        let allExercises = [{% for exercise in exercises %}{name: '{{ exercise.name }}',icon: '{{ exercise.icon }}',bodyPart: '{{ exercise.body_part }}',category: '{{ exercise.category }}'},{% endfor %}];
         let selectedExercise = {name: '{{ exercises.0.name }}', icon: '{{ exercises.0.icon }}', bodyPart: '{{ exercises.0.body_part }}', category: '{{ exercises.0.category }}'};
         document.addEventListener('DOMContentLoaded', () => {
             selectExerciseDiv = document.getElementById('selectExerciseDiv');
@@ -267,7 +266,7 @@
             <div class="columns">
                 <div class="column" id="liftResults">
                     <h2 class="title is-3 is-size-4-mobile">
-                        Your Strength Level for
+                        Your Workoutnote for
                         {{ selected_exercise.name }} is {{ lvl_txt }}</h2>
                     <div class="subtitle is-1">
                         <span class="stars"><span class="star__full">★★★★</span><span class="star__empty">★</span></span></div>

@@ -85,20 +85,6 @@ def handle_about(request):
 
 @require_http_methods(['GET', 'POST'])
 def handle_index(request):
-    TMP_POWERLIFTING_FAKE_DATA = [
-        {'body_weight': 70, 'reps': 10, "lift_mass": 30},
-        {'body_weight': 70, 'reps': 10, "lift_mass": 20},
-        {'body_weight': 70, 'reps': 10, "lift_mass": 50},
-        {'body_weight': 70, 'reps': 10, "lift_mass": 41},
-        {'body_weight': 70, 'reps': 10, "lift_mass": 32},
-        {'body_weight': 70, 'reps': 10, "lift_mass": 35},
-        {'body_weight': 70, 'reps': 10, "lift_mass": 16},
-        {'body_weight': 70, 'reps': 10, "lift_mass": 105},
-        {'body_weight': 70, 'reps': 10, "lift_mass": 85},
-        {'body_weight': 70, 'reps': 10, "lift_mass": 102},
-        {'body_weight': 70, 'reps': 10, "lift_mass": 58},
-        {'body_weight': 70, 'reps': 10, "lift_mass": 25},
-    ]
     data = {
         'lvl_txt': None,
         'lvl_stars_number': None,
@@ -118,11 +104,11 @@ def handle_index(request):
         exercise = request.POST['exercise']
         lift_mass = float(request.POST['liftmass'])
         repetitions = int(request.POST['repetitions'])
-        # TODO: instead of following fake data get real data from db for given bodyweight and gender
-        sorted_fake_lift_mass = sorted([i['lift_mass'] for i in TMP_POWERLIFTING_FAKE_DATA])
+        # TODO: check the following data filtering
+        sorted_lifts_for_given_bw = list(models.Lift.objects.filter(body_weight=body_weight, exercise__name=exercise).order_by('lift_mass').values_list('lift_mass', flat=True))
 
-        lvl_in_percentage = Tools.get_level_in_percentage(sorted_fake_lift_mass, lift_mass)
-        lvl_boundaries = Tools.get_level_boundaries_for_bodyweight(sorted_fake_lift_mass)
+        lvl_in_percentage = Tools.get_level_in_percentage(sorted_lifts_for_given_bw, lift_mass)
+        lvl_boundaries = Tools.get_level_boundaries_for_bodyweight(sorted_lifts_for_given_bw)
         lvl_in_text = Tools.get_string_level(lvl_boundaries, lift_mass)
 
         # Construct the resulting data
@@ -203,22 +189,6 @@ def handle_plate_barbell_racking_calculator(request):
 
 @require_http_methods(['GET', 'POST'])
 def handle_powerlifting_calculator(request):
-    # TODO: remove following fake data after model for lifts is set
-    TMP_POWERLIFTING_FAKE_DATA = [
-        {'body_weight': 70, 'reps': 10, "lift_mass": 30},
-        {'body_weight': 70, 'reps': 10, "lift_mass": 20},
-        {'body_weight': 70, 'reps': 10, "lift_mass": 50},
-        {'body_weight': 70, 'reps': 10, "lift_mass": 41},
-        {'body_weight': 70, 'reps': 10, "lift_mass": 32},
-        {'body_weight': 70, 'reps': 10, "lift_mass": 35},
-        {'body_weight': 70, 'reps': 10, "lift_mass": 16},
-        {'body_weight': 70, 'reps': 10, "lift_mass": 105},
-        {'body_weight': 70, 'reps': 10, "lift_mass": 85},
-        {'body_weight': 70, 'reps': 10, "lift_mass": 102},
-        {'body_weight': 70, 'reps': 10, "lift_mass": 58},
-        {'body_weight': 70, 'reps': 10, "lift_mass": 25},
-    ]
-
     data = {
         'lvl_txt': None,
         'lvl_stars_number': None,
@@ -232,8 +202,8 @@ def handle_powerlifting_calculator(request):
     if request.method == 'POST':
         gender = request.POST['gender']
         body_weight = float(request.POST['bodymass'])
-        # TODO: instead of following fake data get real data from db for given bodyweight and gender
-        sorted_fake_lift_mass = sorted([i['lift_mass'] for i in TMP_POWERLIFTING_FAKE_DATA])
+        # TODO: check following data filtering
+        sorted_lifts_for_given_bw = list(models.Lift.objects.filter(body_weight=body_weight).order_by('lift_mass').values_list('lift_mass', flat=True))
         if request.POST['method'] == 'total':
             total_lift_mass = float(request.POST['totalliftmass'])
         else:
@@ -251,8 +221,8 @@ def handle_powerlifting_calculator(request):
             )
             total_lift_mass = bench_1rm + squat_1rm + deadlift_1rm
 
-        lvl_in_percentage = Tools.get_level_in_percentage(sorted_fake_lift_mass, total_lift_mass)
-        lvl_boundaries = Tools.get_level_boundaries_for_bodyweight(sorted_fake_lift_mass)
+        lvl_in_percentage = Tools.get_level_in_percentage(sorted_lifts_for_given_bw, total_lift_mass)
+        lvl_boundaries = Tools.get_level_boundaries_for_bodyweight(sorted_lifts_for_given_bw)
         lvl_in_text = Tools.get_string_level(lvl_boundaries, total_lift_mass)
 
         # Construct the resulting data

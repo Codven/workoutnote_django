@@ -2,7 +2,8 @@
 {% block content %}
     <script>
         let selectExerciseDiv, exercisesListDiv, filterExerciseBodyPart, filterExerciseCategory, filterText, selectedExerciseName, selectedExerciseIcon;
-        let allExercises = [{% for exercise in exercises %}{name: '{{ exercise.name }}',icon: '{{ exercise.icon }}',bodyPart: '{{ exercise.body_part }}',category: '{{ exercise.category }}'},{% endfor %}];
+        let allExercises = [{% for exercise in exercises %}{name: '{{ exercise.name }}',icon: '{{ exercise.icon }}',bodyPart: '{{ exercise.body_part }}',category: '{{ exercise.category }}'
+                },{% endfor %}];
         let selectedExercise = {name: '{{ exercises.0.name }}', icon: '{{ exercises.0.icon }}', bodyPart: '{{ exercises.0.body_part }}', category: '{{ exercises.0.category }}'};
         document.addEventListener('DOMContentLoaded', () => {
             selectExerciseDiv = document.getElementById('selectExerciseDiv');
@@ -163,20 +164,11 @@
                             <div class="field-label is-normal"><label for="bodymass" class="label">Bodyweight</label></div>
                             <div class="field-body">
                                 <div class="field has-addons">
-                                    <div class="control is-expanded"><input type="number" id="bodymass" name="bodymass" required="required" min="5" max="400" step="0.1" class="input"></div>
-                                    <div class="control">
-                                        <div class="select"><select name="bodymassunit">
-                                            <option>
-                                                kg
-                                            </option>
-                                            <option>
-                                                lb
-                                            </option>
-                                            <option>
-                                                st
-                                            </option>
-                                        </select></div>
-                                    </div> <!----></div>
+                                    <div class="control is-expanded">
+                                        <input type="number" id="bodymass" name="bodymass" required="required" min="5" max="400" step="0.1" class="input">
+                                    </div>
+                                    <div class="control"><span class="button is-static">kg</span></div>
+                                </div>
                             </div>
                         </div>
                         <div class="field is-horizontal">
@@ -199,19 +191,12 @@
                             <div class="field-body">
                                 <div class="field is-expanded">
                                     <div class="field has-addons">
-                                        <div class="control is-expanded"><input type="number" id="liftmass" name="liftmass" min="1" max="1500" required="required" step="0.1" class="input">
+                                        <div class="control is-expanded">
+                                            <input type="number" id="liftmass" name="liftmass" min="1" max="1500" required="required" step="0.1" class="input">
                                         </div>
-                                        <div class="control">
-                                            <div class="select"><select name="liftmassunit">
-                                                <option>
-                                                    kg
-                                                </option>
-                                                <option>
-                                                    lb
-                                                </option>
-                                            </select></div>
-                                        </div>
-                                    </div> <!----></div>
+                                        <div class="control"><span class="button is-static">kg</span></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="field is-horizontal">
@@ -370,7 +355,7 @@
                             </p>
 
                             <p class="standards__note">
-                                Note: these barbell standards include the weight of the bar, normally 20 kg / 44 lb.
+                                Note: these barbell standards include the weight of the bar, normally 20 kg.
                             </p>
                         </div>
 

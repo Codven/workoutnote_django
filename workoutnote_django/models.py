@@ -62,6 +62,7 @@ class Lift(models.Model):
     lift_mass = models.FloatField()
     repetitions = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
+    one_rep_max = models.FloatField(default=None)
 
     def __str__(self):
         return self.exercise.name

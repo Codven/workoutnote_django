@@ -8,6 +8,13 @@ from utils.tools import Tools
 from datetime import datetime
 import re
 
+LIMIT_OF_ACCEPTABLE_DATA_AMOUNT = 10
+
+
+class Status:
+    OK = "OK"
+    NOT_ENOUGH_DATA = "Not enough data for the given body weight"
+
 
 @login_required
 def handle_init_exercises(request):
@@ -97,21 +104,27 @@ def handle_index(request):
         'lift_mass': None,
         'body_weight_ratio': None,
         'lvl_boundaries': None,
-        'selected_exercise': models.Exercise.objects.all(),
-        'exercises': models.Exercise.objects.all()
+        'selected_exercise': None,
+        'exercises': models.Exercise.objects.all(),
+        'status': Status.OK
     }
     if request.method == 'POST':
         gender = request.POST['gender']
-        body_weight = float(request.POST['bodymass'])
+        body_weight = round(float(request.POST['bodymass']))
         exercise = request.POST['exercise']
         lift_mass = float(request.POST['liftmass'])
         repetitions = int(request.POST['repetitions'])
         avg_age = float(request.POST['age'])
+
         # TODO: check the following data filtering
         age_range = Tools.get_age_range(avg_age)
         filtered_prefs = models.Preferences.objects.filter(
             date_of_birth__range=Tools.get_date_of_birth_range(age_range),
             gender=str(gender).upper())
+        if not filtered_prefs:
+            data['status'] = Status.NOT_ENOUGH_DATA
+            return render(request=request, template_name='index/index.html', context=data)
+
         user_ids = filtered_prefs.values_list('user', flat=True)
 
         filtered_lifts = models.Lift.objects.filter(
@@ -119,6 +132,10 @@ def handle_index(request):
             exercise__name=exercise,
             user_id__in=user_ids
         )
+        if len(filtered_lifts) < LIMIT_OF_ACCEPTABLE_DATA_AMOUNT:
+            data['status'] = Status.NOT_ENOUGH_DATA
+            return render(request=request, template_name='index/index.html', context=data)
+
         sorted_1rms_for_given_bw = list(filtered_lifts.order_by('one_rep_max').values_list('one_rep_max', flat=True))
 
         one_rep_max = Tools.calculate_one_rep_max(lift_mass, repetitions)
@@ -163,7 +180,8 @@ def handle_one_rep_max_calculator(request):
     data = {
         'result_number': None,
         'result_table_1': [],
-        'result_table_2': []
+        'result_table_2': [],
+        'status': Status.OK
     }
     table_1_reps = [1, 2, 4, 6, 8, 10, 12, 16, 20, 24, 30]
     table_2_percentages = [
@@ -213,17 +231,27 @@ def handle_powerlifting_calculator(request):
         'body_weight': None,
         'total_lift_mass': None,
         'wilks_score': None,
-        'lvl_boundaries': None
+        'lvl_boundaries': None,
+        'status': Status.OK
     }
     if request.method == 'POST':
         gender = request.POST['gender']
-        body_weight = float(request.POST['bodymass'])
+        body_weight = round(float(request.POST['bodymass']))
+        input_method = request.POST['method']
         # TODO: check following data filtering
         filtered_prefs = models.Preferences.objects.filter(gender=str(gender).upper())
+        if not filtered_prefs:
+            data['status'] = Status.NOT_ENOUGH_DATA
+            return render(request=request, template_name='index/powerlifting calculator.html', context=data)
+
         user_ids = filtered_prefs.values_list('user', flat=True)
         filtered_lifts = models.Lift.objects.filter(body_weight=body_weight, user_id__in=user_ids)
+        if not len(filtered_lifts) < LIMIT_OF_ACCEPTABLE_DATA_AMOUNT:
+            data['status'] = Status.NOT_ENOUGH_DATA
+            return render(request=request, template_name='index/powerlifting calculator.html', context=data)
+
         sorted_1rms_for_given_bw = list(filtered_lifts.order_by('one_rep_max').values_list('one_rep_max', flat=True))
-        if request.POST['method'] == 'total':
+        if input_method == 'total':
             total_lift_mass = float(request.POST['totalliftmass'])
         else:
             bench_1rm = Tools.calculate_one_rep_max(
@@ -264,12 +292,15 @@ def handle_wilks_calculator(request):
         'gender': None,
         'body_weight': None,
         'total_lift_mass': None,
-        'wilks_score_boundaries': None
+        'wilks_score_boundaries': None,
+        'status': Status.OK
     }
     if request.method == 'POST':
         gender = request.POST['gender']
-        body_weight = float(request.POST['bodymass'])
-        if request.POST['method'] == 'total':
+        body_weight = round(float(request.POST['bodymass']))
+        input_method = request.POST['method']
+        # TODO: get filtered lifts here if needed for calculation
+        if input_method == 'total':
             total_lift_mass = float(request.POST['totalliftmass'])
         else:
             bench_1rm = Tools.calculate_one_rep_max(

@@ -106,24 +106,38 @@ def handle_index(request):
         exercise = request.POST['exercise']
         lift_mass = float(request.POST['liftmass'])
         repetitions = int(request.POST['repetitions'])
+        avg_age = float(request.POST['age'])
         # TODO: check the following data filtering
-        sorted_lifts_for_given_bw = list(models.Lift.objects.filter(body_weight=body_weight, exercise__name=exercise).order_by('lift_mass').values_list('lift_mass', flat=True))
+        age_range = Tools.get_age_range(avg_age)
+        filtered_prefs = models.Preferences.objects.filter(
+            date_of_birth__range=Tools.get_date_of_birth_range(age_range),
+            gender=str(gender).upper())
+        user_ids = filtered_prefs.values_list('user', flat=True)
 
-        lvl_in_percentage = Tools.get_level_in_percentage(sorted_lifts_for_given_bw, lift_mass)
-        lvl_boundaries = Tools.get_level_boundaries_for_bodyweight(sorted_lifts_for_given_bw)
-        lvl_in_text = Tools.get_string_level(lvl_boundaries, lift_mass)
+        filtered_lifts = models.Lift.objects.filter(
+            body_weight=body_weight,
+            exercise__name=exercise,
+            user_id__in=user_ids
+        )
+        sorted_1rms_for_given_bw = list(filtered_lifts.order_by('one_rep_max').values_list('one_rep_max', flat=True))
+
+        one_rep_max = Tools.calculate_one_rep_max(lift_mass, repetitions)
+
+        lvl_in_percentage = Tools.get_level_in_percentage(sorted_1rms_for_given_bw, one_rep_max)
+        lvl_boundaries = Tools.get_level_boundaries_for_bodyweight(sorted_1rms_for_given_bw)
+        lvl_in_text = Tools.get_string_level(lvl_boundaries, one_rep_max)
 
         # Construct the resulting data
         data['lvl_txt'] = lvl_in_text
         data['lvl_stars_number'] = None  # TODO: make a function to calculate number of stars
-        data['one_rep_max'] = Tools.calculate_one_rep_max(lift_mass, repetitions)
+        data['one_rep_max'] = one_rep_max
         data['lvl_percentage'] = round(lvl_in_percentage, 1)
         data['body_weight'] = body_weight
         data['gender'] = gender
         data['lift_mass'] = lift_mass
         data['body_weight_ratio'] = round(Tools.calculate_body_weight_ratio(lift_mass, body_weight), 2)
         data['lvl_boundaries'] = lvl_boundaries
-        data['exercise'] = exercise
+        data['selected_exercise'] = exercise
 
     return render(request=request, template_name='index/index.html', context=data)
 
@@ -205,7 +219,10 @@ def handle_powerlifting_calculator(request):
         gender = request.POST['gender']
         body_weight = float(request.POST['bodymass'])
         # TODO: check following data filtering
-        sorted_lifts_for_given_bw = list(models.Lift.objects.filter(body_weight=body_weight).order_by('lift_mass').values_list('lift_mass', flat=True))
+        filtered_prefs = models.Preferences.objects.filter(gender=str(gender).upper())
+        user_ids = filtered_prefs.values_list('user', flat=True)
+        filtered_lifts = models.Lift.objects.filter(body_weight=body_weight, user_id__in=user_ids)
+        sorted_1rms_for_given_bw = list(filtered_lifts.order_by('one_rep_max').values_list('one_rep_max', flat=True))
         if request.POST['method'] == 'total':
             total_lift_mass = float(request.POST['totalliftmass'])
         else:
@@ -223,8 +240,8 @@ def handle_powerlifting_calculator(request):
             )
             total_lift_mass = bench_1rm + squat_1rm + deadlift_1rm
 
-        lvl_in_percentage = Tools.get_level_in_percentage(sorted_lifts_for_given_bw, total_lift_mass)
-        lvl_boundaries = Tools.get_level_boundaries_for_bodyweight(sorted_lifts_for_given_bw)
+        lvl_in_percentage = Tools.get_level_in_percentage(sorted_1rms_for_given_bw, total_lift_mass)
+        lvl_boundaries = Tools.get_level_boundaries_for_bodyweight(sorted_1rms_for_given_bw)
         lvl_in_text = Tools.get_string_level(lvl_boundaries, total_lift_mass)
 
         # Construct the resulting data
@@ -387,7 +404,8 @@ def handle_add_lift(request):
                 exercise=exercise,
                 body_weight=70,
                 lift_mass=lift_mass,
-                repetitions=repetitions
+                repetitions=repetitions,
+                one_rep_max=Tools.calculate_one_rep_max(lift_mass, repetitions)
             )
     return redirect(to='lifts')
 

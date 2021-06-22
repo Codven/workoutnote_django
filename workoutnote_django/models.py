@@ -1,6 +1,5 @@
 from django.contrib.auth.models import User as django_User
 from django.db import models
-import enum
 
 
 class Preferences(models.Model):
@@ -24,7 +23,7 @@ class Preferences(models.Model):
     user = models.OneToOneField(to=django_User, on_delete=models.CASCADE, primary_key=True)
     name = models.CharField(max_length=128, default=None, null=True)
     gender = models.CharField(max_length=16, default=Gender.MALE)
-    date_of_birth = models.CharField(max_length=8, default=None, null=True)
+    date_of_birth = models.DateField(default=None)
     height = models.FloatField(default=None, null=True)
     profile_sharing = models.CharField(max_length=128, default=ProfileSharing.PRIVATE)
     unit_of_measure = models.CharField(max_length=128, default=MeasurementUnit.KILOGRAMS)

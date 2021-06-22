@@ -24,7 +24,7 @@ class Preferences(models.Model):
     user = models.OneToOneField(to=django_User, on_delete=models.CASCADE, primary_key=True)
     name = models.CharField(max_length=128, default=None, null=True)
     gender = models.CharField(max_length=16, default=Gender.MALE)
-    date_of_birth = models.CharField(max_length=8, default=None, null=True)
+    date_of_birth = models.DateTimeField(default=None, null=True)
     height = models.FloatField(default=None, null=True)
     profile_sharing = models.CharField(max_length=128, default=ProfileSharing.PRIVATE)
     unit_of_measure = models.CharField(max_length=128, default=MeasurementUnit.KILOGRAMS)
@@ -37,6 +37,9 @@ class Preferences(models.Model):
 
     def unit_of_measure_str(self):
         return self.unit_of_measure.__str__()
+
+    def date_of_birth_str(self):
+        return self.date_of_birth.strftime('%m%d%Y') if self.date_of_birth is not None else ''
 
 
 class Exercise(models.Model):

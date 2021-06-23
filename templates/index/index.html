@@ -246,7 +246,7 @@
             </div>
         </div>
     </div>
-    {% if lvl_txt %}
+    {% if calculator_result_status == 'OK' %}
         <div class="section-box liftresult">
             <div class="columns">
                 <div class="column" id="liftResults">
@@ -406,6 +406,8 @@
                 </table>
             </div>
         </div>
+    {% elif calculator_result_status == 'FAIL' %}
+        <!---TODO: place the fail case here--->
     {% endif %}
     <div class="section-box content">
         <h2 class="title is-3 is-size-4-mobile">Strength Standards</h2>

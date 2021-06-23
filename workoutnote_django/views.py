@@ -13,7 +13,7 @@ LIMIT_OF_ACCEPTABLE_DATA_AMOUNT = 10
 
 class Status:
     OK = "OK"
-    NOT_ENOUGH_DATA = "Not enough data for the given body weight"
+    FAIL = "FAIL"
 
 
 @login_required
@@ -106,7 +106,7 @@ def handle_index(request):
         'lvl_boundaries': None,
         'selected_exercise': None,
         'exercises': models.Exercise.objects.all(),
-        'status': Status.OK
+        'calculator_result_status': None
     }
     if request.method == 'POST':
         gender = request.POST['gender']
@@ -122,7 +122,7 @@ def handle_index(request):
             date_of_birth__range=Tools.get_date_of_birth_range(age_range),
             gender=str(gender).upper())
         if not filtered_prefs:
-            data['status'] = Status.NOT_ENOUGH_DATA
+            data['calculator_result_status'] = Status.FAIL
             return render(request=request, template_name='index/index.html', context=data)
 
         user_ids = filtered_prefs.values_list('user', flat=True)
@@ -133,7 +133,7 @@ def handle_index(request):
             user_id__in=user_ids
         )
         if len(filtered_lifts) < LIMIT_OF_ACCEPTABLE_DATA_AMOUNT:
-            data['status'] = Status.NOT_ENOUGH_DATA
+            data['calculator_result_status'] = Status.FAIL
             return render(request=request, template_name='index/index.html', context=data)
 
         sorted_1rms_for_given_bw = list(filtered_lifts.order_by('one_rep_max').values_list('one_rep_max', flat=True))
@@ -155,6 +155,7 @@ def handle_index(request):
         data['body_weight_ratio'] = round(Tools.calculate_body_weight_ratio(lift_mass, body_weight), 2)
         data['lvl_boundaries'] = lvl_boundaries
         data['selected_exercise'] = exercise
+        data['calculator_result_status'] = Status.OK
 
     return render(request=request, template_name='index/index.html', context=data)
 
@@ -181,7 +182,7 @@ def handle_one_rep_max_calculator(request):
         'result_number': None,
         'result_table_1': [],
         'result_table_2': [],
-        'status': Status.OK
+        'calculator_result_status': None
     }
     table_1_reps = [1, 2, 4, 6, 8, 10, 12, 16, 20, 24, 30]
     table_2_percentages = [
@@ -201,6 +202,7 @@ def handle_one_rep_max_calculator(request):
         )
         max_percentage = 100
         data['result_number'] = result
+        data['calculator_result_status'] = Status.OK
 
         # Populate Table 1 with content
         for item in table_1_reps:
@@ -217,8 +219,79 @@ def handle_one_rep_max_calculator(request):
         return render(request=request, template_name='index/one rep max calculator.html', context=data)
 
 
+@require_http_methods(['GET', 'POST'])
 def handle_plate_barbell_racking_calculator(request):
-    return render(request=request, template_name='index/plate barbell racking calculator.html')
+    data = {
+        'total_lift_mass': 0,
+        'fail_lift_mass': None,
+        'fail_lift_mass_difference': None,
+        'bar_weight': 20,
+        'num_of_plates': None,
+        'plates_data': None,
+        'plate_quantity_2_5': 10,
+        'plate_quantity_5': 10,
+        'plate_quantity_10': 10,
+        'plate_quantity_15': 10,
+        'plate_quantity_20': 10,
+        'plate_quantity_25': 0,
+        'calculator_result_status': None
+    }
+    if request.method == 'POST':
+        total_lift = float(request.POST['liftmass'])
+        bar_weight = float(request.POST['barliftmass'])
+        plate_quantity_2_5 = int(request.POST['plate_quantity_2_5'])
+        plate_quantity_5 = int(request.POST['plate_quantity_5'])
+        plate_quantity_10 = int(request.POST['plate_quantity_10'])
+        plate_quantity_15 = int(request.POST['plate_quantity_15'])
+        plate_quantity_20 = int(request.POST['plate_quantity_20'])
+        plate_quantity_25 = int(request.POST['plate_quantity_25'])
+        plates = [
+            (25, plate_quantity_25),
+            (20, plate_quantity_20),
+            (15, plate_quantity_15),
+            (10, plate_quantity_10),
+            (5, plate_quantity_5),
+            (2.5, plate_quantity_2_5)
+        ]
+        plates_data = {}
+
+        initial_weight_on_one_side = (total_lift - bar_weight) / 2
+        weight_one_side = initial_weight_on_one_side
+
+        for item in plates:
+            stop = False
+            current_plate_num = item[1]
+            while not stop and current_plate_num > 0:
+                if weight_one_side - item[0] >= 0:
+                    weight_one_side = weight_one_side - item[0]
+                    if not plates_data.get(str(item[0])):
+                        plates_data[str(item[0])] = 1
+                    else:
+                        plates_data[str(item[0])] += 1
+                    current_plate_num -= 1
+                else:
+                    stop = True
+
+        if weight_one_side != 0:
+            data['calculator_result_status'] = Status.FAIL
+            data['fail_lift_mass'] = total_lift - 2 * weight_one_side
+            data['fail_lift_mass_difference'] = total_lift - data['fail_lift_mass']
+
+        print(plates_data)
+        # Construct data
+        data['total_lift_mass'] = total_lift
+        data['bar_weight'] = bar_weight
+        data['num_of_plates'] = sum(plates_data.values())
+        data['plates_data'] = plates_data
+        data['plate_quantity_2_5'] = plate_quantity_2_5
+        data['plate_quantity_5'] = plate_quantity_5
+        data['plate_quantity_10'] = plate_quantity_10
+        data['plate_quantity_15'] = plate_quantity_15
+        data['plate_quantity_20'] = plate_quantity_20
+        data['plate_quantity_25'] = plate_quantity_25
+        data['calculator_result_status'] = Status.OK
+
+    return render(request=request, template_name='index/plate barbell racking calculator.html', context=data)
 
 
 @require_http_methods(['GET', 'POST'])
@@ -232,7 +305,7 @@ def handle_powerlifting_calculator(request):
         'total_lift_mass': None,
         'wilks_score': None,
         'lvl_boundaries': None,
-        'status': Status.OK
+        'calculator_result_status': None
     }
     if request.method == 'POST':
         gender = request.POST['gender']
@@ -241,13 +314,13 @@ def handle_powerlifting_calculator(request):
         # TODO: check following data filtering
         filtered_prefs = models.Preferences.objects.filter(gender=str(gender).upper())
         if not filtered_prefs:
-            data['status'] = Status.NOT_ENOUGH_DATA
+            data['calculator_result_status'] = Status.FAIL
             return render(request=request, template_name='index/powerlifting calculator.html', context=data)
 
         user_ids = filtered_prefs.values_list('user', flat=True)
         filtered_lifts = models.Lift.objects.filter(body_weight=body_weight, user_id__in=user_ids)
         if not len(filtered_lifts) < LIMIT_OF_ACCEPTABLE_DATA_AMOUNT:
-            data['status'] = Status.NOT_ENOUGH_DATA
+            data['calculator_result_status'] = Status.FAIL
             return render(request=request, template_name='index/powerlifting calculator.html', context=data)
 
         sorted_1rms_for_given_bw = list(filtered_lifts.order_by('one_rep_max').values_list('one_rep_max', flat=True))
@@ -281,6 +354,7 @@ def handle_powerlifting_calculator(request):
         data['total_lift_mass'] = total_lift_mass
         data['wilks_score'] = Tools.calculate_wilks_score(total_lift_mass)
         data['lvl_boundaries'] = lvl_boundaries
+        data['calculator_result_status'] = Status.OK
 
     return render(request=request, template_name='index/powerlifting calculator.html', context=data)
 

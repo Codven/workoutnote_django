@@ -8,14 +8,17 @@
             <h3 class="subtitle is-4 is-size-5-mobile">
                 Enter the lift you want to perform:
             </h3>
-            <form action="/plate-barbell-racking-calculator#plateCalculatorResults" method="post">
+            <form action="{% url 'plate barbell racking calculator' %}" method="post">
+                {% csrf_token %}
                 <div class="field is-horizontal">
                     <div class="field-label is-normal"><label for="liftmass" class="label">
                         Total Lift
                     </label></div>
                     <div class="field-body">
                         <div class="field has-addons">
-                            <div class="control is-expanded"><input type="number" id="liftmass" name="liftmass" min="1" max="4000" required="required" step="0.1" class="input"></div>
+                            <div class="control is-expanded">
+                                <input type="number" id="liftmass" name="liftmass" min="1" max="4000" required="required" step="0.1" class="input" value="{{ total_lift }} ">
+                            </div>
                             <div class="control"><span class="button is-static">kg</span></div>
                         </div>
                     </div>
@@ -26,7 +29,9 @@
                     </label></div>
                     <div class="field-body">
                         <div class="field has-addons">
-                            <div class="control is-expanded"><input type="number" id="barliftmass" name="barliftmass" min="1" max="4000" required="required" step="0.1" class="input"></div>
+                            <div class="control is-expanded">
+                                <input type="number" id="barliftmass" name="barliftmass" min="1" max="4000" required="required" step="0.1" class="input" value="{{ bar_weight }}">
+                            </div>
                             <div class="control"><span class="button is-static">kg</span></div>
                         </div>
                     </div>
@@ -51,90 +56,72 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td>100 lb</td>
+                        <td>25 kg</td>
                         <td>
                             <div class="field">
-                                <div class="control"><input name="plateQuantities[]" type="number" min="0" max="10" class="input"></div>
+                                <div class="control">
+                                    <input name="plate_quantity_25" type="number" min="0" max="10" class="input" value="{{ plate_quantity_25 }}">
+                                </div>
                             </div>
                         </td>
                     </tr>
                     </tbody>
                     <tbody>
                     <tr>
-                        <td>55 lb</td>
+                        <td>20 kg</td>
                         <td>
                             <div class="field">
-                                <div class="control"><input name="plateQuantities[]" type="number" min="0" max="10" class="input"></div>
+                                <div class="control">
+                                    <input name="plate_quantity_20" type="number" min="0" max="10" class="input" value="{{ plate_quantity_20 }}">
+                                </div>
                             </div>
                         </td>
                     </tr>
                     </tbody>
                     <tbody>
                     <tr>
-                        <td>45 lb</td>
+                        <td>15 kg</td>
                         <td>
                             <div class="field">
-                                <div class="control"><input name="plateQuantities[]" type="number" min="0" max="10" class="input"></div>
+                                <div class="control">
+                                    <input name="plate_quantity_15" type="number" min="0" max="10" class="input" value="{{ plate_quantity_15 }}">
+                                </div>
                             </div>
                         </td>
                     </tr>
                     </tbody>
                     <tbody>
                     <tr>
-                        <td>35 lb</td>
+                        <td>10 kg</td>
                         <td>
                             <div class="field">
-                                <div class="control"><input name="plateQuantities[]" type="number" min="0" max="10" class="input"></div>
+                                <div class="control">
+                                    <input name="plate_quantity_10" type="number" min="0" max="10" class="input" value="{{ plate_quantity_10 }}">
+                                </div>
                             </div>
                         </td>
                     </tr>
                     </tbody>
                     <tbody>
                     <tr>
-                        <td>25 lb</td>
+                        <td>5 kg</td>
                         <td>
                             <div class="field">
-                                <div class="control"><input name="plateQuantities[]" type="number" min="0" max="10" class="input"></div>
+                                <div class="control">
+                                    <input name="plate_quantity_5" type="number" min="0" max="10" class="input" value="{{ plate_quantity_5 }}">
+                                </div>
                             </div>
                         </td>
                     </tr>
                     </tbody>
                     <tbody>
                     <tr>
-                        <td>15 lb</td>
+                        <td>2.5 kg</td>
                         <td>
                             <div class="field">
-                                <div class="control"><input name="plateQuantities[]" type="number" min="0" max="10" class="input"></div>
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                    <tbody>
-                    <tr>
-                        <td>10 lb</td>
-                        <td>
-                            <div class="field">
-                                <div class="control"><input name="plateQuantities[]" type="number" min="0" max="10" class="input"></div>
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                    <tbody>
-                    <tr>
-                        <td>5 lb</td>
-                        <td>
-                            <div class="field">
-                                <div class="control"><input name="plateQuantities[]" type="number" min="0" max="10" class="input"></div>
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                    <tbody>
-                    <tr>
-                        <td>2.5 lb</td>
-                        <td>
-                            <div class="field">
-                                <div class="control"><input name="plateQuantities[]" type="number" min="0" max="10" class="input"></div>
+                                <div class="control">
+                                    <input name="plate_quantity_2_5" type="number" min="0" max="10" class="input" value="{{ plate_quantity_2_5 }}">
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -142,12 +129,67 @@
                 </table>
             </form>
         </div>
+        <div id="plateCalculatorResults" class="section-box content">
+            <h2 class="title is-3 is-size-4-mobile">Plates Calculated</h2>
+            {% if calculator_result_status == 'OK' %}
+                <div>
+                    <p>
+                        You can make
+                        <strong>{{ total_lift_mass }} kg</strong>
+                        from
+                        <strong>{{ num_of_plates }} plate</strong>
+                        each side plus the bar weight of
+                        <strong>{{ bar_weight }} kg</strong>.
+                    </p>
+                    <h3 class="subtitle is-4 is-size-5-mobile">Each side</h3>
+                    <ul>
+                        {% for key, value in plates_data.items %}
+                            <li>{{ value }} x {{ key }} kg</li>
+                        {% endfor %}
+                    </ul>
+                    <p>
+                        Bar: {{ bar_weight }} kg</p>
+                </div>
+            {% elif calculator_result_status == 'FAIL' %}
+                <div>
+                    <p>
+                        We couldn't make your lift exactly but you can make
+                        <strong>{{ fail_lift_mass }} kg</strong>
+                        from
+                        <strong>{{ num_of_plates }} plates</strong>
+                        each side plus the bar weight of
+                        <strong>{{ bar_weight }} kg</strong>.
+                    </p>
+                    <p>
+                        This is
+                        <strong>{{ fail_lift_mass_difference }} kg</strong>
+                        under your target of
+                        <strong>{{ total_lift_mass }} kg .</strong>
+                    </p>
+                    <h3 class="subtitle is-4 is-size-5-mobile">Each side</h3>
+                    <ul>
+                        {% for key, value in plates_data.items %}
+                            <li>{{ value }} x {{ key }} kg</li>
+                        {% endfor %}
+                    </ul>
+                    <p>
+                        Bar: {{ bar_weight }} kg</p>
+                </div>
+            {% endif %}
+        </div>
     </div>
     <script>
         StrengthLevel.addPlateCalculator({
             "liftMass": "",
             "liftMassUnitSymbol": "lb",
-            "unitDefinitions": [{"symbol": "kg", "conversionToBaseUnit": 1, "step": 0.1, "remainderSymbol": null, "remainderMultiple": null, "remainderStep": null}, {"symbol": "lb", "conversionToBaseUnit": 0.45359237, "step": 0.1, "remainderSymbol": null, "remainderMultiple": null, "remainderStep": null}],
+            "unitDefinitions": [{"symbol": "kg", "conversionToBaseUnit": 1, "step": 0.1, "remainderSymbol": null, "remainderMultiple": null, "remainderStep": null}, {
+                "symbol": "lb",
+                "conversionToBaseUnit": 0.45359237,
+                "step": 0.1,
+                "remainderSymbol": null,
+                "remainderMultiple": null,
+                "remainderStep": null
+            }],
             "liftMassUnits": ["kg", "lb"],
             "plates": {"kg": [25, 20, 15, 10, 5, 2.5, 1.25], "lb": [100, 55, 45, 35, 25, 15, 10, 5, 2.5]},
             "plateQuantities": {"kg": [0, 10, 10, 10, 10, 10, 10], "lb": [0, 0, 10, 10, 10, 10, 10, 10, 10]},

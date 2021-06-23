@@ -125,6 +125,9 @@ def handle_index(request):
             gender=str(gender).upper())
         if not filtered_prefs:
             data['calculator_result_status'] = Status.FAIL
+            data['body_weight'] = body_weight
+            data['selected_exercise'] = exercise
+            data['lvl_txt'] = 'Unknown'
             return render(request=request, template_name='index/index.html', context=data)
 
         user_ids = filtered_prefs.values_list('user', flat=True)
@@ -136,6 +139,9 @@ def handle_index(request):
         )
         if len(filtered_lifts) < LIMIT_OF_ACCEPTABLE_DATA_AMOUNT:
             data['calculator_result_status'] = Status.FAIL
+            data['body_weight'] = body_weight
+            data['selected_exercise'] = exercise
+            data['lvl_txt'] = 'Unknown'
             return render(request=request, template_name='index/index.html', context=data)
 
         sorted_1rms_for_given_bw = list(filtered_lifts.order_by('one_rep_max').values_list('one_rep_max', flat=True))

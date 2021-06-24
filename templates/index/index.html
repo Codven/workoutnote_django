@@ -385,11 +385,13 @@
                     <div>
                         <h2 class="title is-3 is-size-4-mobile">
                             Your Workoutnote for
-                            {{ selected_exercise }} is {{ lvl_txt }}</h2>
+                            {{ selected_exercise }} is Unknown</h2>
                         <div class="content">
                             <p>
                                 <strong>:(</strong><br>
-                                Sorry, there is no enough data in our database for people weighing
+                                Sorry, there is no enough data regarding
+                                <strong>{{ selected_exercise }}</strong>
+                                in our database for people weighing
                                 <strong>{{ body_weight }} kg</strong>
                             </p>
                         </div>

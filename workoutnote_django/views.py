@@ -127,7 +127,6 @@ def handle_index(request):
             data['calculator_result_status'] = Status.FAIL
             data['body_weight'] = body_weight
             data['selected_exercise'] = exercise
-            data['lvl_txt'] = 'Unknown'
             return render(request=request, template_name='index/index.html', context=data)
 
         user_ids = filtered_prefs.values_list('user', flat=True)
@@ -141,7 +140,6 @@ def handle_index(request):
             data['calculator_result_status'] = Status.FAIL
             data['body_weight'] = body_weight
             data['selected_exercise'] = exercise
-            data['lvl_txt'] = 'Unknown'
             return render(request=request, template_name='index/index.html', context=data)
 
         sorted_1rms_for_given_bw = list(filtered_lifts.order_by('one_rep_max').values_list('one_rep_max', flat=True))
@@ -319,19 +317,6 @@ def handle_powerlifting_calculator(request):
         gender = request.POST['gender']
         body_weight = round(float(request.POST['bodymass']))
         input_method = request.POST['method']
-        # TODO: check following data filtering
-        filtered_prefs = models.Preferences.objects.filter(gender=str(gender).upper())
-        if not filtered_prefs:
-            data['calculator_result_status'] = Status.FAIL
-            return render(request=request, template_name='index/powerlifting calculator.html', context=data)
-
-        user_ids = filtered_prefs.values_list('user', flat=True)
-        filtered_lifts = models.Lift.objects.filter(body_weight=body_weight, user_id__in=user_ids)
-        if not len(filtered_lifts) < LIMIT_OF_ACCEPTABLE_DATA_AMOUNT:
-            data['calculator_result_status'] = Status.FAIL
-            return render(request=request, template_name='index/powerlifting calculator.html', context=data)
-
-        sorted_1rms_for_given_bw = list(filtered_lifts.order_by('one_rep_max').values_list('one_rep_max', flat=True))
         if input_method == 'total':
             total_lift_mass = float(request.POST['totalliftmass'])
         else:
@@ -348,10 +333,33 @@ def handle_powerlifting_calculator(request):
                 int(request.POST['deadliftrepetitions'])
             )
             total_lift_mass = bench_1rm + squat_1rm + deadlift_1rm
+        wilks_score = Tools.calculate_wilks_score(str(gender).upper(), body_weight, total_lift_mass)
+
+        filtered_prefs = models.Preferences.objects.filter(gender=str(gender).upper())
+        if not filtered_prefs:
+            data['calculator_result_status'] = Status.FAIL
+            data['body_weight'] = body_weight
+            data['wilks_score'] = wilks_score
+            return render(request=request, template_name='index/powerlifting calculator.html', context=data)
+
+        user_ids = filtered_prefs.values_list('user', flat=True)
+        filtered_lifts = models.Lift.objects.filter(
+            body_weight=body_weight,
+            user_id__in=user_ids,
+            exercise__in=Tools.POWERLIFTING_EXERCISE_NAMES
+        )
+        if len(filtered_lifts) < LIMIT_OF_ACCEPTABLE_DATA_AMOUNT:
+            data['calculator_result_status'] = Status.FAIL
+            data['body_weight'] = body_weight
+            data['wilks_score'] = wilks_score
+            return render(request=request, template_name='index/powerlifting calculator.html', context=data)
+
+        sorted_1rms_for_given_bw = list(filtered_lifts.order_by('one_rep_max').values_list('one_rep_max', flat=True))
 
         lvl_in_percentage = Tools.get_level_in_percentage(sorted_1rms_for_given_bw, total_lift_mass)
         lvl_boundaries = Tools.get_level_boundaries_for_bodyweight(sorted_1rms_for_given_bw)
         lvl_in_text = Tools.get_string_level(lvl_boundaries, total_lift_mass)
+
 
         # Construct the resulting data
         data['lvl_txt'] = lvl_in_text
@@ -360,7 +368,7 @@ def handle_powerlifting_calculator(request):
         data['body_weight'] = body_weight
         data['gender'] = gender
         data['total_lift_mass'] = total_lift_mass
-        data['wilks_score'] = Tools.calculate_wilks_score(total_lift_mass)
+        data['wilks_score'] = wilks_score
         data['lvl_boundaries'] = lvl_boundaries
         data['calculator_result_status'] = Status.OK
 
@@ -375,13 +383,12 @@ def handle_wilks_calculator(request):
         'body_weight': None,
         'total_lift_mass': None,
         'wilks_score_boundaries': None,
-        'status': Status.OK
+        'calculator_result_status': None
     }
     if request.method == 'POST':
         gender = request.POST['gender']
-        body_weight = round(float(request.POST['bodymass']))
+        body_weight = float(request.POST['bodymass'])
         input_method = request.POST['method']
-        # TODO: get filtered lifts here if needed for calculation
         if input_method == 'total':
             total_lift_mass = float(request.POST['totalliftmass'])
         else:
@@ -399,15 +406,14 @@ def handle_wilks_calculator(request):
             )
             total_lift_mass = bench_1rm + squat_1rm + deadlift_1rm
 
-        wilks_score = Tools.calculate_wilks_score(total_lift_mass)
-        wilks_score_boundaries = Tools.get_wilks_score_boundaries()
+        wilks_score = Tools.calculate_wilks_score(str(gender).upper(), body_weight, total_lift_mass)
 
         # Construct the resulting data
         data['wilks_score'] = wilks_score
         data['body_weight'] = body_weight
         data['gender'] = gender
         data['total_lift_mass'] = total_lift_mass
-        data['wilks_score_boundaries'] = wilks_score_boundaries
+        data['calculator_result_status'] = Status.OK
 
     return render(request=request, template_name='index/wilks calculator.html', context=data)
 

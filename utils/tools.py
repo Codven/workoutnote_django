@@ -1,5 +1,7 @@
 from typing import Tuple
 from datetime import date, timedelta
+from workoutnote_django.models import Preferences
+from math import pow
 
 
 class Tools:
@@ -13,6 +15,7 @@ class Tools:
         '70-79': (70, 79),
         '80-89': (80, 89)
     }
+    POWERLIFTING_EXERCISE_NAMES = ['Bench Press', 'Deadlift', 'Squat']
 
     @staticmethod
     def calculate_one_rep_max(lift_mass: float, repetitions: int) -> float:
@@ -53,14 +56,27 @@ class Tools:
         return level
 
     @staticmethod
-    def calculate_wilks_score(total_lift_mass: float):
-        # TODO: make a calculation formula
-        pass
+    def calculate_wilks_score(gender: str, body_weight: float, lift_mass: float) -> float:
+        '''
+        Wilks score formula:
+        Wilks coefficient = W * 500 / (a + bx +cx² +dx³ +ex⁴ +fx⁵)
+        W - the maximum weight lifted
+        x - body weight
+        letters denote coefficients from coeff  array
+        '''
+        coeff = []
+        if gender == Preferences.Gender.MALE:
+            coeff = [-216.0475144, 16.2606339, -0.002388645, -0.00113732, 7.01863E-06, -1.291E-08]
+        elif gender == Preferences.Gender.FEMALE:
+            coeff = [594.31747775582, -27.23842536447, 0.82112226871, -0.00930733913, 4.731582E-05, -9.054E-08]
 
-    @staticmethod
-    def get_wilks_score_boundaries():
-        # TODO: make a logic for finding boundaries
-        pass
+        denominator = 0
+        for i in range(0, 6):
+            denominator += coeff[i] * pow(body_weight, i)
+
+        result = lift_mass * 500 / denominator
+
+        return round(result, 2)
 
     @staticmethod
     def calculate_body_weight_ratio(lift_mass: float, body_weight: float):

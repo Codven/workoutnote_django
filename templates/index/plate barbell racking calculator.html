@@ -1,5 +1,30 @@
 {% extends 'index/base.html' %}
 {% block content %}
+    <script>
+        let totalLiftInput, barWeightInput;
+        document.addEventListener('DOMContentLoaded', () => {
+            totalLiftInput = document.getElementById('totalLiftInput');
+            barWeightInput = document.getElementById('barWeightInput');
+
+            totalLiftInput.addEventListener('change', (event) => {
+                if (totalLiftInput.value === '')
+                    totalLiftInput.value = barWeightInput.value;
+                else if (parseFloat(totalLiftInput.value) < parseFloat(barWeightInput.value)) {
+                    alert('Total lift mass must be greater than bar weight mass')
+                    totalLiftInput.value = barWeightInput.value;
+                }
+            });
+
+            barWeightInput.addEventListener('change', (event) => {
+                if (barWeightInput.value === '')
+                    barWeightInput.value = totalLiftInput.value;
+                else if (parseFloat(totalLiftInput.value) < parseFloat(barWeightInput.value)) {
+                    alert('Bar weight mass should be smaller than total lift mass')
+                    barWeightInput.value = totalLiftInput.value;
+                }
+            });
+        });
+    </script>
     <div id="plateContainer">
         <div class="section-box"><h1 class="title is-2 is-size-3-mobile is-spaced">Plate Barbell Racking Calculator</h1>
             <h2 class="subtitle is-3 is-size-4-mobile">
@@ -11,26 +36,26 @@
             <form action="{% url 'plate barbell racking calculator' %}" method="post">
                 {% csrf_token %}
                 <div class="field is-horizontal">
-                    <div class="field-label is-normal"><label for="liftmass" class="label">
+                    <div class="field-label is-normal"><label for="totalLiftInput" class="label">
                         Total Lift
                     </label></div>
                     <div class="field-body">
                         <div class="field has-addons">
                             <div class="control is-expanded">
-                                <input type="number" id="liftmass" name="liftmass" min="1" max="4000" required="required" step="0.1" class="input" value="{{ total_lift }} ">
+                                <input type="number" id="totalLiftInput" name="liftmass" min="1" max="4000" required="required" step="0.1" class="input" value="{{ total_lift_mass }}">
                             </div>
                             <div class="control"><span class="button is-static">kg</span></div>
                         </div>
                     </div>
                 </div>
                 <div class="field is-horizontal">
-                    <div class="field-label is-normal"><label for="barliftmass" class="label">
+                    <div class="field-label is-normal"><label for="barWeightInput" class="label">
                         Bar Weight
                     </label></div>
                     <div class="field-body">
                         <div class="field has-addons">
                             <div class="control is-expanded">
-                                <input type="number" id="barliftmass" name="barliftmass" min="1" max="4000" required="required" step="0.1" class="input" value="{{ bar_weight }}">
+                                <input type="number" id="barWeightInput" name="barliftmass" min="1" max="4000" required="required" step="0.1" class="input" value="{{ bar_weight }}">
                             </div>
                             <div class="control"><span class="button is-static">kg</span></div>
                         </div>
@@ -178,22 +203,4 @@
             {% endif %}
         </div>
     </div>
-    <script>
-        StrengthLevel.addPlateCalculator({
-            "liftMass": "",
-            "liftMassUnitSymbol": "lb",
-            "unitDefinitions": [{"symbol": "kg", "conversionToBaseUnit": 1, "step": 0.1, "remainderSymbol": null, "remainderMultiple": null, "remainderStep": null}, {
-                "symbol": "lb",
-                "conversionToBaseUnit": 0.45359237,
-                "step": 0.1,
-                "remainderSymbol": null,
-                "remainderMultiple": null,
-                "remainderStep": null
-            }],
-            "liftMassUnits": ["kg", "lb"],
-            "plates": {"kg": [25, 20, 15, 10, 5, 2.5, 1.25], "lb": [100, 55, 45, 35, 25, 15, 10, 5, 2.5]},
-            "plateQuantities": {"kg": [0, 10, 10, 10, 10, 10, 10], "lb": [0, 0, 10, 10, 10, 10, 10, 10, 10]},
-            "barMass": 45
-        });
-    </script>
 {% endblock %}

@@ -228,7 +228,7 @@ def handle_one_rep_max_calculator(request):
 @require_http_methods(['GET', 'POST'])
 def handle_plate_barbell_racking_calculator(request):
     data = {
-        'total_lift_mass': 0,
+        'total_lift_mass': 20,
         'fail_lift_mass': None,
         'fail_lift_mass_difference': None,
         'bar_weight': 20,
@@ -359,7 +359,6 @@ def handle_powerlifting_calculator(request):
         lvl_in_percentage = Tools.get_level_in_percentage(sorted_1rms_for_given_bw, total_lift_mass)
         lvl_boundaries = Tools.get_level_boundaries_for_bodyweight(sorted_1rms_for_given_bw)
         lvl_in_text = Tools.get_string_level(lvl_boundaries, total_lift_mass)
-
 
         # Construct the resulting data
         data['lvl_txt'] = lvl_in_text

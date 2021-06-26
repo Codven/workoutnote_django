@@ -52,6 +52,9 @@ class Preferences(models.Model):
     def unit_of_measure_str(self):
         return self.unit_of_measure.__str__()
 
+    def date_of_birth_str(self):
+        return self.date_of_birth.strftime('%d%m%Y')
+
     def get_age(self):
         from datetime import date
         today = date.today()

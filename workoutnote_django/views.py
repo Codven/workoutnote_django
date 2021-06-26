@@ -462,8 +462,8 @@ def handle_settings(request):
         if 'gender' in request.POST and request.POST['gender'] in models.Preferences.Gender.ALL:
             preferences.gender = request.POST['gender']
         if 'birthday' in request.POST and re.match(r'^\d{8}$', request.POST['birthday']):
-            month = int(request.POST['birthday'][:2])
-            day = int(request.POST['birthday'][2:4])
+            day = int(request.POST['birthday'][:2])
+            month = int(request.POST['birthday'][2:4])
             year = int(request.POST['birthday'][4:])
             if 1930 < year < datetime.now().year and 0 < month < 13 and 0 < day < 32:
                 preferences.date_of_birth = datetime.now().replace(year=year, month=month, day=day, hour=0, minute=0, second=0, microsecond=0)

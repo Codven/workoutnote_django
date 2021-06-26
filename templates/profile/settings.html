@@ -54,7 +54,7 @@
                             <div class="field">
                                 <div class="control">
                                     <div>
-                                        <div class="control is-expanded"><input id="birthday" name="birthday" type="number" placeholder="MMDDYYYY" required class="input" maxlength="8" value="{% if preferences.date_of_birth is not None %}{{ preferences.date_of_birth_str }}{% endif %}"></div>
+                                        <div class="control is-expanded"><input id="birthday" name="birthday" type="number" placeholder="DDMMYYYY" required class="input" maxlength="8" value="{% if preferences.date_of_birth is not None %}{{ preferences.date_of_birth_str }}{% endif %}"></div>
                                     </div>
                                 </div>
                                 <p class="help">
@@ -73,7 +73,8 @@
                                     <div class="select"><select id="heightunit" name="heightunit">
                                         <option>Centimeters (cm)</option>
                                     </select></div>
-                                </div></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="field is-horizontal">

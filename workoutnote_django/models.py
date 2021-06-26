@@ -85,3 +85,17 @@ class Lift(models.Model):
 
     def __str__(self):
         return self.exercise.name
+
+
+class BodyWeight(models.Model):
+    BODY_FAT_TYPE_CHOICES = (
+        ('not_specified', 'Not Specified'),
+        ('body_weight_scales', 'Body Fat Scales'),
+        ('skin_calipers', 'Skin Calipers'),
+        ('underwater_weighing', 'Underwater Weighing'),
+        ('dexa_scan', 'DEXA Scan'),
+    )
+    body_weight = models.FloatField()
+    body_fat_type = models.CharField(max_length=20, choices=BODY_FAT_TYPE_CHOICES)
+    body_fat_value = models.FloatField(default=None, null=True)
+    date = models.DateField(auto_now_add=True)

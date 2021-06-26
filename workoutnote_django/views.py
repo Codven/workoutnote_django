@@ -1,17 +1,17 @@
 import random
+import re
+from datetime import datetime
 
-from django.views.decorators.http import require_http_methods
+from django.conf import settings
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
-from django.template.loader import render_to_string
-from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
-from workoutnote_django import models
+from django.shortcuts import render, redirect
+from django.views.decorators.http import require_http_methods
+
 from utils.tools import Tools, Levels
-from django.conf import settings
-from datetime import datetime
-import re
+from workoutnote_django import models
 
 LIMIT_OF_ACCEPTABLE_DATA_AMOUNT = 10
 

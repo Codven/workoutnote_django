@@ -47,7 +47,7 @@
             <div class="navbar-item has-dropdown is-hoverable">
                 <a class="navbar-link">
                     <img width="20" height="20" style="margin-right: 10px" src="{% static 'user-white.svg' %}"/>
-                    <span>kobiljon</span>
+                    <span>{{ request.user.username }}</span>
                 </a>
                 <div class="navbar-dropdown is-right">
                     <a href="{% url 'profile main' %}" class="navbar-item">

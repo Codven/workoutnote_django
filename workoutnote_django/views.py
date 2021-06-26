@@ -1,12 +1,10 @@
-import math
-
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from workoutnote_django import models
-from utils.tools import Tools
+from utils.tools import Tools, Levels
 from datetime import datetime
 import re
 
@@ -471,8 +469,45 @@ def handle_settings(request):
     )
 
 
-def handle_analyse_lift(request):
-    return render(request=request, template_name='profile/analyse lift.html')
+def handle_analyse_lift(request, lift_id):
+    lift = models.Lift.objects.filter(pk=lift_id).first()
+    data = {
+        'lift_mass': lift.lift_mass,
+        'repetitions': lift.repetitions,
+        'one_rep_max': lift.one_rep_max,
+        'body_weight': lift.body_weight,
+        'user_age': lift.user.preferences.get_age(),
+        'rounded_body_weight': lift.body_weight,
+        'body_weight_ratio': round(lift.lift_mass / lift.body_weight, 2),
+        'step1_result': None,
+        'step3_result': None,
+        'step4_result': None,
+        'step4_lvl_standard_limit': None,
+    }
+    # TODO: temporarily put MALE instead of real known gender
+    filtered_prefs = models.Preferences.objects.filter(gender=str('MALE').upper())
+    user_ids = filtered_prefs.values_list('user', flat=True)
+    # region filter data for the 1st Step
+    filtered_lifts = models.Lift.objects.filter(
+        exercise__name=lift.exercise.name,
+        user_id__in=user_ids
+    )
+    if len(filtered_lifts) > LIMIT_OF_ACCEPTABLE_DATA_AMOUNT:
+        sorted_1rms_for_given_bw = list(filtered_lifts.order_by('one_rep_max').values_list('one_rep_max', flat=True))
+        data['step1_result'] = Tools.get_level_in_percentage(sorted_1rms_for_given_bw, lift.one_rep_max)
+    # endregion
+
+    # filter data for 3rd and 4th Steps
+    filtered_lifts = filtered_lifts.filter(body_weight=round(lift.body_weight))
+    if len(filtered_lifts) > LIMIT_OF_ACCEPTABLE_DATA_AMOUNT:
+        sorted_1rms_for_given_bw = list(filtered_lifts.order_by('one_rep_max').values_list('one_rep_max', flat=True))
+        data['step3_result'] = Tools.get_level_in_percentage(sorted_1rms_for_given_bw, lift.one_rep_max)
+        lvl_boundaries = Tools.get_level_boundaries_for_bodyweight(sorted_1rms_for_given_bw)
+        lvl_txt = Tools.get_string_level(lvl_boundaries, lift.one_rep_max)
+        data['step4_result'] = lvl_txt
+        data['lvl_standard_limit'] = int(Levels.LIMITS[lvl_txt])
+    # endregion
+    return render(request=request, template_name='profile/analyse lift.html', context=data)
 
 
 def handle_bodyweight(request):
@@ -520,7 +555,7 @@ def handle_add_lift(request):
             models.Lift.objects.create(
                 user=request.user,
                 exercise=exercise,
-                body_weight=70,
+                body_weight=70,  # TODO: change this to real body weight
                 lift_mass=lift_mass,
                 repetitions=repetitions,
                 one_rep_max=Tools.calculate_one_rep_max(lift_mass, repetitions)

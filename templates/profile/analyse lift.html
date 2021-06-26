@@ -48,19 +48,19 @@
                             <div class="level-item has-text-centered">
                                 <div>
                                     <div class="heading">Weight</div>
-                                    <div class="title">50 kg</div>
+                                    <div class="title">{{ lift_mass }} kg</div>
                                 </div>
                             </div>
                             <div class="level-item has-text-centered">
                                 <div>
                                     <div class="heading">Reps</div>
-                                    <div class="title">10</div>
+                                    <div class="title">{{ repetitions }}</div>
                                 </div>
                             </div>
                             <div class="level-item has-text-centered">
                                 <div>
                                     <div class="heading">Estimated 1RM</div>
-                                    <div class="title">66.7 kg</div>
+                                    <div class="title">{{ one_rep_max }} kg</div>
                                 </div>
                             </div>
                         </nav>
@@ -68,13 +68,13 @@
                             <div class="level-item has-text-centered">
                                 <div>
                                     <div class="heading">Bodyweight</div>
-                                    <div class="title">67 kg</div>
+                                    <div class="title">{{ body_weight }} kg</div>
                                 </div>
                             </div>
                             <div class="level-item has-text-centered">
                                 <div>
                                     <div class="heading">Bodyweight Ratio</div>
-                                    <div class="title">0.75 x</div>
+                                    <div class="title">{{ body_weight_ratio }} x</div>
                                 </div>
                             </div>
                         </nav>
@@ -85,8 +85,8 @@
                     <div class="column is-half"><h2 class="title is-3 is-size-4-mobile">How did we calculate this?</h2>
                         <div class="content"><h3 class="subtitle is-4 is-size-5-mobile">Step 1 - Compare to all male lifters</h3>
                             <p>
-                                We estimated that your <strong>one-rep max is 66.7 kg</strong>
-                                as you lifted 50 kg for 10 repetitions.
+                                We estimated that your <strong>one-rep max is {{ one_rep_max }} kg</strong>
+                                as you lifted {{ lift_mass }} kg for {{ repetitions }} repetitions.
                             </p>
                             <p>
                                 We then compared you to other
@@ -94,30 +94,50 @@
                                 lifters who tested with Workoutnote.
                             </p>
                             <p class="has-text-weight-bold">
-                                Result: stronger than 18%
-                                <span class="stars"><span class="star__full">★</span><span class="star__half">★</span><span class="star__empty">★★★</span></span></p>
+                                Result:
+                                {% if step1_result %}
+                                    stronger than {{ step1_result }}%
+                                    <span class="stars"><span class="star__full">★</span><span class="star__half">★</span><span class="star__empty">★★★</span></span></p>
+                                {% else %}
+                                    Not enough data for bodyweight of {{ body_weight }} kg
+                                {% endif %}
                             <h3 class="subtitle is-4 is-size-5-mobile">Step 2 - Adjust for age</h3>
                             <p>
-                                At age 25 you are at a prime age for lifting and therefore
+                                At age {{ user_age }} you are at a prime age for lifting and therefore
                                 <strong>did not get an age bonus</strong>.
                             </p>
                             <h3 class="subtitle is-4 is-size-5-mobile">Step 3 - Adjust for bodyweight</h3>
                             <p>
                                 We then compared you to other lifters at your
-                                <strong>bodyweight of 67 kg</strong>
+                                <strong>bodyweight of {{ rounded_body_weight }} kg</strong>
                                 to find your relative strength.
                             </p>
                             <p class="has-text-weight-bold">
-                                Result: stronger than 31%
-                                <span class="stars"><span class="star__full">★★</span><!----><span class="star__empty">★★★</span></span></p>
-                            <h3 class="subtitle is-4 is-size-5-mobile">Step 4 - Find Workoutnote boundary</h3>
-                            <p>
-                                Your Workoutnote is <strong>Novice</strong>.
-                            </p>
-                            <p>
-                                Novice lifters are stronger than at least
-                                20% of lifters.
-                            </p></div>
+                                Result:
+                                {% if step3_result %}
+                                    stronger than {{ step3_result }}%
+                                    <span class="stars"><span class="star__full">★★</span><!----><span class="star__empty">★★★</span></span></p>
+                                {% else %}
+                                    Not enough data for bodyweight of {{ body_weight }} kg
+                                {% endif %}
+                            <h3 class="subtitle is-4 is-size-5-mobile">Step 4 - Find Strength Level boundary</h3>
+
+                            {% if step4_result %}
+                                <p>
+                                    Your Strength Level is <strong>{{ step4_result }}</strong>.
+                                </p>
+                                <p>
+                                    {{ step4_result }} lifters are stronger than at least
+                                    {{ step4_lvl_standard_limit }}% of lifters.
+                                </p>
+                            {% else %}
+                                <p>
+                                    Sorry, there is no enough data regarding
+                                    in our database for people weighing
+                                    <strong>{{ rounded_body_weight }} kg</strong>
+                                </p>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>

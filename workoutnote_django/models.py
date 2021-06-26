@@ -35,7 +35,7 @@ class Preferences(models.Model):
             (STONE, 'st'),
         )
 
-    user = models.OneToOneField(to=django_User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(to=django_User, on_delete=models.CASCADE, primary_key=True, related_name='preferences')
     name = models.CharField(max_length=128, default=None, null=True)
     gender = models.CharField(max_length=16, default=Gender.MALE)
     date_of_birth = models.DateTimeField(default=None, null=True)
@@ -51,6 +51,11 @@ class Preferences(models.Model):
 
     def unit_of_measure_str(self):
         return self.unit_of_measure.__str__()
+
+    def get_age(self):
+        from datetime import date
+        today = date.today()
+        return today.year - self.date_of_birth.year - ((today.month, today.day) < (self.date_of_birth.month, self.date_of_birth.day))
 
 
 class Exercise(models.Model):

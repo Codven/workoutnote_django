@@ -4,6 +4,22 @@ from workoutnote_django.models import Preferences
 from math import pow
 
 
+class Levels:
+    BEGINNER = 'Beginner'
+    NOVICE = 'Novice'
+    INTERMEDIATE = 'Intermediate'
+    ADVANCED = 'Advanced'
+    ELITE = 'Elite'
+
+    LIMITS = {
+        BEGINNER: 0.05,
+        NOVICE: 0.2,
+        INTERMEDIATE: 0.5,
+        ADVANCED: 0.8,
+        ELITE: 0.95
+    }
+
+
 class Tools:
     AGE_RANGES = {
         '14-17': (14, 17),
@@ -33,26 +49,26 @@ class Tools:
     @staticmethod
     def get_level_boundaries_for_bodyweight(sorted_lifts_for_body_weight: list) -> dict:
         return {
-            'beginner': sorted_lifts_for_body_weight[int(0.05 * len(sorted_lifts_for_body_weight))],
-            'novice': sorted_lifts_for_body_weight[int(0.2 * len(sorted_lifts_for_body_weight))],
-            'intermediate': sorted_lifts_for_body_weight[int(0.5 * len(sorted_lifts_for_body_weight))],
-            'advanced': sorted_lifts_for_body_weight[int(0.8 * len(sorted_lifts_for_body_weight))],
-            'elite': sorted_lifts_for_body_weight[int(0.95 * len(sorted_lifts_for_body_weight))]
+            Levels.BEGINNER: sorted_lifts_for_body_weight[int(Levels.LIMITS[Levels.BEGINNER] * len(sorted_lifts_for_body_weight))],
+            Levels.NOVICE: sorted_lifts_for_body_weight[int(Levels.LIMITS[Levels.NOVICE] * len(sorted_lifts_for_body_weight))],
+            Levels.INTERMEDIATE: sorted_lifts_for_body_weight[int(Levels.LIMITS[Levels.INTERMEDIATE] * len(sorted_lifts_for_body_weight))],
+            Levels.ADVANCED: sorted_lifts_for_body_weight[int(Levels.LIMITS[Levels.ADVANCED] * len(sorted_lifts_for_body_weight))],
+            Levels.ELITE: sorted_lifts_for_body_weight[int(Levels.LIMITS[Levels.ELITE] * len(sorted_lifts_for_body_weight))]
         }
 
     @staticmethod
     def get_string_level(boundaries: dict, total_lift_mass: float) -> str:
-        level = 'Beginner'  # let the default be a Beginner level
-        if total_lift_mass > boundaries['beginner']:
-            level = 'Beginner'
-        if total_lift_mass > boundaries['beginner']:
-            level = 'Novice'
-        if total_lift_mass > boundaries['novice']:
-            level = 'Novice'
-        if total_lift_mass > boundaries['intermediate']:
-            level = 'Intermediate'
-        if total_lift_mass > boundaries['advanced']:
-            level = 'Advanced'
+        level = Levels.BEGINNER  # let the default be a Beginner level
+        if total_lift_mass > boundaries[Levels.BEGINNER]:
+            level = Levels.BEGINNER
+        if total_lift_mass > boundaries[Levels.NOVICE]:
+            level = Levels.NOVICE
+        if total_lift_mass > boundaries[Levels.INTERMEDIATE]:
+            level = Levels.INTERMEDIATE
+        if total_lift_mass > boundaries[Levels.ADVANCED]:
+            level = Levels.ADVANCED
+        if total_lift_mass > boundaries[Levels.ELITE]:
+            level = Levels.ELITE
         return level
 
     @staticmethod

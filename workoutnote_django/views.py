@@ -1,10 +1,15 @@
+import random
+
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
+from django.template.loader import render_to_string
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
+from django.core.mail import EmailMessage
 from workoutnote_django import models
 from utils.tools import Tools, Levels
+from django.conf import settings
 from datetime import datetime
 import re
 
@@ -57,18 +62,39 @@ def handle_register(request):
         password = request.POST['password']
         if User.objects.filter(username=email).exists() or len(password) < 4:
             return redirect(to='register')
-        else:
-            User.objects.create_user(username=email, password=password).save()
-            user = authenticate(request, username=email, password=password)
-            if user:
-                models.Preferences.objects.create(user=user)
-                login(request=request, user=user)
-                if 'next' in request.POST and len(request.POST['next']) > 0:
-                    return redirect(to=request.POST['next'])
+        elif 'verification_code' in request.POST and models.EmailConfirmationCodes.objects.filter(email=email).exists():
+            expected_code = models.EmailConfirmationCodes.objects.get(email=email).verification_code
+            provided_code = request.POST['verification_code']
+            if provided_code == expected_code:
+                models.EmailConfirmationCodes.objects.filter(email=email).delete()
+                User.objects.create_user(username=email, password=password).save()
+                user = authenticate(request, username=email, password=password)
+                if user:
+                    models.Preferences.objects.create(user=user)
+                    login(request=request, user=user)
+                    if 'next' in request.POST and len(request.POST['next']) > 0:
+                        return redirect(to=request.POST['next'])
+                    else:
+                        return redirect(to='profile main')
                 else:
-                    return redirect(to='profile main')
+                    return redirect(to='register')  # whatever the reason could be
             else:
-                return redirect(to='register')  # whatever the reason could be
+                return redirect(to='register')
+        elif not models.EmailConfirmationCodes.objects.filter(email=email).exists():
+            verification_code = ''.join([str(random.randint(0, 9)) for _ in range(6)])
+            email_message = EmailMessage(
+                'Workoutnote.com email verification',
+                f'Email verification code is : {verification_code}',
+                settings.EMAIL_HOST_USER,
+                [email],
+            )
+            email_message.fail_silently = False
+            email_message.send()
+            models.EmailConfirmationCodes.objects.create(email=email, verification_code=verification_code)
+            return render(request=request, template_name='index/email confirmation.html', context={
+                'email': email,
+                'password': password
+            })
     else:
         return redirect(to='index')
 
@@ -169,11 +195,9 @@ def handle_calculators(request):
 
 
 def handle_strength_standards(request):
-    return render(
-        request=request,
-        template_name='index/strength standards.html',
-        context={'exercises': models.Exercise.objects.all()}
-    )
+    return render(request=request, template_name='index/strength standards.html', context={
+        'exercises': models.Exercise.objects.all()
+    })
 
 
 def handle_training_log_tutorial(request):
@@ -421,11 +445,9 @@ def handle_powerlifting_standards(request):
 
 @login_required
 def handle_profile_main(request):
-    return render(
-        request=request,
-        template_name='profile/main.html',
-        context={'preferences': models.Preferences.objects.get(user=request.user)}
-    )
+    return render(request=request, template_name='profile/main.html', context={
+        'preferences': models.Preferences.objects.get(user=request.user)
+    })
 
 
 @login_required
@@ -457,16 +479,12 @@ def handle_settings(request):
                 request.user.save()
         preferences.save()
 
-    return render(
-        request=request,
-        template_name='profile/settings.html',
-        context={
-            'preferences': preferences,
-            'gender': models.Preferences.Gender,
-            'sharing': models.Preferences.ProfileSharing,
-            'unit': models.Preferences.MeasurementUnit,
-        }
-    )
+    return render(request=request, template_name='profile/settings.html', context={
+        'preferences': preferences,
+        'gender': models.Preferences.Gender,
+        'sharing': models.Preferences.ProfileSharing,
+        'unit': models.Preferences.MeasurementUnit,
+    })
 
 
 def handle_analyse_lift(request, lift_id):
@@ -517,26 +535,18 @@ def handle_find_lifters(request):
 @login_required
 @require_http_methods(['GET'])
 def handle_workouts(request):
-    return render(
-        request=request,
-        template_name='profile/workouts.html',
-        context={
-            'lifts': models.Lift.objects.filter(user=request.user)
-        }
-    )
+    return render(request=request, template_name='profile/workouts.html', context={
+        'lifts': models.Lift.objects.filter(user=request.user)
+    })
 
 
 @login_required
 @require_http_methods(['GET'])
 def handle_lifts(request):
-    return render(
-        request=request,
-        template_name='profile/lifts.html',
-        context={
-            'exercises': models.Exercise.objects.all(),
-            'lifts': models.Lift.objects.filter(user=request.user)
-        }
-    )
+    return render(request=request, template_name='profile/lifts.html', context={
+        'exercises': models.Exercise.objects.all(),
+        'lifts': models.Lift.objects.filter(user=request.user)
+    })
 
 
 @login_required

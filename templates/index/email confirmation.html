@@ -40,47 +40,22 @@
         </a>
     </div>
 </nav>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-
-        // Get all "navbar-burger" elements
-        const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-
-        // Check if there are any navbar burgers
-        if ($navbarBurgers.length > 0) {
-
-            // Add a click event on each of them
-            $navbarBurgers.forEach(el => {
-                el.addEventListener('click', () => {
-
-                    // Get the target from the "data-target" attribute
-                    const target = el.dataset.target;
-                    const $target = document.getElementById(target);
-
-                    // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-                    el.classList.toggle('is-active');
-                    $target.classList.toggle('is-active');
-
-                });
-            });
-        }
-
-    });
-</script>
 <section class="section">
-    <form action="{% url 'email confirmation' %}" method="post" class="container">
+    <form action="{% url 'register' %}" method="post" class="container">
         {% csrf_token %}
+        <input type="text" name="email" value="{{ email }}" hidden>
+        <input type="text" name="password" value="{{ password }}" hidden>
         <div class="card is-centered" style="max-width: 40rem; margin: 0 auto;">
             <header class="card-header">
                 <p class="card-header-title">
                     <span class="icon mr-1"><i class="slicon slicon-fa-envelope"></i></span>
-                    <span>Enter Confirmation Code</span>
+                    <span>Enter Verification Code</span>
                 </p>
             </header>
             <div class="card-content">
                 <div class="content">
                     <p>
-                        Enter the confirmation code we sent to deltoidsoft@gmail.com.
+                        Enter the verification code we sent to {{ email }}
                     </p>
                 </div>
                 <div class="field">
@@ -88,10 +63,7 @@
                     <div class="control">
                         <div class="field is-grouped">
                             <div class="control is-expanded">
-                                <input type="text" name="code" class="input" placeholder="e.g. 424983">
-                            </div>
-                            <div class="control">
-                                <button type="submit" class="button" name="action" value="resend">Resend</button>
+                                <input type="text" name="verification_code" class="input" placeholder="e.g. 424983" required>
                             </div>
                         </div>
                     </div>
@@ -100,7 +72,7 @@
             <footer class="card-footer">
                 <div class="card-footer-item">
                     <div class="buttons" style="justify-content: space-between; flex: 1;">
-                        <input type="submit" name="action" value="Next" class="button is-primary" id="nextButton">
+                        <input type="submit" class="button is-primary" id="nextButton">
                         <a href="{% url 'logout' %}" class="button">Cancel</a>
                     </div>
                 </div>

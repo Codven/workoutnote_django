@@ -58,6 +58,11 @@ class Preferences(models.Model):
         return today.year - self.date_of_birth.year - ((today.month, today.day) < (self.date_of_birth.month, self.date_of_birth.day))
 
 
+class EmailConfirmationCodes(models.Model):
+    email = models.CharField(max_length=128, primary_key=True)
+    verification_code = models.CharField(max_length=16)
+
+
 class Exercise(models.Model):
     name = models.CharField(max_length=64, primary_key=True)
     icon = models.CharField(max_length=128)

@@ -1,33 +1,5 @@
 {% extends 'index/base.html' %}
 {% block content %}
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
-    <!-- TODO: Add SDKs for Firebase products that you want to use
-         https://firebase.google.com/docs/web/setup#available-libraries -->
-    <script>
-        // Your web app's Firebase configuration
-        var firebaseConfig = {
-            apiKey: "AIzaSyAxVISqf3UK-spyDwGXVqSlMIIWJEKmMWs",
-            authDomain: "deltoidapis.firebaseapp.com",
-            projectId: "deltoidapis",
-            storageBucket: "deltoidapis.appspot.com",
-            messagingSenderId: "677829581625",
-            appId: "1:677829581625:web:ecf78f2647a4ce963fe6e8"
-        };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-
-        document.addEventListener('DOMContentLoaded', () => {
-            firebase.auth().onAuthStateChanged(function (user) {
-                if (user) {
-
-                }
-            });
-
-
-        });
-    </script>
-
     <div class="section-box">
         <h1 class="title is-2 is-size-3-mobile">Register</h1>
         <div class="columns">
@@ -39,21 +11,12 @@
                     </p>
                 </div>
 
-                <script>
-                    function onRegisterFormSubmit(token) {
-                        document.getElementById("registerForm").submit();
-                    }
-                </script>
                 <form id="registerForm" action="{% url 'register' %}" style="margin-top: 0;" method="post">
                     {% csrf_token %}
                     <div class="field">
                         <label for="register_email" class="label">Email</label>
                         <div class="control has-icons-left">
-                            <input name="email" id="register_email" type="email" placeholder="Email"
-                                   class="input"
-                                   value=""
-                                   required autofocus>
-                            <span class="icon is-small is-left">
+                            <input name="email" id="register_email" type="email" placeholder="Email" class="input" <span class="icon is-small is-left">
                                 <i class="slicon slicon-fa-envelope"></i>
                                 </span>
                         </div>
@@ -64,8 +27,7 @@
                     <div class="field">
                         <label for="register_password" class="label">Password</label>
                         <div class="control has-icons-left">
-                            <input name="password" id="register_password" type="password" placeholder="Password"
-                                   class="input" required>
+                            <input name="password" id="register_password" type="password" placeholder="Password" class="input" required>
                             <span class="icon is-small is-left"><i class="slicon slicon-fa-lock"></i></span>
                         </div>
                     </div>

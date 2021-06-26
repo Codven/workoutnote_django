@@ -1,8 +1,6 @@
 @font-face {
-    font-family: "strengthlevelfont";
-    src: url("strengthlevelfont.eot?fabf82305d499377a01e24d7bb5fb30d?#iefix") format("embedded-opentype"),
-    url("strengthlevelfont.woff2?fabf82305d499377a01e24d7bb5fb30d") format("woff2"),
-    url("strengthlevelfont.woff?fabf82305d499377a01e24d7bb5fb30d") format("woff");
+    font-family: "workoutnote";
+url("workoutnote.woff2?fabf82305d499377a01e24d7bb5fb30d") format("woff2"),
 }
 
 .slicon {
@@ -10,7 +8,7 @@
 }
 
 .slicon:before {
-    font-family: strengthlevelfont !important;
+    font-family: workoutnote !important;
     font-style: normal;
     font-weight: normal !important;
     vertical-align: top;
@@ -2230,120 +2228,120 @@ a.box:active {
     color: #947d00
 }
 
-.button.is-strengthlevel {
+.button.is-workoutnote {
     background-color: #004977;
     border-color: transparent;
     color: #fff
 }
 
-.button.is-strengthlevel:hover, .button.is-strengthlevel.is-hovered {
+.button.is-workoutnote:hover, .button.is-workoutnote.is-hovered {
     background-color: #00416a;
     border-color: transparent;
     color: #fff
 }
 
-.button.is-strengthlevel:focus, .button.is-strengthlevel.is-focused {
+.button.is-workoutnote:focus, .button.is-workoutnote.is-focused {
     border-color: transparent;
     color: #fff
 }
 
-.button.is-strengthlevel:focus:not(:active), .button.is-strengthlevel.is-focused:not(:active) {
+.button.is-workoutnote:focus:not(:active), .button.is-workoutnote.is-focused:not(:active) {
     box-shadow: 0 0 0 0.125em rgba(0, 73, 119, 0.25)
 }
 
-.button.is-strengthlevel:active, .button.is-strengthlevel.is-active {
+.button.is-workoutnote:active, .button.is-workoutnote.is-active {
     background-color: #00395e;
     border-color: transparent;
     color: #fff
 }
 
-.button.is-strengthlevel[disabled], fieldset[disabled] .button.is-strengthlevel {
+.button.is-workoutnote[disabled], fieldset[disabled] .button.is-workoutnote {
     background-color: #004977;
     border-color: transparent;
     box-shadow: none
 }
 
-.button.is-strengthlevel.is-inverted {
+.button.is-workoutnote.is-inverted {
     background-color: #fff;
     color: #004977
 }
 
-.button.is-strengthlevel.is-inverted:hover, .button.is-strengthlevel.is-inverted.is-hovered {
+.button.is-workoutnote.is-inverted:hover, .button.is-workoutnote.is-inverted.is-hovered {
     background-color: #f2f2f2
 }
 
-.button.is-strengthlevel.is-inverted[disabled], fieldset[disabled] .button.is-strengthlevel.is-inverted {
+.button.is-workoutnote.is-inverted[disabled], fieldset[disabled] .button.is-workoutnote.is-inverted {
     background-color: #fff;
     border-color: transparent;
     box-shadow: none;
     color: #004977
 }
 
-.button.is-strengthlevel.is-loading::after {
+.button.is-workoutnote.is-loading::after {
     border-color: transparent transparent #fff #fff !important
 }
 
-.button.is-strengthlevel.is-outlined {
+.button.is-workoutnote.is-outlined {
     background-color: transparent;
     border-color: #004977;
     color: #004977
 }
 
-.button.is-strengthlevel.is-outlined:hover, .button.is-strengthlevel.is-outlined.is-hovered, .button.is-strengthlevel.is-outlined:focus, .button.is-strengthlevel.is-outlined.is-focused {
+.button.is-workoutnote.is-outlined:hover, .button.is-workoutnote.is-outlined.is-hovered, .button.is-workoutnote.is-outlined:focus, .button.is-workoutnote.is-outlined.is-focused {
     background-color: #004977;
     border-color: #004977;
     color: #fff
 }
 
-.button.is-strengthlevel.is-outlined.is-loading::after {
+.button.is-workoutnote.is-outlined.is-loading::after {
     border-color: transparent transparent #004977 #004977 !important
 }
 
-.button.is-strengthlevel.is-outlined.is-loading:hover::after, .button.is-strengthlevel.is-outlined.is-loading.is-hovered::after, .button.is-strengthlevel.is-outlined.is-loading:focus::after, .button.is-strengthlevel.is-outlined.is-loading.is-focused::after {
+.button.is-workoutnote.is-outlined.is-loading:hover::after, .button.is-workoutnote.is-outlined.is-loading.is-hovered::after, .button.is-workoutnote.is-outlined.is-loading:focus::after, .button.is-workoutnote.is-outlined.is-loading.is-focused::after {
     border-color: transparent transparent #fff #fff !important
 }
 
-.button.is-strengthlevel.is-outlined[disabled], fieldset[disabled] .button.is-strengthlevel.is-outlined {
+.button.is-workoutnote.is-outlined[disabled], fieldset[disabled] .button.is-workoutnote.is-outlined {
     background-color: transparent;
     border-color: #004977;
     box-shadow: none;
     color: #004977
 }
 
-.button.is-strengthlevel.is-inverted.is-outlined {
+.button.is-workoutnote.is-inverted.is-outlined {
     background-color: transparent;
     border-color: #fff;
     color: #fff
 }
 
-.button.is-strengthlevel.is-inverted.is-outlined:hover, .button.is-strengthlevel.is-inverted.is-outlined.is-hovered, .button.is-strengthlevel.is-inverted.is-outlined:focus, .button.is-strengthlevel.is-inverted.is-outlined.is-focused {
+.button.is-workoutnote.is-inverted.is-outlined:hover, .button.is-workoutnote.is-inverted.is-outlined.is-hovered, .button.is-workoutnote.is-inverted.is-outlined:focus, .button.is-workoutnote.is-inverted.is-outlined.is-focused {
     background-color: #fff;
     color: #004977
 }
 
-.button.is-strengthlevel.is-inverted.is-outlined.is-loading:hover::after, .button.is-strengthlevel.is-inverted.is-outlined.is-loading.is-hovered::after, .button.is-strengthlevel.is-inverted.is-outlined.is-loading:focus::after, .button.is-strengthlevel.is-inverted.is-outlined.is-loading.is-focused::after {
+.button.is-workoutnote.is-inverted.is-outlined.is-loading:hover::after, .button.is-workoutnote.is-inverted.is-outlined.is-loading.is-hovered::after, .button.is-workoutnote.is-inverted.is-outlined.is-loading:focus::after, .button.is-workoutnote.is-inverted.is-outlined.is-loading.is-focused::after {
     border-color: transparent transparent #004977 #004977 !important
 }
 
-.button.is-strengthlevel.is-inverted.is-outlined[disabled], fieldset[disabled] .button.is-strengthlevel.is-inverted.is-outlined {
+.button.is-workoutnote.is-inverted.is-outlined[disabled], fieldset[disabled] .button.is-workoutnote.is-inverted.is-outlined {
     background-color: transparent;
     border-color: #fff;
     box-shadow: none;
     color: #fff
 }
 
-.button.is-strengthlevel.is-light {
+.button.is-workoutnote.is-light {
     background-color: #ebf7ff;
     color: #0aa0ff
 }
 
-.button.is-strengthlevel.is-light:hover, .button.is-strengthlevel.is-light.is-hovered {
+.button.is-workoutnote.is-light:hover, .button.is-workoutnote.is-light.is-hovered {
     background-color: #def2ff;
     border-color: transparent;
     color: #0aa0ff
 }
 
-.button.is-strengthlevel.is-light:active, .button.is-strengthlevel.is-light.is-active {
+.button.is-workoutnote.is-light:active, .button.is-workoutnote.is-light.is-active {
     background-color: #d1edff;
     border-color: transparent;
     color: #0aa0ff
@@ -3032,12 +3030,12 @@ div.icon-text {
     color: #947d00
 }
 
-.notification.is-strengthlevel {
+.notification.is-workoutnote {
     background-color: #004977;
     color: #fff
 }
 
-.notification.is-strengthlevel.is-light {
+.notification.is-workoutnote.is-light {
     background-color: #ebf7ff;
     color: #0aa0ff
 }
@@ -3126,7 +3124,7 @@ div.icon-text {
     color: rgba(0, 0, 0, 0.7)
 }
 
-.table td.is-strengthlevel, .table th.is-strengthlevel {
+.table td.is-workoutnote, .table th.is-workoutnote {
     background-color: #004977;
     border-color: #004977;
     color: #fff
@@ -3424,12 +3422,12 @@ div.icon-text {
     color: #947d00
 }
 
-.tag:not(body).is-strengthlevel {
+.tag:not(body).is-workoutnote {
     background-color: #004977;
     color: #fff
 }
 
-.tag:not(body).is-strengthlevel.is-light {
+.tag:not(body).is-workoutnote.is-light {
     background-color: #ebf7ff;
     color: #0aa0ff
 }
@@ -3813,11 +3811,11 @@ a.tag:hover {
     box-shadow: 0 0 0 0.125em rgba(255, 215, 0, 0.25)
 }
 
-.is-strengthlevel.input, .is-strengthlevel.textarea {
+.is-workoutnote.input, .is-workoutnote.textarea {
     border-color: #004977
 }
 
-.is-strengthlevel.input:focus, .is-strengthlevel.textarea:focus, .is-strengthlevel.is-focused.input, .is-strengthlevel.is-focused.textarea, .is-strengthlevel.input:active, .is-strengthlevel.textarea:active, .is-strengthlevel.is-active.input, .is-strengthlevel.is-active.textarea {
+.is-workoutnote.input:focus, .is-workoutnote.textarea:focus, .is-workoutnote.is-focused.input, .is-workoutnote.is-focused.textarea, .is-workoutnote.input:active, .is-workoutnote.textarea:active, .is-workoutnote.is-active.input, .is-workoutnote.is-active.textarea {
     box-shadow: 0 0 0 0.125em rgba(0, 73, 119, 0.25)
 }
 
@@ -4150,19 +4148,19 @@ a.tag:hover {
     box-shadow: 0 0 0 0.125em rgba(255, 215, 0, 0.25)
 }
 
-.select.is-strengthlevel:not(:hover)::after {
+.select.is-workoutnote:not(:hover)::after {
     border-color: #004977
 }
 
-.select.is-strengthlevel select {
+.select.is-workoutnote select {
     border-color: #004977
 }
 
-.select.is-strengthlevel select:hover, .select.is-strengthlevel select.is-hovered {
+.select.is-workoutnote select:hover, .select.is-workoutnote select.is-hovered {
     border-color: #00395e
 }
 
-.select.is-strengthlevel select:focus, .select.is-strengthlevel select.is-focused, .select.is-strengthlevel select:active, .select.is-strengthlevel select.is-active {
+.select.is-workoutnote select:focus, .select.is-workoutnote select.is-focused, .select.is-workoutnote select:active, .select.is-workoutnote select.is-active {
     box-shadow: 0 0 0 0.125em rgba(0, 73, 119, 0.25)
 }
 
@@ -4506,25 +4504,25 @@ a.tag:hover {
     color: rgba(0, 0, 0, 0.7)
 }
 
-.file.is-strengthlevel .file-cta {
+.file.is-workoutnote .file-cta {
     background-color: #004977;
     border-color: transparent;
     color: #fff
 }
 
-.file.is-strengthlevel:hover .file-cta, .file.is-strengthlevel.is-hovered .file-cta {
+.file.is-workoutnote:hover .file-cta, .file.is-workoutnote.is-hovered .file-cta {
     background-color: #00416a;
     border-color: transparent;
     color: #fff
 }
 
-.file.is-strengthlevel:focus .file-cta, .file.is-strengthlevel.is-focused .file-cta {
+.file.is-workoutnote:focus .file-cta, .file.is-workoutnote.is-focused .file-cta {
     border-color: transparent;
     box-shadow: 0 0 0.5em rgba(0, 73, 119, 0.25);
     color: #fff
 }
 
-.file.is-strengthlevel:active .file-cta, .file.is-strengthlevel.is-active .file-cta {
+.file.is-workoutnote:active .file-cta, .file.is-workoutnote.is-active .file-cta {
     background-color: #00395e;
     border-color: transparent;
     color: #fff
@@ -4791,7 +4789,7 @@ a.tag:hover {
     color: gold
 }
 
-.help.is-strengthlevel {
+.help.is-workoutnote {
     color: #004977
 }
 
@@ -6043,48 +6041,48 @@ a.dropdown-item.is-active, button.dropdown-item.is-active {
     }
 }
 
-.navbar.is-strengthlevel {
+.navbar.is-workoutnote {
     background-color: #004977;
     color: #fff
 }
 
-.navbar.is-strengthlevel .navbar-brand > .navbar-item, .navbar.is-strengthlevel .navbar-brand .navbar-link {
+.navbar.is-workoutnote .navbar-brand > .navbar-item, .navbar.is-workoutnote .navbar-brand .navbar-link {
     color: #fff
 }
 
-.navbar.is-strengthlevel .navbar-brand > a.navbar-item:focus, .navbar.is-strengthlevel .navbar-brand > a.navbar-item:hover, .navbar.is-strengthlevel .navbar-brand > a.navbar-item.is-active, .navbar.is-strengthlevel .navbar-brand .navbar-link:focus, .navbar.is-strengthlevel .navbar-brand .navbar-link:hover, .navbar.is-strengthlevel .navbar-brand .navbar-link.is-active {
+.navbar.is-workoutnote .navbar-brand > a.navbar-item:focus, .navbar.is-workoutnote .navbar-brand > a.navbar-item:hover, .navbar.is-workoutnote .navbar-brand > a.navbar-item.is-active, .navbar.is-workoutnote .navbar-brand .navbar-link:focus, .navbar.is-workoutnote .navbar-brand .navbar-link:hover, .navbar.is-workoutnote .navbar-brand .navbar-link.is-active {
     background-color: #00395e;
     color: #fff
 }
 
-.navbar.is-strengthlevel .navbar-brand .navbar-link::after {
+.navbar.is-workoutnote .navbar-brand .navbar-link::after {
     border-color: #fff
 }
 
-.navbar.is-strengthlevel .navbar-burger {
+.navbar.is-workoutnote .navbar-burger {
     color: #fff
 }
 
 @media screen and (min-width: 1024px) {
-    .navbar.is-strengthlevel .navbar-start > .navbar-item, .navbar.is-strengthlevel .navbar-start .navbar-link, .navbar.is-strengthlevel .navbar-end > .navbar-item, .navbar.is-strengthlevel .navbar-end .navbar-link {
+    .navbar.is-workoutnote .navbar-start > .navbar-item, .navbar.is-workoutnote .navbar-start .navbar-link, .navbar.is-workoutnote .navbar-end > .navbar-item, .navbar.is-workoutnote .navbar-end .navbar-link {
         color: #fff
     }
 
-    .navbar.is-strengthlevel .navbar-start > a.navbar-item:focus, .navbar.is-strengthlevel .navbar-start > a.navbar-item:hover, .navbar.is-strengthlevel .navbar-start > a.navbar-item.is-active, .navbar.is-strengthlevel .navbar-start .navbar-link:focus, .navbar.is-strengthlevel .navbar-start .navbar-link:hover, .navbar.is-strengthlevel .navbar-start .navbar-link.is-active, .navbar.is-strengthlevel .navbar-end > a.navbar-item:focus, .navbar.is-strengthlevel .navbar-end > a.navbar-item:hover, .navbar.is-strengthlevel .navbar-end > a.navbar-item.is-active, .navbar.is-strengthlevel .navbar-end .navbar-link:focus, .navbar.is-strengthlevel .navbar-end .navbar-link:hover, .navbar.is-strengthlevel .navbar-end .navbar-link.is-active {
+    .navbar.is-workoutnote .navbar-start > a.navbar-item:focus, .navbar.is-workoutnote .navbar-start > a.navbar-item:hover, .navbar.is-workoutnote .navbar-start > a.navbar-item.is-active, .navbar.is-workoutnote .navbar-start .navbar-link:focus, .navbar.is-workoutnote .navbar-start .navbar-link:hover, .navbar.is-workoutnote .navbar-start .navbar-link.is-active, .navbar.is-workoutnote .navbar-end > a.navbar-item:focus, .navbar.is-workoutnote .navbar-end > a.navbar-item:hover, .navbar.is-workoutnote .navbar-end > a.navbar-item.is-active, .navbar.is-workoutnote .navbar-end .navbar-link:focus, .navbar.is-workoutnote .navbar-end .navbar-link:hover, .navbar.is-workoutnote .navbar-end .navbar-link.is-active {
         background-color: #00395e;
         color: #fff
     }
 
-    .navbar.is-strengthlevel .navbar-start .navbar-link::after, .navbar.is-strengthlevel .navbar-end .navbar-link::after {
+    .navbar.is-workoutnote .navbar-start .navbar-link::after, .navbar.is-workoutnote .navbar-end .navbar-link::after {
         border-color: #fff
     }
 
-    .navbar.is-strengthlevel .navbar-item.has-dropdown:focus .navbar-link, .navbar.is-strengthlevel .navbar-item.has-dropdown:hover .navbar-link, .navbar.is-strengthlevel .navbar-item.has-dropdown.is-active .navbar-link {
+    .navbar.is-workoutnote .navbar-item.has-dropdown:focus .navbar-link, .navbar.is-workoutnote .navbar-item.has-dropdown:hover .navbar-link, .navbar.is-workoutnote .navbar-item.has-dropdown.is-active .navbar-link {
         background-color: #00395e;
         color: #fff
     }
 
-    .navbar.is-strengthlevel .navbar-dropdown a.navbar-item.is-active {
+    .navbar.is-workoutnote .navbar-dropdown a.navbar-item.is-active {
         background-color: #004977;
         color: #fff
     }
@@ -9289,39 +9287,39 @@ a.has-text-gold-dark:hover, a.has-text-gold-dark:focus {
     background-color: #947d00 !important
 }
 
-.has-text-strengthlevel {
+.has-text-workoutnote {
     color: #004977 !important
 }
 
-a.has-text-strengthlevel:hover, a.has-text-strengthlevel:focus {
+a.has-text-workoutnote:hover, a.has-text-workoutnote:focus {
     color: #002a44 !important
 }
 
-.has-background-strengthlevel {
+.has-background-workoutnote {
     background-color: #004977 !important
 }
 
-.has-text-strengthlevel-light {
+.has-text-workoutnote-light {
     color: #ebf7ff !important
 }
 
-a.has-text-strengthlevel-light:hover, a.has-text-strengthlevel-light:focus {
+a.has-text-workoutnote-light:hover, a.has-text-workoutnote-light:focus {
     color: #b8e3ff !important
 }
 
-.has-background-strengthlevel-light {
+.has-background-workoutnote-light {
     background-color: #ebf7ff !important
 }
 
-.has-text-strengthlevel-dark {
+.has-text-workoutnote-dark {
     color: #0aa0ff !important
 }
 
-a.has-text-strengthlevel-dark:hover, a.has-text-strengthlevel-dark:focus {
+a.has-text-workoutnote-dark:hover, a.has-text-workoutnote-dark:focus {
     color: #3db4ff !important
 }
 
-.has-background-strengthlevel-dark {
+.has-background-workoutnote-dark {
     background-color: #0aa0ff !important
 }
 
@@ -11880,75 +11878,75 @@ a.has-text-strengthlevel-dark:hover, a.has-text-strengthlevel-dark:focus {
     }
 }
 
-.hero.is-strengthlevel {
+.hero.is-workoutnote {
     background-color: #004977;
     color: #fff
 }
 
-.hero.is-strengthlevel a:not(.button):not(.dropdown-item):not(.tag):not(.pagination-link.is-current), .hero.is-strengthlevel strong {
+.hero.is-workoutnote a:not(.button):not(.dropdown-item):not(.tag):not(.pagination-link.is-current), .hero.is-workoutnote strong {
     color: inherit
 }
 
-.hero.is-strengthlevel .title {
+.hero.is-workoutnote .title {
     color: #fff
 }
 
-.hero.is-strengthlevel .subtitle {
+.hero.is-workoutnote .subtitle {
     color: rgba(255, 255, 255, 0.9)
 }
 
-.hero.is-strengthlevel .subtitle a:not(.button), .hero.is-strengthlevel .subtitle strong {
+.hero.is-workoutnote .subtitle a:not(.button), .hero.is-workoutnote .subtitle strong {
     color: #fff
 }
 
 @media screen and (max-width: 1023px) {
-    .hero.is-strengthlevel .navbar-menu {
+    .hero.is-workoutnote .navbar-menu {
         background-color: #004977
     }
 }
 
-.hero.is-strengthlevel .navbar-item, .hero.is-strengthlevel .navbar-link {
+.hero.is-workoutnote .navbar-item, .hero.is-workoutnote .navbar-link {
     color: rgba(255, 255, 255, 0.7)
 }
 
-.hero.is-strengthlevel a.navbar-item:hover, .hero.is-strengthlevel a.navbar-item.is-active, .hero.is-strengthlevel .navbar-link:hover, .hero.is-strengthlevel .navbar-link.is-active {
+.hero.is-workoutnote a.navbar-item:hover, .hero.is-workoutnote a.navbar-item.is-active, .hero.is-workoutnote .navbar-link:hover, .hero.is-workoutnote .navbar-link.is-active {
     background-color: #00395e;
     color: #fff
 }
 
-.hero.is-strengthlevel .tabs a {
+.hero.is-workoutnote .tabs a {
     color: #fff;
     opacity: 0.9
 }
 
-.hero.is-strengthlevel .tabs a:hover {
+.hero.is-workoutnote .tabs a:hover {
     opacity: 1
 }
 
-.hero.is-strengthlevel .tabs li.is-active a {
+.hero.is-workoutnote .tabs li.is-active a {
     opacity: 1
 }
 
-.hero.is-strengthlevel .tabs.is-boxed a, .hero.is-strengthlevel .tabs.is-toggle a {
+.hero.is-workoutnote .tabs.is-boxed a, .hero.is-workoutnote .tabs.is-toggle a {
     color: #fff
 }
 
-.hero.is-strengthlevel .tabs.is-boxed a:hover, .hero.is-strengthlevel .tabs.is-toggle a:hover {
+.hero.is-workoutnote .tabs.is-boxed a:hover, .hero.is-workoutnote .tabs.is-toggle a:hover {
     background-color: rgba(10, 10, 10, 0.1)
 }
 
-.hero.is-strengthlevel .tabs.is-boxed li.is-active a, .hero.is-strengthlevel .tabs.is-boxed li.is-active a:hover, .hero.is-strengthlevel .tabs.is-toggle li.is-active a, .hero.is-strengthlevel .tabs.is-toggle li.is-active a:hover {
+.hero.is-workoutnote .tabs.is-boxed li.is-active a, .hero.is-workoutnote .tabs.is-boxed li.is-active a:hover, .hero.is-workoutnote .tabs.is-toggle li.is-active a, .hero.is-workoutnote .tabs.is-toggle li.is-active a:hover {
     background-color: #fff;
     border-color: #fff;
     color: #004977
 }
 
-.hero.is-strengthlevel.is-bold {
+.hero.is-workoutnote.is-bold {
     background-image: linear-gradient(141deg, #003544 0%, #004977 71%, #004191 100%)
 }
 
 @media screen and (max-width: 768px) {
-    .hero.is-strengthlevel.is-bold .navbar-menu {
+    .hero.is-workoutnote.is-bold .navbar-menu {
         background-image: linear-gradient(141deg, #003544 0%, #004977 71%, #004191 100%)
     }
 }
@@ -12638,6 +12636,3 @@ abbr[title] {
         padding: 0
     }
 }
-
-
-/*# sourceMappingURL=webapp.strengthlevel.66e6ff5a636c939b1c6c.css.map*/

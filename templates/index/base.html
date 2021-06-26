@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- saved from url=(0026)https://strengthlevel.com/ -->
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -9,17 +8,12 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'index.css' %}">
     <link href="{% url 'index' %}" rel="canonical">
-    <link rel="shortcut icon" href="https://strengthlevel.com/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
     <meta property="og:title" content="Workoutnote - Weightlifting Calculator (Bench/Squat/Deadlift)">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="https://strengthlevel.com/images/sharelift.jpg">
     <meta property="og:description" content="Calculate male/female ability in exercises like bench press, squat and deadlift. Compare your max lifts against other lifters at your bodyweight. Compete with friends.">
     <meta property="fb:admins" content="651600295">
     <meta property="fb:app_id" content="731465336900630">
-    <link rel="apple-touch-icon" sizes="57x57" href="https://strengthlevel.com/images/touch-icon-iphone-114.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="https://strengthlevel.com/images/touch-icon-iphone-114.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="https://strengthlevel.com/images/touch-icon-ipad-144.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="https://strengthlevel.com/images/touch-icon-ipad-144.png">
     <script>
         window.dataLayer = window.dataLayer || [];
 
@@ -5465,15 +5459,6 @@
         {% endblock %}
         <div class="footer content">
             <p>
-                Post your feedback and suggestions on our Facebook page:
-            </p>
-            <p>
-                <a href="https://www.facebook.com/strengthlevel" class="button is-facebook">
-                    <img width="20" height="20" style="margin-right: 20px" src="{% static 'facebook.svg' %}"/>
-                    <span>Find us on Facebook</span>
-                </a>
-            </p>
-            <p>
                 <a href="{% url 'about' %}">About</a>
                 -
                 <a href="{% url 'faq' %}">FAQ</a>
@@ -5530,9 +5515,8 @@
 </div>
 <div class="at-share-dock-outer at4-hide addthis-smartlayers at4-visually-hidden addthis-smartlayers-mobile" aria-labelledby="at-share-dock-label" role="region">
     <div id="at-share-dock-label" class="at4-hide">AddThis Sharing</div>
-    <div id="at-share-dock" class="at-share-dock atss atss-bottom at-shfs-large addthis-animated slideInUp at4-show at4-hide"><a href="https://strengthlevel.com/training-log#" class="at4-count" style="width: 16.6667%;"><span class="at4-counter"></span><span class="at4-share-label">SHARES</span></a><a role="button" tabindex="100" title="Facebook" class="at-share-btn at-svc-facebook"
-                                                                                                                                                                                                                                                                                                              style="width: 16.6667%;"><span class="at-icon-wrapper"
-                                                                                                                                                                                                                                                                                                                                             style="background-color: rgb(59, 89, 152);"><svg
+    <div id="at-share-dock" class="at-share-dock atss atss-bottom at-shfs-large addthis-animated slideInUp at4-show at4-hide"><a href="{% url 'profile main' %}" class="at4-count" style="width: 16.6667%;"><span class="at4-counter"></span><span class="at4-share-label">SHARES</span></a><a role="button" tabindex="100" title="Facebook" class="at-share-btn at-svc-facebook"
+                                                                                                                                                                                                                                                                                               style="width: 16.6667%;"><span class="at-icon-wrapper" style="background-color: rgb(59, 89, 152);"><svg
             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" version="1.1" role="img" aria-labelledby="at-svg-facebook-6" title="Facebook" alt="Facebook" style="fill: rgb(255, 255, 255); width: 32px; height: 32px;" class="at-icon at-icon-facebook"><title id="at-svg-facebook-6">Facebook</title><g><path
             d="M22 5.16c-.406-.054-1.806-.16-3.43-.16-3.4 0-5.733 1.825-5.733 5.17v2.882H9v3.913h3.837V27h4.604V16.965h3.823l.587-3.913h-4.41v-2.5c0-1.123.347-1.903 2.198-1.903H22V5.16z" fill-rule="evenodd"></path></g></svg></span></a><a role="button" tabindex="100" title="Twitter" class="at-share-btn at-svc-twitter" style="width: 16.6667%;"><span class="at-icon-wrapper"
                                                                                                                                                                                                                                                                                                                                                               style="background-color: rgb(29, 161, 242);"><svg

@@ -6,19 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% load static %}
     <link rel="stylesheet" href="{% static 'profile.css' %}">
-    <link rel="shortcut icon" href="https://strengthlevel.com/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
     <meta property="fb:admins" content="651600295">
     <meta property="fb:app_id" content="731465336900630">
-    <link rel="apple-touch-icon" sizes="57x57" href="https://strengthlevel.com/images/touch-icon-iphone-114.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="https://strengthlevel.com/images/touch-icon-iphone-114.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="https://strengthlevel.com/images/touch-icon-ipad-144.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="https://strengthlevel.com/images/touch-icon-ipad-144.png">
     <script>
         window.apiUrl = "\/api\/";
     </script>
 </head>
 <body data-new-gr-c-s-check-loaded="14.1015.0" data-gr-ext-installed="">
-<nav role="navigation" aria-label="main navigation" class="navbar is-fixed-top is-strengthlevel">
+<nav role="navigation" aria-label="main navigation" class="navbar is-fixed-top is-workoutnote">
     {% load static %}
     <div class="navbar-brand">
         <a href="{% url 'profile main' %}" aria-current="page" class="navbar-item">
@@ -81,20 +77,5 @@
 </nav>
 {% block content %}
 {% endblock %}
-<footer class="footer">
-    <div class="content has-text-centered">
-        <p>
-            Post your feedback and suggestions on our Facebook page:
-        </p>
-        <p>
-            <a href="https://www.facebook.com/strengthlevel" class="button is-facebook">
-        <span class="icon">
-            <img width="20" height="20" style="margin-right: 20px; margin-left: 20px;" src="{% static 'facebook.svg' %}"/>
-        </span>
-                <span>Find us on Facebook</span>
-            </a>
-        </p>
-    </div>
-</footer>
 </body>
 </html>

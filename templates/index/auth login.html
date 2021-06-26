@@ -8,7 +8,7 @@
                 <div class="content">
                     <p>
                         Need an account?
-                        <a href="https://strengthlevel.com/register">Register</a>
+                        <a href="{% url 'register' %}">Register</a>
                     </p>
                 </div>
 
@@ -39,25 +39,7 @@
                             <button type="submit" class="button is-primary is-medium">Log In</button>
                         </div>
                     </div>
-
-                    <p>
-                        <a href="https://strengthlevel.com/forgot-password">
-                            Forgot your password?
-                        </a>
-                    </p>
                 </form>
-
-                <div class="content mt-4">
-                    <p><strong>Or</strong></p>
-                    <p>
-                        <a href="https://www.facebook.com/v2.10/dialog/oauth?client_id=731465336900630&amp;state=5b353421e25edef8cbd12938215bfd50&amp;response_type=code&amp;sdk=php-sdk-5.7.0&amp;redirect_uri=https%3A%2F%2Fstrengthlevel.com%2Ffacebook-login&amp;scope=email%2Cuser_friends%2Cuser_gender" class="button is-facebook">
-            <span class="icon">
-                <i class="slicon slicon-fa-facebook-square"></i>
-            </span>
-                            <span>Continue with Facebook</span>
-                        </a>
-                    </p>
-                </div>
             </div>
 
             <div class="column">

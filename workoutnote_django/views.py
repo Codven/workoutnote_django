@@ -472,11 +472,7 @@ def handle_settings(request):
 def handle_analyse_lift(request, lift_id):
     lift = models.Lift.objects.filter(pk=lift_id).first()
     data = {
-        'lift_mass': lift.lift_mass,
-        'repetitions': lift.repetitions,
-        'one_rep_max': lift.one_rep_max,
-        'body_weight': lift.body_weight,
-        'user_age': lift.user.preferences.get_age(),
+        'lift': lift,
         'rounded_body_weight': lift.body_weight,
         'body_weight_ratio': round(lift.lift_mass / lift.body_weight, 2),
         'step1_result': None,

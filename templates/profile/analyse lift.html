@@ -31,8 +31,9 @@
         <section class="hero is-primary is-translucent">
             <div class="hero-body">
                 <div class="container"><h1 class="title is-3 is-size-4-mobile"><span class="icon mr-1"><i aria-hidden="true" class="slicon slicon-fa-dumbbell"></i></span>
-                    <span>Bench Press Analysis</span></h1>
-                    <h2 class="subtitle is-4 is-size-5-mobile"><a><span class="icon"><i aria-hidden="true" class="slicon slicon-fa-calendar-day"></i></span> <span>15 June 2021</span></a></h2></div>
+                    <span>{{ lift.exercise.name }}</span></h1>
+                    <h2 class="subtitle is-4 is-size-5-mobile"><a><span class="icon"><i aria-hidden="true" class="slicon slicon-fa-calendar-day"></i></span>
+                        <span>{{ lift.created_at|date:"d M Y" }}</span></a></h2></div>
             </div>
         </section>
         <section class="section has-background-white">
@@ -48,19 +49,19 @@
                             <div class="level-item has-text-centered">
                                 <div>
                                     <div class="heading">Weight</div>
-                                    <div class="title">{{ lift_mass }} kg</div>
+                                    <div class="title">{{ lift.lift_mass }} kg</div>
                                 </div>
                             </div>
                             <div class="level-item has-text-centered">
                                 <div>
                                     <div class="heading">Reps</div>
-                                    <div class="title">{{ repetitions }}</div>
+                                    <div class="title">{{ lift.repetitions }}</div>
                                 </div>
                             </div>
                             <div class="level-item has-text-centered">
                                 <div>
                                     <div class="heading">Estimated 1RM</div>
-                                    <div class="title">{{ one_rep_max }} kg</div>
+                                    <div class="title">{{ lift.one_rep_max }} kg</div>
                                 </div>
                             </div>
                         </nav>
@@ -68,7 +69,7 @@
                             <div class="level-item has-text-centered">
                                 <div>
                                     <div class="heading">Bodyweight</div>
-                                    <div class="title">{{ body_weight }} kg</div>
+                                    <div class="title">{{ lift.body_weight }} kg</div>
                                 </div>
                             </div>
                             <div class="level-item has-text-centered">
@@ -85,8 +86,8 @@
                     <div class="column is-half"><h2 class="title is-3 is-size-4-mobile">How did we calculate this?</h2>
                         <div class="content"><h3 class="subtitle is-4 is-size-5-mobile">Step 1 - Compare to all male lifters</h3>
                             <p>
-                                We estimated that your <strong>one-rep max is {{ one_rep_max }} kg</strong>
-                                as you lifted {{ lift_mass }} kg for {{ repetitions }} repetitions.
+                                We estimated that your <strong>one-rep max is {{ lift.one_rep_max }} kg</strong>
+                                as you lifted {{ lift.lift_mass }} kg for {{ lift.repetitions }} repetitions.
                             </p>
                             <p>
                                 We then compared you to other
@@ -99,11 +100,11 @@
                                     stronger than {{ step1_result }}%
                                     <span class="stars"><span class="star__full">★</span><span class="star__half">★</span><span class="star__empty">★★★</span></span></p>
                                 {% else %}
-                                    Not enough data for bodyweight of {{ body_weight }} kg
+                                    Not enough data for bodyweight of {{ lift.body_weight }} kg
                                 {% endif %}
                             <h3 class="subtitle is-4 is-size-5-mobile">Step 2 - Adjust for age</h3>
                             <p>
-                                At age {{ user_age }} you are at a prime age for lifting and therefore
+                                At age {{ lift.user.preferences.get_age }} you are at a prime age for lifting and therefore
                                 <strong>did not get an age bonus</strong>.
                             </p>
                             <h3 class="subtitle is-4 is-size-5-mobile">Step 3 - Adjust for bodyweight</h3>
@@ -118,7 +119,7 @@
                                     stronger than {{ step3_result }}%
                                     <span class="stars"><span class="star__full">★★</span><!----><span class="star__empty">★★★</span></span></p>
                                 {% else %}
-                                    Not enough data for bodyweight of {{ body_weight }} kg
+                                    Not enough data for bodyweight of {{ lift.body_weight }} kg
                                 {% endif %}
                             <h3 class="subtitle is-4 is-size-5-mobile">Step 4 - Find Strength Level boundary</h3>
 

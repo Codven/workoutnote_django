@@ -132,7 +132,7 @@ class Tools:
                 update_timestamps = False
             print(f'\rWorking on dummy data of {username}')
             # generate dummy lifts for the user
-            timestamp = (timezone.now() - timedelta(days=len(exercises))).replace(hour=0, minute=0, microsecond=0)
+            timestamp = (timezone.localtime(timezone.now()) - timedelta(days=len(exercises))).replace(hour=0, minute=0, microsecond=0)
             for exercise in exercises:
                 if update_timestamps:
                     lifts = Lift.objects.filter(user=user, exercise=exercise)
@@ -171,7 +171,7 @@ class Tools:
                 update_timestamps = False
             print(f'\rWorking on dummy data of {username}')
             # generate dummy lifts for the user
-            timestamp = (timezone.now() - timedelta(days=len(exercises))).replace(hour=0, minute=0, microsecond=0)
+            timestamp = (timezone.localtime(timezone.now()) - timedelta(days=len(exercises))).replace(hour=0, minute=0, microsecond=0)
             for exercise in exercises:
                 if update_timestamps:
                     lifts = Lift.objects.filter(user=user, exercise=exercise)

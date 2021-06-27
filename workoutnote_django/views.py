@@ -1,4 +1,4 @@
-from datetime import datetime
+from django.utils import timezone
 import random
 import re
 
@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.core.mail import EmailMessage
 from django.conf import settings
+from datetime import datetime
 
 from utils.tools import Tools, Levels
 from workoutnote_django import models
@@ -545,11 +546,14 @@ def handle_workouts(request):
     lifts = models.Lift.objects.filter(user=request.user)
     lifts_by_days = {}
     for lift in lifts:
-        day = Tools.date2str(lift.created_at, readable=True)
+        day = timezone.localtime(lift.created_at)
         if day in lifts_by_days:
             lifts_by_days[day] += [lift]
         else:
             lifts_by_days[day] = [lift]
+    days = list(lifts_by_days.keys())
+    days.sort(reverse=True)
+    lifts_by_days = [(Tools.date2str(day, readable=True), lifts_by_days[day]) for day in days]
     return render(request=request, template_name='profile/workouts.html', context={
         'lifts_by_days': lifts_by_days
     })

@@ -34,7 +34,7 @@
                 <div class="buttons mb-6"><a href="{% url 'lifts' %}" class="button is-primary is-large"><span class="icon"><img width="42" height="42" style="margin-left: 10px; margin-right: 10px;" src="{% static 'dumbbell-white.svg' %}"/></span>
                     <span>Add Workout</span></a></div>
                 <div class="block">
-                    {% for day, lifts in lifts_by_days.items %}
+                    {% for day, lifts in lifts_by_days %}
                         <div class="workout mb-6">
                             <div class="columns">
                                 <div class="column is-one-third"><h3 class="title is-4 is-size-5-mobile"><a href="/"><span class="icon"><i aria-hidden="true" class="slicon slicon-fa-calendar-day"></i></span> <span>{{ day }}</span></a></h3></div>

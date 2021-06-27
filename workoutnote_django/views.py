@@ -1,14 +1,14 @@
+from datetime import datetime
 import random
 import re
-from datetime import datetime
 
-from django.conf import settings
-from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.core.mail import EmailMessage
-from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.models import User as django_User
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.core.mail import EmailMessage
+from django.conf import settings
 
 from utils.tools import Tools, Levels
 from workoutnote_django import models
@@ -25,6 +25,13 @@ class Status:
 def handle_init_exercises(request):
     if request.user.is_superuser:
         models.Exercise.init_from_csv()
+    return redirect(to='index')
+
+
+@login_required
+def handle_generate_dummy_data(request):
+    if request.user.is_superuser:
+        Tools.generate_dummy_data()
     return redirect(to='index')
 
 
@@ -60,14 +67,14 @@ def handle_register(request):
     elif 'email' in request.POST and 'password' in request.POST:
         email = request.POST['email']
         password = request.POST['password']
-        if User.objects.filter(username=email).exists() or len(password) < 4:
+        if django_User.objects.filter(username=email).exists() or len(password) < 4:
             return redirect(to='register')
         elif 'verification_code' in request.POST and models.EmailConfirmationCodes.objects.filter(email=email).exists():
             expected_code = models.EmailConfirmationCodes.objects.get(email=email).verification_code
             provided_code = request.POST['verification_code']
             if provided_code == expected_code:
                 models.EmailConfirmationCodes.objects.filter(email=email).delete()
-                User.objects.create_user(username=email, password=password).save()
+                django_User.objects.create_user(username=email, password=password).save()
                 user = authenticate(request, username=email, password=password)
                 if user:
                     models.Preferences.objects.create(user=user)

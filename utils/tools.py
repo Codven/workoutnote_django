@@ -1,7 +1,12 @@
-from typing import Tuple
-from datetime import date, timedelta
 from workoutnote_django.models import Preferences
+from datetime import date, timedelta, datetime
+from typing import Tuple
 from math import pow
+import random
+import math
+
+from django.contrib.auth.models import User as django_User
+from workoutnote_django import models
 
 
 class Levels:
@@ -110,3 +115,60 @@ class Tools:
         start_date = (today - timedelta(days=365 * age_range[0])).replace(month=1, day=1)
         end_date = (today - timedelta(days=365 * age_range[1])).replace(month=1, day=1)
         return (start_date, end_date)
+
+    @staticmethod
+    def generate_dummy_data():
+        exercises = models.Exercise.objects.all()
+        # create dummy accounts
+        for weight in range(50, 141):
+            username = f'male_{weight}kg@workoutnote.com'
+            user = django_User.objects.create_user(username=username, email=username, password=username)
+            user.save()
+            print(f'user {username} created. Exercises added : ')
+            models.Preferences.objects.create(user=user, gender=models.Preferences.Gender.MALE).save()
+            # generate for the user
+            timestamp = (datetime.now() - timedelta(days=len(exercises))).replace(hour=0, minute=0, microsecond=0)
+            for exercise in exercises:
+                number_of_sets = random.randint(2, 10)
+                number_of_reps = random.randint(2, 7)
+                lift_mass = random.randint(math.floor(weight * .5), math.ceil(weight * 1.8))
+                one_rep_max = lift_mass + lift_mass * number_of_reps * 0.025
+                for _ in range(number_of_sets):
+                    models.Lift.objects.create(
+                        user=user,
+                        exercise=exercise,
+                        body_weight=weight,
+                        lift_mass=lift_mass,
+                        repetitions=number_of_reps,
+                        created_at=timestamp,
+                        one_rep_max=one_rep_max
+                    ).save()
+                timestamp += timedelta(days=1)
+                print(f'{exercise}({number_of_sets})', end=' ', flush=True)
+
+        for weight in range(40, 121):
+            username = f'female_{weight}kg@workoutnote.com'
+            password = 'password'
+            user = django_User.objects.create(username=username, email=username, password=username)
+            user.save()
+            print(f'user {username} created. Exercises added : ')
+            models.Preferences.objects.create(user=user, gender=models.Preferences.Gender.FEMALE).save()
+            # generate for the user
+            timestamp = (datetime.now() - timedelta(days=len(exercises))).replace(hour=0, minute=0, microsecond=0)
+            for exercise in exercises:
+                number_of_sets = random.randint(1, 6)
+                number_of_reps = random.randint(1, 5)
+                lift_mass = random.randint(math.floor(weight * .3), math.ceil(weight * 1.4))
+                one_rep_max = lift_mass + lift_mass * number_of_reps * 0.025
+                for _ in range(number_of_sets):
+                    models.Lift.objects.create(
+                        user=user,
+                        exercise=exercise,
+                        body_weight=weight,
+                        lift_mass=lift_mass,
+                        repetitions=number_of_reps,
+                        created_at=timestamp,
+                        one_rep_max=one_rep_max
+                    ).save()
+                timestamp += timedelta(days=1)
+                print(f'{exercise}({number_of_sets})', end=' ', flush=True)

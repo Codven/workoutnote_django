@@ -37,7 +37,7 @@ class Preferences(models.Model):
 
     user = models.OneToOneField(to=django_User, on_delete=models.CASCADE, primary_key=True, related_name='preferences')
     name = models.CharField(max_length=128, default=None, null=True)
-    gender = models.CharField(max_length=16, default=Gender.MALE)
+    gender = models.CharField(max_length=24, default=Gender.MALE, choices=ProfileSharing.CHOICES)
     date_of_birth = models.DateTimeField(default=None, null=True)
     height = models.FloatField(default=None, null=True)
     profile_sharing = models.CharField(max_length=128, default=ProfileSharing.PRIVATE, choices=ProfileSharing.CHOICES)

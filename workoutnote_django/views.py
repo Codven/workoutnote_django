@@ -8,8 +8,8 @@ from django.contrib.auth.models import User as django_User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.core.mail import EmailMessage
+from datetime import datetime, timedelta
 from django.conf import settings
-from datetime import datetime
 
 from utils.tools import Tools, Levels
 from workoutnote_django import models
@@ -588,5 +588,25 @@ def handle_add_lift(request):
     return redirect(to='lifts')
 
 
+@login_required
+@require_http_methods(['GET', 'POST'])
 def handle_exercises(request):
-    return render(request=request, template_name='profile/exercises.html')
+    then = timezone.now() - timedelta(days=6 * 30)
+    lifts = models.Lift.objects.filter(user=request.user, created_at__gte=then)
+    plot_data = []
+    if lifts.exists():
+        for lift in lifts:
+            plot_data += [(lift.created_at, lift.one_rep_max)]
+    plot_data.sort(key=lambda x: x[0])
+    days = []
+    one_rep_maxes = []
+    for day, one_rep_max in plot_data:
+        days += [Tools.date2str(timezone.localtime(day), readable=True)]
+        one_rep_maxes += [one_rep_max]
+
+    # todo plot as in https://simpleisbetterthancomplex.com/tutorial/2020/01/19/how-to-use-chart-js-with-django.html
+    # todo customize plot as in https://www.chartjs.org/docs/latest/charts/line.html
+    return render(request=request, template_name='profile/exercises.html', context={
+        'days': days,
+        'one_rep_maxes': one_rep_maxes
+    })

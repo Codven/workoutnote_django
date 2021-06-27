@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User as django_User
+from utils.tools import Tools
 from django.db import models
-import enum
 
 
 class Preferences(models.Model):
@@ -53,7 +53,7 @@ class Preferences(models.Model):
         return self.unit_of_measure.__str__()
 
     def date_of_birth_str(self):
-        return self.date_of_birth.strftime('%d%m%Y')
+        return Tools.date2str(self.date_of_birth)
 
     def get_age(self):
         from datetime import date

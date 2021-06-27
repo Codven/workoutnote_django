@@ -542,8 +542,16 @@ def handle_find_lifters(request):
 @login_required
 @require_http_methods(['GET'])
 def handle_workouts(request):
+    lifts = models.Lift.objects.filter(user=request.user)
+    lifts_by_days = {}
+    for lift in lifts:
+        day = Tools.date2str(lift.created_at, readable=True)
+        if day in lifts_by_days:
+            lifts_by_days[day] += [lift]
+        else:
+            lifts_by_days[day] = [lift]
     return render(request=request, template_name='profile/workouts.html', context={
-        'lifts': models.Lift.objects.filter(user=request.user)
+        'lifts_by_days': lifts_by_days
     })
 
 

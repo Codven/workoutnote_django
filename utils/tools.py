@@ -1,12 +1,9 @@
-from workoutnote_django.models import Preferences
+from django.contrib.auth.models import User as django_User
 from datetime import date, timedelta, datetime
 from typing import Tuple
 from math import pow
 import random
 import math
-
-from django.contrib.auth.models import User as django_User
-from workoutnote_django import models
 
 
 class Levels:
@@ -43,8 +40,7 @@ class Tools:
         return round(lift_mass / (1.0278 - 0.0278 * repetitions), 1)
 
     @staticmethod
-    def get_level_in_percentage(sorted_lifts_for_body_weight: list,
-                                total_lift_mass: float) -> float:
+    def get_level_in_percentage(sorted_lifts_for_body_weight: list, total_lift_mass: float) -> float:
         list_copy = sorted_lifts_for_body_weight[:]
         data_length = len(list_copy)
         list_copy.append(total_lift_mass)
@@ -86,6 +82,7 @@ class Tools:
         letters denote coefficients from coeff  array
         '''
         coeff = []
+        from workoutnote_django.models import Preferences
         if gender == Preferences.Gender.MALE:
             coeff = [-216.0475144, 16.2606339, -0.002388645, -0.00113732, 7.01863E-06, -1.291E-08]
         elif gender == Preferences.Gender.FEMALE:
@@ -118,57 +115,91 @@ class Tools:
 
     @staticmethod
     def generate_dummy_data():
-        exercises = models.Exercise.objects.all()
+        print('working on dummy data')
+        from workoutnote_django.models import Exercise, Preferences, Lift
+        from django.utils import timezone
+        exercises = Exercise.objects.all()
         # create dummy accounts
         for weight in range(50, 141):
             username = f'male_{weight}kg@workoutnote.com'
-            user = django_User.objects.create_user(username=username, email=username, password=username)
-            user.save()
-            print(f'user {username} created. Exercises added : ')
-            models.Preferences.objects.create(user=user, gender=models.Preferences.Gender.MALE).save()
-            # generate for the user
-            timestamp = (datetime.now() - timedelta(days=len(exercises))).replace(hour=0, minute=0, microsecond=0)
+            if django_User.objects.filter(username=username).exists():
+                user = django_User.objects.get(username=username)
+                update_timestamps = True
+            else:
+                user = django_User.objects.create_user(username=username, email=username, password=username)
+                user.save()
+                Preferences.objects.create(user=user, gender=Preferences.Gender.MALE).save()
+                update_timestamps = False
+            print(f'\rWorking on dummy data of {username}')
+            # generate dummy lifts for the user
+            timestamp = (timezone.now() - timedelta(days=len(exercises))).replace(hour=0, minute=0, microsecond=0)
             for exercise in exercises:
-                number_of_sets = random.randint(2, 10)
-                number_of_reps = random.randint(2, 7)
-                lift_mass = random.randint(math.floor(weight * .5), math.ceil(weight * 1.8))
-                one_rep_max = lift_mass + lift_mass * number_of_reps * 0.025
-                for _ in range(number_of_sets):
-                    models.Lift.objects.create(
-                        user=user,
-                        exercise=exercise,
-                        body_weight=weight,
-                        lift_mass=lift_mass,
-                        repetitions=number_of_reps,
-                        created_at=timestamp,
-                        one_rep_max=one_rep_max
-                    ).save()
+                if update_timestamps:
+                    lifts = Lift.objects.filter(user=user, exercise=exercise)
+                    for lift in lifts:
+                        lift.created_at = timestamp
+                        lift.save()
+                else:
+                    number_of_sets = random.randint(2, 10)
+                    number_of_reps = random.randint(2, 7)
+                    lift_mass = random.randint(math.floor(weight * .5), math.ceil(weight * 1.8))
+                    one_rep_max = lift_mass + lift_mass * number_of_reps * 0.025
+                    for _ in range(number_of_sets):
+                        lift = Lift.objects.create(
+                            user=user,
+                            exercise=exercise,
+                            body_weight=weight,
+                            lift_mass=lift_mass,
+                            repetitions=number_of_reps,
+                            created_at=timestamp,
+                            one_rep_max=one_rep_max
+                        )
+                        lift.created_at = timestamp
+                        lift.save()
                 timestamp += timedelta(days=1)
-                print(f'{exercise}({number_of_sets})', end=' ', flush=True)
+                print(f'\r{exercise}', end='', flush=True)
 
         for weight in range(40, 121):
             username = f'female_{weight}kg@workoutnote.com'
-            password = 'password'
-            user = django_User.objects.create(username=username, email=username, password=username)
-            user.save()
-            print(f'user {username} created. Exercises added : ')
-            models.Preferences.objects.create(user=user, gender=models.Preferences.Gender.FEMALE).save()
-            # generate for the user
-            timestamp = (datetime.now() - timedelta(days=len(exercises))).replace(hour=0, minute=0, microsecond=0)
+            if django_User.objects.filter(username=username).exists():
+                user = django_User.objects.get(username=username)
+                update_timestamps = True
+            else:
+                user = django_User.objects.create_user(username=username, email=username, password=username)
+                user.save()
+                Preferences.objects.create(user=user, gender=Preferences.Gender.FEMALE).save()
+                update_timestamps = False
+            print(f'\rWorking on dummy data of {username}')
+            # generate dummy lifts for the user
+            timestamp = (timezone.now() - timedelta(days=len(exercises))).replace(hour=0, minute=0, microsecond=0)
             for exercise in exercises:
-                number_of_sets = random.randint(1, 6)
-                number_of_reps = random.randint(1, 5)
-                lift_mass = random.randint(math.floor(weight * .3), math.ceil(weight * 1.4))
-                one_rep_max = lift_mass + lift_mass * number_of_reps * 0.025
-                for _ in range(number_of_sets):
-                    models.Lift.objects.create(
-                        user=user,
-                        exercise=exercise,
-                        body_weight=weight,
-                        lift_mass=lift_mass,
-                        repetitions=number_of_reps,
-                        created_at=timestamp,
-                        one_rep_max=one_rep_max
-                    ).save()
+                if update_timestamps:
+                    lifts = Lift.objects.filter(user=user, exercise=exercise)
+                    for lift in lifts:
+                        lift.created_at = timestamp
+                        lift.save()
+                else:
+                    number_of_sets = random.randint(1, 6)
+                    number_of_reps = random.randint(1, 5)
+                    lift_mass = random.randint(math.floor(weight * .3), math.ceil(weight * 1.4))
+                    one_rep_max = lift_mass + lift_mass * number_of_reps * 0.025
+                    for _ in range(number_of_sets):
+                        lift = Lift.objects.create(
+                            user=user,
+                            exercise=exercise,
+                            body_weight=weight,
+                            lift_mass=lift_mass,
+                            repetitions=number_of_reps,
+                            one_rep_max=one_rep_max
+                        )
+                        lift.created_at = timestamp
+                        lift.save()
                 timestamp += timedelta(days=1)
-                print(f'{exercise}({number_of_sets})', end=' ', flush=True)
+                print(f'\r{exercise}', end='', flush=True)
+
+    @staticmethod
+    def date2str(_date, readable=False):
+        if readable:
+            return _date.strftime("%d %B %Y")
+        else:
+            return _date.strftime('%d%m%Y')

@@ -546,7 +546,7 @@ def handle_workouts(request):
     lifts = models.Lift.objects.filter(user=request.user)
     lifts_by_days = {}
     for lift in lifts:
-        day = timezone.localtime(lift.created_at)
+        day = timezone.localtime(lift.created_at).replace(hour=0, minute=0, second=0, microsecond=0)
         if day in lifts_by_days:
             lifts_by_days[day] += [lift]
         else:

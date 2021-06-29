@@ -37,7 +37,7 @@ class Preferences(models.Model):
 
     user = models.OneToOneField(to=django_User, on_delete=models.CASCADE, primary_key=True, related_name='preferences')
     name = models.CharField(max_length=128, default=None, null=True)
-    gender = models.CharField(max_length=24, default=Gender.MALE, choices=ProfileSharing.CHOICES)
+    gender = models.CharField(max_length=24, default=Gender.MALE, choices=Gender.CHOICES)
     date_of_birth = models.DateTimeField(default=None, null=True)
     height = models.FloatField(default=None, null=True)
     profile_sharing = models.CharField(max_length=128, default=ProfileSharing.PRIVATE, choices=ProfileSharing.CHOICES)
@@ -85,7 +85,7 @@ class Lift(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(to=django_User, on_delete=models.CASCADE)
     exercise = models.ForeignKey(to=Exercise, on_delete=models.CASCADE)
-    body_weight = models.FloatField()
+    body_weight = models.FloatField(default=None, null=True)
     lift_mass = models.FloatField()
     repetitions = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -103,6 +103,7 @@ class BodyWeight(models.Model):
         ('underwater_weighing', 'Underwater Weighing'),
         ('dexa_scan', 'DEXA Scan'),
     )
+    user = models.ForeignKey(to=django_User, on_delete=models.CASCADE, related_name='body_weight', default=None)
     body_weight = models.FloatField()
     body_fat_type = models.CharField(max_length=20, choices=BODY_FAT_TYPE_CHOICES)
     body_fat_value = models.FloatField(default=None, null=True)

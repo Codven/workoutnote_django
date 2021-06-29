@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User as django_User
-from datetime import date, timedelta, datetime
+from datetime import date, timedelta
 from typing import Tuple
 from math import pow
 import random
@@ -37,7 +37,8 @@ class Tools:
 
     @staticmethod
     def calculate_one_rep_max(lift_mass: float, repetitions: int) -> float:
-        return round(lift_mass / (1.0278 - 0.0278 * repetitions), 1)
+        # return round(lift_mass / (1.0278 - 0.0278 * repetitions), 1) -> Previous formula
+        return round(lift_mass + lift_mass * repetitions * 0.025, 1)
 
     @staticmethod
     def get_level_in_percentage(sorted_lifts_for_body_weight: list, total_lift_mass: float) -> float:
@@ -109,8 +110,8 @@ class Tools:
     @staticmethod
     def get_date_of_birth_range(age_range: Tuple[int, int]) -> Tuple[date, date]:
         today = date.today()
-        start_date = (today - timedelta(days=365 * age_range[0])).replace(month=1, day=1)
-        end_date = (today - timedelta(days=365 * age_range[1])).replace(month=1, day=1)
+        start_date = (today - timedelta(days=365 * age_range[1])).replace(month=1, day=1)
+        end_date = (today - timedelta(days=365 * age_range[0])).replace(month=1, day=1)
         return (start_date, end_date)
 
     @staticmethod
@@ -140,11 +141,14 @@ class Tools:
                         lift.created_at = timestamp
                         lift.save()
                 else:
-                    number_of_sets = random.randint(2, 10)
-                    number_of_reps = random.randint(2, 7)
-                    lift_mass = random.randint(math.floor(weight * .5), math.ceil(weight * 1.8))
-                    one_rep_max = lift_mass + lift_mass * number_of_reps * 0.025
+                    number_of_sets = 10  # random.randint(2, 10)
+                    # number_of_reps = random.randint(2, 7)
+                    # lift_mass = random.randint(math.floor(weight * .5), math.ceil(weight * 1.8))
+                    # one_rep_max = Tools.calculate_one_rep_max(lift_mass, number_of_reps)
                     for _ in range(number_of_sets):
+                        number_of_reps = random.randint(2, 7)
+                        lift_mass = random.randint(math.floor(weight * .5), math.ceil(weight * 1.8))
+                        one_rep_max = Tools.calculate_one_rep_max(lift_mass, number_of_reps)
                         lift = Lift.objects.create(
                             user=user,
                             exercise=exercise,
@@ -179,11 +183,14 @@ class Tools:
                         lift.created_at = timestamp
                         lift.save()
                 else:
-                    number_of_sets = random.randint(1, 6)
-                    number_of_reps = random.randint(1, 5)
-                    lift_mass = random.randint(math.floor(weight * .3), math.ceil(weight * 1.4))
-                    one_rep_max = lift_mass + lift_mass * number_of_reps * 0.025
+                    number_of_sets = 10  # random.randint(1, 6)
+                    # number_of_reps = random.randint(1, 5)
+                    # lift_mass = random.randint(math.floor(weight * .3), math.ceil(weight * 1.4))
+                    # one_rep_max = lift_mass + lift_mass * number_of_reps * 0.025
                     for _ in range(number_of_sets):
+                        number_of_reps = random.randint(1, 5)
+                        lift_mass = random.randint(math.floor(weight * .3), math.ceil(weight * 1.4))
+                        one_rep_max = lift_mass + lift_mass * number_of_reps * 0.025
                         lift = Lift.objects.create(
                             user=user,
                             exercise=exercise,

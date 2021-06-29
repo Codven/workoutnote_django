@@ -14,7 +14,7 @@ from django.conf import settings
 from utils.tools import Tools, Levels
 from workoutnote_django import models
 
-LIMIT_OF_ACCEPTABLE_DATA_AMOUNT = 10
+LIMIT_OF_ACCEPTABLE_DATA_AMOUNT = 5
 
 
 class Status:
@@ -150,10 +150,10 @@ def handle_index(request):
         repetitions = int(request.POST['repetitions'])
         avg_age = float(request.POST['age'])
 
-        # TODO: check the following data filtering
+        #TODO: Temporarily igonre filtering according to age range
         age_range = Tools.get_age_range(avg_age)
         filtered_prefs = models.Preferences.objects.filter(
-            date_of_birth__range=Tools.get_date_of_birth_range(age_range),
+            # date_of_birth__range=Tools.get_date_of_birth_range(age_range),
             gender=str(gender).upper())
         if not filtered_prefs:
             data['calculator_result_status'] = Status.FAIL
@@ -373,6 +373,7 @@ def handle_powerlifting_calculator(request):
             return render(request=request, template_name='index/powerlifting calculator.html', context=data)
 
         user_ids = filtered_prefs.values_list('user', flat=True)
+        # TODO: check logic of data filtering
         filtered_lifts = models.Lift.objects.filter(
             body_weight=body_weight,
             user_id__in=user_ids,

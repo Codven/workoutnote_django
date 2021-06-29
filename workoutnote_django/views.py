@@ -611,3 +611,7 @@ def handle_exercises(request):
         'days': days,
         'one_rep_maxes': one_rep_maxes
     })
+
+
+def handle_new_index(request):
+    return render(request=request,template_name='index/index_new.html')

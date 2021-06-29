@@ -49,4 +49,6 @@ urlpatterns = [
     path('add-lift/', views.handle_add_lift, name='add lift'),
     path('exercises/', views.handle_exercises, name='exercises'),
     path('bodyweight/', views.handle_bodyweight, name='bodyweight'),
+
+    path('new-index/', views.handle_new_index, name='new_index'),
 ]

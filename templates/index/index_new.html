@@ -34,114 +34,45 @@
                                                         <option value="100">100</option>
                                                     </select> entries</label></div>
                                                 </div>
-                                                <div class="col-sm-6">
-                                                    <div id="example1_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control input-sm" placeholder=""
-                                                                                                                             aria-controls="example1"></label></div>
-                                                </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-sm-12">
                                                     <table aria-describedby="example1_info" role="grid" id="example1" class="table table-bordered table-striped dataTable">
+                                                        <colgroup>
+                                                            <col span="1" style="width: 10%;">
+                                                            <col span="1" style="width: 50%;">
+                                                            <col span="1" style="width: 15%;">
+                                                            <col span="1" style="width: 15%;">
+                                                            <col span="1" style="width: 10%;">
+                                                        </colgroup>
                                                         <thead>
                                                         <tr role="row">
-                                                            <th aria-label="Rendering engine: activate to sort column descending" colspan="1" rowspan="1" aria-controls="example1" tabindex="0"
-                                                                class="sorting_asc" style="width: 176px;" aria-sort="ascending">Rendering engine
-                                                            </th>
-                                                            <th aria-label="Browser: activate to sort column ascending" colspan="1" rowspan="1" aria-controls="example1" tabindex="0" class="sorting"
-                                                                style="width: 218px;">Browser
-                                                            </th>
-                                                            <th aria-label="Platform(s): activate to sort column ascending" colspan="1" rowspan="1" aria-controls="example1" tabindex="0"
-                                                                class="sorting" style="width: 192px;">Platform(s)
-                                                            </th>
-                                                            <th aria-label="Engine version: activate to sort column ascending" colspan="1" rowspan="1" aria-controls="example1" tabindex="0"
-                                                                class="sorting" style="width: 150px;">Engine version
-                                                            </th>
-                                                            <th aria-label="CSS grade: activate to sort column ascending" colspan="1" rowspan="1" aria-controls="example1" tabindex="0" class="sorting"
-                                                                style="width: 107px;">CSS grade
-                                                            </th>
+                                                            <th class="sorting">№</th>
+                                                            <th class="sorting_asc">Exercise</th>
+                                                            <th class="sorting">Lift</th>
+                                                            <th class="sorting">Reps</th>
+                                                            <th class="sorting">Status</th>
                                                         </tr>
                                                         </thead>
                                                         <tbody>
                                                         <tr role="row" class="odd">
-                                                            <td class="sorting_1">Blink</td>
-                                                            <td>Iridium 54.0</td>
-                                                            <td>GNU/Linux</td>
-                                                            <td>54</td>
-                                                            <td>A</td>
+                                                            <form action="{% url 'new_index' %}" method="post">
+                                                                {% csrf_token %}
+                                                                <td>1</td>
+                                                                <td>
+                                                                    <select name="exercise" id="exercises">
+                                                                        {% for exercise in exercises %}
+                                                                            <option value="{{ exercise.name }}">{{ exercise.name }}</option>
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                </td>
+                                                                <td><input type="number" id="liftmass" name="liftmass" required="required" min="5" max="20" step="0.1"></td>
+                                                                <td><input type="number" id="repetitions" name="repetitions" required="required" min="1" max="20"></td>
+                                                                <td><input type="submit" value="Add"></td>
+                                                            </form>
                                                         </tr>
-                                                        <tr role="row" class="even">
-                                                            <td class="sorting_1">Gecko</td>
-                                                            <td>Firefox 1.0</td>
-                                                            <td>Win 98+ / OSX.2+</td>
-                                                            <td>1.7</td>
-                                                            <td>A</td>
-                                                        </tr>
-                                                        <tr role="row" class="odd">
-                                                            <td class="sorting_1">Gecko</td>
-                                                            <td>Firefox 1.5</td>
-                                                            <td>Win 98+ / OSX.2+</td>
-                                                            <td>1.8</td>
-                                                            <td>A</td>
-                                                        </tr>
-                                                        <tr role="row" class="even">
-                                                            <td class="sorting_1">Gecko</td>
-                                                            <td>Firefox 2.0</td>
-                                                            <td>Win 98+ / OSX.2+</td>
-                                                            <td>1.8</td>
-                                                            <td>A</td>
-                                                        </tr>
-                                                        <tr role="row" class="odd">
-                                                            <td class="sorting_1">Gecko</td>
-                                                            <td>Firefox 3.0</td>
-                                                            <td>Win 2k+ / OSX.3+</td>
-                                                            <td>1.9</td>
-                                                            <td>A</td>
-                                                        </tr>
-                                                        <tr role="row" class="even">
-                                                            <td class="sorting_1">Gecko</td>
-                                                            <td>Camino 1.0</td>
-                                                            <td>OSX.2+</td>
-                                                            <td>1.8</td>
-                                                            <td>A</td>
-                                                        </tr>
-                                                        <tr role="row" class="odd">
-                                                            <td class="sorting_1">Gecko</td>
-                                                            <td>Camino 1.5</td>
-                                                            <td>OSX.3+</td>
-                                                            <td>1.8</td>
-                                                            <td>A</td>
-                                                        </tr>
-                                                        <tr role="row" class="even">
-                                                            <td class="sorting_1">Gecko</td>
-                                                            <td>Netscape 7.2</td>
-                                                            <td>Win 95+ / Mac OS 8.6-9.2</td>
-                                                            <td>1.7</td>
-                                                            <td>A</td>
-                                                        </tr>
-                                                        <tr role="row" class="odd">
-                                                            <td class="sorting_1">Gecko</td>
-                                                            <td>Netscape Browser 8</td>
-                                                            <td>Win 98SE+</td>
-                                                            <td>1.7</td>
-                                                            <td>A</td>
-                                                        </tr>
-                                                        <tr role="row" class="even">
-                                                            <td class="sorting_1">Gecko</td>
-                                                            <td>Netscape Navigator 9</td>
-                                                            <td>Win 98+ / OSX.2+</td>
-                                                            <td>1.8</td>
-                                                            <td>A</td>
-                                                        </tr>
+
                                                         </tbody>
-                                                        <tfoot>
-                                                        <tr>
-                                                            <th colspan="1" rowspan="1">Rendering engine</th>
-                                                            <th colspan="1" rowspan="1">Browser</th>
-                                                            <th colspan="1" rowspan="1">Platform(s)</th>
-                                                            <th colspan="1" rowspan="1">Engine version</th>
-                                                            <th colspan="1" rowspan="1">CSS grade</th>
-                                                        </tr>
-                                                        </tfoot>
                                                     </table>
                                                 </div>
                                             </div>

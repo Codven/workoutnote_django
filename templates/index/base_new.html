@@ -39,9 +39,11 @@
                 </span></a>
                 <div class="navbar-custom-menu">
                     <ul class="nav navbar-nav">
-                        <li class="dropdown user user-menu"><a href="javascript:;" data-toggle="dropdown" class="dropdown-toggle"><img src="./CoPilot_files/128.jpg" alt="User Image"
-                                                                                                                                       class="user-image"> <span
-                                class="hidden-xs">Tressie Torp</span></a>
+                        <li class="dropdown user user-menu">
+                            <a href="javascript:;" data-toggle="dropdown" class="dropdown-toggle">
+                                <img src="{% static 'user-white.svg' %}" alt="User Image" class="user-image"/>
+                                <span class="hidden-xs">{{ request.user.username }}</span>
+                            </a>
                             <ul class="dropdown-menu">
                                 <li class="user-header" style="height: auto; min-height: 85px; padding-bottom: 15px;"><p><span>Tressie Torp</span> <small>Lead Accounts Administrator</small><small>Investor
                                     Program Consultant</small></p></li>

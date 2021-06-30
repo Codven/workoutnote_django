@@ -50,5 +50,5 @@ urlpatterns = [
     path('exercises/', views.handle_exercises, name='exercises'),
     path('bodyweight/', views.handle_bodyweight, name='bodyweight'),
 
-    path('new-index/', views.handle_new_index, name='new_index'),
+    path('new-index/', views.handle_index_new, name='new_index'),
 ]

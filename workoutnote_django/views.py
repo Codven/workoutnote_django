@@ -150,7 +150,7 @@ def handle_index(request):
         repetitions = int(request.POST['repetitions'])
         avg_age = float(request.POST['age'])
 
-        #TODO: Temporarily igonre filtering according to age range
+        # TODO: Temporarily igonre filtering according to age range
         age_range = Tools.get_age_range(avg_age)
         filtered_prefs = models.Preferences.objects.filter(
             # date_of_birth__range=Tools.get_date_of_birth_range(age_range),
@@ -613,5 +613,24 @@ def handle_exercises(request):
     })
 
 
-def handle_new_index(request):
-    return render(request=request,template_name='index/index_new.html')
+@require_http_methods(['GET', 'POST'])
+def handle_index_new(request):
+    data = {
+        'exercises': models.Exercise.objects.all(),
+    }
+    if request.method == 'POST':
+        # Adding Lift
+        exercise = models.Exercise.objects.get(name=request.POST['exercise']) if models.Exercise.objects.filter(name=request.POST['exercise']).exists() else None
+        lift_mass = float(request.POST['liftmass'])
+        repetitions = int(request.POST['repetitions'])
+        if exercise is not None:
+            models.Lift.objects.create(
+                user=request.user,
+                exercise=exercise,
+                body_weight=request.user.preferences.body_weight,
+                lift_mass=lift_mass,
+                repetitions=repetitions,
+                one_rep_max=Tools.calculate_one_rep_max(lift_mass, repetitions)
+            )
+        return redirect(to='new_index')
+    return render(request=request, template_name='index/index_new.html', context=data)

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import (Exercise, Lift, Preferences, BodyWeight)
+from .models import (Exercise, Lift, Preferences)
 
 
 @admin.register(Exercise)
@@ -15,8 +15,3 @@ class LiftAdmin(admin.ModelAdmin):
 @admin.register(Preferences)
 class LiftAdmin(admin.ModelAdmin):
     list_display = ['user', 'name', 'gender', 'date_of_birth']
-
-
-@admin.register(BodyWeight)
-class BodyweightAdmin(admin.ModelAdmin):
-    list_display = ['user', 'user', 'date']

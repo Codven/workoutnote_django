@@ -40,7 +40,7 @@ def handle_generate_dummy_data(request):
 @require_http_methods(['GET', 'POST'])
 def handle_login(request):
     if request.user.is_authenticated:
-        return redirect(to='index')
+        return redirect(to='profile main')
     elif request.method == 'GET':
         return render(request=request, template_name='index/auth login.html')
     else:
@@ -56,7 +56,7 @@ def handle_login(request):
                     return redirect(to='profile main')
             else:
                 return redirect(to='login')
-    return redirect(to='index')
+    return redirect(to='profile main')
 
 
 @require_http_methods(['GET', 'POST'])
@@ -111,7 +111,7 @@ def handle_register(request):
 @require_http_methods(['GET'])
 def handle_logout(request):
     logout(request=request)
-    return redirect(to='index')
+    return redirect(to='login')
 
 
 # endregion

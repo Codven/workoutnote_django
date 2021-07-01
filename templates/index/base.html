@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% load static %}
     <link rel="stylesheet" href="{% static 'index.css' %}">
-    <link href="{% url 'index' %}" rel="canonical">
     <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
     <meta property="og:title" content="Workoutnote - Weightlifting Calculator (Bench/Squat/Deadlift)">
     <meta property="og:type" content="website">
@@ -5428,9 +5427,6 @@
     <div class="container">
         <div class="header">
             <div class="header__logo" id="headerLogoSection">
-                <a href="{% url 'index' %}">
-                    <img alt="Workoutnote" src="{% static 'deltoid.png' %}" width="162" height="40">
-                </a>
             </div>
             <div class="header__login" id="headerLoginSection">
                 {% if request.user.is_authenticated %}

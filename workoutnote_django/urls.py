@@ -26,7 +26,7 @@ urlpatterns = [
     path('faq/', views.handle_faq, name='faq'),
     path('privacy-policy/', views.handle_faq, name='privacy policy'),
 
-    path('', views.handle_login, name='index'),
+    path('', views.handle_login, name='login'),
     path('calculators/', views.handle_calculators, name='calculators'),
     path('strength-standards/', views.handle_strength_standards, name='strength standards'),
     path('training-log-tutorial/', views.handle_training_log_tutorial, name='training log tutorial'),
@@ -36,7 +36,7 @@ urlpatterns = [
     path('wilks-calculator/', views.handle_wilks_calculator, name='wilks calculator'),
     path('powerlifting-standards/', views.handle_powerlifting_standards, name='powerlifting standards'),
 
-    path('accounts/login/', views.handle_login, name='login'),
+    #path('accounts/login/', views.handle_login, name='login'),
     path('accounts/register/', views.handle_register, name='register'),
     path('accounts/logout/', views.handle_logout, name='logout'),
 

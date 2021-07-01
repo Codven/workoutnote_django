@@ -454,9 +454,46 @@ def handle_powerlifting_standards(request):
 
 @login_required
 def handle_profile_main(request):
-    return render(request=request, template_name='profile/main.html', context={
-        'preferences': models.Preferences.objects.get(user=request.user)
-    })
+    data = {
+        'exercises': models.Exercise.objects.all(),
+        'preferences': models.Preferences.objects.get(user=request.user),
+        'today_lifts': None,
+        'workouts': []
+    }
+    if request.method == 'GET':
+        dates = list(models.Lift.objects.filter(user=request.user).order_by('-created_at').values_list('created_at', flat=True).distinct())
+
+        today = datetime.now()
+        for date in dates:
+            lifts = models.Lift.objects.filter(
+                user=request.user,
+                created_at__year=date.year,
+                created_at__month=date.month,
+                created_at__day=date.day
+            )
+            if date.year == today.year and date.month == today.month and date.day == today.day:
+                data['today_lifts'] = lifts
+                continue
+            data['workouts'].append({
+                'date': date,
+                'lifts': lifts
+            })
+    elif request.method == 'POST':
+        # Adding Lift
+        exercise = models.Exercise.objects.get(name=request.POST['exercise']) if models.Exercise.objects.filter(name=request.POST['exercise']).exists() else None
+        lift_mass = float(request.POST['liftmass'])
+        repetitions = int(request.POST['repetitions'])
+        if exercise is not None:
+            models.Lift.objects.create(
+                user=request.user,
+                exercise=exercise,
+                body_weight=request.user.preferences.body_weight,
+                lift_mass=lift_mass,
+                repetitions=repetitions,
+                one_rep_max=Tools.calculate_one_rep_max(lift_mass, repetitions)
+            )
+        return redirect(to='profile main')
+    return render(request=request, template_name='profile/main.html', context=data)
 
 
 @login_required
@@ -611,26 +648,3 @@ def handle_exercises(request):
         'days': days,
         'one_rep_maxes': one_rep_maxes
     })
-
-
-@require_http_methods(['GET', 'POST'])
-def handle_index_new(request):
-    data = {
-        'exercises': models.Exercise.objects.all(),
-    }
-    if request.method == 'POST':
-        # Adding Lift
-        exercise = models.Exercise.objects.get(name=request.POST['exercise']) if models.Exercise.objects.filter(name=request.POST['exercise']).exists() else None
-        lift_mass = float(request.POST['liftmass'])
-        repetitions = int(request.POST['repetitions'])
-        if exercise is not None:
-            models.Lift.objects.create(
-                user=request.user,
-                exercise=exercise,
-                body_weight=request.user.preferences.body_weight,
-                lift_mass=lift_mass,
-                repetitions=repetitions,
-                one_rep_max=Tools.calculate_one_rep_max(lift_mass, repetitions)
-            )
-        return redirect(to='new_index')
-    return render(request=request, template_name='index/index_new.html', context=data)

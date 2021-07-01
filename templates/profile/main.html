@@ -1,191 +1,147 @@
 {% extends 'profile/base.html' %}
 {% block content %}
-    {% load static %}
-    <script>
-        let selectExerciseDiv, exercisesListDiv, filterExerciseBodyPart, filterExerciseCategory, filterText, selectedExerciseName, selectedExerciseIcon;
-        let allExercises = [{% for exercise in exercises %}{name: '{{ exercise.name }}',icon: '{{ exercise.icon }}',bodyPart: '{{ exercise.body_part }}',category: '{{ exercise.category }}'},{% endfor %}];
-        let selectedExercise = {name: '{{ exercises.0.name }}', icon: '{{ exercises.0.icon }}', bodyPart: '{{ exercises.0.body_part }}', category: '{{ exercises.0.category }}'};
-        document.addEventListener('DOMContentLoaded', () => {
-            const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-            if ($navbarBurgers.length > 0)
-                $navbarBurgers.forEach(el => {
-                    el.addEventListener('click', () => {
+    <div class="content-wrapper" style="min-height: 701px;">
+        <section class="content-header"><h1>
+            TABLES
+            <small>Simple and advance table in CoPilot</small></h1>
+            <ol class="breadcrumb">
+                <li><a href="javascript:;"><i class="fa fa-home"></i>Home</a></li>
+                <li class="active">TABLES</li>
+            </ol>
+        </section>
+        <section class="content">
+            <div class="row center-block">
+                <h2>Hi,
+                    {% if request.user.first_name %}
+                        <span style="color: royalblue">{{ request.user.first_name }} {{ request.user.last_name }}</span>
+                    {% else %}
+                        <span style="color: royalblue">{{ request.user.username }}</span>
+                    {% endif %}
 
-                        // Get the target from the "data-target" attribute
-                        const target = el.dataset.target;
-                        const $target = document.getElementById(target);
+                </h2>
+                <div class="col-md-12">
+                    <div class="box">
+                        <div class="box-header"><h3 class="box-title">{% now "jS F Y" %}</h3></div>
+                        <div class="box-body">
+                            <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div id="example1_length" class="dataTables_length"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 table-responsive">
+                                        <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <table aria-describedby="example1_info" role="grid" id="example1" class="table table-bordered table-striped dataTable">
+                                                        <colgroup>
+                                                            <col span="1" style="width: 10%;">
+                                                            <col span="1" style="width: 50%;">
+                                                            <col span="1" style="width: 15%;">
+                                                            <col span="1" style="width: 15%;">
+                                                            <col span="1" style="width: 10%;">
+                                                        </colgroup>
+                                                        <thead>
+                                                        <tr role="row">
+                                                            <th class="sorting">№</th>
+                                                            <th class="sorting_asc">Exercise</th>
+                                                            <th class="sorting">Lift</th>
+                                                            <th class="sorting">Reps</th>
+                                                            <th class="sorting">Status</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for lift in today_lifts %}
+                                                            <tr role="row" class="odd">
+                                                                <td>{{ forloop.counter }}</td>
+                                                                <td>{{ lift.exercise.name }}</td>
+                                                                <td>{{ lift.lift_mass }}</td>
+                                                                <td>{{ lift.repetitions }}</td>
+                                                                <td>smth</td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                        <tr role="row" class="odd">
+                                                            <form action="{% url 'profile main' %}" method="post">
+                                                                {% csrf_token %}
+                                                                <td></td>
+                                                                <td>
+                                                                    <select name="exercise" id="exercises">
+                                                                        {% for exercise in exercises %}
+                                                                            <option value="{{ exercise.name }}">{{ exercise.name }}</option>
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                </td>
+                                                                <td><input type="number" id="liftmass" name="liftmass" required="required" min="5" max="1000" step="0.1"></td>
+                                                                <td><input type="number" id="repetitions" name="repetitions" required="required" min="1" max="20"></td>
+                                                                <td><input type="submit" value="Add"></td>
+                                                            </form>
+                                                        </tr>
 
-                        // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-                        el.classList.toggle('is-active');
-                        $target.classList.toggle('is-active');
-
-                    });
-                });
-
-            selectExerciseDiv = document.getElementById('selectExerciseDiv');
-            exercisesListDiv = document.getElementById('exercisesListDiv');
-            selectedExerciseName = document.getElementById('selectedExerciseName');
-            selectedExerciseIcon = document.getElementById('selectedExerciseIcon');
-
-            document.getElementById('filterExerciseBodyPart').addEventListener('change', (event) => {
-                filterExerciseBodyPart = event.target.value === 'none' ? null : event.target.value;
-                filterExercises();
-            });
-            document.getElementById('filterExerciseCategory').addEventListener('change', (event) => {
-                filterExerciseCategory = event.target.value === 'none' ? null : event.target.value;
-                filterExercises();
-            });
-        });
-
-        function addLiftClick() {
-            if (document.readyState === "complete")
-                addLiftForm.style.display = 'block';
-        }
-
-        function hideAddLiftFormClick() {
-            addLiftForm.style.display = 'none';
-        }
-
-        function showExerciseSelectorDivClick() {
-            if (document.readyState === "complete")
-                selectExerciseDiv.style.display = 'block';
-        }
-
-        function hideExerciseSelectorDivClick() {
-            selectExerciseDiv.style.display = 'none';
-        }
-
-        function onFilterTextChanged(input) {
-            filterText = input.value.length > 0 ? input.value : null;
-            filterExercises();
-        }
-
-        function filterExercises() {
-            let displayedExercises = allExercises.slice();
-
-            if (filterText != null) {
-                let filterTextLower = filterText.toLowerCase();
-                for (let i = 0; i < displayedExercises.length; i++)
-                    if (!displayedExercises[i].name.toLowerCase().includes(filterTextLower)) {
-                        displayedExercises.splice(i, 1);
-                        i--;
-                    }
-                let newArray = [];
-                for (let i = 0; i < displayedExercises.length; i++) {
-                    if (displayedExercises[i].name.toLowerCase().startsWith(filterTextLower)) {
-                        newArray.push(displayedExercises[i]);
-                        displayedExercises.splice(i, 1);
-                        i--;
-                    }
-                }
-                displayedExercises = newArray.concat(displayedExercises);
-            }
-
-            if (filterExerciseBodyPart != null)
-                for (let i = 0; i < displayedExercises.length; i++)
-                    if (displayedExercises[i].bodyPart !== filterExerciseBodyPart) {
-                        displayedExercises.splice(i, 1);
-                        i--;
-                    }
-            if (filterExerciseCategory != null)
-                for (let i = 0; i < displayedExercises.length; i++)
-                    if (displayedExercises[i].category !== filterExerciseCategory) {
-                        displayedExercises.splice(i, 1);
-                        i--;
-                    }
-
-            exercisesListDiv.innerHTML = '';
-            for (let i = 0; i < displayedExercises.length; i++) {
-                let newElementHtml = '<a onclick="selectExerciseClick(\'' + displayedExercises[i].name + '\');" class="card-content px-4 py-3" style="display: block;"><span class="media"><span class="media-left"><span class="icon is-left has-text-dark"><i class="slicon slicon-2x ' + displayedExercises[i].icon + '"></i></span></span><span class="media-content"><span>' + displayedExercises[i].name + '</span> <span class="tag is-small ml-1">' + displayedExercises[i].bodyPart + '</span> <span class="tag is-small"> <span class="stars"> <span class="star__full">★</span> <span class="star__empty">★★★★</span> </span></span> </span> </span> </a>';
-                let newElement = document.createElement('div');
-                newElement.className = 'card';
-                newElement.innerHTML = newElementHtml;
-                exercisesListDiv.appendChild(newElement);
-            }
-        }
-
-        function selectExerciseClick(name) {
-            let newExercise = null;
-            let nameLower = name.toLowerCase();
-            for (let i = 0; i < allExercises.length; i++)
-                if (allExercises[i].name.toLowerCase() === nameLower) {
-                    newExercise = allExercises[i];
-                    break;
-                }
-
-            if (newExercise != null) {
-                selectedExerciseName.value = newExercise.name;
-                selectedExerciseIcon.classList.remove(selectedExercise.icon);
-                selectedExerciseIcon.classList.add(newExercise.icon);
-                selectedExercise = newExercise;
-                hideExerciseSelectorDivClick();
-            }
-        }
-    </script>
-    <div id="profilePageContainer">
-        <section class="hero is-primary is-translucent">
-            <div class="hero-body">
-                <div class="container">
-                    <div class="media" style="align-items: center;">
-                        <div class="media-left">
-                            <img width="96" height="96" style="margin-right: 10px" src="{% static 'user-white.svg' %}" alt="Dumbbell"/>
-                        </div>
-                        <div class="media-content">
-                            <div class="field is-grouped is-grouped-multiline">
-                                <div class="control" style="flex-shrink: 1;"><h1 class="title is-2 is-size-3-mobile">
-                                    {% if preferences.name is not None %}{{ preferences.name }}{% else %}{{ request.user.username }}{% endif %}
-                                </h1></div>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="is-size-5"><a class="has-text-white"><strong>0</strong> Following
-                            </a> <a class="has-text-white ml-1"><strong>0</strong> Followers
-                            </a></div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </section>
-        <section class="section has-background-white">
-            <div class="container">
-                <div class="block">
-                    <div class="tags are-medium has-addons"><span class="tag">
-            Powerlifting Level
-          </span> <span class="tag is-primary"><span class="stars"><span class="star__full">★</span><span class="star__empty">★★★★</span></span></span> <span class="tag is-primary">
-            6%
-          </span></div>
-                </div>
-                <div class="buttons mb-6">
-                    <a href="{% url 'workouts' %}" class="button is-primary is-large">
-                        <span class="icon"><img width="42" height="42" style="margin-left: 10px; margin-right: 10px;" src="{% static 'dumbbell-white.svg' %}"/></span><span>Workouts</span></a>
-                    <a href="{% url 'exercises' %}" class="button is-primary is-large">
-                        <span class="icon"><img width="28" height="28" style="margin-left: 10px; margin-right: 10px;" src="{% static 'exercises-white.svg' %}"/></span><span>Exercises</span></a>
-                    <a href="{% url 'bodyweight' %}" class="button is-primary is-large"><span class="icon"><img width="28" height="28" style="margin-left: 10px; margin-right: 10px;" src="{% static 'bodyweight-white.svg' %}"/></span> <span>Bodyweight</span></a></div>
-                <div class="notification is-info" style="background-color: rgb(114, 137, 218);">
-                    <article class="media">
-                        <img width="96" height="96" style="margin-right: 32px" src="{% static 'discord-white.svg' %}"/>
-                        <div class="media-content"><h3 class="title is-5">
-                            Join our Discord Community
-                        </h3> <h4 class="subtitle is-6">
-                            We've created a <a href="https://discord.gg/m9sayhBQaC" target="_blank">Discord Community
-                            for Workoutnote</a> so that you can learn from experienced lifters by sharing
-                            goals, routines and progress photos. Introduce yourself on #introductions and don't forget
-                            to link to your Workoutnote profile.
-                        </h4>
-                            <div class="buttons"><a href="https://discord.gg/m9sayhBQaC" target="_blank" class="button"><span>Join Discord Community</span></a></div>
+
+                    {% for workout in workouts %}
+                        <div class="box">
+                            <div class="box-header"><h3 class="box-title">{{ workout.date|date:"jS F Y" }}</h3></div>
+                            <div class="box-body">
+                                <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div id="example1_length" class="dataTables_length"></div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12 table-responsive">
+                                            <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <table aria-describedby="example1_info" role="grid" id="example1" class="table table-bordered table-striped dataTable">
+                                                            <colgroup>
+                                                                <col span="1" style="width: 10%;">
+                                                                <col span="1" style="width: 50%;">
+                                                                <col span="1" style="width: 15%;">
+                                                                <col span="1" style="width: 15%;">
+                                                                <col span="1" style="width: 10%;">
+                                                            </colgroup>
+                                                            <thead>
+                                                            <tr role="row">
+                                                                <th class="sorting">№</th>
+                                                                <th class="sorting_asc">Exercise</th>
+                                                                <th class="sorting">Lift</th>
+                                                                <th class="sorting">Reps</th>
+                                                                <th class="sorting">Status</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            {% for lift in workout.lifts %}
+                                                                <tr role="row" class="odd">
+                                                                    <td>{{ forloop.counter }}</td>
+                                                                    <td>{{ lift.exercise.name }}</td>
+                                                                    <td>{{ lift.lift_mass }}</td>
+                                                                    <td>{{ lift.repetitions }}</td>
+                                                                    <td>smth</td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </article>
-                </div>
-                <div class="notification"><h3 class="title is-5">
-                    We love your feedback
-                </h3> <h4 class="subtitle is-6">
-                    If you are interested in a Workoutnote app, please fill out the app survey below.
-                    We also have a survey to gather feedback for this website and learn
-                    how we can help your progression in the gym.
-                </h4>
-                    <div class="buttons"><a href="https://forms.gle/MvuDqc1dkFobKzyMA" target="_blank" class="button is-primary is-small">
-                        Website Survey
-                    </a> <a href="https://forms.gle/JBwGhBPoHVoxpXzj9" target="_blank" class="button is-primary is-small">
-                        App Survey
-                    </a></div>
+                    {% endfor %}
                 </div>
             </div>
         </section>

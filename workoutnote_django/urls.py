@@ -26,7 +26,7 @@ urlpatterns = [
     path('faq/', views.handle_faq, name='faq'),
     path('privacy-policy/', views.handle_faq, name='privacy policy'),
 
-    path('', views.handle_index, name='index'),
+    path('', views.handle_login, name='index'),
     path('calculators/', views.handle_calculators, name='calculators'),
     path('strength-standards/', views.handle_strength_standards, name='strength standards'),
     path('training-log-tutorial/', views.handle_training_log_tutorial, name='training log tutorial'),
@@ -50,5 +50,4 @@ urlpatterns = [
     path('exercises/', views.handle_exercises, name='exercises'),
     path('bodyweight/', views.handle_bodyweight, name='bodyweight'),
 
-    path('new-index/', views.handle_index_new, name='new_index'),
 ]

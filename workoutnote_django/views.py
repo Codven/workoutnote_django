@@ -461,7 +461,7 @@ def handle_profile_main(request):
         'workouts': []
     }
     if request.method == 'GET':
-        dates = list(models.Lift.objects.filter(user=request.user).order_by('-created_at').values_list('created_at', flat=True).distinct())
+        dates = list(models.Lift.objects.filter(user=request.user).values_list('created_at', flat=True).distinct())
 
         today = datetime.now()
         for date in dates:

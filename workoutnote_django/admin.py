@@ -9,9 +9,9 @@ class ExerciseAdmin(admin.ModelAdmin):
 
 @admin.register(Lift)
 class LiftAdmin(admin.ModelAdmin):
-    list_display = ['user', 'exercise', 'body_weight', 'lift_mass', 'repetitions']
+    list_display = ['user', 'exercise', 'body_weight', 'lift_mass', 'repetitions', 'created_at']
 
 
 @admin.register(Preferences)
-class LiftAdmin(admin.ModelAdmin):
+class PreferencesAdmin(admin.ModelAdmin):
     list_display = ['user', 'name', 'gender', 'date_of_birth']

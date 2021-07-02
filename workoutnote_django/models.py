@@ -89,8 +89,11 @@ class Lift(models.Model):
     body_weight = models.FloatField(default=None, null=True)
     lift_mass = models.FloatField()
     repetitions = models.IntegerField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateField(default=None)
     one_rep_max = models.FloatField(default=None)
 
     def __str__(self):
         return self.exercise.name
+
+    class Meta:
+        ordering = ['user', '-created_at']

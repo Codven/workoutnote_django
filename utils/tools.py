@@ -200,6 +200,6 @@ class Tools:
     @staticmethod
     def date2str(_date, readable=False):
         if readable:
-            return _date.strftime("%d %B %Y")
+            return _date.strftime("%Y.%m.%d. %d %B %Y")
         else:
             return _date.strftime('%d%m%Y')

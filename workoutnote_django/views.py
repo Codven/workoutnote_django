@@ -1,5 +1,6 @@
 from django.utils import timezone
 import random
+import json
 import re
 
 from django.views.decorators.http import require_http_methods
@@ -9,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.core.mail import EmailMessage
 from datetime import datetime, timedelta
-from datetime import date
+from django.http import JsonResponse
 from django.conf import settings
 
 from utils.tools import Tools, Levels
@@ -41,9 +42,11 @@ def handle_generate_dummy_data(request):
 @require_http_methods(['GET', 'POST'])
 def handle_login(request):
     if request.user.is_authenticated:
-        return redirect(to='profile main')
+        return redirect(to='index')
     elif request.method == 'GET':
-        return render(request=request, template_name='index/auth login.html')
+        return render(request=request, template_name='auth.html', context={
+            'title': 'Welcome to the Workoutnote community!'
+        })
     else:
         if 'email' in request.POST and 'password' in request.POST:
             email = request.POST['email']
@@ -54,23 +57,22 @@ def handle_login(request):
                 if 'next' in request.POST and len(request.POST['next']) > 0:
                     return redirect(to=request.POST['next'])
                 else:
-                    return redirect(to='profile main')
+                    return redirect(to='index')
             else:
                 return redirect(to='login')
-    return redirect(to='profile main')
+    return redirect(to='index')
 
 
-@require_http_methods(['GET', 'POST'])
+@require_http_methods(['POST'])
 def handle_register(request):
     if request.user.is_authenticated:
-        return redirect(to='profile main')
-    elif request.method == 'GET':
-        return render(request=request, template_name='index/auth register.html')
-    elif 'email' in request.POST and 'password' in request.POST:
+        return redirect(to='index')
+    elif 'name' in request.POST and 'email' in request.POST and 'password' in request.POST:
+        name = request.POST['name']
         email = request.POST['email']
         password = request.POST['password']
         if django_User.objects.filter(username=email).exists() or len(password) < 4:
-            return redirect(to='register')
+            return redirect(to='login')
         elif 'verification_code' in request.POST and models.EmailConfirmationCodes.objects.filter(email=email).exists():
             expected_code = models.EmailConfirmationCodes.objects.get(email=email).verification_code
             provided_code = request.POST['verification_code']
@@ -79,28 +81,30 @@ def handle_register(request):
                 django_User.objects.create_user(username=email, password=password).save()
                 user = authenticate(request, username=email, password=password)
                 if user:
-                    models.Preferences.objects.create(user=user)
+                    models.Preferences.objects.create(user=user, name=name)
                     login(request=request, user=user)
                     if 'next' in request.POST and len(request.POST['next']) > 0:
                         return redirect(to=request.POST['next'])
                     else:
-                        return redirect(to='profile main')
+                        return redirect(to='index')
                 else:
                     return redirect(to='register')  # whatever the reason could be
-            else:
-                return redirect(to='register')
-        elif not models.EmailConfirmationCodes.objects.filter(email=email).exists():
-            verification_code = ''.join([str(random.randint(0, 9)) for _ in range(6)])
-            email_message = EmailMessage(
-                'Workoutnote.com email verification',
-                f'Email verification code is : {verification_code}',
-                settings.EMAIL_HOST_USER,
-                [email],
-            )
-            email_message.fail_silently = False
-            email_message.send()
-            models.EmailConfirmationCodes.objects.create(email=email, verification_code=verification_code)
-            return render(request=request, template_name='index/email confirmation.html', context={
+            return redirect(to='login')
+        else:
+            if not models.EmailConfirmationCodes.objects.filter(email=email).exists():
+                verification_code = ''.join([str(random.randint(0, 9)) for _ in range(6)])
+                email_message = EmailMessage(
+                    'Workoutnote.com email verification',
+                    f'Email verification code is : {verification_code}',
+                    settings.EMAIL_HOST_USER,
+                    [email],
+                )
+                email_message.fail_silently = False
+                email_message.send()
+                models.EmailConfirmationCodes.objects.create(email=email, verification_code=verification_code)
+            return render(request=request, template_name='auth.html', context={
+                'verify_now': True,
+                'name': name,
                 'email': email,
                 'password': password
             })
@@ -112,114 +116,62 @@ def handle_register(request):
 @require_http_methods(['GET'])
 def handle_logout(request):
     logout(request=request)
-    return redirect(to='login')
+    return redirect(to='index')
 
 
 # endregion
 
-
-def handle_faq(request):
-    # models.Exercise.init_from_csv()
-    return render(request=request, template_name='index/faq.html')
-
-
-def handle_about(request):
-    return render(request=request, template_name='index/about.html')
-
-
-@require_http_methods(['GET', 'POST'])
+@login_required
 def handle_index(request):
-    data = {
-        'lvl_txt': None,
-        'lvl_stars_number': None,
-        'one_rep_max': None,
-        'lvl_percentage': None,
-        'body_weight': None,
-        'gender': None,
-        'lift_mass': None,
-        'body_weight_ratio': None,
-        'lvl_boundaries': None,
-        'selected_exercise': None,
+    if request.user.is_superuser:
+        return redirect(to='admin')
+
+    name = models.Preferences.objects.get(user=request.user).name
+
+    db_workout_sessions = models.WorkoutSession.objects.filter(user=request.user)
+
+    for db_workout_session in db_workout_sessions:
+        db_lifts = models.Lift.objects.filter(workout_session=db_workout_session)
+
+    lifts_by_days = {}
+    # for lift in lifts:
+    #     day = timezone.localtime(lift.timestamp).replace(hour=0, minute=0, second=0, microsecond=0)
+    #     if day in lifts_by_days:
+    #         lifts_by_days[day] += [lift]
+    #     else:
+    #         lifts_by_days[day] = [lift]
+    # days = list(lifts_by_days.keys())
+    # days.sort(reverse=True)
+    # lifts_by_days = [(Tools.date2str(day, readable=True), lifts_by_days[day]) for day in days]
+
+    return render(request=request, template_name='home.html', context={
+        'name': name if name else request.user.username,
+        'at_home': True,
+
         'exercises': models.Exercise.objects.all(),
-        'calculator_result_status': None
-    }
-    if request.method == 'POST':
-        gender = request.POST['gender']
-        body_weight = round(float(request.POST['bodymass']))
-        exercise = request.POST['exercise']
-        lift_mass = float(request.POST['liftmass'])
-        repetitions = int(request.POST['repetitions'])
-        avg_age = float(request.POST['age'])
-
-        # TODO: Temporarily igonre filtering according to age range
-        age_range = Tools.get_age_range(avg_age)
-        filtered_prefs = models.Preferences.objects.filter(
-            # date_of_birth__range=Tools.get_date_of_birth_range(age_range),
-            gender=str(gender).upper())
-        if not filtered_prefs:
-            data['calculator_result_status'] = Status.FAIL
-            data['body_weight'] = body_weight
-            data['selected_exercise'] = exercise
-            return render(request=request, template_name='index/index.html', context=data)
-
-        user_ids = filtered_prefs.values_list('user', flat=True)
-
-        filtered_lifts = models.Lift.objects.filter(
-            body_weight=body_weight,
-            exercise__name=exercise,
-            user_id__in=user_ids
-        )
-        if len(filtered_lifts) < LIMIT_OF_ACCEPTABLE_DATA_AMOUNT:
-            data['calculator_result_status'] = Status.FAIL
-            data['body_weight'] = body_weight
-            data['selected_exercise'] = exercise
-            return render(request=request, template_name='index/index.html', context=data)
-
-        sorted_1rms_for_given_bw = list(filtered_lifts.order_by('one_rep_max').values_list('one_rep_max', flat=True))
-
-        one_rep_max = Tools.calculate_one_rep_max(lift_mass, repetitions)
-
-        lvl_in_percentage = Tools.get_level_in_percentage(sorted_1rms_for_given_bw, one_rep_max)
-        lvl_boundaries = Tools.get_level_boundaries_for_bodyweight(sorted_1rms_for_given_bw)
-        lvl_in_text = Tools.get_string_level(lvl_boundaries, one_rep_max)
-
-        # Construct the resulting data
-        data['lvl_txt'] = lvl_in_text
-        data['lvl_stars_number'] = None  # TODO: make a function to calculate number of stars
-        data['one_rep_max'] = one_rep_max
-        data['lvl_percentage'] = round(lvl_in_percentage, 1)
-        data['body_weight'] = body_weight
-        data['gender'] = gender
-        data['lift_mass'] = lift_mass
-        data['body_weight_ratio'] = round(Tools.calculate_body_weight_ratio(lift_mass, body_weight), 2)
-        data['lvl_boundaries'] = lvl_boundaries
-        data['selected_exercise'] = exercise
-        data['calculator_result_status'] = Status.OK
-
-    return render(request=request, template_name='index/index.html', context=data)
-
-
-def handle_calculators(request):
-    return render(request=request, template_name='index/calculators.html')
-
-
-def handle_strength_standards(request):
-    return render(request=request, template_name='index/strength standards.html', context={
-        'exercises': models.Exercise.objects.all()
+        'lifts_by_days': lifts_by_days
     })
 
 
-def handle_training_log_tutorial(request):
-    return render(request=request, template_name='index/training log tutorial.html')
+@login_required
+def handle_calculators(request):
+    return render(request=request, template_name='calculators/calculators.html', context={
+        'title': 'Strength calculators',
+        'at_calculators': True,
+    })
 
 
+@login_required
 @require_http_methods(['GET', 'POST'])
 def handle_one_rep_max_calculator(request):
     data = {
+        'title': '1RM calculator',
+        'at_calculators': True,
+
         'result_number': None,
         'result_table_1': [],
         'result_table_2': [],
-        'calculator_result_status': None
+        'calculator_result_status': None,
     }
     table_1_reps = [1, 2, 4, 6, 8, 10, 12, 16, 20, 24, 30]
     table_2_percentages = [
@@ -231,7 +183,7 @@ def handle_one_rep_max_calculator(request):
                 {'percentage': item, 'reps_of_1rm': index + 1}
             )
 
-        return render(request=request, template_name='index/one rep max calculator.html', context=data)
+        return render(request=request, template_name='calculators/one rep max calculator.html', context=data)
     elif request.method == 'POST':
         result = Tools.calculate_one_rep_max(
             float(request.POST['liftmass']),
@@ -253,12 +205,16 @@ def handle_one_rep_max_calculator(request):
             data['result_table_2'].append(
                 {'percentage': item, 'liftmass': round(result * item / 100, 1), 'reps_of_1rm': index + 1}
             )
-        return render(request=request, template_name='index/one rep max calculator.html', context=data)
+        return render(request=request, template_name='calculators/one rep max calculator.html', context=data)
 
 
+@login_required
 @require_http_methods(['GET', 'POST'])
 def handle_plate_barbell_racking_calculator(request):
     data = {
+        'title': 'Plate barbell racking calculator',
+        'at_calculators': True,
+
         'total_lift_mass': 20,
         'fail_lift_mass': None,
         'fail_lift_mass_difference': None,
@@ -271,7 +227,7 @@ def handle_plate_barbell_racking_calculator(request):
         'plate_quantity_15': 10,
         'plate_quantity_20': 10,
         'plate_quantity_25': 0,
-        'calculator_result_status': None
+        'calculator_result_status': None,
     }
     if request.method == 'POST':
         total_lift = float(request.POST['liftmass'])
@@ -328,12 +284,16 @@ def handle_plate_barbell_racking_calculator(request):
         data['plate_quantity_25'] = plate_quantity_25
         data['calculator_result_status'] = Status.OK
 
-    return render(request=request, template_name='index/plate barbell racking calculator.html', context=data)
+    return render(request=request, template_name='calculators/plate barbell racking calculator.html', context=data)
 
 
+@login_required
 @require_http_methods(['GET', 'POST'])
 def handle_powerlifting_calculator(request):
     data = {
+        'title': 'Powerlifting calculator',
+        'at_calculators': True,
+
         'lvl_txt': None,
         'lvl_stars_number': None,
         'lvl_percentage': None,
@@ -342,7 +302,7 @@ def handle_powerlifting_calculator(request):
         'total_lift_mass': None,
         'wilks_score': None,
         'lvl_boundaries': None,
-        'calculator_result_status': None
+        'calculator_result_status': None,
     }
     if request.method == 'POST':
         gender = request.POST['gender']
@@ -371,7 +331,7 @@ def handle_powerlifting_calculator(request):
             data['calculator_result_status'] = Status.FAIL
             data['body_weight'] = body_weight
             data['wilks_score'] = wilks_score
-            return render(request=request, template_name='index/powerlifting calculator.html', context=data)
+            return render(request=request, template_name='calculators/powerlifting calculator.html', context=data)
 
         user_ids = filtered_prefs.values_list('user', flat=True)
         # TODO: check logic of data filtering
@@ -384,7 +344,7 @@ def handle_powerlifting_calculator(request):
             data['calculator_result_status'] = Status.FAIL
             data['body_weight'] = body_weight
             data['wilks_score'] = wilks_score
-            return render(request=request, template_name='index/powerlifting calculator.html', context=data)
+            return render(request=request, template_name='calculators/powerlifting calculator.html', context=data)
 
         sorted_1rms_for_given_bw = list(filtered_lifts.order_by('one_rep_max').values_list('one_rep_max', flat=True))
 
@@ -403,18 +363,22 @@ def handle_powerlifting_calculator(request):
         data['lvl_boundaries'] = lvl_boundaries
         data['calculator_result_status'] = Status.OK
 
-    return render(request=request, template_name='index/powerlifting calculator.html', context=data)
+    return render(request=request, template_name='calculators/powerlifting calculator.html', context=data)
 
 
+@login_required
 @require_http_methods(['GET', 'POST'])
 def handle_wilks_calculator(request):
     data = {
+        'title': '1RM calculator',
+        'at_calculators': True,
+
         'wilks_score': None,
         'gender': None,
         'body_weight': None,
         'total_lift_mass': None,
         'wilks_score_boundaries': None,
-        'calculator_result_status': None
+        'calculator_result_status': None,
     }
     if request.method == 'POST':
         gender = request.POST['gender']
@@ -446,55 +410,7 @@ def handle_wilks_calculator(request):
         data['total_lift_mass'] = total_lift_mass
         data['calculator_result_status'] = Status.OK
 
-    return render(request=request, template_name='index/wilks calculator.html', context=data)
-
-
-def handle_powerlifting_standards(request):
-    return render(request=request, template_name='index/powerlifting standards.html')
-
-
-@login_required
-def handle_profile_main(request):
-    data = {
-        'exercises': models.Exercise.objects.all(),
-        'preferences': models.Preferences.objects.get(user=request.user),
-        'today_lifts': None,
-        'workouts': []
-    }
-    if request.method == 'GET':
-        dates = list(models.Lift.objects.filter(user=request.user).values_list('created_at', flat=True).distinct())
-
-        today = datetime.now()
-        for date in dates:
-            lifts = models.Lift.objects.filter(
-                user=request.user,
-                created_at__year=date.year,
-                created_at__month=date.month,
-                created_at__day=date.day
-            )
-            if date.year == today.year and date.month == today.month and date.day == today.day:
-                data['today_lifts'] = lifts
-                continue
-            data['workouts'].append({
-                'date': date,
-                'lifts': lifts
-            })
-    elif request.method == 'POST':
-        # Adding Lift
-        exercise = models.Exercise.objects.get(name=request.POST['exercise']) if models.Exercise.objects.filter(name=request.POST['exercise']).exists() else None
-        lift_mass = float(request.POST['liftmass'])
-        repetitions = int(request.POST['repetitions'])
-        if exercise is not None:
-            models.Lift.objects.create(
-                user=request.user,
-                exercise=exercise,
-                body_weight=request.user.preferences.body_weight,
-                lift_mass=lift_mass,
-                repetitions=repetitions,
-                one_rep_max=Tools.calculate_one_rep_max(lift_mass, repetitions)
-            )
-        return redirect(to='profile main')
-    return render(request=request, template_name='profile/main.html', context=data)
+    return render(request=request, template_name='calculators/wilks calculator.html', context=data)
 
 
 @login_required
@@ -508,31 +424,29 @@ def handle_settings(request):
             preferences.name = request.POST['name']
         if 'gender' in request.POST and request.POST['gender'] in models.Preferences.Gender.ALL:
             preferences.gender = request.POST['gender']
-        if 'birthday' in request.POST and re.match(r'^\d{4}-\d{2}-\d{2}$', request.POST['birthday']):
-            try:
-                preferences.date_of_birth = date.fromisoformat(request.POST['birthday'])
-            except ValueError as err:
-                print(err)
+        if 'birthday' in request.POST and re.match(r'^\d{8}$', request.POST['birthday']):
+            day = int(request.POST['birthday'][:2])
+            month = int(request.POST['birthday'][2:4])
+            year = int(request.POST['birthday'][4:])
+            if 1930 < year < datetime.now().year and 0 < month < 13 and 0 < day < 32:
+                preferences.date_of_birth = datetime.now().replace(year=year, month=month, day=day, hour=0, minute=0, second=0, microsecond=0)
         if 'height' in request.POST and 30 < float(request.POST['height']) < 300:
             preferences.height = float(request.POST['height'])
-        if 'measurement_unit' in request.POST and request.POST['measurement_unit'] in models.Preferences.MeasurementUnit.ALL:
-            preferences.unit_of_measure = request.POST['measurement_unit']
-        if 'profile_sharing' in request.POST and request.POST['profile_sharing'] in models.Preferences.ProfileSharing.ALL:
-            preferences.profile_sharing = request.POST['profile_sharing']
         if 'oldpassword' in request.POST and 'newpassword' in request.POST and 'repeatpassword' in request.POST and request.POST['newpassword'] == request.POST['repeatpassword']:
             if request.user.check_password(raw_password=request.POST['oldpassword']):
                 request.user.set_password(request.POST['newpassword'])
                 request.user.save()
         preferences.save()
 
-    return render(request=request, template_name='profile/settings.html', context={
+    return render(request=request, template_name='settings.html', context={
+        'title': 'Settings',
         'preferences': preferences,
         'gender': models.Preferences.Gender,
-        'sharing': models.Preferences.ProfileSharing,
-        'unit': models.Preferences.MeasurementUnit,
+        'at_settings': True
     })
 
 
+@login_required
 def handle_analyse_lift(request, lift_id):
     lift = models.Lift.objects.filter(pk=lift_id).first()
     data = {
@@ -570,71 +484,15 @@ def handle_analyse_lift(request, lift_id):
     return render(request=request, template_name='profile/analyse lift.html', context=data)
 
 
-def handle_bodyweight(request):
-    return render(request=request, template_name='profile/bodyweight.html')
-
-
-def handle_find_lifters(request):
-    return render(request=request, template_name='profile/find lifters.html')
-
-
-@login_required
-@require_http_methods(['GET'])
-def handle_workouts(request):
-    lifts = models.Lift.objects.filter(user=request.user)
-    lifts_by_days = {}
-    for lift in lifts:
-        day = timezone.localtime(lift.created_at).replace(hour=0, minute=0, second=0, microsecond=0)
-        if day in lifts_by_days:
-            lifts_by_days[day] += [lift]
-        else:
-            lifts_by_days[day] = [lift]
-    days = list(lifts_by_days.keys())
-    days.sort(reverse=True)
-    lifts_by_days = [(Tools.date2str(day, readable=True), lifts_by_days[day]) for day in days]
-    return render(request=request, template_name='profile/workouts.html', context={
-        'lifts_by_days': lifts_by_days
-    })
-
-
-@login_required
-@require_http_methods(['GET'])
-def handle_lifts(request):
-    return render(request=request, template_name='profile/lifts.html', context={
-        'exercises': models.Exercise.objects.all(),
-        'lifts': models.Lift.objects.filter(user=request.user)
-    })
-
-
-@login_required
-@require_http_methods(['POST'])
-def handle_add_lift(request):
-    exercise = models.Exercise.objects.get(name=request.POST['exercise']) if models.Exercise.objects.filter(name=request.POST['exercise']).exists() else None
-    lift_mass = float(request.POST['liftmass'])
-    repetitions = int(request.POST['repetitions'])
-    sets = int(request.POST['sets'])
-    if exercise is not None:
-        for _ in range(sets):
-            models.Lift.objects.create(
-                user=request.user,
-                exercise=exercise,
-                body_weight=70,  # TODO: change this to real body weight
-                lift_mass=lift_mass,
-                repetitions=repetitions,
-                one_rep_max=Tools.calculate_one_rep_max(lift_mass, repetitions)
-            )
-    return redirect(to='lifts')
-
-
 @login_required
 @require_http_methods(['GET', 'POST'])
 def handle_exercises(request):
     then = timezone.now() - timedelta(days=6 * 30)
-    lifts = models.Lift.objects.filter(user=request.user, created_at__gte=then)
+    lifts = models.Lift.objects.filter(user=request.user, timestamp__gte=then)
     plot_data = []
     if lifts.exists():
         for lift in lifts:
-            plot_data += [(lift.created_at, lift.one_rep_max)]
+            plot_data += [(lift.timestamp, lift.one_rep_max)]
     plot_data.sort(key=lambda x: x[0])
     days = []
     one_rep_maxes = []
@@ -648,3 +506,37 @@ def handle_exercises(request):
         'days': days,
         'one_rep_maxes': one_rep_maxes
     })
+
+
+@login_required
+@require_http_methods(['POST'])
+def handle_add_workout(request):
+    try:
+        claimed_exercises = json.loads(request.POST['exercises'])
+        exercises = []
+        for exercise in claimed_exercises:
+            if models.Exercise.objects.filter(name=exercise['exerciseName']).exists():
+                exercises += [exercise]
+        if len(exercises) == 0:
+            return JsonResponse(data={'success': False, 'error': 'empty or invalid exercises provided'})
+    except json.JSONDecodeError or TypeError as e:
+        return JsonResponse(data={'success': False, 'error': str(e)})
+
+    # create workout session
+    db_workout = models.WorkoutSession.objects.create(title=request.POST['title'], duration=int(request.POST['duration']))
+    db_workout.save()
+    # create lifts
+    for exercise in exercises:
+        db_exercise = models.Exercise.objects.get(name=exercise['exerciseName'])
+        lift_mass = float(exercise['liftMass'])
+        repetitions = int(float(exercise['repetitions']))
+        models.Lift.objects.create(
+            user=request.user,
+            exercise=db_exercise,
+            workout=db_workout,
+            lift_mass=lift_mass,
+            repetitions=repetitions,
+            one_rep_max=Tools.calculate_one_rep_max(lift_mass, repetitions)
+        ).save()
+
+    return JsonResponse(data={'success': True})

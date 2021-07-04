@@ -117,7 +117,7 @@ class Tools:
     @staticmethod
     def generate_dummy_data():
         print('working on dummy data')
-        from workoutnote_django.models import Exercise, Preferences, Lift
+        from workoutnote_django.models import Exercise, Preferences, Lift, WorkoutSession
         from django.utils import timezone
         exercises = Exercise.objects.all()
         # create dummy accounts
@@ -138,27 +138,23 @@ class Tools:
                 if update_timestamps:
                     lifts = Lift.objects.filter(user=user, exercise=exercise)
                     for lift in lifts:
-                        lift.created_at = timestamp
+                        lift.timestamp = timestamp
                         lift.save()
                 else:
-                    number_of_sets = 10  # random.randint(2, 10)
-                    # number_of_reps = random.randint(2, 7)
-                    # lift_mass = random.randint(math.floor(weight * .5), math.ceil(weight * 1.8))
-                    # one_rep_max = Tools.calculate_one_rep_max(lift_mass, number_of_reps)
+                    number_of_sets = random.randint(10, 14)
+                    db_workout = WorkoutSession.objects.create(user=user)
+                    db_workout.save()
                     for _ in range(number_of_sets):
                         number_of_reps = random.randint(2, 7)
                         lift_mass = random.randint(math.floor(weight * .5), math.ceil(weight * 1.8))
-                        one_rep_max = Tools.calculate_one_rep_max(lift_mass, number_of_reps)
                         lift = Lift.objects.create(
-                            user=user,
+                            workout_session=db_workout,
                             exercise=exercise,
-                            body_weight=weight,
                             lift_mass=lift_mass,
                             repetitions=number_of_reps,
-                            created_at=timestamp,
-                            one_rep_max=one_rep_max
+                            one_rep_max=Tools.calculate_one_rep_max(lift_mass, number_of_reps)
                         )
-                        lift.created_at = timestamp
+                        lift.timestamp = timestamp
                         lift.save()
                 timestamp += timedelta(days=1)
                 print(f'\r{exercise}', end='', flush=True)
@@ -180,26 +176,23 @@ class Tools:
                 if update_timestamps:
                     lifts = Lift.objects.filter(user=user, exercise=exercise)
                     for lift in lifts:
-                        lift.created_at = timestamp
+                        lift.timestamp = timestamp
                         lift.save()
                 else:
-                    number_of_sets = 10  # random.randint(1, 6)
-                    # number_of_reps = random.randint(1, 5)
-                    # lift_mass = random.randint(math.floor(weight * .3), math.ceil(weight * 1.4))
-                    # one_rep_max = lift_mass + lift_mass * number_of_reps * 0.025
+                    number_of_sets = random.randint(10, 14)
+                    db_workout = WorkoutSession.objects.create(user=user)
+                    db_workout.save()
                     for _ in range(number_of_sets):
-                        number_of_reps = random.randint(1, 5)
-                        lift_mass = random.randint(math.floor(weight * .3), math.ceil(weight * 1.4))
-                        one_rep_max = lift_mass + lift_mass * number_of_reps * 0.025
+                        number_of_reps = random.randint(2, 7)
+                        lift_mass = random.randint(math.floor(weight * .5), math.ceil(weight * 1.8))
                         lift = Lift.objects.create(
-                            user=user,
                             exercise=exercise,
-                            body_weight=weight,
+                            workout_session=db_workout,
                             lift_mass=lift_mass,
                             repetitions=number_of_reps,
-                            one_rep_max=one_rep_max
+                            one_rep_max=Tools.calculate_one_rep_max(lift_mass, number_of_reps)
                         )
-                        lift.created_at = timestamp
+                        lift.timestamp = timestamp
                         lift.save()
                 timestamp += timedelta(days=1)
                 print(f'\r{exercise}', end='', flush=True)

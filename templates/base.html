@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Workoutnote.com</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'index.css' %}">
+    <link rel="stylesheet" href="{% static 'slicon.css' %}">
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
+</head>
+
+<body class="w3-content">
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-bar-block w3-black w3-collapse w3-top" style="z-index: 3; width: 250px; display: none;" id="mySidebar">
+    <div class="w3-container w3-display-container w3-padding-16">
+        <a href="{% url 'index' %}">
+            <img alt="Workoutnote" src="{% static 'WORKOUTNOTE_horizontal_white.png' %}" width="200" height="50" style="cursor: pointer;">
+        </a>
+    </div>
+    <div id="sidebar_middle_part" class="w3-padding-64 w3-large w3-text-grey" style="font-weight:bold">
+        <a href="{% url 'index' %}" class="w3-bar-item w3-button {% if at_home %}w3-navcolor{% else %}w3-black{% endif %}">HOME</a>
+        <a href="#" class="w3-bar-item w3-button {% if at_calendar %}w3-navcolor{% else %}w3-black{% endif %}">MY CALENDAR</a>
+        <a href="{% url 'calculators' %}" class="w3-bar-item w3-button {% if at_calculators %}w3-navcolor{% else %}w3-black{% endif %}">STRENGTH RANK</a>
+    </div>
+    <div id="sidebar_bottom_part">
+        <a href="{% url 'settings' %}" class="w3-bar-item w3-button {% if at_settings %}w3-navcolor{% else %}w3-black{% endif %}">SETTINGS</a>
+        <a href="{% url 'logout' %}" class="w3-bar-item w3-button" style="margin-bottom: 20px;">LOG OUT</a>
+        <span style="font-size: x-small; margin-left: 10px;">©2021 by Deltoid. All rights reserved.</span>
+    </div>
+</nav>
+
+<!-- Top menu on small screens -->
+<header class="w3-bar w3-top w3-hide-large w3-black w3-xlarge">
+    <div class="w3-bar-item w3-padding-16 w3-wide">
+        <a href="{% url 'index' %}">
+            <img alt="Workoutnote" src="{% static 'WORKOUTNOTE_horizontal_white.png' %}" width="160" height="40" style="cursor: pointer;">
+        </a>
+    </div>
+    <div class="w3-bar-item w3-padding-16 w3-button w3-right">
+        <img onclick="toggleSidebar();" src="{% static 'menu.png' %}" width="40px" height="40px" style="padding: 5px 5px 5px 5px;">
+    </div>
+</header>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="toggleSidebar();" style="cursor: pointer; display: none;" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:250px;">
+    <!-- Push down content on small screens -->
+    <div class="w3-hide-large" style="margin-top:83px"></div>
+
+    <!-- Top header -->
+    {% if title or name %}
+        <header class="w3-container w3-xlarge">
+            {% if title %}
+                <h1 class="w3-left">{{ title }}</h1>
+            {% elif name %}
+                <h2 class="w3-left"><span style="font-weight: bold;">Hi, </span><span style="color: #0006b1; font-weight: bold;">{{ name }}</span></h2>
+            {% endif %}
+        </header>
+    {% endif %}
+
+    {% block content %}
+    {% endblock %}
+
+    <div id="selectExerciseDiv" class="modal w3-top" style="display: none; margin-top: 20px;">
+        <div onclick="hideExerciseSelectorDivClick();" class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head"><p class="modal-card-title">Select Exercise</p></header>
+            <section class="modal-card-search">
+                <div >
+                    <div class="control is-expanded has-icons-left">
+                        <input onchange="onFilterTextChanged(this);" type="text" placeholder="Search..." autocomplete="off" class="input">
+                    </div>
+                </div>
+                <div class="is-grouped is-grouped-multiline" style="margin-top: 5px;">
+                    <div style="margin-right: 5px;">
+                        <div class="select is-small">
+                            <select id="filterExerciseBodyPart" style="cursor: pointer;">
+                                <option value="none">Any Body Part</option>
+                                <option value="Back">
+                                    Back
+                                </option>
+                                <option value="Biceps">
+                                    Biceps
+                                </option>
+                                <option value="Chest">
+                                    Chest
+                                </option>
+                                <option value="Core">
+                                    Core
+                                </option>
+                                <option value="Forearms">
+                                    Forearms
+                                </option>
+                                <option value="Legs">
+                                    Legs
+                                </option>
+                                <option value="Shoulders">
+                                    Shoulders
+                                </option>
+                                <option value="Triceps">
+                                    Triceps
+                                </option>
+                                <option value="Whole Body">
+                                    Whole Body
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control">
+                        <div class="select is-small">
+                            <select id="filterExerciseCategory" style="cursor: pointer;">
+                                <option value="none">Any Category</option>
+                                <option value="Barbell">Barbell</option>
+                                <option value="Bodyweight">Bodyweight</option>
+                                <option value="Cable">Cable</option>
+                                <option value="Dumbbell">Dumbbell</option>
+                                <option value="Machine">Machine</option>
+                                <option value="Olympic">Olympic</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="modal-card-body">
+                <div id="exercisesListDiv" style="min-height: 415px;">
+                    {% for exercise in exercises %}
+                        <a onclick="selectExerciseClick('{{ exercise.name }}')" style="display: block; border-top: 1px solid lightgrey; padding: 3px; cursor: pointer;">
+                            <i class="slicon slicon-2x {{ exercise.icon }}"></i>
+                            {{ exercise.name }} ({{ exercise.body_part }})
+                        </a>
+                    {% endfor %}
+                </div>
+            </section>
+            <footer class="modal-card-foot">
+                <a onclick="hideExerciseSelectorDivClick();" style="cursor: pointer;">Close</a>
+            </footer>
+        </div>
+    </div>
+</div>
+
+</body>
+
+<script>
+    function toggleSidebar() {
+        let sidebar = document.getElementById('mySidebar');
+        let overlay = document.getElementById('myOverlay');
+
+        if (sidebar.style.display === 'none') {
+            sidebar.style.display = 'block';
+            overlay.style.display = 'block';
+        } else {
+            sidebar.style.display = 'none';
+            overlay.style.display = 'none';
+        }
+    }
+</script>
+
+</html>

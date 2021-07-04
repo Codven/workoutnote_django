@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="sub_content">
+        <form method="post" action="{% url 'settings' %}" class="mt-5"><h2 class="title is-3 is-size-4-mobile">Personal Details</h2>
+            {% csrf_token %}
+            <div >
+                <div ><label for="name" class="label">Name</label></div>
+                <div >
+                    <div >
+                        <div class="control"><input id="name" name="name" type="text" placeholder="Enter Your Name" minlength="3" maxlength="32" class="input" required value="{% if preferences.name is not None %}{{ preferences.name }}{% endif %}"></div>
+                    </div>
+                </div>
+            </div>
+            <div >
+                <div ><label for="gender" class="label">Gender</label></div>
+                <div >
+                    <div >
+                        <div class="control">
+                            <div class="select is-fullwidth"><select id="gender" name="gender">
+                                <option value="{{ gender.MALE }}" {% if preferences.gender_str == gender.MALE %}selected{% endif %}>Male</option>
+                                <option value="{{ gender.FEMALE }}" {% if preferences.gender_str == gender.FEMALE %}selected{% endif %}>Female</option>
+                            </select></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div >
+                <div ><label for="birthday" class="label">Date of Birth</label></div>
+                <div >
+                    <div >
+                        <div class="control">
+                            <div>
+                                <div class="control is-expanded"><input id="birthday" name="birthday" type="number" placeholder="DDMMYYYY" required class="input" maxlength="8" value="{% if preferences.date_of_birth is not None %}{{ preferences.date_of_birth_str }}{% endif %}"></div>
+                            </div>
+                        </div>
+                        <p class="help">
+                            We calculate your age from your date of birth and use it to adapt our ratings for your
+                            lifts.
+                            You may be stronger than you think!
+                        </p></div>
+                </div>
+            </div>
+            <div >
+                <div ></div>
+                <div >
+                    <div >
+                        <div class="control">
+                            <button type="submit" class="button is-primary">Update Profile</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="sub_content">
+        <form method="post" action="{% url 'settings' %}" id="profileSharing" class="mt-5"><h2 class="title is-3 is-size-4-mobile">Sharing Settings</h2>
+            {% csrf_token %}
+            <div >
+                <div>
+                    <div >
+                        <div class="control"><label class="radio"><input type="radio" name="profile_sharing" value="{{ sharing.SHARED_WITH_PUBLIC }}" {% if preferences.profile_sharing_str == sharing.SHARED_WITH_PUBLIC %}checked{% endif %}>
+                            Share my profile with everyone
+                        </label>
+                            <p class="help">
+                                Anyone can see your workout progress, similar to Bodybuilding.com's BodySpace
+                            </p></div>
+                    </div>
+                    <div >
+                        <div class="control"><label class="radio"><input type="radio" name="profile_sharing" value="{{ sharing.SHARED_WITH_USERS }}" {% if preferences.profile_sharing_str == sharing.SHARED_WITH_USERS %}checked{% endif %}>
+                            Share my profile with Workoutnote users
+                        </label>
+                            <p class="help">
+                                You can compete with other lifters on Workoutnote but your profile
+                                will not be visible on the internet
+                            </p></div>
+                    </div>
+                    <div >
+                        <div class="control"><label class="radio"><input type="radio" name="profile_sharing" value="{{ sharing.PRIVATE }}" {% if preferences.profile_sharing_str == sharing.PRIVATE %}checked{% endif %}>
+                            Do not share my profile
+                        </label>
+                            <p class="help">
+                                This means you will not be able to compete with other lifters
+                            </p></div>
+                    </div>
+                </div>
+            </div>
+            <div >
+                <div class="control">
+                    <button type="submit" class="button is-primary">Update Sharing Settings</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="sub_content">
+        <form method="post" action="{% url 'settings' %}" class="mt-5"><h2 class="title is-3 is-size-4-mobile">Change Password</h2>
+            {% csrf_token %}
+            <div>
+                <div >
+                    <div ><label for="oldPassword" class="label">Old Password</label></div>
+                    <div >
+                        <div >
+                            <div class="control"><input name="oldpassword" id="oldPassword" type="password" required="required" class="input"></div>
+                        </div>
+                    </div>
+                </div>
+                <div >
+                    <div ><label for="newPassword" class="label">New Password</label></div>
+                    <div >
+                        <div >
+                            <div class="control"><input name="newpassword" id="newPassword" type="password" required="required" class="input"></div>
+                        </div>
+                    </div>
+                </div>
+                <div >
+                    <div ><label for="repeatPassword" class="label">Repeat Password</label></div>
+                    <div >
+                        <div >
+                            <div class="control"><input name="repeatpassword" id="repeatPassword" type="password" required="required" class="input"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div >
+                <div ></div>
+                <div >
+                    <div >
+                        <div class="control">
+                            <button type="submit" class="button is-primary">Change Password</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

@@ -7,30 +7,32 @@ config apache:
     sudo vim /etc/apache2/sites-available/workoutnode_django.conf
 content :
     <VirtualHost *:80>
-            ServerAdmin admin@workoutnote_django.localhost
-            ServerName workoutnode_django.localhost
-            ServerAlias www.workoutnote.com
-            DocumentRoot /home/ubuntu/workoutnote_django
-            ErrorLog ${APACHE_LOG_DIR}/error.log
-            CustomLog ${APACHE_LOG_DIR}/access.log combined
+        ServerAdmin admin@workoutnote_django.localhost
+        ServerName workoutnote.com
+        ServerAlias www.workoutnote.com
+        DocumentRoot /home/ubuntu/workoutnote_django
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
 
-            Alias /static /home/ubuntu/workoutnote_django/static
-            <Directory /home/ubuntu/workoutnote_django/static>
-                    Require all granted
-            </Directory>
+        Alias /static /home/ubuntu/workoutnote_django/static
+        <Directory /home/ubuntu/workoutnote_django/static>
+                Require all granted
+        </Directory>
 
-            <Directory /home/ubuntu/workoutnote_django/workoutnote_django>
-                    <Files wsgi.py>
-                            Require all granted
-                    </Files>
-            </Directory>
+        <Directory /home/ubuntu/workoutnote_django/workoutnote_django>
+                <Files wsgi.py>
+                        Require all granted
+                </Files>
+        </Directory>
 
-            WSGIDaemonProcess workoutnote_django python-path=/home/ubuntu/workoutnote_django python-home=/home/ubuntu/workoutnote_django/venv
-            WSGIProcessGroup workoutnote_django
-            WSGIScriptAlias / /home/ubuntu/workoutnote_django/workoutnote_django/wsgi.py
+        #WSGIDaemonProcess workoutnote_django python-path=/home/ubuntu/workoutnote_django python-home=/home/ubuntu/workoutnote_django/venv
+        #WSGIProcessGroup workoutnote_django
+        #WSGIScriptAlias / /home/ubuntu/workoutnote_django/workoutnote_django/wsgi.py
     </VirtualHost>
 
 start apache2 server:
+    cd /etc/apache2/sites-available/
+    sudo a2ensite workoutnode_django.conf
     sudo rm /etc/apache2/sites-available/000-default.conf
     sudo systemctl reload apache2
 

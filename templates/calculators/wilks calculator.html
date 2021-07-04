@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="section-box" id="wilksContainer">
+        <h1 class="title is-2 is-size-3-mobile is-spaced">Wilks Calculator for Powerlifting</h1>
+
+        <h2 class="subtitle is-4 is-size-5-mobile">
+            Calculate the Wilks Score for your gender/bodyweight in kg
+        </h2>
+
+        <div class="content">
+            <p>
+                The Wilks Score (also known as Wilks Coefficient) measures your strength in powerlifting against
+                other
+                powerlifters with different bodyweights across both genders. It was invented by Robert Wilks of
+                Powerlifting
+                Australia.
+            </p>
+        </div>
+
+        <form action="{% url 'wilks calculator' %}" method="post" id="powerliftingForm" class="powerliftingcalculator__form">
+            {% csrf_token %}
+            <div >
+                <div ><label for="splitform_gender" class="label">Gender</label></div>
+                <div >
+                    <div >
+                        <div class="control">
+                            <div class="select"><select id="splitform_gender" name="gender">
+                                <option value="male">
+                                    Male
+                                </option>
+                                <option value="female">
+                                    Female
+                                </option>
+                            </select></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div >
+                <div ><label for="splitform_bodymass" class="label">Bodyweight</label></div>
+                <div >
+                    <div class="field has-addons">
+                        <div class="control is-expanded"><input type="number" id="splitform_bodymass" name="bodymass" required="required" min="5" max="400" step="0.1" class="input"></div>
+                        <div class="control"><span class="button is-static">kg</span></div>
+                        <!----></div>
+                </div>
+            </div>
+            <div >
+                <div class="field-label"><label class="label">Method</label></div>
+                <div >
+                    <div >
+                        <div class="control">
+                            <label class="radio">
+                                <input type="radio" onclick="splitTotalCheck()" name="method" value="split" checked id="splitCheck"> Separately
+                            </label>
+                            <label class="radio">
+                                <input type="radio" onclick="splitTotalCheck()" name="method" value="total" id="totalCheck"> AddedUp
+                            </label>
+                        </div>
+                        <p class="help">
+                            Enter your best bench press, squat and deadlift (conventional or sumo)
+                        </p></div>
+                </div>
+            </div>
+            <div id="splitLiftInputBlock">
+                <div >
+                    <div ><label for="benchliftmass" class="label">
+                        Bench Press </label></div>
+                    <div >
+                        <div class="field has-addons">
+                            <div class="control is-expanded"><input type="number" id="benchliftmass" name="benchliftmass" min="1" max="1500" required="required" step="0.1" class="input"></div>
+                            <div class="control"><span class="button is-static">kg</span></div>
+                            <div class="control is-expanded"><input type="number" name="benchrepetitions" min="1" max="500" class="input"></div>
+                            <div class="control"><span class="button is-static">
+                            rep
+                        </span></div>
+                        </div>
+                    </div>
+                </div>
+                <div >
+                    <div ><label for="squatliftmass" class="label">
+                        Back Squat </label></div>
+                    <div >
+                        <div class="field has-addons">
+                            <div class="control is-expanded"><input type="number" id="squatliftmass" name="squatliftmass" min="1" max="1500" required="required" step="0.1" class="input"></div>
+                            <div class="control"><span class="button is-static">kg</span></div>
+                            <div class="control is-expanded"><input type="number" name="squatrepetitions" min="1" max="500" class="input"></div>
+                            <div class="control"><span class="button is-static">
+                            rep
+                        </span></div>
+                        </div>
+                    </div>
+                </div>
+                <div >
+                    <div ><label for="deadliftliftmass" class="label">
+                        Deadlift </label></div>
+                    <div >
+                        <div class="field has-addons">
+                            <div class="control is-expanded"><input type="number" id="deadliftliftmass" name="deadliftliftmass" min="1" max="1500" required="required" step="0.1" class="input"></div>
+                            <div class="control"><span class="button is-static">kg</span></div>
+                            <div class="control is-expanded"><input type="number" name="deadliftrepetitions" min="1" max="500" class="input"></div>
+                            <div class="control"><span class="button is-static">
+                            rep
+                        </span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="totalLiftInputBlock" style="display: none">
+                <div >
+                    <div class="field-label"><label for="totalform_liftmass" class="label">
+                        Total Lift
+                    </label></div>
+                    <div >
+                        <div class="field has-addons">
+                            <div class="control is-expanded"><input type="number" id="totalform_liftmass" name="totalliftmass" min="1" max="4000" required="required" step="0.1" class="input"></div>
+                            <div class="control"><span class="button is-static">kg</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div >
+                <div ></div>
+                <div >
+                    <div >
+                        <div class="control">
+                            <button type="submit" class="button is-primary is-medium" onclick="submit()">Calculate Score</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    {% if calculator_result_status == 'OK' %}
+        <div class="section-box" id="wilksScoreResults">
+            <h2 class="title is-3 is-size-4-mobile">Your Wilks Score is
+                <strong>{{ wilks_score }}</strong>
+            </h2>
+
+            <div class="content">
+                <p>
+                    Based on a total lift of
+                    <strong>
+                        {{ total_lift_mass }} kg </strong>
+                    in bench press, squat and deadlift at a bodyweight of
+                    <strong>
+                        {{ body_weight }} kg </strong>
+                </p>
+            </div>
+
+            <table class="table is-fullwidth is-striped">
+                <thead>
+                <tr>
+                    <th width="50%">Level</th>
+                    <th>Score</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Untrained</td>
+                    <td>120</td>
+                </tr>
+                <tr>
+                    <td>Novice</td>
+                    <td>200</td>
+                </tr>
+                <tr>
+                    <td>Intermediate</td>
+                    <td>238</td>
+                </tr>
+                <tr>
+                    <td>Advanced</td>
+                    <td>326</td>
+                </tr>
+                <tr>
+                    <td>Elite</td>
+                    <td>414</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    {% elif calculator_result_status == 'FAIL' %}
+        <!---TODO: place the fail case here--->
+    {% endif %}
+    <div class="section-box content">
+        <h2 class="title is-3 is-size-4-mobile">Rate Your Lifts Against Other People</h2>
+        <p>
+            The Workoutnote Calculator can show your exact level of strength at any bodyweight.
+        </p>
+        <p>
+            <a href="{% url 'index' %}" class="button is-primary">
+                Calculate Your Strength
+            </a>
+        </p>
+    </div>
+{% endblock %}

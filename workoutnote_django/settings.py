@@ -27,10 +27,15 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
+
     '13.125.252.36',
     'ec2-13-125-252-36.ap-northeast-2.compute.amazonaws.com',
+    'workoutnote.sytes.net',
+
+    '3.34.141.229',
+    'ec2-3-34-141-229.ap-northeast-2.compute.amazonaws.com',
     'workoutnote.com',
-    'workoutnote.sytes.net'
+    'www.workoutnote.com',
 ]
 
 # Application definition

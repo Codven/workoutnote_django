@@ -1,4 +1,4 @@
-{% extends 'profile/base.html' %}
+{% extends 'base.html' %}
 {% block content %}
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -33,7 +33,7 @@
                 <div class="container"><h1 class="title is-3 is-size-4-mobile"><span class="icon mr-1"><i aria-hidden="true" class="slicon slicon-fa-dumbbell"></i></span>
                     <span>{{ lift.exercise.name }}</span></h1>
                     <h2 class="subtitle is-4 is-size-5-mobile"><a><span class="icon"><i aria-hidden="true" class="slicon slicon-fa-calendar-day"></i></span>
-                        <span>{{ lift.created_at|date:"d M Y" }}</span></a></h2></div>
+                        <span>{{ lift.timestamp|date:"d M Y" }}</span></a></h2></div>
             </div>
         </section>
         <section class="section has-background-white">

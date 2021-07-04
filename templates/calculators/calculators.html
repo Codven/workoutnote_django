@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% load static %}
+    <div class="section-box content">
+        <h2 class="title is-3 is-size-4-mobile">One Rep Max Calculator</h2>
+        <p>
+            Calculate your one-rep max (1RM) for any lift.
+        </p>
+        <p>
+            <a class="button is-primary" href="{% url 'one rep max calculator' %}">One Rep Max
+                Calculator</a>
+        </p>
+
+        <h2 class="title is-3 is-size-4-mobile">Plate Barbell Racking Calculator</h2>
+        <p>
+            The Plate Barbell Racking Calculator tells you the plates you need to put on your barbell to lift a certain
+            weight.
+        </p>
+        <p>
+            <a class="button is-primary" href="{% url 'plate barbell racking calculator' %}">Plate
+                Calculator</a>
+        </p>
+
+        <h2 class="title is-3 is-size-4-mobile">Powerlifting Calculator</h2>
+        <p>
+            The Workoutnote Powerlifting Calculator measures your strength in powerlifting against other
+            lifters who have entered bench press, squat and deadlift into our calculator.
+        </p>
+        <p>
+            <a class="button is-primary" href="{% url 'powerlifting calculator' %}">Powerlifting
+                Calculator</a>
+        </p>
+
+        <h2 class="title is-3 is-size-4-mobile">Wilks Calculator</h2>
+        <p>
+            The Wilks Score measures your strength in powerlifting against other
+            powerlifters with different bodyweights across both genders.
+        </p>
+        <p>
+            <a class="button is-primary" href="{% url 'wilks calculator' %}">Wilks Calculator</a>
+        </p>
+    </div>
+{% endblock %}

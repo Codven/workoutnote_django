@@ -1,13 +1,11 @@
-{% extends 'profile/base.html' %}
+{% extends 'base.html' %}
 {% block content %}
     <script>
-        let addLiftForm;
         let selectExerciseDiv, exercisesListDiv, filterExerciseBodyPart, filterExerciseCategory, filterText, selectedExerciseName, selectedExerciseIcon;
         let allExercises = [{% for exercise in exercises %}{name: '{{ exercise.name }}',icon: '{{ exercise.icon }}',bodyPart: '{{ exercise.body_part }}',category: '{{ exercise.category }}'
                 },{% endfor %}];
         let selectedExercise = {name: '{{ exercises.0.name }}', icon: '{{ exercises.0.icon }}', bodyPart: '{{ exercises.0.body_part }}', category: '{{ exercises.0.category }}'};
         document.addEventListener('DOMContentLoaded', () => {
-            addLiftForm = document.getElementById('addLiftForm');
             selectExerciseDiv = document.getElementById('selectExerciseDiv');
             exercisesListDiv = document.getElementById('exercisesListDiv');
             selectedExerciseName = document.getElementById('selectedExerciseName');
@@ -131,7 +129,7 @@
                         <span>Add Lift</span>
                     </button>
                 </div>
-                <div class="block">
+                <div class="sub_content">
                     <table class="table is-fullwidth is-narrow mb-2 table--mobilesmall">
                         <thead>
                         <tr>
@@ -170,7 +168,7 @@
             </div>
         </section>
 
-        <form action="{% url 'add lift' %}" id="addLiftForm" method="post" style="display: none;" autocomplete="off">
+        <form action="{% url 'add workout' %}" id="addLiftForm" method="post" style="display: none;" autocomplete="off">
             {% csrf_token %}
             <div class="modal is-active">
                 <div class="modal-background" onclick="hideAddLiftFormClick();"></div>
@@ -179,10 +177,10 @@
                         <button aria-label="close" type="button" class="delete" onclick="addLiftForm.style.display='none';"></button>
                     </header>
                     <section class="modal-card-body">
-                        <div class="field is-horizontal">
-                            <div class="field-label is-normal"><label class="label">Exercise</label></div>
-                            <div class="field-body">
-                                <div class="field">
+                        <div >
+                            <div ><label class="label">Exercise</label></div>
+                            <div >
+                                <div >
                                     <div class="control control--modal has-icons-left has-icons-right">
                                         <input id="selectedExerciseName" onclick="showExerciseSelectorDivClick();" name="exercise" type="text" class="input" value="{{ exercises.0.name }}">
                                         <span class="icon is-left has-text-dark">
@@ -193,11 +191,11 @@
                             </div>
                         </div>
                         <div><!---->
-                            <div class="field is-horizontal">
-                                <div class="field-label is-normal"><label for="liftmass" class="label">
+                            <div >
+                                <div ><label for="liftmass" class="label">
                                     Lift
                                 </label></div>
-                                <div class="field-body">
+                                <div >
                                     <div class="field is-expanded">
                                         <div class="field has-addons">
                                             <div class="control is-expanded">
@@ -207,18 +205,18 @@
                                         </div> <!----></div>
                                 </div>
                             </div>
-                            <div class="field is-horizontal">
-                                <div class="field-label is-normal"><label for="repetitions" class="label">Repetitions</label></div>
-                                <div class="field-body">
-                                    <div class="field">
+                            <div >
+                                <div ><label for="repetitions" class="label">Repetitions</label></div>
+                                <div >
+                                    <div >
                                         <div class="control"><input type="number" name="repetitions" id="repetitions" min="1" max="500" tabindex="2" class="input"></div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="field is-horizontal">
-                                <div class="field-label is-normal"><label for="sets" class="label">Sets</label></div>
-                                <div class="field-body">
-                                    <div class="field">
+                            <div >
+                                <div ><label for="sets" class="label">Sets</label></div>
+                                <div >
+                                    <div >
                                         <div class="control"><input type="number" name="sets" id="sets" tabindex="3" min="1" max="10" class="input"></div>
                                     </div>
                                 </div>
@@ -241,7 +239,7 @@
                     <button onclick="hideExerciseSelectorDivClick();" aria-label="close" type="button" class="delete"></button>
                 </header>
                 <section class="modal-card-search">
-                    <div class="field">
+                    <div >
                         <div class="control is-expanded has-icons-left">
                             <input onchange="onFilterTextChanged(this);" type="text" placeholder="Search..." autocomplete="off" class="input">
                             <span class="icon is-small is-left"><i class="slicon slicon-fa-search"></i></span>

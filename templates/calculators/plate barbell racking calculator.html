@@ -1,0 +1,206 @@
+{% extends 'base.html' %}
+{% block content %}
+    <script>
+        let totalLiftInput, barWeightInput;
+        document.addEventListener('DOMContentLoaded', () => {
+            totalLiftInput = document.getElementById('totalLiftInput');
+            barWeightInput = document.getElementById('barWeightInput');
+
+            totalLiftInput.addEventListener('change', (event) => {
+                if (totalLiftInput.value === '')
+                    totalLiftInput.value = barWeightInput.value;
+                else if (parseFloat(totalLiftInput.value) < parseFloat(barWeightInput.value)) {
+                    alert('Total lift mass must be greater than bar weight mass')
+                    totalLiftInput.value = barWeightInput.value;
+                }
+            });
+
+            barWeightInput.addEventListener('change', (event) => {
+                if (barWeightInput.value === '')
+                    barWeightInput.value = totalLiftInput.value;
+                else if (parseFloat(totalLiftInput.value) < parseFloat(barWeightInput.value)) {
+                    alert('Bar weight mass should be smaller than total lift mass')
+                    barWeightInput.value = totalLiftInput.value;
+                }
+            });
+        });
+    </script>
+    <div id="plateContainer">
+        <div class="section-box"><h1 class="title is-2 is-size-3-mobile is-spaced">Plate Barbell Racking Calculator</h1>
+            <h2 class="subtitle is-3 is-size-4-mobile">
+                Calculate the plates you need to load on your barbell
+            </h2>
+            <h3 class="subtitle is-4 is-size-5-mobile">
+                Enter the lift you want to perform:
+            </h3>
+            <form action="{% url 'plate barbell racking calculator' %}" method="post">
+                {% csrf_token %}
+                <div >
+                    <div ><label for="totalLiftInput" class="label">
+                        Total Lift
+                    </label></div>
+                    <div >
+                        <div class="field has-addons">
+                            <div class="control is-expanded">
+                                <input type="number" id="totalLiftInput" name="liftmass" min="1" max="4000" required="required" step="0.1" class="input" value="{{ total_lift_mass }}">
+                            </div>
+                            <div class="control"><span class="button is-static">kg</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div >
+                    <div ><label for="barWeightInput" class="label">
+                        Bar Weight
+                    </label></div>
+                    <div >
+                        <div class="field has-addons">
+                            <div class="control is-expanded">
+                                <input type="number" id="barWeightInput" name="barliftmass" min="1" max="4000" required="required" step="0.1" class="input" value="{{ bar_weight }}">
+                            </div>
+                            <div class="control"><span class="button is-static">kg</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div >
+                    <div ></div>
+                    <div >
+                        <div >
+                            <div class="control"><input type="submit" value="Calculate Plates" name="calculateTotal" class="button is-primary is-medium"></div>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="subtitle is-4 is-size-5-mobile mt-5">
+                    Customize the plates you have available at your gym (optional):
+                </h3>
+                <table class="table is-fullwidth is-striped">
+                    <thead>
+                    <tr>
+                        <th width="50%">Plate Weight</th>
+                        <th>Quantity (each side)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>25 kg</td>
+                        <td>
+                            <div >
+                                <div class="control">
+                                    <input name="plate_quantity_25" type="number" min="0" max="10" class="input" value="{{ plate_quantity_25 }}">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tbody>
+                    <tr>
+                        <td>20 kg</td>
+                        <td>
+                            <div >
+                                <div class="control">
+                                    <input name="plate_quantity_20" type="number" min="0" max="10" class="input" value="{{ plate_quantity_20 }}">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tbody>
+                    <tr>
+                        <td>15 kg</td>
+                        <td>
+                            <div >
+                                <div class="control">
+                                    <input name="plate_quantity_15" type="number" min="0" max="10" class="input" value="{{ plate_quantity_15 }}">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tbody>
+                    <tr>
+                        <td>10 kg</td>
+                        <td>
+                            <div >
+                                <div class="control">
+                                    <input name="plate_quantity_10" type="number" min="0" max="10" class="input" value="{{ plate_quantity_10 }}">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tbody>
+                    <tr>
+                        <td>5 kg</td>
+                        <td>
+                            <div >
+                                <div class="control">
+                                    <input name="plate_quantity_5" type="number" min="0" max="10" class="input" value="{{ plate_quantity_5 }}">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tbody>
+                    <tr>
+                        <td>2.5 kg</td>
+                        <td>
+                            <div >
+                                <div class="control">
+                                    <input name="plate_quantity_2_5" type="number" min="0" max="10" class="input" value="{{ plate_quantity_2_5 }}">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+        <div id="plateCalculatorResults" class="section-box content">
+            <h2 class="title is-3 is-size-4-mobile">Plates Calculated</h2>
+            {% if calculator_result_status == 'OK' %}
+                <div>
+                    <p>
+                        You can make
+                        <strong>{{ total_lift_mass }} kg</strong>
+                        from
+                        <strong>{{ num_of_plates }} plate</strong>
+                        each side plus the bar weight of
+                        <strong>{{ bar_weight }} kg</strong>.
+                    </p>
+                    <h3 class="subtitle is-4 is-size-5-mobile">Each side</h3>
+                    <ul>
+                        {% for key, value in plates_data.items %}
+                            <li>{{ value }} x {{ key }} kg</li>
+                        {% endfor %}
+                    </ul>
+                    <p>
+                        Bar: {{ bar_weight }} kg</p>
+                </div>
+            {% elif calculator_result_status == 'FAIL' %}
+                <div>
+                    <p>
+                        We couldn't make your lift exactly but you can make
+                        <strong>{{ fail_lift_mass }} kg</strong>
+                        from
+                        <strong>{{ num_of_plates }} plates</strong>
+                        each side plus the bar weight of
+                        <strong>{{ bar_weight }} kg</strong>.
+                    </p>
+                    <p>
+                        This is
+                        <strong>{{ fail_lift_mass_difference }} kg</strong>
+                        under your target of
+                        <strong>{{ total_lift_mass }} kg .</strong>
+                    </p>
+                    <h3 class="subtitle is-4 is-size-5-mobile">Each side</h3>
+                    <ul>
+                        {% for key, value in plates_data.items %}
+                            <li>{{ value }} x {{ key }} kg</li>
+                        {% endfor %}
+                    </ul>
+                    <p>
+                        Bar: {{ bar_weight }} kg</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

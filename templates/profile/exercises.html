@@ -1,4 +1,4 @@
-{% extends 'profile/base.html' %}
+{% extends 'base.html' %}
 {% block content %}
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
     <script>
@@ -51,7 +51,7 @@
         <section class="section has-background-white">
             <div class="container">
                 <div class="buttons mb-6"><a class="button is-primary is-large"><span>Select Exercise</span> <span class="icon"><i aria-hidden="true" class="slicon slicon-fa-angle-down"></i></span></a></div>
-                <div class="block mb-6"><h2 class="title is-3 is-size-4-mobile">Exercise Comparison</h2>
+                <div class="sub_content mb-6"><h2 class="title is-3 is-size-4-mobile">Exercise Comparison</h2>
                     <div class="buttons">
                         <button type="button" class="button">Customize Exercises
                         </button>
@@ -59,7 +59,7 @@
                     <div class="" ga-event-label="exercise-graph">
                         <div class="columns">
                             <div class="column">
-                                <div class="field"><label for="undefinedType" class="label">Graph Type</label>
+                                <div ><label for="undefinedType" class="label">Graph Type</label>
                                     <div class="control">
                                         <div class="select"><select id="undefinedType">
                                             <option value="percentile">
@@ -82,7 +82,7 @@
                                 </div>
                             </div>
                             <div class="column">
-                                <div class="field"><label for="undefinedDateRange" class="label">Date Range</label>
+                                <div ><label for="undefinedDateRange" class="label">Date Range</label>
                                     <div class="control">
                                         <div class="select"><select id="undefinedDateRange">
                                             <option value="3">
@@ -115,7 +115,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="block"><h2 class="title is-3 is-size-4-mobile">Powerlifting</h2> <!---->
+                <div class="sub_content"><h2 class="title is-3 is-size-4-mobile">Powerlifting</h2> <!---->
                     <div class="tags are-medium has-addons"><span class="tag">
             Powerlifting Level
           </span> <span class="tag is-primary"><span class="stars"><span class="star__full">★</span><!----><span class="star__empty">★★★★</span></span></span> <span class="tag is-primary">
@@ -124,7 +124,7 @@
                     <div class="" ga-event-label="overall-graph">
                         <div class="columns">
                             <div class="column">
-                                <div class="field"><label for="overallGraphType" class="label">Graph Type</label>
+                                <div ><label for="overallGraphType" class="label">Graph Type</label>
                                     <div class="control">
                                         <div class="select"><select id="overallGraphType">
                                             <option value="percentile">
@@ -141,7 +141,7 @@
                                 </div>
                             </div>
                             <div class="column">
-                                <div class="field"><label for="overallGraphDateRange" class="label">Date Range</label>
+                                <div ><label for="overallGraphDateRange" class="label">Date Range</label>
                                     <div class="control">
                                         <div class="select"><select id="overallGraphDateRange">
                                             <option value="3">

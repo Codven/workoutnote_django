@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.core.mail import EmailMessage
 from datetime import datetime, timedelta
+from datetime import date
 from django.conf import settings
 
 from utils.tools import Tools, Levels
@@ -507,12 +508,11 @@ def handle_settings(request):
             preferences.name = request.POST['name']
         if 'gender' in request.POST and request.POST['gender'] in models.Preferences.Gender.ALL:
             preferences.gender = request.POST['gender']
-        if 'birthday' in request.POST and re.match(r'^\d{8}$', request.POST['birthday']):
-            day = int(request.POST['birthday'][:2])
-            month = int(request.POST['birthday'][2:4])
-            year = int(request.POST['birthday'][4:])
-            if 1930 < year < datetime.now().year and 0 < month < 13 and 0 < day < 32:
-                preferences.date_of_birth = datetime.now().replace(year=year, month=month, day=day, hour=0, minute=0, second=0, microsecond=0)
+        if 'birthday' in request.POST and re.match(r'^\d{4}-\d{2}-\d{2}$', request.POST['birthday']):
+            try:
+                preferences.date_of_birth = date.fromisoformat(request.POST['birthday'])
+            except ValueError as err:
+                print(err)
         if 'height' in request.POST and 30 < float(request.POST['height']) < 300:
             preferences.height = float(request.POST['height'])
         if 'measurement_unit' in request.POST and request.POST['measurement_unit'] in models.Preferences.MeasurementUnit.ALL:

@@ -428,8 +428,8 @@ def handle_settings(request):
             year = int(request.POST['birthday'][4:])
             if 1930 < year < datetime.now().year and 0 < month < 13 and 0 < day < 32:
                 preferences.date_of_birth = datetime.now().replace(year=year, month=month, day=day, hour=0, minute=0, second=0, microsecond=0)
-        if 'height' in request.POST and 30 < float(request.POST['height']) < 300:
-            preferences.height = float(request.POST['height'])
+        if 'share' in request.POST:
+            preferences.shared_profile = True if request.POST['share'] == 'true' else False
         if 'oldpassword' in request.POST and 'newpassword' in request.POST and 'repeatpassword' in request.POST and request.POST['newpassword'] == request.POST['repeatpassword']:
             if request.user.check_password(raw_password=request.POST['oldpassword']):
                 request.user.set_password(request.POST['newpassword'])

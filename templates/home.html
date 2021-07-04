@@ -49,6 +49,28 @@
         </div>
     </div>
 
+    {% for day_str, workouts in workouts_by_days.items %}
+        <h4 style="color: #3f51b5"><b>{{ day_str }}</b></h4>
+        {% for workout, exercises in workouts.items %}
+            <div class="sub_content" style="min-height: 190px;">
+                <div style="height: 12px;">
+                    <span style="color: #3f51b5; font-weight: bold;" class="w3-left">{{ workout.title }}</span>
+                    <span class="w3-right">...</span>
+                </div>
+                <hr style="border: 1px solid lightgrey;">
+                <div style="display: inline-block; padding: 8px;">
+                    {% for exercise, lifts in exercises.items %}
+                        <span>{{ lifts.count }} x {{ exercise.name }} ({{ exercise.category }}, {{ exercise.body_part }})</span> <br>
+                    {% endfor %}
+                </div>
+                <div style="display: inline-block; padding: 8px; text-align: center;" class="w3-right">
+                    <span style="font-weight: bold; font-size: large;" class="light-blue-text">{{ workout.get_duration_str }}</span> <br>
+                    <a onclick="repeatWorkoutSession({{ workout.id }});" class="w3-button w3-buttoncolor" style="padding: 5px 30px 5px 30px; border-radius: 4px; display: block; margin-top: 10px;">REPEAT</a>
+                </div>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
     <style>
         #liftCreatorHead {
             text-align: center;
@@ -126,8 +148,12 @@
             color: lightgrey;
         }
 
+        .dark-blue-text {
+            color: #0006b1;;
+        }
+
         .light-blue-text {
-            color: #0006b1;
+            color: #C5BDEC;
         }
 
         tr:nth-child(even) td {
@@ -149,8 +175,24 @@
         let selectedExercise = {name: '{{ exercises.0.name }}', icon: '{{ exercises.0.icon }}', bodyPart: '{{ exercises.0.body_part }}', category: '{{ exercises.0.category }}'};
         let stopwatchId, stopwatchSeconds = 0;
 
+        function findExerciseByName(name) {
+            for (let i = 0; i < allExercises.length; i++)
+                if (allExercises[i].name === name)
+                    return allExercises[i];
+            return null;
+        }
+
         let newExercises = [];
         let newSetNumber = 1, newExercise = "{{ exercises.0.name }}", newWeight = 1, newReps = 1;
+        let allWorkouts = [{% for _, workout_sessions in workouts_by_days.items %}{% for workout_session, exercises in workout_sessions.items %}{
+            workout_session_id: {{ workout_session.id }},
+            title: "{{ workout_session.title }}",
+            lifts: [{% for exercise, lifts in exercises.items %}{% for lift in lifts.lifts %}{
+                exerciseName: "{{ exercise.name }}",
+                liftMass: {{ lift.lift_mass }},
+                reps: {{ lift.repetitions }},
+            }, {% endfor %}{% endfor %}]
+        }, {% endfor %}{% endfor %}];
 
         $(document).ready(function () {
             $(".default_option").click(function () {
@@ -285,12 +327,22 @@
             let reps = $('#newLiftReps').val();
 
             if (weight != null && reps != null && parseFloat(weight) > 0 && parseFloat(reps) > 0) {
+                // add to array
                 newExercise = {id: newExercises.length + 1, exercise: selectedExercise, liftMass: Math.floor(parseFloat(weight)), reps: Math.floor(parseFloat(reps)), enabled: true};
                 newExercises.push(newExercise);
 
                 // display on UI
-                $('#newExercisesTable tr:last').before('<tr id="exerciseRow' + newExercise.id + '"> <td class="set_column light-blue-text">' + newExercise.id + '</td><td class="exercise_column light-blue-text">' + newExercise.exercise.name + '(' + newExercise.exercise.bodyPart + ')</td><td class="weight_column light-blue-text">' + weight + '</td><td class="repetition_column light-blue-text">' + reps + '</td><td class="done_column"> <a onclick="toggleExercise(' + newExercise.id + ');" class="w3-button w3-buttoncolor" style="padding: 5px; margin: 0; line-height: 1; border-radius: 2px;"><img src="{% static 'checked.png' %}" height="20px"></a> </td></tr>');
+                $('#newExercisesTable tr:last').before('<tr id="exerciseRow' + newExercise.id + '"> <td class="set_column dark-blue-text">' + newExercise.id + '</td><td class="exercise_column dark-blue-text">' + newExercise.exercise.name + '(' + newExercise.exercise.bodyPart + ')</td><td class="weight_column dark-blue-text">' + weight + '</td><td class="repetition_column dark-blue-text">' + reps + '</td><td class="done_column"> <a onclick="toggleExercise(' + newExercise.id + ');" class="w3-button w3-buttoncolor" style="padding: 5px; margin: 0; line-height: 1; border-radius: 2px;"><img src="{% static 'checked.png' %}" height="20px"></a> </td></tr>');
             }
+        }
+
+        function addNewExerciseWithRawValues(liftMass, reps, exerciseName) {
+            // add to array
+            newExercise = {id: newExercises.length + 1, exercise: findExerciseByName(exerciseName), liftMass: liftMass, reps: reps, enabled: true};
+            newExercises.push(newExercise);
+
+            // display on UI
+            $('#newExercisesTable tr:last').before('<tr id="exerciseRow' + newExercise.id + '"> <td class="set_column dark-blue-text">' + newExercise.id + '</td><td class="exercise_column dark-blue-text">' + newExercise.exercise.name + '(' + newExercise.exercise.bodyPart + ')</td><td class="weight_column dark-blue-text">' + liftMass + '</td><td class="repetition_column dark-blue-text">' + reps + '</td><td class="done_column"> <a onclick="toggleExercise(' + newExercise.id + ');" class="w3-button w3-buttoncolor" style="padding: 5px; margin: 0; line-height: 1; border-radius: 2px;"><img src="{% static 'checked.png' %}" height="20px"></a> </td></tr>');
         }
 
         function toggleExercise(id) {
@@ -331,6 +383,16 @@
                     img.attr('src', "{% static 'unchecked.png' %}");
                 }
             }
+        }
+
+        function repeatWorkoutSession(workoutSessionId) {
+            for (let i = 0; i < allWorkouts.length; i++)
+                if (allWorkouts[i].workout_session_id === workoutSessionId) {
+                    $("#workoutTitle").val(allWorkouts[i].title);
+                    for (let j = 0; j < allWorkouts[i].lifts.length; j++)
+                        addNewExerciseWithRawValues(allWorkouts[i].lifts[j].liftMass, allWorkouts[i].lifts[j].reps, allWorkouts[i].lifts[j].exerciseName);
+                    break;
+                }
         }
 
         function saveExercises() {

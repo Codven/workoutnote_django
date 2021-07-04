@@ -58,8 +58,14 @@ class WorkoutSession(models.Model):
     title = models.CharField(max_length=512, default='[unnamed workout]')
     duration = models.IntegerField(default=0)
 
+    def get_duration_str(self):
+        seconds = self.duration % 60
+        minutes = (int((self.duration - seconds) / 60)) % 60
+        hours = int(((int((self.duration - seconds) / 60)) % 60 - minutes) / 60)
+        return f'{hours:02}:{minutes:02}:{seconds:02}'
+
     def get_day_str(self):
-        return self.timestamp.strftime('%Y.%m.%d. %a').upper()
+        return timezone.localtime(self.timestamp).strftime('%Y.%m.%d. %a').upper()
 
 
 class Lift(models.Model):
@@ -70,6 +76,3 @@ class Lift(models.Model):
     lift_mass = models.FloatField()
     repetitions = models.IntegerField()
     one_rep_max = models.FloatField(default=None)
-
-    def __str__(self):
-        return f'{self.exercise.name} ({self.exercise.category, self.exercise.body_part})'

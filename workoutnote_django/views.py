@@ -125,31 +125,29 @@ def handle_logout(request):
 def handle_index(request):
     if request.user.is_superuser:
         return redirect(to='admin')
-
     name = models.Preferences.objects.get(user=request.user).name
-
     db_workout_sessions = models.WorkoutSession.objects.filter(user=request.user)
-
+    workouts_by_days = {}
     for db_workout_session in db_workout_sessions:
         db_lifts = models.Lift.objects.filter(workout_session=db_workout_session)
-
-    lifts_by_days = {}
-    # for lift in lifts:
-    #     day = timezone.localtime(lift.timestamp).replace(hour=0, minute=0, second=0, microsecond=0)
-    #     if day in lifts_by_days:
-    #         lifts_by_days[day] += [lift]
-    #     else:
-    #         lifts_by_days[day] = [lift]
-    # days = list(lifts_by_days.keys())
-    # days.sort(reverse=True)
-    # lifts_by_days = [(Tools.date2str(day, readable=True), lifts_by_days[day]) for day in days]
-
+        day_str = db_workout_session.get_day_str()
+        for db_lift in db_lifts:
+            if day_str in workouts_by_days:
+                if db_workout_session in workouts_by_days[day_str]:
+                    if db_lift.exercise in workouts_by_days[day_str][db_workout_session]:
+                        workouts_by_days[day_str][db_workout_session][db_lift.exercise]['count'] += 1
+                        workouts_by_days[day_str][db_workout_session][db_lift.exercise]['lifts'] += [db_lift]
+                    else:
+                        workouts_by_days[day_str][db_workout_session][db_lift.exercise] = {'count': 1, 'lifts': [db_lift]}
+                else:
+                    workouts_by_days[day_str][db_workout_session] = {db_lift.exercise: {'count': 1, 'lifts': [db_lift]}}
+            else:
+                workouts_by_days[day_str] = {db_workout_session: {db_lift.exercise: {'count': 1, 'lifts': [db_lift]}}}
     return render(request=request, template_name='home.html', context={
         'name': name if name else request.user.username,
         'at_home': True,
-
         'exercises': models.Exercise.objects.all(),
-        'lifts_by_days': lifts_by_days
+        'workouts_by_days': workouts_by_days
     })
 
 
@@ -523,7 +521,7 @@ def handle_add_workout(request):
         return JsonResponse(data={'success': False, 'error': str(e)})
 
     # create workout session
-    db_workout = models.WorkoutSession.objects.create(title=request.POST['title'], duration=int(request.POST['duration']))
+    db_workout = models.WorkoutSession.objects.create(user=request.user, title=request.POST['title'], duration=int(request.POST['duration']))
     db_workout.save()
     # create lifts
     for exercise in exercises:
@@ -531,9 +529,8 @@ def handle_add_workout(request):
         lift_mass = float(exercise['liftMass'])
         repetitions = int(float(exercise['repetitions']))
         models.Lift.objects.create(
-            user=request.user,
             exercise=db_exercise,
-            workout=db_workout,
+            workout_session=db_workout,
             lift_mass=lift_mass,
             repetitions=repetitions,
             one_rep_max=Tools.calculate_one_rep_max(lift_mass, repetitions)

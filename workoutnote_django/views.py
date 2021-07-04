@@ -124,7 +124,7 @@ def handle_logout(request):
 @login_required
 def handle_index(request):
     if request.user.is_superuser:
-        return redirect(to='admin')
+        return redirect(to='logout')
     name = models.Preferences.objects.get(user=request.user).name
     db_workout_sessions = models.WorkoutSession.objects.filter(user=request.user)
     workouts_by_days = {}

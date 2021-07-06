@@ -38,17 +38,17 @@ class EmailConfirmationCodes(models.Model):
 
 class Exercise(models.Model):
     name = models.CharField(max_length=64, primary_key=True)
-    icon = models.CharField(max_length=128)
+    icon = models.ImageField(upload_to='exercise_icons', default='default_icon.svg')
     body_part = models.CharField(max_length=16)
-    category = models.CharField(max_length=16)
+    category = models.CharField(max_length=16, default='all body parts')
 
     @staticmethod
     def init_from_csv():
         Exercise.objects.all().delete()
-        with open('/Users/kevin/PycharmProjects/workoutnote_django/static/exercises.csv', 'r') as r:
+        with open('C:\\Users\\Nematjon\\PycharmProjects\\workoutnote_django\\static\\exercises-kr.csv', 'r', encoding='utf-8') as r:
             for line in r.readlines()[1:]:
-                exercise_name, icon, body_part, category = line[:-1].split(',')
-                Exercise.objects.create(name=exercise_name, icon=icon, body_part=body_part, category=category).save()
+                exercise_name, body_part = line[:-1].split(',')
+                Exercise.objects.create(name=exercise_name, body_part=body_part).save()
 
 
 class WorkoutSession(models.Model):

@@ -21,17 +21,26 @@
 <nav class="w3-sidebar w3-bar-block w3-black w3-collapse w3-top" style="z-index: 3; width: 250px; display: none;" id="mySidebar">
     <div class="w3-container w3-display-container w3-padding-16">
         <a href="{% url 'index' %}">
-            <img alt="Workoutnote" src="{% static 'WORKOUTNOTE_horizontal_white.png' %}" width="200" height="50" style="cursor: pointer;">
+            <img alt="Workoutnote" src="{% static 'Logo-white.svg' %}" height="55" style="cursor: pointer;">
         </a>
     </div>
     <div id="sidebar_middle_part" class="w3-padding-64 w3-large w3-text-grey" style="font-weight:bold">
         <a href="{% url 'index' %}" class="w3-bar-item w3-button {% if at_home %}w3-navcolor{% else %}w3-black{% endif %}">HOME</a>
         <a href="#" class="w3-bar-item w3-button {% if at_calendar %}w3-navcolor{% else %}w3-black{% endif %}">MY CALENDAR</a>
-        <a href="{% url 'calculators' %}" class="w3-bar-item w3-button {% if at_calculators %}w3-navcolor{% else %}w3-black{% endif %}">STRENGTH RANK</a>
+        <a href="{% url 'calculators' %}" class="w3-bar-item w3-button {% if at_calculators %}w3-navcolor{% else %}w3-black{% endif %}">
+            <img src="{% static 'Stats-white.svg' %}" height="45">
+            <span>STRENGTH RANK</span>
+        </a>
     </div>
     <div id="sidebar_bottom_part">
-        <a href="{% url 'settings' %}" class="w3-bar-item w3-button {% if at_settings %}w3-navcolor{% else %}w3-black{% endif %}">SETTINGS</a>
-        <a href="{% url 'logout' %}" class="w3-bar-item w3-button" style="margin-bottom: 20px;">LOG OUT</a>
+        <a href="{% url 'settings' %}" class="w3-bar-item w3-button {% if at_settings %}w3-navcolor{% else %}w3-black{% endif %}">
+            <img src="{% static 'Settings-white.svg' %}" height="50" width="50">
+            <span>SETTINGS</span>
+        </a>
+        <a href="{% url 'logout' %}" class="w3-bar-item w3-button" style="margin-bottom: 20px;">
+            <img src="{% static 'Logout-white.svg' %}" height="30" style="margin-left: 15px; margin-right: 5px">
+            <span>LOG OUT</span>
+        </a>
         <span style="font-size: x-small; margin-left: 10px;">©2021 by Deltoid. All rights reserved.</span>
     </div>
 </nav>
@@ -40,7 +49,7 @@
 <header class="w3-bar w3-top w3-hide-large w3-black w3-xlarge">
     <div class="w3-bar-item w3-padding-16 w3-wide">
         <a href="{% url 'index' %}">
-            <img alt="Workoutnote" src="{% static 'WORKOUTNOTE_horizontal_white.png' %}" width="160" height="40" style="cursor: pointer;">
+            <img alt="Workoutnote" src="{% static 'Logo-white.svg' %}" height="45" style="cursor: pointer;">
         </a>
     </div>
     <div class="w3-bar-item w3-padding-16 w3-button w3-right">
@@ -75,7 +84,7 @@
         <div class="modal-card">
             <header class="modal-card-head"><p class="modal-card-title">Select Exercise</p></header>
             <section class="modal-card-search">
-                <div >
+                <div>
                     <div class="control is-expanded has-icons-left">
                         <input onchange="onFilterTextChanged(this);" type="text" placeholder="Search..." autocomplete="off" class="input">
                     </div>

@@ -13,15 +13,10 @@ from datetime import datetime, timedelta
 from django.http import JsonResponse
 from django.conf import settings
 
-from utils.tools import Tools, Levels
+from utils.tools import Tools, Levels, Status
 from workoutnote_django import models
 
 LIMIT_OF_ACCEPTABLE_DATA_AMOUNT = 5
-
-
-class Status:
-    OK = "OK"
-    FAIL = "FAIL"
 
 
 @login_required
@@ -45,7 +40,7 @@ def handle_login(request):
         return redirect(to='index')
     elif request.method == 'GET':
         return render(request=request, template_name='auth.html', context={
-            'title': 'Welcome to the Workoutnote community!'
+            'title': ''
         })
     else:
         if 'email' in request.POST and 'password' in request.POST:
@@ -171,38 +166,19 @@ def handle_one_rep_max_calculator(request):
         'result_table_2': [],
         'calculator_result_status': None,
     }
-    table_1_reps = [1, 2, 4, 6, 8, 10, 12, 16, 20, 24, 30]
-    table_2_percentages = [
-        100, 97, 94, 92, 89, 86, 83, 81, 78, 75, 73, 71, 70, 68, 67, 65, 64, 63, 61, 60, 59, 58, 57, 56, 55, 54, 53, 52, 51, 50
-    ]
     if request.method == 'GET':
-        for index, item in enumerate(table_2_percentages):
+        for index, item in enumerate(Tools.ONE_REP_MAX_PERCENTAGES):
             data['result_table_2'].append(
                 {'percentage': item, 'reps_of_1rm': index + 1}
             )
 
         return render(request=request, template_name='calculators/one rep max calculator.html', context=data)
     elif request.method == 'POST':
-        result = Tools.calculate_one_rep_max(
+        data = Tools.handle_one_rep_max_calculator_post_req(
+            data,
             float(request.POST['liftmass']),
             int((request.POST['repetitions']))
         )
-        max_percentage = 100
-        data['result_number'] = result
-        data['calculator_result_status'] = Status.OK
-
-        # Populate Table 1 with content
-        for item in table_1_reps:
-            data['result_table_1'].append(
-                {'percentage': max_percentage, 'liftmass': round(result * max_percentage / 100, 1), 'reps_of_1rm': item}
-            )
-            max_percentage -= 5
-
-        # Populate Table 2 with content
-        for index, item in enumerate(table_2_percentages):
-            data['result_table_2'].append(
-                {'percentage': item, 'liftmass': round(result * item / 100, 1), 'reps_of_1rm': index + 1}
-            )
         return render(request=request, template_name='calculators/one rep max calculator.html', context=data)
 
 

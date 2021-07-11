@@ -30,7 +30,7 @@
     <style>
         .login-page {
             width: 360px;
-            padding: 8% 0 0;
+            padding: 3% 0 0;
             margin: auto;
         }
 
@@ -121,4 +121,132 @@
             $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
         });
     </script>
+
+    <div class="sub_content">
+        <h1>1 Rep Max 계산기</h1>
+        <div class="section-box">
+            <p>
+                모든 리프트에 대해 최대 1RM을 계산하기. Your one-rep max is the max weight you can lift
+                for a single repetition for a given exercise.
+            </p>
+            <form id="oneRepMaxCalculator" action="{% url 'login' %}" method="post">
+                {% csrf_token %}
+                <div>
+                    <div><label for="liftmass" class="label">
+                        Lift
+                    </label></div>
+                    <div>
+                        <div class="field has-addons">
+                            <div class="control is-expanded">
+                                <input type="number" id="liftmass" name="liftmass" min="1" max="1500" required="required" step="0.1" class="input">
+                            </div>
+                            <div class="control"><span class="button is-static">kg</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div><label for="repetitions" class="label">반복</label></div>
+                    <div>
+                        <input type="number" name="repetitions" id="repetitions" min="1" max="500" class="input" required="required">
+                    </div>
+                </div>
+                <div>
+                    <div></div>
+                    <div>
+                        <div>
+                            <div class="control">
+                                <input type="submit" value="Calculate One Rep Max" class="button is-primary is-medium">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {% if calculator_result_status == 'OK' %}
+            <div class="section-box">
+                <h2 class="title is-3 is-size-4-mobile">
+                    Your one rep max is
+                    <strong>{{ result_number }} kg</strong>
+                </h2>
+                <table class="table is-fullwidth is-striped">
+                    <thead>
+                    <tr>
+                        <th style="width: 33%">Percentage of 1RM</th>
+                        <th style="width: 33%">Lift Weight</th>
+                        <th>1RM 반복</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for result_item in result_table_1 %}
+                        <tr>
+                            <td>{{ result_item.percentage }}%</td>
+                            <td>{{ result_item.liftmass }} kg</td>
+                            <td>{{ result_item.reps_of_1rm }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <div class="notification " style="background-color: #f0d500;">
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td style="vertical-align: middle; width: 124px;" class="pr-2">
+                                <a href="https://runninglevel.com/?utm_source=runninglevel&amp;utm_medium=banner&amp;utm_campaign=launch&amp;utm_content=1rm_result" class="is-text" target="_blank">
+                                    <img src="/images/runninglevel.svg" width="112" height="28" alt="Running Level">
+                                </a>
+                            </td>
+                            <td style="vertical-align: middle">
+                                <strong>New!</strong> <a href="https://runninglevel.com/?utm_source=runninglevel&amp;utm_medium=banner&amp;utm_campaign=launch&amp;utm_content=1rm_result"
+                                                         class="is-text"
+                                                         target="_blank">Calculate your Running Level</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% elif calculator_result_status == 'FAIL' %}
+            <!---TODO: place the fail case here--->
+        {% endif %}
+        <div class="section-box">
+            <h2 class="title is-3 is-size-4-mobile">Repetition Percentages of 1RM</h2>
+            <table class="table is-fullwidth is-striped">
+                <thead>
+                <tr>
+                    {% if result_number %}
+                        <th style="width: 33%;">반복</th>
+                        <th style="width: 33%;">Lift Weight</th>
+                    {% else %}
+                        <th style="width: 50%;">반복</th>
+                    {% endif %}
+                    <th>Percentage of 1RM</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for result_item in result_table_2 %}
+                    <tr>
+                        <td>{{ result_item.reps_of_1rm }}</td>
+                        {% if result_number %}
+                            <td>{{ result_item.liftmass }} kg</td>
+                        {% endif %}
+                        <td>{{ result_item.percentage }}%</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="section-box content">
+            <h2 class="title is-3 is-size-4-mobile">Rate Your Lifts Against Other People</h2>
+            <p>
+                The Workoutnote Calculator can show your exact level of strength at any bodyweight.
+            </p>
+            <p>
+                <a href="{% url 'index' %}" class="button is-primary">
+                    Calculate Your Strength
+                </a>
+            </p>
+        </div>
+    </div>
+
 {% endblock %}

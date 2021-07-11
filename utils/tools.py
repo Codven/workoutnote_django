@@ -22,6 +22,11 @@ class Levels:
     }
 
 
+class Status:
+    OK = "OK"
+    FAIL = "FAIL"
+
+
 class Tools:
     AGE_RANGES = {
         '14-17': (14, 17),
@@ -34,6 +39,10 @@ class Tools:
         '80-89': (80, 89)
     }
     POWERLIFTING_EXERCISE_NAMES = ['Bench Press', 'Deadlift', 'Squat']
+    ONE_REP_MAX_REPS = [1, 2, 4, 6, 8, 10, 12, 16, 20, 24, 30]
+    ONE_REP_MAX_PERCENTAGES = [
+        100, 97, 94, 92, 89, 86, 83, 81, 78, 75, 73, 71, 70, 68, 67, 65, 64, 63, 61, 60, 59, 58, 57, 56, 55, 54, 53, 52, 51, 50
+    ]
 
     @staticmethod
     def calculate_one_rep_max(lift_mass: float, repetitions: int) -> float:
@@ -203,3 +212,23 @@ class Tools:
             return _date.strftime("%Y.%m.%d. %d %B %Y")
         else:
             return _date.strftime('%d%m%Y')
+
+    @staticmethod
+    def handle_one_rep_max_calculator_post_req(result_data: dict, liftmass: float, reps: int):
+        result = Tools.calculate_one_rep_max(liftmass, reps)
+        max_percentage = 100
+        result_data['result_number'] = result
+        result_data['calculator_result_status'] = Status.OK
+
+        # Populate Table 1 with content
+        for item in Tools.ONE_REP_MAX_REPS:
+            result_data['result_table_1'].append(
+                {'percentage': max_percentage, 'liftmass': round(result * max_percentage / 100, 1), 'reps_of_1rm': item}
+            )
+            max_percentage -= 5
+
+        # Populate Table 2 with content
+        for index, item in enumerate(Tools.ONE_REP_MAX_PERCENTAGES):
+            result_data['result_table_2'].append(
+                {'percentage': item, 'liftmass': round(result * item / 100, 1), 'reps_of_1rm': index + 1}
+            )

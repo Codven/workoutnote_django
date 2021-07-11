@@ -67,7 +67,7 @@ class Exercise(models.Model):
     @staticmethod
     def init_from_csv():
         Exercise.objects.all().delete()
-        with open(f'{os.getcwd()}/static/exercises-kr.csv', 'r', encoding='utf-8') as r:
+        with open('static/exercises-kr.csv', 'r', encoding='utf-8') as r:
             for line in r.readlines()[1:]:
                 exercise_name, body_part_str = line[:-1].split(',')
                 if BodyPart.objects.filter(name=body_part_str).exists() and Category.objects.filter(name='무슨'):

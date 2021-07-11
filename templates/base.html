@@ -149,8 +149,8 @@
         }
     }
 
-    function message_broadcast(message) {
-        localStorage.setItem('message', JSON.stringify(message));
+    function message_broadcast(key, value) {
+        localStorage.setItem(key, JSON.stringify(value));
         window.dispatchEvent(new Event('storage'));
     }
 </script>

@@ -38,7 +38,7 @@ urlpatterns = [
 
     path('settings/', views.handle_settings, name='settings'),
     path('add-workout/', views.handle_add_workout, name='add workout'),
-    
+
     # path('analyse-lift/<int:lift_id>/', views.handle_analyse_lift, name='analyse lift'),
 ]
 

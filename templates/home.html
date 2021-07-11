@@ -182,7 +182,7 @@
 
     <script>
         let selectExerciseDiv, exercisesListDiv, filterExerciseBodyPart, filterExerciseCategory, filterText, selectedExerciseName;
-        let allExercises = [{% for exercise in exercises %}{name: '{{ exercise.name }}',iconUrl: '{{ exercise.icon.url }}', bodyPart: '{{ exercise.body_part.name }}', category: '{{ exercise.category.name }}'},{% endfor %}];
+        let allExercises = [{% for exercise in exercises %}{id: {{ exercise.id }}, name: '{{ exercise.name }}',iconUrl: '{{ exercise.icon.url }}', bodyPart: '{{ exercise.body_part.name }}', category: '{{ exercise.category.name }}'},{% endfor %}];
         let selectedExercise = {name: '{{ exercises.0.name }}', iconUrl: '{{ exercises.0.icon.url }}', bodyPart: '{{ exercises.0.body_part.name }}', category: '{{ exercises.0.category.name }}'};
         let stopwatchId, stopwatchSeconds = 0;
 
@@ -247,6 +247,26 @@
             if (prevExercises != null) {
                 newExercises = JSON.parse(prevExercises);
                 setNewExercisesOnUI(newExercises);
+            }
+
+            let params = window.location.search.substr(1).split("&");
+            let exercise, liftMass;
+            for (let i = 0; i < params.length; i++) {
+                let kv = params[i].split('=');
+                if (kv[0] === 'exerciseId') {
+                    for (let j = 0; j < allExercises.length; j++)
+                        if (allExercises[j].id.toString() === kv[1])
+                            exercise = allExercises[j];
+                } else if (kv[0] === 'liftMass') {
+                    liftMass = parseInt(kv[1]);
+                }
+            }
+            if (exercise != null && liftMass != null) {
+                $('#newLiftWeight').val(liftMass);
+                $('#newLiftReps').val(1);
+
+                // addNewExerciseWithRawValues(liftMass, reps, exercise.name);
+                selectExerciseClick(exercise.name);
             }
         });
 

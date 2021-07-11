@@ -47,6 +47,9 @@ class BodyPart(models.Model):
         for body_part in ['등', '이두근', '가슴', '핵심', '숲', '다리', '어깨', '삼두근', '전체']:
             BodyPart.objects.create(name=body_part)
 
+    def __str__(self):
+        return f'{self.name}'
+
 
 class Category(models.Model):
     name = models.CharField(max_length=16)
@@ -57,8 +60,12 @@ class Category(models.Model):
         for category in ['무슨', '바벨', '체중', '굵은', '밧줄', '아령', '기계', '올림픽', '대회의']:
             Category.objects.create(name=category)
 
+    def __str__(self):
+        return f'{self.name}'
+
 
 class Exercise(models.Model):
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=64, unique=True)
     icon = models.ImageField(upload_to='exercise_icons', default='default_icon.svg')
     body_part = models.ForeignKey(to=BodyPart, null=True, on_delete=models.SET_NULL)
@@ -77,8 +84,12 @@ class Exercise(models.Model):
                         category=Category.objects.get(name='무슨')
                     )
 
+    def __str__(self):
+        return f'{self.name} ({self.body_part}, {self.category})'
+
 
 class WorkoutSession(models.Model):
+    id = models.AutoField(primary_key=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(to=django_User, on_delete=models.CASCADE)
     title = models.CharField(max_length=512, default='[unnamed workout]')
@@ -93,8 +104,12 @@ class WorkoutSession(models.Model):
     def get_day_str(self):
         return timezone.localtime(self.timestamp).strftime('%Y.%m.%d. %a').upper()
 
+    def __str__(self):
+        return f'{self.user.username}, {self.timestamp}, {self.title}, {self.duration}'
+
 
 class Lift(models.Model):
+    id = models.AutoField(primary_key=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     workout_session = models.ForeignKey(to=WorkoutSession, null=True, on_delete=models.SET_NULL)
     exercise = models.ForeignKey(to=Exercise, null=True, on_delete=models.SET_NULL)

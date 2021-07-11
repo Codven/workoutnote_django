@@ -120,7 +120,7 @@
                 <div id="exercisesListDiv" style="min-height: 415px;">
                     {% for exercise in exercises %}
                         <a onclick="selectExerciseClick('{{ exercise.name }}')" style="display: block; border-top: 1px solid lightgrey; padding: 3px; cursor: pointer;">
-                            <img src="{{ exercise.icon.url }}" height="35" width="35" style="margin: 5px">
+                            <img src="media/{{ exercise.icon.url }}" height="35" width="35" style="margin: 5px">
                             {{ exercise.name }} ({{ exercise.body_part.name }})
                         </a>
                     {% endfor %}

@@ -7,11 +7,11 @@
         </p>
         <form id="oneRepMaxCalculator" action="{% url 'one rep max calculator' %}" method="post">
             {% csrf_token %}
-            <div >
-                <div ><label for="liftmass" class="label">
+            <div>
+                <div><label for="liftmass" class="label">
                     Lift
                 </label></div>
-                <div >
+                <div>
                     <div class="field has-addons">
                         <div class="control is-expanded">
                             <input type="number" id="liftmass" name="liftmass" min="1" max="1500" required="required" step="0.1" class="input">
@@ -20,16 +20,17 @@
                     </div>
                 </div>
             </div>
-            <div >
-                <div ><label for="repetitions" class="label">반복</label></div>
-                <div >
+            <div>
+                <div><label for="repetitions" class="label">반복</label></div>
+                <div>
                     <input type="number" name="repetitions" id="repetitions" min="1" max="500" class="input" required="required">
                 </div>
             </div>
-            <div >
-                <div ></div>
-                <div >
-                    <div >
+            <br>
+            <div>
+                <div></div>
+                <div>
+                    <div>
                         <div class="control">
                             <input type="submit" value="Calculate One Rep Max" class="button is-primary is-medium">
                         </div>
@@ -38,8 +39,9 @@
             </div>
         </form>
     </div>
+    <br>
     {% if calculator_result_status == 'OK' %}
-        <div class="section-box">
+        <div class="sub_content">
             <h2 class="title is-3 is-size-4-mobile">
                 Your one rep max is
                 <strong>{{ result_number }} kg</strong>
@@ -47,9 +49,9 @@
             <table class="table is-fullwidth is-striped">
                 <thead>
                 <tr>
-                    <th style="width: 33%">Percentage of 1RM</th>
-                    <th style="width: 33%">Lift Weight</th>
-                    <th>1RM 반복</th>
+                    <th style="width: 33%; text-align: left;">Percentage of 1RM</th>
+                    <th style="width: 33%; text-align: left;">Lift Weight</th>
+                    <th style="text-align: left;">1RM 반복</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -62,38 +64,20 @@
                 {% endfor %}
                 </tbody>
             </table>
-
-            <div class="notification " style="background-color: #f0d500;">
-                <table>
-                    <tbody>
-                    <tr>
-                        <td style="vertical-align: middle; width: 124px;" class="pr-2">
-                            <a href="https://runninglevel.com/?utm_source=runninglevel&amp;utm_medium=banner&amp;utm_campaign=launch&amp;utm_content=1rm_result" class="is-text" target="_blank">
-                                <img src="/images/runninglevel.svg" width="112" height="28" alt="Running Level">
-                            </a>
-                        </td>
-                        <td style="vertical-align: middle">
-                            <strong>New!</strong> <a href="https://runninglevel.com/?utm_source=runninglevel&amp;utm_medium=banner&amp;utm_campaign=launch&amp;utm_content=1rm_result" class="is-text"
-                                                     target="_blank">Calculate your Running Level</a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
         </div>
     {% elif calculator_result_status == 'FAIL' %}
         <!---TODO: place the fail case here--->
     {% endif %}
-    <div class="section-box">
+    <div class="sub_content">
         <h2 class="title is-3 is-size-4-mobile">Repetition Percentages of 1RM</h2>
         <table class="table is-fullwidth is-striped">
             <thead>
             <tr>
                 {% if result_number %}
-                    <th style="width: 33%;">반복</th>
-                    <th style="width: 33%;">Lift Weight</th>
+                    <th style="width: 33%; text-align: left;">반복</th>
+                    <th style="width: 33%; text-align: left;">Lift Weight</th>
                 {% else %}
-                    <th style="width: 50%;">반복</th>
+                    <th style="width: 50%; text-align: left;">반복</th>
                 {% endif %}
                 <th>Percentage of 1RM</th>
             </tr>
@@ -110,16 +94,5 @@
             {% endfor %}
             </tbody>
         </table>
-    </div>
-    <div class="section-box content">
-        <h2 class="title is-3 is-size-4-mobile">Rate Your Lifts Against Other People</h2>
-        <p>
-            The Workoutnote Calculator can show your exact level of strength at any bodyweight.
-        </p>
-        <p>
-            <a href="{% url 'index' %}" class="button is-primary">
-                Calculate Your Strength
-            </a>
-        </p>
     </div>
 {% endblock %}

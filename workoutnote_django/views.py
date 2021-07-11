@@ -37,13 +37,11 @@ def handle_generate_dummy_data(request):
 
 # region authentication
 @require_http_methods(['GET', 'POST'])
-def handle_login(request):
+def handle_login(request, *args, **kwargs):
     if request.user.is_authenticated:
         return redirect(to='index')
     elif request.method == 'GET':
-        return render(request=request, template_name='auth.html', context={
-            'title': ''
-        })
+        return render(request=request, template_name='auth.html', context={'title': ''})
     else:
         if 'email' in request.POST and 'password' in request.POST:
             email = request.POST['email']
@@ -156,7 +154,6 @@ def handle_calculators(request):
     })
 
 
-@login_required
 @require_http_methods(['GET', 'POST'])
 def handle_one_rep_max_calculator(request):
     data = {
@@ -176,11 +173,26 @@ def handle_one_rep_max_calculator(request):
 
         return render(request=request, template_name='calculators/one rep max calculator.html', context=data)
     elif request.method == 'POST':
-        data = Tools.handle_one_rep_max_calculator_post_req(
-            data,
+        result = Tools.calculate_one_rep_max(
             float(request.POST['liftmass']),
             int((request.POST['repetitions']))
         )
+        max_percentage = 100
+        data['result_number'] = result
+        data['calculator_result_status'] = Status.OK
+
+        # Populate Table 1 with content
+        for item in Tools.ONE_REP_MAX_REPS:
+            data['result_table_1'].append(
+                {'percentage': max_percentage, 'liftmass': round(result * max_percentage / 100, 1), 'reps_of_1rm': item}
+            )
+            max_percentage -= 5
+
+        # Populate Table 2 with content
+        for index, item in enumerate(Tools.ONE_REP_MAX_PERCENTAGES):
+            data['result_table_2'].append(
+                {'percentage': item, 'liftmass': round(result * item / 100, 1), 'reps_of_1rm': index + 1}
+            )
         return render(request=request, template_name='calculators/one rep max calculator.html', context=data)
 
 

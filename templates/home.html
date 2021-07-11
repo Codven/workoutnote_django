@@ -7,7 +7,6 @@
             <div class="w3-text-grey w3-left" style="display: inline-block;">
                 <p style="font-size: small; margin: 0;">
                     <span id="stopwatch">{% now "SHORT_DATE_FORMAT" %}</span>
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                     <span>{% now "D" %}</span>
                 </p>
                 <input id="workoutTitle" type="text" placeholder="예 : 내 운동" value="">
@@ -99,6 +98,14 @@
         #workoutTitle {
             color: #C5BDEC;
             font-weight: bold;
+            width: 40%;
+            float: left;
+        }
+
+        #stopwatch{
+            float: left;
+            width: 40%;
+            text-align: left;
         }
 
         #workoutTitle::placeholder {

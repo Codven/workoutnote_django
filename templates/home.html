@@ -175,7 +175,7 @@
 
     <script>
         let selectExerciseDiv, exercisesListDiv, filterExerciseBodyPart, filterExerciseCategory, filterText, selectedExerciseName;
-        let allExercises = [{% for exercise in exercises %}{name: '{{ exercise.name }}',icon: '{{ exercise.icon }}',bodyPart: '{{ exercise.body_part.name }}',category: '{{ exercise.category.name }}'},{% endfor %}];
+        let allExercises = [{% for exercise in exercises %}{name: '{{ exercise.name }}',icon: '{{ exercise.icon }}', bodyPart: '{{ exercise.body_part.name }}', category: '{{ exercise.category.name }}'},{% endfor %}];
         let selectedExercise = {name: '{{ exercises.0.name }}', icon: '{{ exercises.0.icon }}', bodyPart: '{{ exercises.0.body_part.name }}', category: '{{ exercises.0.category.name }}'};
         let stopwatchId, stopwatchSeconds = 0;
 
@@ -310,7 +310,7 @@
                 }
 
             if (newExercise != null) {
-                selectedExerciseName.innerHTML = newExercise.name + '(' + newExercise.bodyPart.name + ')';
+                selectedExerciseName.innerHTML = newExercise.name + '(' + newExercise.bodyPart + ')';
                 selectedExercise = newExercise;
                 hideExerciseSelectorDivClick();
             }

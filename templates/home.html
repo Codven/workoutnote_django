@@ -30,13 +30,13 @@
                     <th class="repetition_column">반복</th>
                     <th class="done_column"></th>
                 </tr>
-                <tr>
+                <tr style="color: #777">
                     <td class="set_column light-grey-text"></td>
                     <td class="exercise_column" onclick="showExerciseSelectorDivClick();"><a id="selectedExerciseName">{{ exercises.0.name }} ({{ exercises.0.body_part.name }})</a></td>
                     <td class="weight_column"><input id="newLiftWeight" type="number" min="1" max="200" placeholder="1" value="1"></td>
-                    <td class="repetition_column"><input id="newLiftReps" id="selectedReps" type="number" min="1" max="30" placeholder="1" value="1"></td>
+                    <td class="repetition_column"><input id="newLiftReps" type="number" min="1" max="30" placeholder="1" value="1"></td>
                     <td class="done_column">
-                        <a onclick="addNewExercise();" class="w3-button w3-buttoncolor" style="padding: 5px; margin: 0; line-height: 1; border-radius: 15px;"><img id="timerControlButton" src="{% static 'add.png' %}" height="20px"></a>
+                        <button onclick="addNewExercise();" style="padding: 5px 5px 5px 5px; margin: 0 0 0 0; line-height: 1; border-radius: 15px; background: transparent; border: none; cursor: pointer;"><img id="timerControlButton" src="{% static 'add.svg' %}" height="20px"></button>
                     </td>
                 </tr>
             </table>
@@ -46,7 +46,6 @@
             <div style="display: inline-block;" class="w3-right">
                 <a id="saveExerciseButton" onclick="saveExercises()" class="w3-button w3-buttoncolor" style="padding: 8px 40px 8px 40px; border-radius: 8px; display: block;">저장</a>
             </div>
-
             <div style="display: inline-block;" class="w3-left">
                 <a id="saveExerciseButton" onclick="clearExercises()" class="w3-button w3-buttoncolor" style="padding: 8px 40px 8px 40px; border-radius: 8px; display: block;">삭제</a>
             </div>
@@ -64,7 +63,11 @@
                 <hr style="border: 1px solid lightgrey;">
                 <div style="display: inline-block; padding: 8px;">
                     {% for exercise, lifts in exercises.items %}
-                        <span>{{ lifts.count }} x {{ exercise.name }} ({{ exercise.category }}, {{ exercise.body_part }})</span> <br>
+                        <span>{{ lifts.count }} x <span style="font-weight: bold">{{ exercise.name }}</span>, {{ exercise.category.name }}, {{ exercise.body_part.name }}</span>
+                        <br>
+                        <span style="font-size: x-small; color: #777">({% for lift in lifts.lifts %}{{ lift.lift_mass|floatformat }}KG{% if not forloop.last %}, {% endif %}{% endfor %})</span>
+                        <br>
+                        <br>
                     {% endfor %}
                 </div>
                 <div style="display: inline-block; padding: 8px; text-align: center;" class="w3-right">
@@ -86,6 +89,7 @@
 
         #workoutTitle, #newLiftWeight, #newLiftReps {
             font-size: 14px;
+            color: #777;
             background: #0000;
             outline: none;
             box-sizing: border-box;
@@ -160,12 +164,8 @@
             color: #C5BDEC;
         }
 
-        tr:nth-child(even) td {
-            background: white;
-        }
-
-        tr:nth-child(odd) td {
-            background: #DFDFDF;
+        tr {
+            border-bottom: 1.5px solid #eee;
         }
 
         /* endregion */
@@ -175,8 +175,8 @@
 
     <script>
         let selectExerciseDiv, exercisesListDiv, filterExerciseBodyPart, filterExerciseCategory, filterText, selectedExerciseName;
-        let allExercises = [{% for exercise in exercises %}{name: '{{ exercise.name }}',icon: '{{ exercise.icon }}', bodyPart: '{{ exercise.body_part.name }}', category: '{{ exercise.category.name }}'},{% endfor %}];
-        let selectedExercise = {name: '{{ exercises.0.name }}', icon: '{{ exercises.0.icon }}', bodyPart: '{{ exercises.0.body_part.name }}', category: '{{ exercises.0.category.name }}'};
+        let allExercises = [{% for exercise in exercises %}{name: '{{ exercise.name }}',iconUrl: '{{ exercise.icon.url }}', bodyPart: '{{ exercise.body_part.name }}', category: '{{ exercise.category.name }}'},{% endfor %}];
+        let selectedExercise = {name: '{{ exercises.0.name }}', iconUrl: '{{ exercises.0.icon.url }}', bodyPart: '{{ exercises.0.body_part.name }}', category: '{{ exercises.0.category.name }}'};
         let stopwatchId, stopwatchSeconds = 0;
 
         function findExerciseByName(name) {
@@ -229,8 +229,12 @@
 
                 // refresh UI
                 $("#newExercisesTable tr:not(:last-child, :first-child)").empty();
-                for (let i = 0; i < newExercises.length; i++)
-                    $('#newExercisesTable tr:last').before('<tr id="exerciseRow' + newExercises[i].id + '"> <td class="set_column dark-blue-text">' + newExercises[i].id + '</td><td class="exercise_column dark-blue-text">' + newExercises[i].exercise.name + '(' + newExercises[i].exercise.bodyPart + ')</td><td class="weight_column dark-blue-text">' + newExercises[i].liftMass + '</td><td class="repetition_column dark-blue-text">' + newExercises[i].reps + '</td><td class="done_column"> <a onclick="toggleExercise(' + newExercises[i].id + ');" class="w3-button w3-buttoncolor" style="padding: 5px; margin: 0; line-height: 1; border-radius: 2px;"><img src="' + (newExercises[i].enabled ? '{% static 'checked.png' %}' : '{% static 'unchecked.png' %}') + '" height="20px"></a> </td></tr>');
+                for (let i = 0; i < newExercises.length; i++) {
+                    if (newExercises[i].enabled)
+                        $('#newExercisesTable tr:last').before('<tr id="exerciseRow' + newExercises[i].id + '"> <td class="set_column dark-blue-text">' + newExercises[i].id + '</td><td class="exercise_column dark-blue-text">' + newExercises[i].exercise.name + '(' + newExercises[i].exercise.bodyPart + ')</td><td class="weight_column dark-blue-text">' + newExercises[i].liftMass + '</td><td class="repetition_column dark-blue-text">' + newExercises[i].reps + '</td><td class="done_column"> <a onclick="toggleExercise(' + newExercises[i].id + ');" class="w3-button w3-buttoncolor" style="padding: 5px; margin: 0; line-height: 1; border-radius: 2px;"><img src="{% static 'checked.png' %}" height="20px"></a> </td></tr>');
+                    else
+                        $('#newExercisesTable tr:last').before('<tr id="exerciseRow' + newExercises[i].id + '"> <td class="set_column light-grey-text">' + newExercises[i].id + '</td><td class="exercise_column light-grey-text">' + newExercises[i].exercise.name + '(' + newExercises[i].exercise.bodyPart + ')</td><td class="weight_column light-grey-text">' + newExercises[i].liftMass + '</td><td class="repetition_column light-grey-text">' + newExercises[i].reps + '</td><td class="done_column"> <a onclick="toggleExercise(' + newExercises[i].id + ');" class="w3-button w3-buttondisabledcolor" style="padding: 5px; margin: 0; line-height: 1; border-radius: 2px;"><img src="{% static 'unchecked.png' %}" height="20px"></a> </td></tr>');
+                }
             });
 
             let prevExercises = localStorage.getItem('message');
@@ -291,7 +295,8 @@
 
             exercisesListDiv.innerHTML = '';
             for (let i = 0; i < displayedExercises.length; i++) {
-                let newElementHtml = '<a onclick="selectExerciseClick(\'' + displayedExercises[i].name + '\')" style="display: block; border-top: 1px solid lightgrey; padding: 3px; cursor: pointer;"> <i class="slicon slicon-2x ' + displayedExercises[i].icon + '"></i>' + displayedExercises[i].name + ' (' + displayedExercises[i].bodyPart + ')</a>';
+                console.log(displayedExercises[i].iconUrl);
+                let newElementHtml = '<a onclick="selectExerciseClick(\'' + displayedExercises[i].name + '\')" style="display: block; border-top: 1px solid lightgrey; padding: 3px; cursor: pointer;"> <img src="' + displayedExercises[i].iconUrl + '" height="35" width="35" style="margin: 5px">' + displayedExercises[i].name + ' (' + displayedExercises[i].bodyPart + ')</a>';
                 let newElement = document.createElement('div');
                 newElement.className = 'card';
                 newElement.innerHTML = newElementHtml;
@@ -363,8 +368,6 @@
         }
 
         function toggleExercise(id) {
-            console.log(newExercises);
-
             let eId;
             for (let i = 0; i < newExercises.length; i++)
                 if (newExercises[i].id === id)
@@ -374,31 +377,8 @@
                 // change variable
                 newExercises[eId - 1].enabled = !newExercises[eId - 1].enabled;
 
-                // change UI
-                let tr = $('#exerciseRow' + eId);
-                if (newExercises[eId - 1].enabled) {
-                    // action = enable
-                    let children = tr.children('.light-grey-text');
-                    children.removeClass('light-grey-text');
-                    children.addClass('dark-blue-text');
-
-                    let a = tr.children('.done_column').find('a');
-                    a.removeClass('w3-disabledbuttoncolor');
-                    a.addClass('w3-buttoncolor');
-                    let img = tr.children('.done_column').find('img');
-                    img.attr('src', "{% static 'checked.png' %}");
-                } else {
-                    // action = disable
-                    let children = tr.children('.light-blue-text');
-                    children.removeClass('dark-blue-text');
-                    children.addClass('light-grey-text');
-
-                    let a = tr.children('.done_column').find('a');
-                    a.removeClass('w3-buttoncolor');
-                    a.addClass('w3-disabledbuttoncolor');
-                    let img = tr.children('.done_column').find('img');
-                    img.attr('src', "{% static 'unchecked.png' %}");
-                }
+                // send as a broadcast to all tabs i.e. save locally
+                message_broadcast(newExercises);
             }
         }
 

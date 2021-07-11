@@ -22,7 +22,7 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
 
-    path('init-exercises/', views.handle_init_exercises),
+    path('init-configs/', views.handle_init_configs),
     path('generate-dummy-data/', views.handle_generate_dummy_data),
 
     path('', views.handle_index, name='index'),
@@ -37,9 +37,9 @@ urlpatterns = [
     path('accounts/logout/', views.handle_logout, name='logout'),
 
     path('settings/', views.handle_settings, name='settings'),
-    path('analyse-lift/<int:lift_id>/', views.handle_analyse_lift, name='analyse lift'),
-
     path('add-workout/', views.handle_add_workout, name='add workout'),
+    
+    # path('analyse-lift/<int:lift_id>/', views.handle_analyse_lift, name='analyse lift'),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

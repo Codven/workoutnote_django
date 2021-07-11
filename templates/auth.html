@@ -129,7 +129,7 @@
                 모든 리프트에 대해 최대 1RM을 계산하기. Your one-rep max is the max weight you can lift
                 for a single repetition for a given exercise.
             </p>
-            <form id="oneRepMaxCalculator" action="{% url 'login' %}" method="post">
+            <form id="oneRepMaxCalculator" action="{% url 'one rep max calculator' %}" method="post">
                 {% csrf_token %}
                 <div>
                     <div><label for="liftmass" class="label">

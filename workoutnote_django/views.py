@@ -20,8 +20,10 @@ LIMIT_OF_ACCEPTABLE_DATA_AMOUNT = 5
 
 
 @login_required
-def handle_init_exercises(request):
+def handle_init_configs(request):
     if request.user.is_superuser:
+        models.BodyPart.init_body_parts()
+        models.Category.init_categories()
         models.Exercise.init_from_csv()
     return redirect(to='index')
 
@@ -73,7 +75,7 @@ def handle_register(request):
             provided_code = request.POST['verification_code']
             if provided_code == expected_code:
                 models.EmailConfirmationCodes.objects.filter(email=email).delete()
-                django_User.objects.create_user(username=email, password=password).save()
+                django_User.objects.create_user(username=email, password=password)
                 user = authenticate(request, username=email, password=password)
                 if user:
                     models.Preferences.objects.create(user=user, name=name)
@@ -118,8 +120,6 @@ def handle_logout(request):
 
 @login_required
 def handle_index(request):
-    if request.user.is_superuser:
-        return redirect(to='logout')
     name = models.Preferences.objects.get(user=request.user).name
     db_workout_sessions = models.WorkoutSession.objects.filter(user=request.user).order_by('-timestamp')
     workouts_by_days = {}
@@ -142,6 +142,8 @@ def handle_index(request):
         'name': name if name else request.user.username,
         'at_home': True,
         'exercises': models.Exercise.objects.all(),
+        'body_parts': models.BodyPart.objects.all(),
+        'categories': models.Category.objects.all(),
         'workouts_by_days': workouts_by_days
     })
 
@@ -421,44 +423,6 @@ def handle_settings(request):
 
 
 @login_required
-def handle_analyse_lift(request, lift_id):
-    lift = models.Lift.objects.filter(pk=lift_id).first()
-    data = {
-        'lift': lift,
-        'rounded_body_weight': lift.body_weight,
-        'body_weight_ratio': round(lift.lift_mass / lift.body_weight, 2),
-        'step1_result': None,
-        'step3_result': None,
-        'step4_result': None,
-        'step4_lvl_standard_limit': None,
-    }
-    # TODO: temporarily put MALE instead of real known gender
-    filtered_prefs = models.Preferences.objects.filter(gender=str('MALE').upper())
-    user_ids = filtered_prefs.values_list('user', flat=True)
-    # region filter data for the 1st Step
-    filtered_lifts = models.Lift.objects.filter(
-        exercise__name=lift.exercise.name,
-        user_id__in=user_ids
-    )
-    if len(filtered_lifts) > LIMIT_OF_ACCEPTABLE_DATA_AMOUNT:
-        sorted_1rms_for_given_bw = list(filtered_lifts.order_by('one_rep_max').values_list('one_rep_max', flat=True))
-        data['step1_result'] = Tools.get_level_in_percentage(sorted_1rms_for_given_bw, lift.one_rep_max)
-    # endregion
-
-    # filter data for 3rd and 4th Steps
-    filtered_lifts = filtered_lifts.filter(body_weight=round(lift.body_weight))
-    if len(filtered_lifts) > LIMIT_OF_ACCEPTABLE_DATA_AMOUNT:
-        sorted_1rms_for_given_bw = list(filtered_lifts.order_by('one_rep_max').values_list('one_rep_max', flat=True))
-        data['step3_result'] = Tools.get_level_in_percentage(sorted_1rms_for_given_bw, lift.one_rep_max)
-        lvl_boundaries = Tools.get_level_boundaries_for_bodyweight(sorted_1rms_for_given_bw)
-        lvl_txt = Tools.get_string_level(lvl_boundaries, lift.one_rep_max)
-        data['step4_result'] = lvl_txt
-        data['lvl_standard_limit'] = int(Levels.LIMITS[lvl_txt])
-    # endregion
-    return render(request=request, template_name='profile/analyse lift.html', context=data)
-
-
-@login_required
 @require_http_methods(['GET', 'POST'])
 def handle_exercises(request):
     then = timezone.now() - timedelta(days=6 * 30)
@@ -510,6 +474,6 @@ def handle_add_workout(request):
             lift_mass=lift_mass,
             repetitions=repetitions,
             one_rep_max=Tools.calculate_one_rep_max(lift_mass, repetitions)
-        ).save()
+        )
 
     return JsonResponse(data={'success': True})

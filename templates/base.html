@@ -28,11 +28,11 @@
         <a href="{% url 'index' %}" class="w3-bar-item w3-button {% if at_home %}w3-navcolor{% else %}w3-black{% endif %}">
             <img src="{% static 'Home-white.svg' %}" height="30" style="margin-left: 15px; margin-right: 5px">
             <span>홈</span>
-            </a>
+        </a>
         <a href="#" class="w3-bar-item w3-button {% if at_calendar %}w3-navcolor{% else %}w3-black{% endif %}">
-             <img src="{% static 'Calendar-white.svg' %}" height="30" style="margin-left: 15px; margin-right: 5px">
+            <img src="{% static 'Calendar-white.svg' %}" height="30" style="margin-left: 15px; margin-right: 5px">
             <span>내 캘린더</span>
-            </a>
+        </a>
         <a href="{% url 'calculators' %}" class="w3-bar-item w3-button {% if at_calculators %}w3-navcolor{% else %}w3-black{% endif %}">
             <img src="{% static 'Ranking-white.svg' %}" height="30" style="margin-left: 15px; margin-right: 5px">
             <span>체력 순위</span>
@@ -98,48 +98,19 @@
                 <div class="is-grouped is-grouped-multiline" style="margin-top: 5px;">
                     <div style="margin-right: 5px;">
                         <div class="select is-small">
-                            <select id="filterExerciseBodyPart" style="cursor: pointer;">
-                                <option value="none">Any Body Part</option>
-                                <option value="Back">
-                                    Back
-                                </option>
-                                <option value="Biceps">
-                                    Biceps
-                                </option>
-                                <option value="Chest">
-                                    Chest
-                                </option>
-                                <option value="Core">
-                                    Core
-                                </option>
-                                <option value="Forearms">
-                                    Forearms
-                                </option>
-                                <option value="Legs">
-                                    Legs
-                                </option>
-                                <option value="Shoulders">
-                                    Shoulders
-                                </option>
-                                <option value="Triceps">
-                                    Triceps
-                                </option>
-                                <option value="Whole Body">
-                                    Whole Body
-                                </option>
+                            <select id="filterExerciseBodyPart" style="cursor: pointer;" required>
+                                {% for bodyPart in body_parts %}
+                                    <option value="{{ bodyPart.name }}">{{ bodyPart.name }}</option>
+                                {% endfor %}
                             </select>
                         </div>
                     </div>
                     <div class="control">
                         <div class="select is-small">
-                            <select id="filterExerciseCategory" style="cursor: pointer;">
-                                <option value="none">Any Category</option>
-                                <option value="Barbell">Barbell</option>
-                                <option value="Bodyweight">Bodyweight</option>
-                                <option value="Cable">Cable</option>
-                                <option value="Dumbbell">Dumbbell</option>
-                                <option value="Machine">Machine</option>
-                                <option value="Olympic">Olympic</option>
+                            <select id="filterExerciseCategory" style="cursor: pointer;" required>
+                                {% for category in categories %}
+                                    <option value="{{ category.name }}">{{ category.name }}</option>
+                                {% endfor %}
                             </select>
                         </div>
                     </div>
@@ -150,7 +121,7 @@
                     {% for exercise in exercises %}
                         <a onclick="selectExerciseClick('{{ exercise.name }}')" style="display: block; border-top: 1px solid lightgrey; padding: 3px; cursor: pointer;">
                             <img src="{{ exercise.icon.url }}" height="35" width="35" style="margin: 5px">
-                            {{ exercise.name }} ({{ exercise.body_part }})
+                            {{ exercise.name }} ({{ exercise.body_part.name }})
                         </a>
                     {% endfor %}
                 </div>

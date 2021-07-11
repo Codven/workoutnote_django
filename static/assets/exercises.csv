@@ -1,0 +1,273 @@
+exercise, icon, body part, category
+Ab Wheel Rollout,slicon-bodypart-core,Core,Barbell
+Arnold Press,slicon-bodypart-chest,Chest,Dumbbell
+Australian Pull Ups,slicon-bodypart-back,Back,Bodyweight
+Back Extension,slicon-bodypart-back,Back,Bodyweight
+Barbell Calf Raise,slicon-bodypart-legs,Legs,Barbell
+Barbell Curl,slicon-exercise-barbell-curl,Biceps,Barbell
+Barbell Front Raise,slicon-bodypart-shoulders,Shoulders,Barbell
+Barbell Glute Bridge,slicon-bodypart-legs,Legs,Barbell
+Barbell Hack Squat,slicon-bodypart-legs,Legs,Barbell
+Barbell Lunge,slicon-bodypart-legs,Legs,Barbell
+Barbell Power Shrug,slicon-bodypart-back,Back,Barbell
+Barbell Pullover,slicon-bodypart-back,Back,Barbell
+Barbell Reverse Lunge,slicon-bodypart-legs,Legs,Barbell
+Barbell Shrug,slicon-exercise-barbell-shrug,Back,Barbell
+Behind The Back Barbell Shrug,slicon-bodypart-back,Back,Barbell
+Behind The Back Cable Curl,slicon-bodypart-biceps,Biceps,Cable
+Behind The Neck Press,slicon-bodypart-shoulders,Shoulders,Barbell
+Belt Squat,slicon-bodypart-legs,Legs,Barbell
+Bench Dips,slicon-bodypart-triceps,Triceps,Bodyweight
+Bench Pin Press,slicon-bodypart-chest,Chest,Barbell
+Bench Press,slicon-exercise-bench-press,Chest,Barbell
+Bench Pull,slicon-bodypart-back,Back,Barbell
+Bent Arm Barbell Pullover,slicon-bodypart-back,Back,Barbell
+Bent Over Dumbbell Row,slicon-bodypart-back,Back,Dumbbell
+Bent Over Row,slicon-exercise-bent-over-row,Back,Barbell
+Bicycle Crunch,slicon-bodypart-core,Core,Bodyweight
+Bodyweight Calf Raise,slicon-bodypart-legs,Legs,Barbell
+Bodyweight Squat,slicon-bodypart-legs,Legs,Bodyweight
+Box Squat,slicon-bodypart-legs,Legs,Barbell
+Bulgarian Split Squat,slicon-bodypart-legs,Legs,Barbell
+Burpees,slicon-bodypart-whole-body,Whole Body,Bodyweight
+Cable Bicep Curl,slicon-bodypart-biceps,Biceps,Cable
+Cable Crossover,slicon-bodypart-chest,Chest,Cable
+Cable Crunch,slicon-bodypart-core,Core,Cable
+Cable External Rotation,slicon-bodypart-shoulders,Shoulders,Cable
+Cable Fly,slicon-bodypart-chest,Chest,Cable
+Cable Kickback,slicon-bodypart-legs,Legs,Cable
+Cable Lateral Raise,slicon-bodypart-shoulders,Shoulders,Cable
+Cable Leg Extension,slicon-bodypart-legs,Legs,Cable
+Cable Overhead Tricep Extension,slicon-bodypart-triceps,Triceps,Cable
+Cable Pull Through,slicon-bodypart-legs,Legs,Cable
+Cable Reverse Fly,slicon-bodypart-back,Back,Cable
+Cable Shrug,slicon-bodypart-back,Back,Cable
+Cable Upright Row,slicon-bodypart-back,Back,Cable
+Cable Woodchoppers,slicon-bodypart-core,Core,Cable
+Cheat Curl,slicon-bodypart-biceps,Biceps,Barbell
+Chest Press,slicon-bodypart-chest,Chest,Machine
+Chest Supported Dumbbell Row,slicon-bodypart-back,Back,Dumbbell
+Chin Ups,slicon-exercise-chin-ups,Back,Bodyweight
+Clap Pull Up,slicon-bodypart-whole-body,Whole Body,Bodyweight
+Clean,slicon-exercise-clean,Whole Body,Olympic
+Clean High Pull,slicon-bodypart-whole-body,Whole Body,Olympic
+Clean Pull,slicon-bodypart-whole-body,Whole Body,Olympic
+Clean and Jerk,slicon-exercise-clean-and-jerk,Whole Body,Olympic
+Clean and Press,slicon-exercise-clean-and-press,Whole Body,Olympic
+Close Grip Bench Press,slicon-bodypart-chest,Chest,Barbell
+Close Grip Dumbbell Bench Press,slicon-bodypart-chest,Chest,Dumbbell
+Close Grip Lat Pulldown,slicon-bodypart-back,Back,Machine
+Close Grip Push Up,slicon-bodypart-chest,Chest,Bodyweight
+Crunches,slicon-exercise-crunches,Core,Bodyweight
+Deadlift,slicon-exercise-deadlift,Whole Body,Barbell
+Decline Bench Press,slicon-exercise-decline-bench-press,Chest,Barbell
+Decline Crunch,slicon-bodypart-core,Core,Bodyweight
+Decline Dumbbell Bench Press,slicon-bodypart-chest,Chest,Dumbbell
+Decline Dumbbell Fly,slicon-bodypart-chest,Chest,Dumbbell
+Decline Push Up,slicon-bodypart-chest,Chest,Bodyweight
+Deficit Deadlift,slicon-bodypart-whole-body,Whole Body,Barbell
+Diamond Push Ups,slicon-bodypart-chest,Chest,Bodyweight
+Dips,slicon-exercise-dips,Triceps,Bodyweight
+Donkey Calf Raise,slicon-bodypart-legs,Legs,Barbell
+Dumbbell Bench Press,slicon-exercise-dumbbell-bench-press,Chest,Dumbbell
+Dumbbell Bench Pull,slicon-bodypart-back,Back,Dumbbell
+Dumbbell Bulgarian Split Squat,slicon-bodypart-legs,Legs,Dumbbell
+Dumbbell Calf Raise,slicon-bodypart-legs,Legs,Dumbbell
+Dumbbell Concentration Curl,slicon-exercise-dumbbell-concentration-curl,Biceps,Dumbbell
+Dumbbell Curl,slicon-exercise-dumbbell-curl,Biceps,Dumbbell
+Dumbbell Deadlift,slicon-bodypart-whole-body,Whole Body,Dumbbell
+Dumbbell External Rotation,slicon-bodypart-shoulders,Shoulders,Dumbbell
+Dumbbell Floor Press,slicon-bodypart-chest,Chest,Dumbbell
+Dumbbell Fly,slicon-exercise-dumbbell-fly,Chest,Dumbbell
+Dumbbell Front Raise,slicon-exercise-dumbbell-front-raise,Shoulders,Dumbbell
+Dumbbell Front Squat,slicon-bodypart-legs,Legs,Dumbbell
+Dumbbell Hang Clean,slicon-bodypart-whole-body,Whole Body,Olympic
+Dumbbell High Pull,slicon-bodypart-whole-body,Whole Body,Olympic
+Dumbbell Incline Y Raise,slicon-bodypart-back,Back,Dumbbell
+Dumbbell Lateral Raise,slicon-exercise-dumbbell-lateral-raise,Shoulders,Dumbbell
+Dumbbell Lunge,slicon-exercise-dumbbell-lunge,Legs,Dumbbell
+Dumbbell Preacher Curl,slicon-bodypart-biceps,Biceps,Dumbbell
+Dumbbell Pullover,slicon-bodypart-back,Back,Dumbbell
+Dumbbell Push Press,slicon-bodypart-shoulders,Shoulders,Olympic
+Dumbbell Reverse Fly,slicon-bodypart-back,Back,Dumbbell
+Dumbbell Reverse Wrist Curl,slicon-bodypart-forearms,Forearms,Dumbbell
+Dumbbell Romanian Deadlift,slicon-bodypart-whole-body,Whole Body,Dumbbell
+Dumbbell Row,slicon-exercise-dumbbell-row,Back,Dumbbell
+Dumbbell Shoulder Press,slicon-exercise-dumbbell-shoulder-press,Shoulders,Dumbbell
+Dumbbell Shrug,slicon-exercise-dumbbell-shrug,Back,Dumbbell
+Dumbbell Side Bend,slicon-bodypart-core,Core,Dumbbell
+Dumbbell Snatch,slicon-bodypart-whole-body,Whole Body,Olympic
+Dumbbell Squat,slicon-bodypart-legs,Legs,Dumbbell
+Dumbbell Tricep Extension,slicon-exercise-dumbbell-tricep-extension,Triceps,Dumbbell
+Dumbbell Tricep Kickback,slicon-bodypart-triceps,Triceps,Dumbbell
+Dumbbell Upright Row,slicon-bodypart-shoulders,Shoulders,Dumbbell
+Dumbbell Wrist Curl,slicon-bodypart-forearms,Forearms,Dumbbell
+Dumbbell Z Press,slicon-bodypart-shoulders,Shoulders,Dumbbell
+EZ Bar Curl,slicon-bodypart-biceps,Biceps,Barbell
+Face Pull,slicon-bodypart-back,Back,Cable
+Floor Hip Abduction,slicon-bodypart-legs,Legs,Bodyweight
+Floor Hip Extension,slicon-bodypart-legs,Legs,Bodyweight
+Floor Press,slicon-bodypart-chest,Chest,Barbell
+Flutter Kick,slicon-bodypart-core,Core,Bodyweight
+Front Squat,slicon-exercise-front-squat,Legs,Barbell
+Glute Bridge,slicon-bodypart-legs,Legs,Bodyweight
+Glute Ham Raise,slicon-bodypart-legs,Legs,Bodyweight
+Goblet Squat,slicon-bodypart-legs,Legs,Dumbbell
+Good Morning,slicon-exercise-good-morning,Back,Barbell
+Hack Squat,slicon-bodypart-legs,Legs,Machine
+Hammer Curl,slicon-exercise-hammer-curl,Biceps,Dumbbell
+Handstand Push Ups,slicon-bodypart-chest,Chest,Bodyweight
+Hang Clean,slicon-bodypart-whole-body,Whole Body,Olympic
+Hang Power Clean,slicon-bodypart-whole-body,Whole Body,Olympic
+Hanging Knee Raise,slicon-bodypart-core,Core,Bodyweight
+Hanging Leg Raise,slicon-bodypart-core,Core,Bodyweight
+Hex Bar Deadlift,slicon-exercise-hex-bar-deadlift,Whole Body,Barbell
+High Pulley Crunch,slicon-bodypart-core,Core,Cable
+Hip Abduction,slicon-bodypart-legs,Legs,Machine
+Hip Adduction,slicon-bodypart-legs,Legs,Machine
+Hip Extension,slicon-bodypart-legs,Legs,Bodyweight
+Hip Thrust,slicon-exercise-hip-thrust,Legs,Barbell
+Horizontal Leg Press,slicon-exercise-horizontal-leg-press,Legs,Machine
+Incline Bench Press,slicon-exercise-incline-bench-press,Chest,Barbell
+Incline Bench Sit Up,slicon-bodypart-core,Core,Bodyweight
+Incline Cable Curl,slicon-bodypart-biceps,Biceps,Cable
+Incline Dumbbell Bench Press,slicon-exercise-incline-dumbbell-bench-press,Chest,Dumbbell
+Incline Dumbbell Curl,slicon-bodypart-biceps,Biceps,Dumbbell
+Incline Dumbbell Fly,slicon-exercise-incline-dumbbell-fly,Chest,Dumbbell
+Incline Hammer Curl,slicon-bodypart-biceps,Biceps,Dumbbell
+Incline Push Up,slicon-bodypart-chest,Chest,Bodyweight
+Inverted Row,slicon-bodypart-back,Back,Bodyweight
+JM Press,slicon-bodypart-triceps,Triceps,Barbell
+Jefferson Deadlift,slicon-bodypart-whole-body,Whole Body,Barbell
+Jefferson Squat,slicon-bodypart-whole-body,Whole Body,Barbell
+Jump Squat,slicon-bodypart-legs,Legs,Bodyweight
+Jumping Jack,slicon-bodypart-core,Core,Bodyweight
+Landmine Press,slicon-bodypart-shoulders,Shoulders,Barbell
+Landmine Squat,slicon-bodypart-legs,Legs,Barbell
+Lat Pulldown,slicon-exercise-lat-pulldown,Back,Cable
+Leg Extension,slicon-exercise-leg-extension,Legs,Machine
+Leg Lift,slicon-bodypart-legs,Legs,Bodyweight
+Log Press,slicon-bodypart-shoulders,Shoulders,Barbell
+Lunge,slicon-bodypart-legs,Legs,Bodyweight
+Lying Cable Curl,slicon-bodypart-biceps,Biceps,Cable
+Lying Dumbbell Tricep Extension,slicon-exercise-lying-dumbbell-tricep-extension,Triceps,Dumbbell
+Lying Leg Curl,slicon-exercise-lying-leg-curl,Legs,Machine
+Lying Leg Raise,slicon-bodypart-core,Core,Bodyweight
+Lying Tricep Extension,slicon-exercise-lying-tricep-extension,Triceps,Barbell
+Machine Back Extension,slicon-bodypart-back,Back,Machine
+Machine Bicep Curl,slicon-bodypart-biceps,Biceps,Machine
+Machine Calf Raise,slicon-exercise-machine-calf-raise,Legs,Machine
+Machine Chest Fly,slicon-bodypart-chest,Chest,Machine
+Machine Lateral Raise,slicon-bodypart-shoulders,Shoulders,Machine
+Machine Reverse Fly,slicon-bodypart-back,Back,Machine
+Machine Row,slicon-bodypart-back,Back,Machine
+Machine Seated Crunch,slicon-bodypart-core,Core,Machine
+Machine Shoulder Press,slicon-bodypart-shoulders,Shoulders,Machine
+Machine Shrug,slicon-bodypart-back,Back,Barbell
+Machine Tricep Extension,slicon-bodypart-triceps,Triceps,Machine
+Machine Tricep Press,slicon-bodypart-triceps,Triceps,Machine
+Military Press,slicon-bodypart-shoulders,Shoulders,Barbell
+Mountain Climbers,slicon-bodypart-core,Core,Bodyweight
+Muscle Snatch,slicon-bodypart-whole-body,Whole Body,Olympic
+Muscle Ups,slicon-exercise-muscle-ups,Whole Body,Bodyweight
+Neck Curl,slicon-bodypart-shoulders,Shoulders,Barbell
+Neck Extension,slicon-bodypart-shoulders,Shoulders,Barbell
+Neutral Grip Pull Ups,slicon-bodypart-back,Back,Bodyweight
+Nordic Hamstring Curl,slicon-bodypart-legs,Legs,Bodyweight
+One Arm Cable Bicep Curl,slicon-bodypart-biceps,Biceps,Cable
+One Arm Pull Ups,slicon-bodypart-back,Back,Bodyweight
+One Arm Pulldown,slicon-bodypart-biceps,Biceps,Cable
+One Arm Push Ups,slicon-bodypart-chest,Chest,Bodyweight
+One Arm Seated Cable Row,slicon-bodypart-back,Back,Cable
+Overhead Cable Curl,slicon-bodypart-biceps,Biceps,Cable
+Overhead Squat,slicon-exercise-overhead-squat,Legs,Olympic
+Pause Deadlift,slicon-bodypart-whole-body,Whole Body,Barbell
+Pause Squat,slicon-bodypart-legs,Legs,Barbell
+Paused Bench Press,slicon-bodypart-chest,Chest,Barbell
+Pendlay Row,slicon-exercise-pendlay-row,Back,Barbell
+Pike Push Up,slicon-bodypart-chest,Chest,Bodyweight
+Pin Squat,slicon-bodypart-legs,Legs,Barbell
+Pistol Squat,slicon-bodypart-legs,Legs,Bodyweight
+Power Clean,slicon-exercise-power-clean,Whole Body,Olympic
+Power Snatch,slicon-bodypart-whole-body,Whole Body,Olympic
+Preacher Curl,slicon-exercise-preacher-curl,Biceps,Barbell
+Pull Ups,slicon-exercise-pull-ups,Back,Bodyweight
+Push Jerk,slicon-exercise-push-jerk,Whole Body,Olympic
+Push Press,slicon-exercise-push-press,Shoulders,Olympic
+Push Ups,slicon-exercise-push-ups,Chest,Bodyweight
+Rack Pull,slicon-bodypart-whole-body,Whole Body,Barbell
+Renegade Row,slicon-bodypart-back,Back,Dumbbell
+Reverse Barbell Curl,slicon-bodypart-biceps,Biceps,Barbell
+Reverse Crunches,slicon-bodypart-core,Core,Bodyweight
+Reverse Curl,slicon-bodypart-biceps,Biceps,Barbell
+Reverse Grip Bench Press,slicon-bodypart-chest,Chest,Barbell
+Reverse Grip Lat Pulldown,slicon-bodypart-back,Back,Cable
+Reverse Grip Tricep Pushdown,slicon-bodypart-triceps,Triceps,Cable
+Reverse Lunge,slicon-bodypart-legs,Legs,Bodyweight
+Reverse Wrist Curl,slicon-bodypart-forearms,Forearms,Barbell
+Ring Dips,slicon-bodypart-triceps,Triceps,Bodyweight
+Ring Muscle Ups,slicon-bodypart-whole-body,Whole Body,Bodyweight
+Roman Chair Side Bend,slicon-bodypart-core,Core,Bodyweight
+Romanian Deadlift,slicon-exercise-romanian-deadlift,Whole Body,Barbell
+Russian Twist,slicon-bodypart-core,Core,Bodyweight
+Safety Bar Squat,slicon-bodypart-legs,Legs,Barbell
+Seated Cable Row,slicon-bodypart-back,Back,Cable
+Seated Calf Raise,slicon-bodypart-legs,Legs,Machine
+Seated Dip Machine,slicon-bodypart-triceps,Triceps,Machine
+Seated Dumbbell Curl,slicon-bodypart-biceps,Biceps,Dumbbell
+Seated Dumbbell Shoulder Press,slicon-bodypart-shoulders,Shoulders,Dumbbell
+Seated Dumbbell Tricep Extension,slicon-bodypart-triceps,Triceps,Dumbbell
+Seated Leg Curl,slicon-exercise-seated-leg-curl,Legs,Machine
+Seated Shoulder Press,slicon-bodypart-shoulders,Shoulders,Barbell
+Shoulder Pin Press,slicon-bodypart-shoulders,Shoulders,Barbell
+Shoulder Press,slicon-exercise-shoulder-press,Shoulders,Barbell
+Side Crunch,slicon-bodypart-core,Core,Bodyweight
+Side Lunge,slicon-bodypart-legs,Legs,Bodyweight
+Single Leg Deadlift,slicon-bodypart-whole-body,Whole Body,Barbell
+Single Leg Press,slicon-bodypart-legs,Legs,Machine
+Single Leg Romanian Deadlift,slicon-bodypart-whole-body,Whole Body,Barbell
+Single Leg Seated Calf Raise,slicon-bodypart-legs,Legs,Machine
+Single Leg Squat,slicon-exercise-single-leg-squat,Legs,Bodyweight
+Sissy Squat,slicon-bodypart-legs,Legs,Bodyweight
+Sit Ups,slicon-exercise-sit-ups,Core,Bodyweight
+Sled Leg Press,slicon-exercise-sled-leg-press,Legs,Machine
+Sled Press Calf Raise,slicon-bodypart-legs,Legs,Machine
+Smith Machine Bench Press,slicon-bodypart-chest,Chest,Machine
+Smith Machine Shrug,slicon-bodypart-back,Back,Machine
+Smith Machine Squat,slicon-bodypart-legs,Legs,Machine
+Snatch,slicon-exercise-snatch,Whole Body,Olympic
+Snatch Deadlift,slicon-bodypart-whole-body,Whole Body,Barbell
+Snatch Grip Deadlift,slicon-bodypart-whole-body,Whole Body,Barbell
+Snatch Pull,slicon-bodypart-whole-body,Whole Body,Olympic
+Spider Curl,slicon-bodypart-biceps,Biceps,Barbell
+Split Jerk,slicon-bodypart-whole-body,Whole Body,Olympic
+Split Squat,slicon-bodypart-legs,Legs,Barbell
+Squat,slicon-exercise-squat,Legs,Barbell
+Squat Jump,slicon-bodypart-legs,Legs,Bodyweight
+Squat Thrust,slicon-bodypart-whole-body,Whole Body,Bodyweight
+Standing Cable Crunch,slicon-bodypart-core,Core,Cable
+Standing Leg Curl,slicon-bodypart-legs,Legs,Machine
+Star Jump,slicon-bodypart-whole-body,Whole Body,Bodyweight
+Stiff Leg Deadlift,slicon-bodypart-whole-body,Whole Body,Barbell
+Straight Arm Pulldown,slicon-bodypart-back,Back,Cable
+Strict Curl,slicon-bodypart-biceps,Biceps,Barbell
+Sumo Deadlift,slicon-exercise-sumo-deadlift,Whole Body,Barbell
+Sumo Squat,slicon-bodypart-legs,Legs,Barbell
+T-Bar Row,slicon-exercise-t-bar-row,Back,Barbell
+Tate Press,slicon-bodypart-triceps,Triceps,Dumbbell
+Thruster,slicon-exercise-thruster,Whole Body,Olympic
+Toes To Bar,slicon-bodypart-core,Core,Bodyweight
+Tricep Extension,slicon-exercise-tricep-extension,Triceps,Barbell
+Tricep Pushdown,slicon-exercise-tricep-pushdown,Triceps,Cable
+Tricep Rope Pushdown,slicon-exercise-tricep-rope-pushdown,Triceps,Cable
+Upright Row,slicon-exercise-upright-row,Shoulders,Barbell
+Vertical Leg Press,slicon-bodypart-legs,Legs,Machine
+Viking Press,slicon-bodypart-shoulders,Shoulders,Barbell
+Walking Lunge,slicon-bodypart-legs,Legs,Barbell
+Wall Ball,slicon-bodypart-whole-body,Whole Body,Barbell
+Wide Grip Bench Press,slicon-bodypart-chest,Chest,Barbell
+Wrist Curl,slicon-bodypart-forearms,Forearms,Barbell
+Yates Row,slicon-bodypart-back,Back,Barbell
+Z Press,slicon-bodypart-shoulders,Shoulders,Barbell
+Zercher Squat,slicon-bodypart-legs,Legs,Barbell
+Zottman Curl,slicon-bodypart-biceps,Biceps,Dumbbell

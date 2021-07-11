@@ -46,6 +46,10 @@
             <div style="display: inline-block;" class="w3-right">
                 <a id="saveExerciseButton" onclick="saveExercises()" class="w3-button w3-buttoncolor" style="padding: 8px 40px 8px 40px; border-radius: 8px; display: block;">저장</a>
             </div>
+
+            <div style="display: inline-block;" class="w3-left">
+                <a id="saveExerciseButton" onclick="clearExercises()" class="w3-button w3-buttoncolor" style="padding: 8px 40px 8px 40px; border-radius: 8px; display: block;">삭제</a>
+            </div>
         </div>
     </div>
 
@@ -171,8 +175,8 @@
 
     <script>
         let selectExerciseDiv, exercisesListDiv, filterExerciseBodyPart, filterExerciseCategory, filterText, selectedExerciseName;
-        let allExercises = [{% for exercise in exercises %}{name: '{{ exercise.name }}',icon: '{{ exercise.icon }}',bodyPart: '{{ exercise.body_part }}',category: '{{ exercise.category }}'},{% endfor %}];
-        let selectedExercise = {name: '{{ exercises.0.name }}', icon: '{{ exercises.0.icon }}', bodyPart: '{{ exercises.0.body_part }}', category: '{{ exercises.0.category }}'};
+        let allExercises = [{% for exercise in exercises %}{name: '{{ exercise.name }}',icon: '{{ exercise.icon }}',bodyPart: '{{ exercise.body_part.name }}',category: '{{ exercise.category.name }}'},{% endfor %}];
+        let selectedExercise = {name: '{{ exercises.0.name }}', icon: '{{ exercises.0.icon }}', bodyPart: '{{ exercises.0.body_part.name }}', category: '{{ exercises.0.category.name }}'};
         let stopwatchId, stopwatchSeconds = 0;
 
         function findExerciseByName(name) {
@@ -219,6 +223,19 @@
                 filterExerciseCategory = event.target.value === 'none' ? null : event.target.value;
                 filterExercises();
             });
+
+            window.addEventListener("storage", function (_) {
+                newExercises = JSON.parse(localStorage.getItem('message'));
+
+                // refresh UI
+                $("#newExercisesTable tr:not(:last-child, :first-child)").empty();
+                for (let i = 0; i < newExercises.length; i++)
+                    $('#newExercisesTable tr:last').before('<tr id="exerciseRow' + newExercises[i].id + '"> <td class="set_column dark-blue-text">' + newExercises[i].id + '</td><td class="exercise_column dark-blue-text">' + newExercises[i].exercise.name + '(' + newExercises[i].exercise.bodyPart + ')</td><td class="weight_column dark-blue-text">' + newExercises[i].liftMass + '</td><td class="repetition_column dark-blue-text">' + newExercises[i].reps + '</td><td class="done_column"> <a onclick="toggleExercise(' + newExercises[i].id + ');" class="w3-button w3-buttoncolor" style="padding: 5px; margin: 0; line-height: 1; border-radius: 2px;"><img src="' + (newExercises[i].enabled ? '{% static 'checked.png' %}' : '{% static 'unchecked.png' %}') + '" height="20px"></a> </td></tr>');
+            });
+
+            let prevExercises = localStorage.getItem('message');
+            if (prevExercises != null)
+                message_broadcast(JSON.parse(prevExercises));
         });
 
         function showExerciseSelectorDivClick() {
@@ -331,8 +348,8 @@
                 newExercise = {id: newExercises.length + 1, exercise: selectedExercise, liftMass: Math.floor(parseFloat(weight)), reps: Math.floor(parseFloat(reps)), enabled: true};
                 newExercises.push(newExercise);
 
-                // display on UI
-                $('#newExercisesTable tr:last').before('<tr id="exerciseRow' + newExercise.id + '"> <td class="set_column dark-blue-text">' + newExercise.id + '</td><td class="exercise_column dark-blue-text">' + newExercise.exercise.name + '(' + newExercise.exercise.bodyPart + ')</td><td class="weight_column dark-blue-text">' + weight + '</td><td class="repetition_column dark-blue-text">' + reps + '</td><td class="done_column"> <a onclick="toggleExercise(' + newExercise.id + ');" class="w3-button w3-buttoncolor" style="padding: 5px; margin: 0; line-height: 1; border-radius: 2px;"><img src="{% static 'checked.png' %}" height="20px"></a> </td></tr>');
+                // send as a broadcast to all tabs i.e. save locally
+                message_broadcast(newExercises);
             }
         }
 
@@ -341,8 +358,8 @@
             newExercise = {id: newExercises.length + 1, exercise: findExerciseByName(exerciseName), liftMass: liftMass, reps: reps, enabled: true};
             newExercises.push(newExercise);
 
-            // display on UI
-            $('#newExercisesTable tr:last').before('<tr id="exerciseRow' + newExercise.id + '"> <td class="set_column dark-blue-text">' + newExercise.id + '</td><td class="exercise_column dark-blue-text">' + newExercise.exercise.name + '(' + newExercise.exercise.bodyPart + ')</td><td class="weight_column dark-blue-text">' + liftMass + '</td><td class="repetition_column dark-blue-text">' + reps + '</td><td class="done_column"> <a onclick="toggleExercise(' + newExercise.id + ');" class="w3-button w3-buttoncolor" style="padding: 5px; margin: 0; line-height: 1; border-radius: 2px;"><img src="{% static 'checked.png' %}" height="20px"></a> </td></tr>');
+            // send as a broadcast to all tabs i.e. save locally
+            message_broadcast(newExercises);
         }
 
         function toggleExercise(id) {
@@ -393,6 +410,10 @@
                         addNewExerciseWithRawValues(allWorkouts[i].lifts[j].liftMass, allWorkouts[i].lifts[j].reps, allWorkouts[i].lifts[j].exerciseName);
                     break;
                 }
+        }
+
+        function clearExercises() {
+            message_broadcast([]);
         }
 
         function saveExercises() {

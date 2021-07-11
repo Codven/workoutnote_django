@@ -148,6 +148,11 @@
             overlay.style.display = 'none';
         }
     }
+
+    function message_broadcast(message) {
+        localStorage.setItem('message', JSON.stringify(message));
+        window.dispatchEvent(new Event('storage'));
+    }
 </script>
 
 </html>

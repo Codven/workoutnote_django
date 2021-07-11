@@ -149,8 +149,10 @@
         }
     }
 
-    function message_broadcast(key, value) {
-        localStorage.setItem(key, JSON.stringify(value));
+    function message_broadcast(value) {
+        if (value.action === 'exercises')
+            localStorage.setItem('exercises_backup', JSON.stringify(value.value));
+        localStorage.setItem('message', JSON.stringify(value));
         window.dispatchEvent(new Event('storage'));
     }
 </script>

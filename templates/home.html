@@ -231,29 +231,34 @@
                 filterExercises();
             });
 
-            window.addEventListener("storage", function (event) {
-                if (event.key === 'exercises') {
-                    newExercises = JSON.parse(localStorage.getItem('exercises'));
-
-                    // refresh UI
-                    $("#newExercisesTable tr:not(:last-child, :first-child)").empty();
-                    for (let i = 0; i < newExercises.length; i++) {
-                        if (newExercises[i].enabled)
-                            $('#newExercisesTable tr:last').before('<tr id="exerciseRow' + newExercises[i].id + '"> <td class="set_column dark-blue-text">' + newExercises[i].id + '</td><td class="exercise_column dark-blue-text">' + newExercises[i].exercise.name + '(' + newExercises[i].exercise.bodyPart + ')</td><td class="weight_column dark-blue-text">' + newExercises[i].liftMass + '</td><td class="repetition_column dark-blue-text">' + newExercises[i].reps + '</td><td class="done_column"> <a onclick="toggleExercise(' + newExercises[i].id + ');" class="w3-button w3-buttoncolor" style="padding: 5px; margin: 0; line-height: 1; border-radius: 2px;"><img src="{% static 'checked.png' %}" height="20px"></a> </td></tr>');
-                        else
-                            $('#newExercisesTable tr:last').before('<tr id="exerciseRow' + newExercises[i].id + '"> <td class="set_column light-grey-text">' + newExercises[i].id + '</td><td class="exercise_column light-grey-text">' + newExercises[i].exercise.name + '(' + newExercises[i].exercise.bodyPart + ')</td><td class="weight_column light-grey-text">' + newExercises[i].liftMass + '</td><td class="repetition_column light-grey-text">' + newExercises[i].reps + '</td><td class="done_column"> <a onclick="toggleExercise(' + newExercises[i].id + ');" class="w3-button w3-buttondisabledcolor" style="padding: 5px; margin: 0; line-height: 1; border-radius: 2px;"><img src="{% static 'unchecked.png' %}" height="20px"></a> </td></tr>');
-                    }
-                } else if (event.key === 'stopwatchData') {
+            window.addEventListener("storage", function (_) {
+                let event = JSON.parse(localStorage.getItem('message'));
+                if (event.action === 'exercises') {
+                    newExercises = event.value;
+                    setNewExercisesOnUI(newExercises);
+                } else if (event.action === 'stopwatchData') {
                     let stopwatchData = JSON.parse(localStorage.getItem('stopwatchData'));
                     $('#exerciseDurationDisplay').html(pad(stopwatchData.hours, 2) + ':' + pad(stopwatchData.minutes, 2) + ':' + pad(stopwatchData.seconds, 2));
                     $('#exerciseDuration').attr('value', stopwatchSeconds.toString());
                 }
             });
 
-            let prevExercises = localStorage.getItem('message');
-            if (prevExercises != null)
-                message_broadcast('exercises', JSON.parse(prevExercises));
+            let prevExercises = localStorage.getItem('exercises_backup');
+            if (prevExercises != null) {
+                newExercises = JSON.parse(prevExercises);
+                setNewExercisesOnUI(newExercises);
+            }
         });
+
+        function setNewExercisesOnUI(exercises) {
+            $("#newExercisesTable tr:not(:last-child, :first-child)").empty();
+            for (let i = 0; i < exercises.length; i++) {
+                if (exercises[i].enabled)
+                    $('#newExercisesTable tr:last').before('<tr id="exerciseRow' + exercises[i].id + '"> <td class="set_column dark-blue-text">' + exercises[i].id + '</td><td class="exercise_column dark-blue-text">' + exercises[i].exercise.name + '(' + exercises[i].exercise.bodyPart + ')</td><td class="weight_column dark-blue-text">' + exercises[i].liftMass + '</td><td class="repetition_column dark-blue-text">' + exercises[i].reps + '</td><td class="done_column"> <a onclick="toggleExercise(' + exercises[i].id + ');" class="w3-button w3-buttoncolor" style="padding: 5px; margin: 0; line-height: 1; border-radius: 2px;"><img src="{% static 'checked.png' %}" height="20px"></a> </td></tr>');
+                else
+                    $('#newExercisesTable tr:last').before('<tr id="exerciseRow' + exercises[i].id + '"> <td class="set_column light-grey-text">' + exercises[i].id + '</td><td class="exercise_column light-grey-text">' + exercises[i].exercise.name + '(' + exercises[i].exercise.bodyPart + ')</td><td class="weight_column light-grey-text">' + exercises[i].liftMass + '</td><td class="repetition_column light-grey-text">' + exercises[i].reps + '</td><td class="done_column"> <a onclick="toggleExercise(' + exercises[i].id + ');" class="w3-button w3-buttondisabledcolor" style="padding: 5px; margin: 0; line-height: 1; border-radius: 2px;"><img src="{% static 'unchecked.png' %}" height="20px"></a> </td></tr>');
+            }
+        }
 
         function showExerciseSelectorDivClick() {
             if (document.readyState === "complete") {
@@ -351,10 +356,12 @@
                     $('#exerciseDuration').attr('value', stopwatchSeconds.toString());
 
                     // broadcast to other tabs
-                    message_broadcast('stopwatchData', {
-                        seconds: seconds,
-                        minutes: minutes,
-                        hours: hours
+                    message_broadcast({
+                        action: 'stopwatch', value: {
+                            seconds: seconds,
+                            minutes: minutes,
+                            hours: hours
+                        }
                     });
                 }, 1000);
             } else {
@@ -374,7 +381,7 @@
                 newExercises.push(newExercise);
 
                 // send as a broadcast to all tabs i.e. save locally
-                message_broadcast('exercises', newExercises);
+                message_broadcast({action: 'exercises', value: newExercises});
             }
         }
 
@@ -384,7 +391,7 @@
             newExercises.push(newExercise);
 
             // send as a broadcast to all tabs i.e. save locally
-            message_broadcast('exercises', newExercises);
+            message_broadcast({action: 'exercises', value: newExercises});
         }
 
         function toggleExercise(id) {
@@ -398,7 +405,7 @@
                 newExercises[eId - 1].enabled = !newExercises[eId - 1].enabled;
 
                 // send as a broadcast to all tabs i.e. save locally
-                message_broadcast('exercises', newExercises);
+                message_broadcast({action: 'exercises', value: newExercises});
             }
         }
 
@@ -413,7 +420,8 @@
         }
 
         function clearExercises() {
-            message_broadcast('exercises', []);
+            newExercises = [];
+            message_broadcast({action: 'exercises', value: []});
         }
 
         function saveExercises() {

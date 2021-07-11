@@ -1,9 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
     <div class="section-box">
-        <h1 class="title is-2 is-size-3-mobile">One Rep Max Calculator</h1>
         <p>
-            Calculate your one-rep max (1RM) for any lift. Your one-rep max is the max weight you can lift
+            모든 리프트에 대해 최대 1RM을 계산하기. Your one-rep max is the max weight you can lift
             for a single repetition for a given exercise.
         </p>
         <form id="oneRepMaxCalculator" action="{% url 'one rep max calculator' %}" method="post">
@@ -22,7 +21,7 @@
                 </div>
             </div>
             <div >
-                <div ><label for="repetitions" class="label">Repetitions</label></div>
+                <div ><label for="repetitions" class="label">반복</label></div>
                 <div >
                     <input type="number" name="repetitions" id="repetitions" min="1" max="500" class="input" required="required">
                 </div>
@@ -50,7 +49,7 @@
                 <tr>
                     <th style="width: 33%">Percentage of 1RM</th>
                     <th style="width: 33%">Lift Weight</th>
-                    <th>Repetitions of 1RM</th>
+                    <th>1RM 반복</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -91,10 +90,10 @@
             <thead>
             <tr>
                 {% if result_number %}
-                    <th style="width: 33%;">Repetitions</th>
+                    <th style="width: 33%;">반복</th>
                     <th style="width: 33%;">Lift Weight</th>
                 {% else %}
-                    <th style="width: 50%;">Repetitions</th>
+                    <th style="width: 50%;">반복</th>
                 {% endif %}
                 <th>Percentage of 1RM</th>
             </tr>

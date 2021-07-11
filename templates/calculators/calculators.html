@@ -2,42 +2,38 @@
 {% block content %}
     {% load static %}
     <div class="section-box content">
-        <h2 class="title is-3 is-size-4-mobile">One Rep Max Calculator</h2>
+        <h2 class="title is-3 is-size-4-mobile">1 Rep Max 계산기</h2>
         <p>
-            Calculate your one-rep max (1RM) for any lift.
+            모든 리프트에 대해 최대 1RM을 계산하기.
         </p>
         <p>
-            <a class="button is-primary" href="{% url 'one rep max calculator' %}">One Rep Max
-                Calculator</a>
-        </p>
-
-        <h2 class="title is-3 is-size-4-mobile">Plate Barbell Racking Calculator</h2>
-        <p>
-            The Plate Barbell Racking Calculator tells you the plates you need to put on your barbell to lift a certain
-            weight.
-        </p>
-        <p>
-            <a class="button is-primary" href="{% url 'plate barbell racking calculator' %}">Plate
-                Calculator</a>
+            <a class="button is-primary" href="{% url 'one rep max calculator' %}">1 Rep Max 계산기</a>
         </p>
 
-        <h2 class="title is-3 is-size-4-mobile">Powerlifting Calculator</h2>
+        <h2 class="title is-3 is-size-4-mobile">플레이트 바벨 건 드리는 계산기</h2>
         <p>
-            The Workoutnote Powerlifting Calculator measures your strength in powerlifting against other
-            lifters who have entered bench press, squat and deadlift into our calculator.
+            Plate Barbell Racking Calculator는 특정 무게를 들어 올리기 위해 바벨에 올려야하는 플레이트를 알려줍니다.
         </p>
         <p>
-            <a class="button is-primary" href="{% url 'powerlifting calculator' %}">Powerlifting
-                Calculator</a>
+            <a class="button is-primary" href="{% url 'plate barbell racking calculator' %}">
+                플레이트 계산기
+            </a>
         </p>
 
-        <h2 class="title is-3 is-size-4-mobile">Wilks Calculator</h2>
+        <h2 class="title is-3 is-size-4-mobile">파워 리프팅 계산기</h2>
         <p>
-            The Wilks Score measures your strength in powerlifting against other
-            powerlifters with different bodyweights across both genders.
+            Workoutnote 파워 리프팅 계산기는 벤치 프레스, 스쿼트 및 데 드리프트를 계산기에 입력 한 다른 리프터에 대한 파워 리프팅의 강도를 측정합니다.
         </p>
         <p>
-            <a class="button is-primary" href="{% url 'wilks calculator' %}">Wilks Calculator</a>
+            <a class="button is-primary" href="{% url 'powerlifting calculator' %}">파워 리프팅 계산기</a>
+        </p>
+
+        <h2 class="title is-3 is-size-4-mobile">Wilks 계산기</h2>
+        <p>
+            Wilks 점수는 두 성별에 걸쳐 다른 체중을 가진 다른 파워 리프터에 대한 파워 리프팅의 강도를 측정합니다.
+        </p>
+        <p>
+            <a class="button is-primary" href="{% url 'wilks calculator' %}">Wilks 계산기</a>
         </p>
     </div>
 {% endblock %}

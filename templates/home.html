@@ -10,7 +10,7 @@
                     &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                     <span>{% now "D" %}</span>
                 </p>
-                <input id="workoutTitle" type="text" placeholder="e.g. my workout" value="">
+                <input id="workoutTitle" type="text" placeholder="예 : 내 운동" value="">
                 <img onclick="document.getElementById('workoutTitle').focus();" src="{% static 'edit.png' %}" width="14px" style="cursor: pointer;">
             </div>
             <span id="exerciseDurationDisplay" style="font-size: xx-large; color: #0006b1;">{% now "G:i:s" %}</span>
@@ -24,10 +24,10 @@
             <button class="dummy_button" style="margin-bottom: 3px;" disabled>Fetch a prescribed exercise</button>
             <table id="newExercisesTable">
                 <tr>
-                    <th class="set_column">SET</th>
-                    <th class="exercise_column">EXERCISE</th>
+                    <th class="set_column">세트</th>
+                    <th class="exercise_column">운동</th>
                     <th class="weight_column">KG</th>
-                    <th class="repetition_column">REPS</th>
+                    <th class="repetition_column">반복</th>
                     <th class="done_column"></th>
                 </tr>
                 <tr>
@@ -44,7 +44,7 @@
         <!-- tail -->
         <div style="height: 30px; margin-top: 50px;">
             <div style="display: inline-block;" class="w3-right">
-                <a id="saveExerciseButton" onclick="saveExercises()" class="w3-button w3-buttoncolor" style="padding: 8px 40px 8px 40px; border-radius: 8px; display: block;">SAVE</a>
+                <a id="saveExerciseButton" onclick="saveExercises()" class="w3-button w3-buttoncolor" style="padding: 8px 40px 8px 40px; border-radius: 8px; display: block;">저장</a>
             </div>
         </div>
     </div>
@@ -65,7 +65,7 @@
                 </div>
                 <div style="display: inline-block; padding: 8px; text-align: center;" class="w3-right">
                     <span style="font-weight: bold; font-size: large;" class="light-blue-text">{{ workout.get_duration_str }}</span> <br>
-                    <a onclick="repeatWorkoutSession({{ workout.id }});" class="w3-button w3-buttoncolor" style="padding: 5px 30px 5px 30px; border-radius: 4px; display: block; margin-top: 10px;">REPEAT</a>
+                    <a onclick="repeatWorkoutSession({{ workout.id }});" class="w3-button w3-buttoncolor" style="padding: 5px 30px 5px 30px; border-radius: 4px; display: block; margin-top: 10px;">반복하기</a>
                 </div>
             </div>
         {% endfor %}
@@ -411,7 +411,7 @@
 
                 $.post('{% url 'add workout' %}', {
                     csrfmiddlewaretoken: $('{% csrf_token %}').val(),
-                    title: title === '' ? '[unnamed workout]' : title,
+                    title: title === '' ? '[이름없는 운동]' : title,
                     duration: stopwatchSeconds,
                     exercises: JSON.stringify(resExercises)
                 }, function (response) {

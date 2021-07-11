@@ -27,25 +27,25 @@
     <div id="sidebar_middle_part" class="w3-padding-64 w3-large w3-text-grey" style="font-weight:bold">
         <a href="{% url 'index' %}" class="w3-bar-item w3-button {% if at_home %}w3-navcolor{% else %}w3-black{% endif %}">
             <img src="{% static 'Home-white.svg' %}" height="30" style="margin-left: 15px; margin-right: 5px">
-            <span>HOME</span>
+            <span>홈</span>
             </a>
         <a href="#" class="w3-bar-item w3-button {% if at_calendar %}w3-navcolor{% else %}w3-black{% endif %}">
              <img src="{% static 'Calendar-white.svg' %}" height="30" style="margin-left: 15px; margin-right: 5px">
-            <span>MY CALENDAR</span>
+            <span>내 캘린더</span>
             </a>
         <a href="{% url 'calculators' %}" class="w3-bar-item w3-button {% if at_calculators %}w3-navcolor{% else %}w3-black{% endif %}">
             <img src="{% static 'Ranking-white.svg' %}" height="30" style="margin-left: 15px; margin-right: 5px">
-            <span>STRENGTH RANK</span>
+            <span>체력 순위</span>
         </a>
     </div>
     <div id="sidebar_bottom_part">
         <a href="{% url 'settings' %}" class="w3-bar-item w3-button {% if at_settings %}w3-navcolor{% else %}w3-black{% endif %}">
             <img src="{% static 'Settings-white.svg' %}" height="50" width="50">
-            <span>SETTINGS</span>
+            <span>설정</span>
         </a>
         <a href="{% url 'logout' %}" class="w3-bar-item w3-button" style="margin-bottom: 20px;">
             <img src="{% static 'Logout-white.svg' %}" height="30" style="margin-left: 15px; margin-right: 5px">
-            <span>LOG OUT</span>
+            <span>로그아웃</span>
         </a>
         <span style="font-size: x-small; margin-left: 10px;">©2021 by Deltoid. All rights reserved.</span>
     </div>
@@ -77,7 +77,7 @@
             {% if title %}
                 <h1 class="w3-left">{{ title }}</h1>
             {% elif name %}
-                <h2 class="w3-left"><span style="font-weight: bold;">Hi, </span><span style="color: #0006b1; font-weight: bold;">{{ name }}</span></h2>
+                <h2 class="w3-left"><span style="font-weight: bold;">안녕하세요, </span><span style="color: #0006b1; font-weight: bold;">{{ name }}</span></h2>
             {% endif %}
         </header>
     {% endif %}

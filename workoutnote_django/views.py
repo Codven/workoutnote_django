@@ -154,7 +154,7 @@ def handle_index(request):
 @login_required
 def handle_calculators(request):
     return render(request=request, template_name='calculators/calculators.html', context={
-        'title': 'Strength calculators',
+        'title': '체력 계산기',
         'at_calculators': True,
     })
 
@@ -163,7 +163,7 @@ def handle_calculators(request):
 @require_http_methods(['GET', 'POST'])
 def handle_one_rep_max_calculator(request):
     data = {
-        'title': '1RM calculator',
+        'title': '1 Rep Max 계산기',
         'at_calculators': True,
 
         'result_number': None,
@@ -210,7 +210,7 @@ def handle_one_rep_max_calculator(request):
 @require_http_methods(['GET', 'POST'])
 def handle_plate_barbell_racking_calculator(request):
     data = {
-        'title': 'Plate barbell racking calculator',
+        'title': '플레이트 바벨 건 드리는 계산기',
         'at_calculators': True,
 
         'total_lift_mass': 20,
@@ -289,7 +289,7 @@ def handle_plate_barbell_racking_calculator(request):
 @require_http_methods(['GET', 'POST'])
 def handle_powerlifting_calculator(request):
     data = {
-        'title': 'Powerlifting calculator',
+        'title': '파워 리프팅 계산기',
         'at_calculators': True,
 
         'lvl_txt': None,
@@ -368,7 +368,7 @@ def handle_powerlifting_calculator(request):
 @require_http_methods(['GET', 'POST'])
 def handle_wilks_calculator(request):
     data = {
-        'title': '1RM calculator',
+        'title': 'Wilks 계산기',
         'at_calculators': True,
 
         'wilks_score': None,
@@ -437,7 +437,7 @@ def handle_settings(request):
         preferences.save()
 
     return render(request=request, template_name='settings.html', context={
-        'title': 'Settings',
+        'title': '설정',
         'preferences': preferences,
         'gender': models.Preferences.Gender,
         'at_settings': True

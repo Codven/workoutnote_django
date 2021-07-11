@@ -1,33 +1,32 @@
 {% extends 'base.html' %}
 {% block content %}
     <div class="sub_content">
-        <form method="post" action="{% url 'settings' %}" class="mt-5"><h2 class="title is-3 is-size-4-mobile">Personal Details</h2>
+        <form method="post" action="{% url 'settings' %}" class="mt-5"><h2 class="title is-3 is-size-4-mobile">개인 정보</h2>
             {% csrf_token %}
             <div>
-                <div><label for="name" class="label">Name</label></div>
+                <div><label for="name" class="label">이름</label></div>
                 <div>
                     <div>
-                        <div class="control"><input id="name" name="name" type="text" placeholder="Enter Your Name" minlength="3" maxlength="32" class="input" required
+                        <div class="control"><input id="name" name="name" type="text" placeholder="이름을 입력하세요" minlength="3" maxlength="32" class="input" required
                                                     value="{% if preferences.name is not None %}{{ preferences.name }}{% endif %}"></div>
                     </div>
                 </div>
-                Share my profile with everyone
             </div>
             <div>
-                <div><label for="gender" class="label">Gender</label></div>
+                <div><label for="gender" class="label">성별</label></div>
                 <div>
                     <div>
                         <div class="control">
                             <div class="select is-fullwidth"><select id="gender" name="gender">
-                                <option value="{{ gender.MALE }}" {% if preferences.gender_str == gender.MALE %}selected{% endif %}>Male</option>
-                                <option value="{{ gender.FEMALE }}" {% if preferences.gender_str == gender.FEMALE %}selected{% endif %}>Female</option>
+                                <option value="{{ gender.MALE }}" {% if preferences.gender_str == gender.MALE %}selected{% endif %}>남성</option>
+                                <option value="{{ gender.FEMALE }}" {% if preferences.gender_str == gender.FEMALE %}selected{% endif %}>여자</option>
                             </select></div>
                         </div>
                     </div>
                 </div>
             </div>
             <div>
-                <div><label for="birthday" class="label">Date of Birth</label></div>
+                <div><label for="birthday" class="label">생년월일</label></div>
                 <div>
                     <div>
                         <div class="control">
@@ -37,9 +36,7 @@
                             </div>
                         </div>
                         <p class="help">
-                            We calculate your age from your date of birth and use it to adapt our ratings for your
-                            lifts.
-                            You may be stronger than you think!
+                            귀하의 생년월일로 나이를 계산하고 귀하의 리프트에 대한 평가를 계산합니다.
                         </p></div>
                 </div>
             </div>
@@ -48,7 +45,7 @@
                 <div>
                     <div>
                         <div class="control">
-                            <button type="submit" class="button is-primary">Update Profile</button>
+                            <button type="submit" class="button is-primary">프로필 업데이트</button>
                         </div>
                     </div>
                 </div>
@@ -57,26 +54,26 @@
     </div>
 
     <div class="sub_content">
-        <h2 class="title is-3 is-size-4-mobile">Sharing Settings</h2>
+        <h2 class="title is-3 is-size-4-mobile">공유 설정</h2>
         <label class="switch">
             <input type="checkbox" id="togBtn" name="sharing" {% if preferences.shared_profile %}checked{% endif %}>
             <div class="slider round"></div>
         </label>
         <p class="help">
-            Public: We will use your data to calculate standards
+            공개 : 귀하의 데이터를 사용하여 표준을 계산합니다.
         </p>
         <p class="help">
-            Private: We will NOT use your data to calculate standards
+            비공개 : 표준을 계산하는 데 귀하의 데이터를 사용하지 않습니다.
         </p>
 
     </div>
 
     <div class="sub_content">
-        <form method="post" action="{% url 'settings' %}" class="mt-5"><h2 class="title is-3 is-size-4-mobile">Change Password</h2>
+        <form method="post" action="{% url 'settings' %}" class="mt-5"><h2 class="title is-3 is-size-4-mobile">비밀번호 변경</h2>
             {% csrf_token %}
             <div>
                 <div>
-                    <div><label for="oldPassword" class="label">Old Password</label></div>
+                    <div><label for="oldPassword" class="label">기존 비밀번호</label></div>
                     <div>
                         <div>
                             <div class="control"><input name="oldpassword" id="oldPassword" type="password" required="required" class="input"></div>
@@ -84,7 +81,7 @@
                     </div>
                 </div>
                 <div>
-                    <div><label for="newPassword" class="label">New Password</label></div>
+                    <div><label for="newPassword" class="label">새 비밀번호</label></div>
                     <div>
                         <div>
                             <div class="control"><input name="newpassword" id="newPassword" type="password" required="required" class="input"></div>
@@ -92,7 +89,7 @@
                     </div>
                 </div>
                 <div>
-                    <div><label for="repeatPassword" class="label">Repeat Password</label></div>
+                    <div><label for="repeatPassword" class="label">비밀번호 반복</label></div>
                     <div>
                         <div>
                             <div class="control"><input name="repeatpassword" id="repeatPassword" type="password" required="required" class="input"></div>
@@ -105,7 +102,7 @@
                 <div>
                     <div>
                         <div class="control">
-                            <button type="submit" class="button is-primary">Change Password</button>
+                            <button type="submit" class="button is-primary">비밀번호 변경</button>
                         </div>
                     </div>
                 </div>
@@ -163,7 +160,7 @@
 
         /*------ ADDED CSS ---------*/
         .slider:after {
-            content: 'Private';
+            content: '비공개';
             color: white;
             display: block;
             position: absolute;
@@ -175,7 +172,7 @@
         }
 
         input:checked + .slider:after {
-            content: 'Public';
+            content: '공개';
             left: 35%;
         }
 

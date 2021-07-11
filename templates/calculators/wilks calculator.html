@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
     <div class="section-box" id="wilksContainer">
-        <h1 class="title is-2 is-size-3-mobile is-spaced">Wilks Calculator for Powerlifting</h1>
 
         <h2 class="subtitle is-4 is-size-5-mobile">
             Calculate the Wilks Score for your gender/bodyweight in kg
@@ -20,16 +19,16 @@
         <form action="{% url 'wilks calculator' %}" method="post" id="powerliftingForm" class="powerliftingcalculator__form">
             {% csrf_token %}
             <div >
-                <div ><label for="splitform_gender" class="label">Gender</label></div>
+                <div ><label for="splitform_gender" class="label">성별</label></div>
                 <div >
                     <div >
                         <div class="control">
                             <div class="select"><select id="splitform_gender" name="gender">
                                 <option value="male">
-                                    Male
+                                    남성
                                 </option>
                                 <option value="female">
-                                    Female
+                                    여자
                                 </option>
                             </select></div>
                         </div>
@@ -72,7 +71,7 @@
                             <div class="control"><span class="button is-static">kg</span></div>
                             <div class="control is-expanded"><input type="number" name="benchrepetitions" min="1" max="500" class="input"></div>
                             <div class="control"><span class="button is-static">
-                            rep
+                            반복
                         </span></div>
                         </div>
                     </div>
@@ -86,7 +85,7 @@
                             <div class="control"><span class="button is-static">kg</span></div>
                             <div class="control is-expanded"><input type="number" name="squatrepetitions" min="1" max="500" class="input"></div>
                             <div class="control"><span class="button is-static">
-                            rep
+                            반복
                         </span></div>
                         </div>
                     </div>
@@ -100,7 +99,7 @@
                             <div class="control"><span class="button is-static">kg</span></div>
                             <div class="control is-expanded"><input type="number" name="deadliftrepetitions" min="1" max="500" class="input"></div>
                             <div class="control"><span class="button is-static">
-                            rep
+                            반복
                         </span></div>
                         </div>
                     </div>

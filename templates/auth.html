@@ -5,8 +5,8 @@
             <form action="{% url 'register' %}" method="post" class="register-form">
                 {% csrf_token %}
                 <input type="text" name="name" placeholder="Name" {% if name %}value="{{ name }}" {% endif %} required/>
-                <input type="email" name="email" placeholder="Email address" {% if email %}value="{{ email }}" {% endif %} required/>
-                <input type="password" name="password" placeholder="Password" {% if password %}value="{{ password }}" {% endif %} required/>
+                <input type="email" name="email" placeholder="이메일 주소" {% if email %}value="{{ email }}" {% endif %} required/>
+                <input type="password" name="password" placeholder="비밀번호" {% if password %}value="{{ password }}" {% endif %} required/>
                 {% if verify_now %}
                     <input type="number" name="verification_code" placeholder="Verification code" required/>
                 {% endif %}
@@ -14,15 +14,15 @@
                     <button>Verify and register</button>
                 {% else %}
                     <button>Register</button>
-                    <p class="message">Already registered? <a href="#">Sign In</a></p>
+                    <p class="message">Already registered? <a href="#">로그인</a></p>
                 {% endif %}
             </form>
             <form action="{% url 'login' %}" method="post" class="login-form">
                 {% csrf_token %}
-                <input type="email" name="email" placeholder="Email address" required/>
-                <input type="password" name="password" placeholder="Password" required/>
-                <button>Sign In</button>
-                <p class="message">Not registered? <a href="#">Create an account</a></p>
+                <input type="email" name="email" placeholder="이메일 주소" required/>
+                <input type="password" name="password" placeholder="비밀번호" required/>
+                <button>로그인</button>
+                <p class="message">회원가입 안하셨나요? <a href="#">계정 생성</a></p>
             </form>
         </div>
     </div>

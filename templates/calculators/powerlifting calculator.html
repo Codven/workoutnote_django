@@ -22,16 +22,16 @@
                 <form action="{% url 'powerlifting calculator' %}" name="theForm" method="post" id="powerliftingForm" class="powerliftingcalculator__form">
                     {% csrf_token %}
                     <div >
-                        <div ><label for="splitform_gender" class="label">Gender</label></div>
+                        <div ><label for="splitform_gender" class="label">성별</label></div>
                         <div >
                             <div >
                                 <div class="control">
                                     <div class="select"><select id="splitform_gender" name="gender">
                                         <option value="male">
-                                            Male
+                                            남성
                                         </option>
                                         <option value="female">
-                                            Female
+                                            여자
                                         </option>
                                     </select></div>
                                 </div>
@@ -74,7 +74,7 @@
                                     <div class="control"><span class="button is-static">kg</span></div>
                                     <div class="control is-expanded"><input type="number" name="benchrepetitions" required="required" min="1" max="500" class="input"></div>
                                     <div class="control"><span class="button is-static">
-                            rep
+                            반복
                         </span></div>
                                 </div>
                             </div>
@@ -88,7 +88,7 @@
                                     <div class="control"><span class="button is-static">kg</span></div>
                                     <div class="control is-expanded"><input type="number" name="squatrepetitions" required="required" min="1" max="500" class="input"></div>
                                     <div class="control"><span class="button is-static">
-                            rep
+                            반복
                         </span></div>
                                 </div>
                             </div>
@@ -103,7 +103,7 @@
                                     <div class="control"><span class="button is-static">kg</span></div>
                                     <div class="control is-expanded"><input type="number" name="deadliftrepetitions" required="required" min="1" max="500" class="input"></div>
                                     <div class="control"><span class="button is-static">
-                            rep
+                            반복
                         </span></div>
                                 </div>
                             </div>

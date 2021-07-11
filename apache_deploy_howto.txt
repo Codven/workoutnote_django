@@ -19,6 +19,11 @@ content :
                 Require all granted
         </Directory>
 
+        Alias /media /home/ubuntu/workoutnote_django/media
+        <Directory /home/ubuntu/workoutnote_django/media>
+                Require all granted
+        </Directory>
+
         <Directory /home/ubuntu/workoutnote_django/workoutnote_django>
                 <Files wsgi.py>
                         Require all granted

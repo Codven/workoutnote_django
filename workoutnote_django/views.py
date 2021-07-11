@@ -126,7 +126,7 @@ def handle_index(request):
     if request.user.is_superuser:
         return redirect(to='logout')
     name = models.Preferences.objects.get(user=request.user).name
-    db_workout_sessions = models.WorkoutSession.objects.filter(user=request.user)
+    db_workout_sessions = models.WorkoutSession.objects.filter(user=request.user).order_by('-timestamp')
     workouts_by_days = {}
     for db_workout_session in db_workout_sessions:
         db_lifts = models.Lift.objects.filter(workout_session=db_workout_session)

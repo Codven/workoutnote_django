@@ -250,22 +250,18 @@
             }
 
             let params = window.location.search.substr(1).split("&");
-            let exercise, liftMass;
+            let exercise;
             for (let i = 0; i < params.length; i++) {
                 let kv = params[i].split('=');
-                if (kv[0] === 'exerciseId') {
+                if (kv[0] === 'exerciseId')
                     for (let j = 0; j < allExercises.length; j++)
-                        if (allExercises[j].id.toString() === kv[1])
+                        if (allExercises[j].id.toString() === kv[1]) {
                             exercise = allExercises[j];
-                } else if (kv[0] === 'liftMass') {
-                    liftMass = parseInt(kv[1]);
-                }
+                            break;
+                        }
             }
-            if (exercise != null && liftMass != null) {
-                $('#newLiftWeight').val(liftMass);
+            if (exercise != null) {
                 $('#newLiftReps').val(1);
-
-                // addNewExerciseWithRawValues(liftMass, reps, exercise.name);
                 selectExerciseClick(exercise.name);
             }
         });

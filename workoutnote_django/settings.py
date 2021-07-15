@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-=43enxo(9$ws@#2*fvq3qaql$67$rdj7j+p4$lwu0_z*3rn%c^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
@@ -86,8 +86,9 @@ WSGI_APPLICATION = 'workoutnote_django.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    } if DEBUG else {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'deltoid-db',
         'USER': 'postgres',

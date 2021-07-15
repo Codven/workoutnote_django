@@ -69,7 +69,7 @@
                         <br>
                     {% endfor %}
                 </div>
-                <div style="display: inline-block; padding: 8px; text-align: center;" class="w3-right">
+                <div style="padding: 8px; text-align: center;" class="repeatButton">
                     <span style="font-weight: bold; font-size: large;" class="light-blue-text">{{ workout.get_duration_str }}</span> <br>
                     <a onclick="repeatWorkoutSession({{ workout.id }});" class="w3-button w3-buttoncolor" style="padding: 5px 30px 5px 30px; border-radius: 4px; display: block; margin-top: 10px;">반복하기</a>
                 </div>
@@ -177,6 +177,12 @@
 
         /* endregion */
 
+        @media (min-width: 601px) {
+            .repeatButton {
+                display: inline-block;
+                float: right !important;
+            }
+        }
 
     </style>
 

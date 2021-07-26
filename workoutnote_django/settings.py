@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'workoutnote_django',
+    'api',
 ]
 
 MIDDLEWARE = [

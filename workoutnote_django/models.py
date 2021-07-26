@@ -1,5 +1,3 @@
-import os
-
 from django.contrib.auth.models import User as django_User
 from utils.tools import Tools
 from django.db import models

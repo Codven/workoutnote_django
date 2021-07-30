@@ -147,6 +147,9 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+CSRF_COOKIE_DOMAIN = 'workoutnote.com'
+CSRF_TRUSTED_ORIGINS = ['workoutnote.com']
+
 # SMTP configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

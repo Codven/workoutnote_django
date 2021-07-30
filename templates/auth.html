@@ -5,17 +5,17 @@
             <form action="{% url 'register' %}" method="post" class="register-form">
                 {% csrf_token %}
                 <input type="hidden" name="next" value="{{ request.GET.next }}"/>
-                <input type="text" name="name" placeholder="Name" {% if name %}value="{{ name }}" {% endif %} required/>
+                <input type="text" name="name" placeholder="이름" {% if name %}value="{{ name }}" {% endif %} required/>
                 <input type="email" name="email" placeholder="이메일 주소" {% if email %}value="{{ email }}" {% endif %} required/>
                 <input type="password" name="password" placeholder="비밀번호" {% if password %}value="{{ password }}" {% endif %} required/>
                 {% if verify_now %}
                     <input type="number" name="verification_code" placeholder="Verification code" required/>
                 {% endif %}
                 {% if verify_now %}
-                    <button>Verify and register</button>
+                    <button>확인 및 등록</button>
                 {% else %}
-                    <button>Register</button>
-                    <p class="message">Already registered? <a href="#">로그인</a></p>
+                    <button>등록</button>
+                    <p class="message">이미 등록되었습니까? <a href="#">로그인</a></p>
                 {% endif %}
             </form>
             <form action="{% url 'login' %}" method="post" class="login-form">
@@ -128,8 +128,7 @@
         <h1>1 Rep Max 계산기</h1>
         <div class="section-box">
             <p>
-                모든 리프트에 대해 최대 1RM을 계산하기. Your one-rep max is the max weight you can lift
-                for a single repetition for a given exercise.
+                모든 리프트에 대해 최대 1RM을 계산하기. 1rep max는 주어진 운동을 한 번 반복할 때 들 수 있는 최대 무게입니다.
             </p>
             <form id="oneRepMaxCalculator" action="{% url 'one rep max calculator' %}" method="post">
                 {% csrf_token %}

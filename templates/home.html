@@ -12,10 +12,12 @@
                 <input id="workoutTitle" type="text" placeholder="예 : 내 운동" value="">
                 <img onclick="document.getElementById('workoutTitle').focus();" src="{% static 'edit.png' %}" width="14px" style="cursor: pointer;">
             </div>
-            <span id="exerciseDurationDisplay" style="font-size: xx-large; color: #0006b1;">{% now "G:i:s" %}</span>
-            <input id="exerciseDuration" type="number" name="exerciseDuration" value="0" hidden>
-            <div style="display: inline-block;" class="w3-right">
-                <a onclick="stopwatchControlButtonClick();" class="w3-button w3-buttoncolor" style="padding: 8px 30px 8px 30px; border-radius: 10px;"><img id="timerControlButton" src="{% static 'play.png' %}" height="16px"></a>
+            <div id="stopwatch_div">
+                <span id="exerciseDurationDisplay" style="font-size: xx-large; color: #0006b1;">{% now "G:i:s" %}</span>
+                <input id="exerciseDuration" type="number" name="exerciseDuration" value="0" hidden>
+                <div style="display: inline-block;" class="w3-right">
+                    <a onclick="stopwatchControlButtonClick();" class="w3-button w3-buttoncolor" style="padding: 8px 30px 8px 30px; border-radius: 10px;"><img id="timerControlButton" src="{% static 'play.png' %}" height="16px"></a>
+                </div>
             </div>
         </div>
         <!-- body -->
@@ -185,8 +187,14 @@
         }
 
         @media (max-width: 600px) {
-            #exerciseDurationDisplay {
+            #stopwatch_div {
                 display: block;
+            }
+        }
+
+        @media (min-width: 601px) {
+            #stopwatch_div {
+                display: inline-block;
             }
         }
 

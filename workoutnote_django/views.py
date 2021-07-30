@@ -19,29 +19,34 @@ from workoutnote_django import models
 LIMIT_OF_ACCEPTABLE_DATA_AMOUNT = 5
 
 
+def resp(response):
+    response.set_cookie('workoutnote.com', 'workoutnote.com')
+    return response
+
+
 @login_required
 def handle_init_configs(request):
     if request.user.is_superuser:
         models.BodyPart.init_body_parts()
         models.Category.init_categories()
         models.Exercise.init_from_csv()
-    return redirect(to='index')
+    return resp(redirect(to='index'))
 
 
 @login_required
 def handle_generate_dummy_data(request):
     if request.user.is_superuser:
         Tools.generate_dummy_data()
-    return redirect(to='index')
+    return resp(redirect(to='index'))
 
 
 # region authentication
 @require_http_methods(['GET', 'POST'])
 def handle_login(request, *args, **kwargs):
     if request.user.is_authenticated:
-        return redirect(to='index')
+        return resp(redirect(to='index'))
     elif request.method == 'GET':
-        return render(request=request, template_name='auth.html', context={'title': ''})
+        return resp(render(request=request, template_name='auth.html', context={'title': ''}))
     else:
         if 'email' in request.POST and 'password' in request.POST:
             email = request.POST['email']
@@ -50,24 +55,24 @@ def handle_login(request, *args, **kwargs):
             if user and user.is_authenticated:
                 login(request=request, user=user)
                 if 'next' in request.POST and len(request.POST['next']) > 0:
-                    return redirect(to=request.POST['next'])
+                    return resp(redirect(to=request.POST['next']))
                 else:
-                    return redirect(to='index')
+                    return resp(redirect(to='index'))
             else:
-                return redirect(to='login')
-    return redirect(to='index')
+                return resp(redirect(to='login'))
+    return resp(redirect(to='index'))
 
 
 @require_http_methods(['POST'])
 def handle_register(request):
     if request.user.is_authenticated:
-        return redirect(to='index')
+        return resp(redirect(to='index'))
     elif 'name' in request.POST and 'email' in request.POST and 'password' in request.POST:
         name = request.POST['name']
         email = request.POST['email']
         password = request.POST['password']
         if django_User.objects.filter(username=email).exists() or len(password) < 4:
-            return redirect(to='login')
+            return resp(redirect(to='login'))
         elif 'verification_code' in request.POST and models.EmailConfirmationCodes.objects.filter(email=email).exists():
             expected_code = models.EmailConfirmationCodes.objects.get(email=email).verification_code
             provided_code = request.POST['verification_code']
@@ -79,12 +84,12 @@ def handle_register(request):
                     models.Preferences.objects.create(user=user, name=name)
                     login(request=request, user=user)
                     if 'next' in request.POST and len(request.POST['next']) > 0:
-                        return redirect(to=request.POST['next'])
+                        return resp(redirect(to=request.POST['next']))
                     else:
-                        return redirect(to='index')
+                        return resp(redirect(to='index'))
                 else:
-                    return redirect(to='register')  # whatever the reason could be
-            return redirect(to='login')
+                    return resp(redirect(to='register'))  # whatever the reason could be
+            return resp(redirect(to='login'))
         else:
             if not models.EmailConfirmationCodes.objects.filter(email=email).exists():
                 verification_code = ''.join([str(random.randint(0, 9)) for _ in range(6)])
@@ -97,21 +102,21 @@ def handle_register(request):
                 email_message.fail_silently = False
                 email_message.send()
                 models.EmailConfirmationCodes.objects.create(email=email, verification_code=verification_code)
-            return render(request=request, template_name='auth.html', context={
+            return resp(render(request=request, template_name='auth.html', context={
                 'verify_now': True,
                 'name': name,
                 'email': email,
                 'password': password
-            })
+            }))
     else:
-        return redirect(to='index')
+        return resp(redirect(to='index'))
 
 
 @login_required
 @require_http_methods(['GET'])
 def handle_logout(request):
     logout(request=request)
-    return redirect(to='index')
+    return resp(redirect(to='index'))
 
 
 # endregion
@@ -136,22 +141,22 @@ def handle_index(request):
                     workouts_by_days[day_str][db_workout_session] = {db_lift.exercise: {'count': 1, 'lifts': [db_lift]}}
             else:
                 workouts_by_days[day_str] = {db_workout_session: {db_lift.exercise: {'count': 1, 'lifts': [db_lift]}}}
-    return render(request=request, template_name='home.html', context={
+    return resp(render(request=request, template_name='home.html', context={
         'name': name if name else request.user.username,
         'at_home': True,
         'exercises': models.Exercise.objects.all(),
         'body_parts': models.BodyPart.objects.all(),
         'categories': models.Category.objects.all(),
         'workouts_by_days': workouts_by_days
-    })
+    }))
 
 
 @login_required
 def handle_calculators(request):
-    return render(request=request, template_name='calculators/calculators.html', context={
+    return resp(render(request=request, template_name='calculators/calculators.html', context={
         'title': '체력 계산기',
         'at_calculators': True,
-    })
+    }))
 
 
 @require_http_methods(['GET', 'POST'])
@@ -171,7 +176,7 @@ def handle_one_rep_max_calculator(request):
                 {'percentage': item, 'reps_of_1rm': index + 1}
             )
 
-        return render(request=request, template_name='calculators/one rep max calculator.html', context=data)
+        return resp(render(request=request, template_name='calculators/one rep max calculator.html', context=data))
     elif request.method == 'POST':
         result = Tools.calculate_one_rep_max(
             float(request.POST['liftmass']),
@@ -193,7 +198,7 @@ def handle_one_rep_max_calculator(request):
             data['result_table_2'].append(
                 {'percentage': item, 'liftmass': round(result * item / 100, 1), 'reps_of_1rm': index + 1}
             )
-        return render(request=request, template_name='calculators/one rep max calculator.html', context=data)
+        return resp(render(request=request, template_name='calculators/one rep max calculator.html', context=data))
 
 
 @login_required
@@ -272,8 +277,7 @@ def handle_plate_barbell_racking_calculator(request):
         data['plate_quantity_25'] = plate_quantity_25
         data['calculator_result_status'] = Status.OK
 
-    return render(request=request, template_name='calculators/plate barbell racking calculator.html', context=data)
-
+    return resp(render(request=request, template_name='calculators/plate barbell racking calculator.html', context=data))
 
 
 @login_required
@@ -320,7 +324,7 @@ def handle_wilks_calculator(request):
         data['total_lift_mass'] = total_lift_mass
         data['calculator_result_status'] = Status.OK
 
-    return render(request=request, template_name='calculators/wilks calculator.html', context=data)
+    return resp(render(request=request, template_name='calculators/wilks calculator.html', context=data))
 
 
 @login_required
@@ -348,12 +352,12 @@ def handle_settings(request):
                 request.user.save()
         preferences.save()
 
-    return render(request=request, template_name='settings.html', context={
+    return resp(render(request=request, template_name='settings.html', context={
         'title': '설정',
         'preferences': preferences,
         'gender': models.Preferences.Gender,
         'at_settings': True
-    })
+    }))
 
 
 @login_required
@@ -374,10 +378,10 @@ def handle_exercises(request):
 
     # todo plot as in https://simpleisbetterthancomplex.com/tutorial/2020/01/19/how-to-use-chart-js-with-django.html
     # todo customize plot as in https://www.chartjs.org/docs/latest/charts/line.html
-    return render(request=request, template_name='profile/exercises.html', context={
+    return resp(render(request=request, template_name='profile/exercises.html', context={
         'days': days,
         'one_rep_maxes': one_rep_maxes
-    })
+    }))
 
 
 @login_required
@@ -390,9 +394,9 @@ def handle_add_workout(request):
             if models.Exercise.objects.filter(name=exercise['exerciseName']).exists():
                 exercises += [exercise]
         if len(exercises) == 0:
-            return JsonResponse(data={'success': False, 'error': 'empty or invalid exercises provided'})
+            return resp(JsonResponse(data={'success': False, 'error': 'empty or invalid exercises provided'}))
     except json.JSONDecodeError or TypeError as e:
-        return JsonResponse(data={'success': False, 'error': str(e)})
+        return resp(JsonResponse(data={'success': False, 'error': str(e)}))
 
     # create workout session
     db_workout = models.WorkoutSession.objects.create(user=request.user, title=request.POST['title'], duration=int(request.POST['duration']))
@@ -410,4 +414,4 @@ def handle_add_workout(request):
             one_rep_max=Tools.calculate_one_rep_max(lift_mass, repetitions)
         )
 
-    return JsonResponse(data={'success': True})
+    return resp(JsonResponse(data={'success': True}))

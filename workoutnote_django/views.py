@@ -1,19 +1,20 @@
-from django.utils import timezone
-import random
 import json
+import random
 import re
-
-from django.views.decorators.http import require_http_methods
-from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.models import User as django_User
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-from django.core.mail import EmailMessage
 from datetime import datetime, timedelta
-from django.http import JsonResponse
-from django.conf import settings
 
-from utils.tools import Tools, Levels, Status
+from django.conf import settings
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User as django_User
+from django.core.mail import EmailMessage
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+
+from utils.tools import Tools, Status
 from workoutnote_django import models
 
 LIMIT_OF_ACCEPTABLE_DATA_AMOUNT = 5
@@ -36,6 +37,7 @@ def handle_generate_dummy_data(request):
 
 
 # region authentication
+@csrf_exempt
 @require_http_methods(['GET', 'POST'])
 def handle_login(request, *args, **kwargs):
     if request.user.is_authenticated:
@@ -58,6 +60,7 @@ def handle_login(request, *args, **kwargs):
     return redirect(to='index')
 
 
+@csrf_exempt
 @require_http_methods(['POST'])
 def handle_register(request):
     if request.user.is_authenticated:
@@ -107,6 +110,7 @@ def handle_register(request):
         return redirect(to='index')
 
 
+@csrf_exempt
 @login_required
 @require_http_methods(['GET'])
 def handle_logout(request):

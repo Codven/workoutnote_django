@@ -23,7 +23,7 @@ def handle_login_api(request):
             login(request=request, user=user)
             if not models.SessionKey.objects.filter(user=user).exists():
                 session_key = models.SessionKey.generate_key(email=email)
-                while models.SessionKey.objects.filter(session_key=session_key).exists():
+                while models.SessionKey.objects.filter(key=session_key).exists():
                     time.sleep(0.001)
                     session_key = models.SessionKey.generate_key(email=email)
                 models.SessionKey.objects.create(user=user, key=session_key)

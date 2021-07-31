@@ -277,9 +277,9 @@
             $("#newExercisesTable tr:not(:last-child, :first-child)").empty();
             for (let i = 0; i < exercises.length; i++) {
                 if (exercises[i].enabled)
-                    $('#newExercisesTable tr:last').before('<tr id="exerciseRow' + exercises[i].id + '"> <td class="set_column dark-blue-text">' + exercises[i].id + '</td><td class="exercise_column dark-blue-text">' + exercises[i].exercise.name + '(' + exercises[i].exercise.bodyPart + ')</td><td class="weight_column dark-blue-text">' + exercises[i].liftMass + '</td><td class="repetition_column dark-blue-text">' + exercises[i].reps + '</td><td class="done_column"> <a onclick="toggleExercise(this,' + exercises[i].id + ');" class="w3-button w3-buttoncolor" style="padding: 5px; margin: 0; line-height: 1; border-radius: 2px;"><img src="{% static 'checked.png' %}" height="20px"></a> </td></tr>');
+                    $('#newExercisesTable tr:last').before('<tr id="exerciseRow' + exercises[i].id + '"> <td class="set_column dark-blue-text">' + exercises[i].id + '</td><td class="exercise_column dark-blue-text">' + exercises[i].exercise.name + '(' + exercises[i].exercise.bodyPart + ')</td><td class="weight_column dark-blue-text">' + exercises[i].liftMass + '</td><td class="repetition_column dark-blue-text">' + exercises[i].reps + '</td><td class="done_column"> <a onclick="toggleExercise(' + exercises[i].id + ');" class="w3-button w3-buttoncolor" style="padding: 5px; margin: 0; line-height: 1; border-radius: 2px;"><img src="{% static 'checked.png' %}" height="20px"></a> </td></tr>');
                 else
-                    $('#newExercisesTable tr:last').before('<tr id="exerciseRow' + exercises[i].id + '"> <td class="set_column light-grey-text">' + exercises[i].id + '</td><td class="exercise_column light-grey-text">' + exercises[i].exercise.name + '(' + exercises[i].exercise.bodyPart + ')</td><td class="weight_column light-grey-text">' + exercises[i].liftMass + '</td><td class="repetition_column light-grey-text">' + exercises[i].reps + '</td><td class="done_column"> <a onclick="toggleExercise(this,' +  exercises[i].id + ');" class="w3-button w3-buttondisabledcolor" style="padding: 5px; margin: 0; line-height: 1; border-radius: 2px;"><img src="{% static 'unchecked.png' %}" height="20px"></a> </td></tr>');
+                    $('#newExercisesTable tr:last').before('<tr id="exerciseRow' + exercises[i].id + '"> <td class="set_column light-grey-text">' + exercises[i].id + '</td><td class="exercise_column light-grey-text">' + exercises[i].exercise.name + '(' + exercises[i].exercise.bodyPart + ')</td><td class="weight_column light-grey-text">' + exercises[i].liftMass + '</td><td class="repetition_column light-grey-text">' + exercises[i].reps + '</td><td class="done_column"> <a onclick="toggleExercise(' +  exercises[i].id + ');" class="w3-button w3-buttondisabledcolor" style="padding: 5px; margin: 0; line-height: 1; border-radius: 2px;"><img src="{% static 'unchecked.png' %}" height="20px"></a> </td></tr>');
             }
         }
 
@@ -417,9 +417,7 @@
             message_broadcast({action: 'exercises', value: newExercises});
         }
 
-        function toggleExercise(button, id) {
-            button.blur();
-
+        function toggleExercise(id) {
             let eId;
             for (let i = 0; i < newExercises.length; i++)
                 if (newExercises[i].id === id)

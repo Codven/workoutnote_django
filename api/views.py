@@ -1,4 +1,4 @@
-import time
+import time, json
 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -14,9 +14,10 @@ from datetime import datetime, timedelta
 @require_http_methods(['POST'])
 def handle_login_api(request):
     required_params = ['email', 'password']
-    if False not in [x in request.body for x in required_params]:
-        email = request.body['email']
-        password = request.body['password']
+    received_params = json.loads(request.body.decode('utf8'))
+    if False not in [x in received_params for x in required_params]:
+        email = received_params['email']
+        password = received_params['password']
         user = authenticate(username=email, password=password)
         if user and user.is_authenticated:
             login(request=request, user=user)
@@ -42,8 +43,9 @@ def handle_login_api(request):
 @csrf_exempt
 @require_http_methods(['POST'])
 def handle_fetch_settings_api(request):
-    if 'sessionKey' in request.body:
-        session_key = request.body['sessionKey']
+    received_params = json.loads(request.body.decode('utf8'))
+    if 'sessionKey' in received_params:
+        session_key = received_params['sessionKey']
         if models.SessionKey.objects.filter(key=session_key).exists():
             user = models.SessionKey.objects.get(key=session_key).user
             if wn_models.Preferences.objects.filter(user=user).exists():
@@ -66,20 +68,21 @@ def handle_fetch_settings_api(request):
 @csrf_exempt
 @require_http_methods(['POST'])
 def handle_update_settings_api(request):
-    if 'sessionKey' in request.body:
-        session_key = request.body['sessionKey']
+    received_params = json.loads(request.body.decode('utf8'))
+    if 'sessionKey' in received_params:
+        session_key = received_params['sessionKey']
         if models.SessionKey.objects.filter(key=session_key).exists():
             user = models.SessionKey.objects.get(key=session_key).user
             if wn_models.Preferences.objects.filter(user=user).exists():
                 preferences = wn_models.Preferences.objects.get(user=user)
-                if 'name' in request.body:
-                    preferences.name = request.body['name']
-                if 'date_of_birth' in request.body:
-                    preferences.date_of_birth = request.body['date_of_birth']
-                if 'gender' in request.body:
-                    preferences.gender = request.body['gender']
-                if 'is_profile_shared' in request.body:
-                    preferences.shared_profile = request.body['is_profile_shared']
+                if 'name' in received_params:
+                    preferences.name = received_params['name']
+                if 'date_of_birth' in received_params:
+                    preferences.date_of_birth = received_params['date_of_birth']
+                if 'gender' in received_params:
+                    preferences.gender = received_params['gender']
+                if 'is_profile_shared' in received_params:
+                    preferences.shared_profile = received_params['is_profile_shared']
                 return JsonResponse(data={'success': True})
             else:
                 return JsonResponse(data={'success': False, 'reason': 'no settings associated with user, please contact the developer'})
@@ -136,15 +139,16 @@ def handle_fetch_body_parts_api(request):
 @require_http_methods(['POST'])
 def handle_insert_workout_api(request):
     required_params = ['title', 'timestamp', 'duration']
-    if False not in [x in request.body for x in required_params]:
-        session_key = request.body['sessionKey']
+    received_params = json.loads(request.body.decode('utf8'))
+    if False not in [x in received_params for x in required_params]:
+        session_key = received_params['sessionKey']
         if models.SessionKey.objects.filter(key=session_key).exists():
             user = models.SessionKey.objects.get(key=session_key).user
             workout_session = wn_models.WorkoutSession.objects.create(
                 user=user,
-                timestamp=int(request.body['timestamp']),
-                title=request.body['title'],
-                duration=int(request.body['duration']),
+                timestamp=int(received_params['timestamp']),
+                title=received_params['title'],
+                duration=int(received_params['duration']),
             )
             return JsonResponse(data={
                 'success': True,
@@ -164,9 +168,10 @@ def handle_insert_workout_api(request):
 @csrf_exempt
 def handle_fetch_workouts_api(request):
     required_params = ['sessionKey', 'dateTimestampMs']
-    if False not in [x in request.body for x in required_params]:
-        session_key = request.body['sessionKey']
-        date = datetime.utcfromtimestamp(t=int(request.body['dateTimestampMs']) / 1000)
+    received_params = json.loads(request.body.decode('utf8'))
+    if False not in [x in received_params for x in required_params]:
+        session_key = received_params['sessionKey']
+        date = datetime.utcfromtimestamp(t=int(received_params['dateTimestampMs']) / 1000)
         date_from_ts = date.replace(day=0, hour=0, minute=0, second=0, microsecond=0).timestamp()
         date_till_ts = (date.replace(day=0, hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1)).timestamp()
         if models.SessionKey.objects.filter(key=session_key).exists():
@@ -211,21 +216,22 @@ def handle_fetch_workouts_api(request):
 @require_http_methods(['POST'])
 def handle_insert_lift_api(request):
     required_params = ['sessionKey', 'timestamp', 'lift_mass', 'exercise_id', 'workout_session_id']
-    if False not in [x in request.body for x in required_params]:
-        session_key = request.body['sessionKey']
+    received_params = json.loads(request.body.decode('utf8'))
+    if False not in [x in received_params for x in required_params]:
+        session_key = received_params['sessionKey']
         if models.SessionKey.objects.filter(key=session_key).exists():
             user = models.SessionKey.objects.get(key=session_key).user
 
-            if wn_models.Exercise.objects.filter(name=request.body['exercise_id']).exists() and wn_models.WorkoutSession.objects.filter(id=int(request.body['workout_session_id'])).exists():
-                exercise = wn_models.Exercise.objects.filter(name=request.body['exercise_id'])
-                workout_session = wn_models.WorkoutSession.objects.get(id=int(request.body['workout_session_id']))
+            if wn_models.Exercise.objects.filter(name=received_params['exercise_id']).exists() and wn_models.WorkoutSession.objects.filter(id=int(received_params['workout_session_id'])).exists():
+                exercise = wn_models.Exercise.objects.filter(name=received_params['exercise_id'])
+                workout_session = wn_models.WorkoutSession.objects.get(id=int(received_params['workout_session_id']))
                 lift = wn_models.Lift.objects.create(
-                    timestamp=int(request.body['timestamp']),
+                    timestamp=int(received_params['timestamp']),
                     workout_session=workout_session,
                     exercise=exercise,
-                    lift_mass=float(request.body['lift_mass']),
-                    repetitions=float(request.body['repetitions']),
-                    one_rep_max=float(request.body['one_rep_max']),
+                    lift_mass=float(received_params['lift_mass']),
+                    repetitions=float(received_params['repetitions']),
+                    one_rep_max=float(received_params['one_rep_max']),
                 )
                 return JsonResponse(data={
                     'success': True,

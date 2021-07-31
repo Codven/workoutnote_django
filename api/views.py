@@ -83,6 +83,7 @@ def handle_update_settings_api(request):
                     preferences.gender = received_params['gender']
                 if 'is_profile_shared' in received_params:
                     preferences.shared_profile = received_params['is_profile_shared']
+                preferences.save()
                 return JsonResponse(data={'success': True})
             else:
                 return JsonResponse(data={'success': False, 'reason': 'no settings associated with user, please contact the developer'})

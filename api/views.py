@@ -172,9 +172,9 @@ def handle_fetch_workouts_api(request):
     received_params = json.loads(request.body.decode('utf8'))
     if False not in [x in received_params for x in required_params]:
         session_key = received_params['sessionKey']
-        date = datetime.utcfromtimestamp(t=int(received_params['dateTimestampMs']) / 1000)
-        date_from_ts = date.replace(day=0, hour=0, minute=0, second=0, microsecond=0).timestamp()
-        date_till_ts = (date.replace(day=0, hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1)).timestamp()
+        date = datetime.utcfromtimestamp(int(received_params['dateTimestampMs']) / 1000)
+        date_from_ts = date.replace(hour=0, minute=0, second=0, microsecond=0)
+        date_till_ts = date.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1)
         if models.SessionKey.objects.filter(key=session_key).exists():
             user = models.SessionKey.objects.get(key=session_key).user
             workout_sessions = []

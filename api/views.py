@@ -1,6 +1,7 @@
 import time
 
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import login, logout, authenticate
 from api import models
@@ -9,6 +10,7 @@ from datetime import datetime, timedelta
 
 
 # region auth
+@csrf_exempt
 @require_http_methods(['POST'])
 def handle_login_api(request):
     required_params = ['email', 'password']
@@ -37,6 +39,7 @@ def handle_login_api(request):
 
 
 # region settings
+@csrf_exempt
 @require_http_methods(['POST'])
 def handle_fetch_settings_api(request):
     if 'sessionKey' in request.POST:
@@ -60,6 +63,7 @@ def handle_fetch_settings_api(request):
         return JsonResponse(data={'success': False, 'reason': 'bad params, must provide sessionKey'})
 
 
+@csrf_exempt
 @require_http_methods(['POST'])
 def handle_update_settings_api(request):
     if 'sessionKey' in request.POST:
@@ -89,6 +93,7 @@ def handle_update_settings_api(request):
 
 
 # region exercises & body parts
+@csrf_exempt
 @require_http_methods(['POST'])
 def handle_fetch_exercises_api(request):
     exercises = wn_models.Exercise.objects.all()
@@ -107,6 +112,7 @@ def handle_fetch_exercises_api(request):
     })
 
 
+@csrf_exempt
 @require_http_methods(['POST'])
 def handle_fetch_body_parts_api(request):
     body_parts = wn_models.BodyPart.objects.all()
@@ -126,6 +132,7 @@ def handle_fetch_body_parts_api(request):
 
 
 # region workout
+@csrf_exempt
 @require_http_methods(['POST'])
 def handle_insert_workout_api(request):
     required_params = ['title', 'timestamp', 'duration']
@@ -154,6 +161,7 @@ def handle_insert_workout_api(request):
         return JsonResponse(data={'success': False, 'reason': f'bad params, must provide {",".join(required_params)}'})
 
 
+@csrf_exempt
 def handle_fetch_workouts_api(request):
     required_params = ['sessionKey', 'dateTimestampMs']
     if False not in [x in request.POST for x in required_params]:
@@ -199,6 +207,7 @@ def handle_fetch_workouts_api(request):
 
 
 # region lifts
+@csrf_exempt
 @require_http_methods(['POST'])
 def handle_insert_lift_api(request):
     required_params = ['sessionKey', 'timestamp', 'lift_mass', 'exercise_id', 'workout_session_id']

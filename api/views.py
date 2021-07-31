@@ -108,7 +108,7 @@ def handle_fetch_exercises_api(request):
             'name': exercise.name,
             'body_part_str': exercise.body_part.name,
             'category_str': exercise.category.name,
-            'icon_str': exercise.icon,
+            'icon_str': exercise.icon.name,
         }]
     return JsonResponse(data={
         'success': True,

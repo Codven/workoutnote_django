@@ -344,7 +344,7 @@
             for (let i = 0; i < exercises.length; i++) {
                 if (exercises[i].enabled) {
                     $('#newExercisesTable tr:last').before(
-                        `<tr id="exerciseRow${exercises[i].id}">` +
+                        `<tr id="exerciseRow${i}">` +
                         `   <td class="arrow_column">${i === 0 ? '' : `<a onclick="shiftLiftUp(${i});">△</a>`}${i === 0 || i === exercises.length - 1 ? '' : '<br>'}${i === exercises.length - 1 ? '' : `<a onclick="shiftLiftDown(${i});">▽</a>`}</td>` +
                         `   <td onclick="copyExercise(${i});" class="set_column dark-blue-text">${i + 1}</td>` +
                         `   <td onclick="copyExercise(${i});" class="exercise_column dark-blue-text">${exercises[i].exercise.name}</td>` +
@@ -363,9 +363,9 @@
                         `   </td>` +
                         `</tr>`
                     );
-                    $(`#liftWeight${exercises[i].id}, #liftReps${exercises[i].id}`).change(function (e) {
-                        let weight = parseInt($(`#liftWeight${exercises[i].id}`).val());
-                        let reps = parseInt($(`#liftReps${exercises[i].id}`).val());
+                    $(`#liftWeight${i}, #liftReps${i}`).change(function () {
+                        let weight = parseInt($(`#liftWeight${i}`).val());
+                        let reps = parseInt($(`#liftReps${i}`).val());
 
                         exercises[i].liftMass = weight;
                         exercises[i].reps = reps;

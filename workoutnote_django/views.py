@@ -126,20 +126,16 @@ def handle_index(request):
     db_workout_sessions = models.WorkoutSession.objects.filter(user=request.user).order_by('-timestamp')
     workouts_by_days = {}
     for db_workout_session in db_workout_sessions:
-        db_lifts = models.Lift.objects.filter(workout_session=db_workout_session)
+        db_lifts = models.Lift.objects.filter(workout_session=db_workout_session).order_by('id')
         day_str = db_workout_session.get_day_str()
         for db_lift in db_lifts:
             if day_str in workouts_by_days:
                 if db_workout_session in workouts_by_days[day_str]:
-                    if db_lift.exercise in workouts_by_days[day_str][db_workout_session]:
-                        workouts_by_days[day_str][db_workout_session][db_lift.exercise]['count'] += 1
-                        workouts_by_days[day_str][db_workout_session][db_lift.exercise]['lifts'] += [db_lift]
-                    else:
-                        workouts_by_days[day_str][db_workout_session][db_lift.exercise] = {'count': 1, 'lifts': [db_lift]}
+                    workouts_by_days[day_str][db_workout_session] += [db_lift]
                 else:
-                    workouts_by_days[day_str][db_workout_session] = {db_lift.exercise: {'count': 1, 'lifts': [db_lift]}}
+                    workouts_by_days[day_str][db_workout_session] = [db_lift]
             else:
-                workouts_by_days[day_str] = {db_workout_session: {db_lift.exercise: {'count': 1, 'lifts': [db_lift]}}}
+                workouts_by_days[day_str] = {db_workout_session: [db_lift]}
     return render(request=request, template_name='home.html', context={
         'name': name if name else request.user.username,
         'at_home': True,
@@ -342,10 +338,12 @@ def handle_settings(request):
             month = int(request.POST['birthday'][2:4])
             year = int(request.POST['birthday'][4:])
             if 1930 < year < datetime.now().year and 0 < month < 13 and 0 < day < 32:
-                preferences.date_of_birth = datetime.now().replace(year=year, month=month, day=day, hour=0, minute=0, second=0, microsecond=0)
+                preferences.date_of_birth = datetime.now().replace(year=year, month=month, day=day, hour=0, minute=0,
+                                                                   second=0, microsecond=0)
         if 'share' in request.POST:
             preferences.shared_profile = True if request.POST['share'] == 'true' else False
-        if 'oldpassword' in request.POST and 'newpassword' in request.POST and 'repeatpassword' in request.POST and request.POST['newpassword'] == request.POST['repeatpassword']:
+        if 'oldpassword' in request.POST and 'newpassword' in request.POST and 'repeatpassword' in request.POST and \
+                request.POST['newpassword'] == request.POST['repeatpassword']:
             if request.user.check_password(raw_password=request.POST['oldpassword']):
                 request.user.set_password(request.POST['newpassword'])
                 request.user.save()
@@ -398,7 +396,8 @@ def handle_add_workout(request):
         return JsonResponse(data={'success': False, 'error': str(e)})
 
     # create workout session
-    db_workout = models.WorkoutSession.objects.create(user=request.user, title=request.POST['title'], duration=int(request.POST['duration']))
+    db_workout = models.WorkoutSession.objects.create(user=request.user, title=request.POST['title'],
+                                                      duration=int(request.POST['duration']))
     db_workout.save()
     # create lifts
     for exercise in exercises:

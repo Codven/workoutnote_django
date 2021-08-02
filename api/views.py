@@ -233,6 +233,7 @@ def handle_insert_lift_api(request):
                     lift_mass=float(received_params['lift_mass']),
                     repetitions=float(received_params['repetitions']),
                     one_rep_max=float(received_params['one_rep_max']),
+
                 )
                 return JsonResponse(data={
                     'success': True,
@@ -245,6 +246,7 @@ def handle_insert_lift_api(request):
                         'lift_mass': lift.workout_session.lift_mass,
                         'repetitions': lift.workout_session.repetitions,
                         'one_rep_max': lift.workout_session.one_rep_max,
+
                     }
                 })
             else:

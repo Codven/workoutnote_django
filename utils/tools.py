@@ -47,7 +47,7 @@ class Tools:
     @staticmethod
     def calculate_one_rep_max(lift_mass: float, repetitions: int) -> float:
         # return round(lift_mass / (1.0278 - 0.0278 * repetitions), 1) -> Previous formula
-        return round(lift_mass + lift_mass * repetitions * 0.025, 1)
+        return round(lift_mass + lift_mass * repetitions * 0.025, 2)
 
     @staticmethod
     def get_level_in_percentage(sorted_lifts_for_body_weight: list, total_lift_mass: float) -> float:

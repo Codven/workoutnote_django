@@ -1,8 +1,10 @@
 import json
 import random
 import re
+import time
 from datetime import datetime, timedelta
 
+import pytz
 from django.conf import settings
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
@@ -16,6 +18,7 @@ from django.views.decorators.http import require_http_methods
 
 from utils.tools import Tools, Status
 from workoutnote_django import models
+from api import models as api_models
 
 LIMIT_OF_ACCEPTABLE_DATA_AMOUNT = 5
 
@@ -136,12 +139,21 @@ def handle_index(request):
                     workouts_by_days[day_str][db_workout_session] = [db_lift]
             else:
                 workouts_by_days[day_str] = {db_workout_session: [db_lift]}
+    if not api_models.SessionKey.objects.filter(user=request.user).exists():
+        session_key = api_models.SessionKey.generate_key(email=request.user.email)
+        while api_models.SessionKey.objects.filter(key=session_key).exists():
+            time.sleep(0.001)
+            session_key = api_models.SessionKey.generate_key(email=request.user.email)
+        api_models.SessionKey.objects.create(user=request.user, key=session_key)
+    else:
+        session_key = api_models.SessionKey.objects.get(user=request.user).key
     return render(request=request, template_name='home.html', context={
         'name': name if name else request.user.username,
         'at_home': True,
         'exercises': models.Exercise.objects.all(),
         'body_parts': models.BodyPart.objects.all(),
         'categories': models.Category.objects.all(),
+        'sessionKey': session_key,
         'workouts_by_days': workouts_by_days
     })
 
@@ -396,8 +408,7 @@ def handle_add_workout(request):
         return JsonResponse(data={'success': False, 'error': str(e)})
 
     # create workout session
-    db_workout = models.WorkoutSession.objects.create(user=request.user, title=request.POST['title'],
-                                                      duration=int(request.POST['duration']))
+    db_workout = models.WorkoutSession.objects.create(user=request.user, title=request.POST['title'], duration=int(request.POST['duration']))
     db_workout.save()
     # create lifts
     for exercise in exercises:
@@ -413,3 +424,27 @@ def handle_add_workout(request):
         )
 
     return JsonResponse(data={'success': True})
+
+
+@login_required
+@require_http_methods(['GET'])
+def handle_calendar(request):
+    workout_sessions = models.WorkoutSession.objects.filter(user=request.user)
+    workout_days = set()
+    if workout_sessions.exists():
+        for workout_session in workout_sessions:
+            workout_days.add(f'{workout_session.timestamp.year}/{workout_session.timestamp.month}/{workout_session.timestamp.day}')
+    if not api_models.SessionKey.objects.filter(user=request.user).exists():
+        session_key = api_models.SessionKey.generate_key(email=request.user.email)
+        while api_models.SessionKey.objects.filter(key=session_key).exists():
+            time.sleep(0.001)
+            session_key = api_models.SessionKey.generate_key(email=request.user.email)
+        api_models.SessionKey.objects.create(user=request.user, key=session_key)
+    else:
+        session_key = api_models.SessionKey.objects.get(user=request.user).key
+    return render(request=request, template_name='calendar.html', context={
+        'title': '내 캘린더',
+        'at_calendar': True,
+        'workout_days': list(workout_days),
+        'sessionKey': session_key
+    })

@@ -1,6 +1,7 @@
 import json
 import random
 import re
+import time
 from datetime import datetime, timedelta
 
 from django.conf import settings
@@ -16,6 +17,7 @@ from django.views.decorators.http import require_http_methods
 
 from utils.tools import Tools, Status
 from workoutnote_django import models
+from api import models as api_models
 
 LIMIT_OF_ACCEPTABLE_DATA_AMOUNT = 5
 
@@ -419,13 +421,24 @@ def handle_add_workout(request):
 @require_http_methods(['GET'])
 def handle_calendar(request):
     workout_sessions = models.WorkoutSession.objects.filter(user=request.user)
-    workout_days = []
+    workout_days_timestamps = []
     if workout_sessions.exists():
         for workout_session in workout_sessions:
             _time = workout_session.timestamp.replace(hour=0, minute=0, second=0, microsecond=0)
-            workout_days += [int(_time.timestamp() * 1000)]
+            workout_days_timestamps += [int(_time.timestamp() * 1000)]
+
+    if not api_models.SessionKey.objects.filter(user=request.user).exists():
+        session_key = api_models.SessionKey.generate_key(email=request.user.email)
+        while api_models.SessionKey.objects.filter(key=session_key).exists():
+            time.sleep(0.001)
+            session_key = api_models.SessionKey.generate_key(email=request.user.email)
+        api_models.SessionKey.objects.create(user=request.user, key=session_key)
+    else:
+        session_key = api_models.SessionKey.objects.get(user=request.user).key
+    
     return render(request=request, template_name='calendar.html', context={
         'title': '내 캘린더',
         'at_calendar': True,
-        'workout_days_ts': workout_days
+        'workout_days_ts': workout_days_timestamps,
+        'sessionKey': session_key
     })

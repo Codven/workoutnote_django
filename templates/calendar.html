@@ -17,6 +17,9 @@
         </tr>
     </table>
 
+    <div id="selected_date_content">
+    </div>
+
     <style>
         #calendar_navigator {
             height: 100px;
@@ -58,6 +61,7 @@
         #calendar_table {
             margin-left: 40px;
             margin-right: 40px;
+            margin-bottom: 100px;
             border: none;
             border-spacing: 0;
             width: calc(100% - 80px);
@@ -100,8 +104,11 @@
     </style>
 
     <script>
-        let currentMonth;
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const weekdayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
         const workoutDays = [{% for workout_day_ts in workout_days_ts %}{{ workout_day_ts }}{% if not forloop.last %}, {% endif %}{% endfor %}]
+        let currentMonth;
+        let sessionKey;
 
         $(document).ready(function () {
             currentMonth = new Date();
@@ -119,7 +126,6 @@
             mo.setUTCSeconds(0);
             mo.setUTCMilliseconds(0);
 
-            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
             $('#month_text').html(`${monthNames[mo.getMonth()]}, ${mo.getFullYear()}`);
 
             // days before this month
@@ -142,7 +148,7 @@
                 if (mo.getDay() === 0)
                     $('#calendar_table tr:last').after('<tr></tr>');
 
-                $('#calendar_table tr:last').append(`<td><button class="calendar_cell ${$.inArray(mo.getTime(), workoutDays) > -1 ? "calendar_cell_outline" : ""} ${today.getTime() === mo.getTime() ? "today_cell" : ""}">${mo.getDate()}</button></td>`);
+                $('#calendar_table tr:last').append(`<td><button onclick="fetchDayWorkouts(${mo.getTime()});" class="calendar_cell ${$.inArray(mo.getTime(), workoutDays) > -1 ? "calendar_cell_outline" : ""} ${today.getTime() === mo.getTime() ? "today_cell" : ""}">${mo.getDate()}</button></td>`);
 
                 mo.setDate(mo.getDate() + 1);
             }
@@ -156,6 +162,47 @@
         function nextMonthClick() {
             currentMonth.setMonth(currentMonth.getMonth() + 1);
             loadMonth(currentMonth);
+        }
+
+        function displayWorkouts(ts, workouts) {
+            let date = new Date(ts);
+
+            let rootDiv = $('#selected_date_content');
+            rootDiv.empty();
+            rootDiv.append(`<h4 style="color: #3f51b5"><b>${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}. ${weekdayNames[date.getDay()]}</b></h4>`);
+            for (let i = 0; i < workouts.length; i++) {
+                rootDiv.append(`<div class="sub_content" style="min-height: 190px;"></div>`);
+                let subDiv = $('.sub_content:last');
+                subDiv.append(`<div style="height: 12px;">
+                    <span style="color: #3f51b5; font-weight: bold;" class="w3-left">${workouts[i].title}</span>
+                    <span class="w3-right">...</span>
+                </div>`);
+                subDiv.append('<hr style="border: 1px solid lightgrey;">');
+                subDiv.append('<div style="display: inline-block; padding: 8px;"></div>');
+                let liftsDiv = $('.sub_content:last div:last');
+                for (let j = 0; j < workouts[i].lifts.length; j++) {
+                    liftsDiv.append(`<span>${j + 1}. </span>`);
+                    liftsDiv.append(`<span>${workouts[i].lifts[j].exercise_name}, </span>`);
+                    liftsDiv.append(`<span>${workouts[i].lifts[j].lift_mass} KG, </span>`);
+                    liftsDiv.append(`<span>${workouts[i].lifts[j].repetitions} REPS, </span>`);
+                    liftsDiv.append(`<span>${workouts[i].lifts[j].one_rep_max} RM, </span>`);
+                    liftsDiv.append('<br><br>');
+                }
+
+                let seconds = workouts[i].duration % 60
+                let minutes = (Math.trunc(workouts[i].duration - seconds) / 60) % 60;
+                let hours = Math.trunc(((Math.trunc((workouts[i].duration - seconds) / 60)) % 60 - minutes) / 60)
+                subDiv.append(
+                    `<div style="padding: 8px; text-align: center;" class="repeatButton">
+                        <span style="font-weight: bold; font-size: large;" class="light-blue-text">
+                            ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}
+                        </span> <br>
+                    </div>`);
+            }
+        }
+
+        function fetchDayWorkouts(ts) {
+            $.post('/api/fetch_workouts', `{"sessionKey": "{{ sessionKey }}", "dateTimestampMs": ${ts}}`).done((res) => res.success ? displayWorkouts(ts, res.workouts) : alert('No workout data found on selected day!'));
         }
     </script>
 {% endblock %}

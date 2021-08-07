@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import login, logout, authenticate
 from api import models
+from utils.tools import Tools
 from workoutnote_django import models as wn_models
 from datetime import datetime, timedelta
 
@@ -216,23 +217,24 @@ def handle_fetch_workouts_api(request):
 @csrf_exempt
 @require_http_methods(['POST'])
 def handle_insert_lift_api(request):
-    required_params = ['sessionKey', 'timestamp', 'lift_mass', 'exercise_id', 'workout_session_id']
+    required_params = ['sessionKey', 'timestamp', 'exercise_id', 'workout_session_id', 'lift_mass', 'repetitions']
     received_params = json.loads(request.body.decode('utf8'))
     if False not in [x in received_params for x in required_params]:
         session_key = received_params['sessionKey']
         if models.SessionKey.objects.filter(key=session_key).exists():
             user = models.SessionKey.objects.get(key=session_key).user
             if wn_models.Exercise.objects.filter(id=received_params['exercise_id']).exists() and wn_models.WorkoutSession.objects.filter(id=int(received_params['workout_session_id']), user=user).exists():
-                exercise = wn_models.Exercise.objects.filter(name=received_params['exercise_id'])
+                exercise = wn_models.Exercise.objects.get(id=received_params['exercise_id'])
                 workout_session = wn_models.WorkoutSession.objects.get(id=int(received_params['workout_session_id']))
+                lift_mass = float(received_params['lift_mass'])
+                repetitions = int(received_params['repetitions'])
                 lift = wn_models.Lift.objects.create(
                     timestamp=int(received_params['timestamp']),
                     workout_session=workout_session,
                     exercise=exercise,
-                    lift_mass=float(received_params['lift_mass']),
-                    repetitions=float(received_params['repetitions']),
-                    one_rep_max=float(received_params['one_rep_max']),
-
+                    lift_mass=lift_mass,
+                    repetitions=repetitions,
+                    one_rep_max=Tools.calculate_one_rep_max(lift_mass=lift_mass, repetitions=repetitions),
                 )
                 return JsonResponse(data={
                     'success': True,
@@ -242,9 +244,9 @@ def handle_insert_lift_api(request):
                         'exercise_id': lift.exercise.id,
                         'exercise_name': lift.exercise.name,
                         'workout_session_id': lift.workout_session.id,
-                        'lift_mass': lift.workout_session.lift_mass,
-                        'repetitions': lift.workout_session.repetitions,
-                        'one_rep_max': lift.workout_session.one_rep_max,
+                        'lift_mass': lift.lift_mass,
+                        'repetitions': lift.repetitions,
+                        'one_rep_max': lift.one_rep_max,
                     }
                 })
             else:

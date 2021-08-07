@@ -40,6 +40,8 @@ def handle_login_api(request):
         return JsonResponse(data={'success': False, 'reason': 'bad params, must provide email and password'})
 
 
+@csrf_exempt
+@require_http_methods(['POST'])
 def handle_send_verification_code_api(request):
     required_params = ['email']
     received_params = json.loads(request.body.decode('utf8'))
@@ -63,6 +65,8 @@ def handle_send_verification_code_api(request):
         return JsonResponse(data={'success': False, 'reason': 'bad params, must provide email and password'})
 
 
+@csrf_exempt
+@require_http_methods(['POST'])
 def handle_verify_register_api(request):
     required_params = ['name', 'email', 'password', 'verification_code']
     received_params = json.loads(request.body.decode('utf8'))

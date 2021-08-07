@@ -222,8 +222,7 @@ def handle_insert_lift_api(request):
         session_key = received_params['sessionKey']
         if models.SessionKey.objects.filter(key=session_key).exists():
             user = models.SessionKey.objects.get(key=session_key).user
-
-            if wn_models.Exercise.objects.filter(name=received_params['exercise_id']).exists() and wn_models.WorkoutSession.objects.filter(id=int(received_params['workout_session_id'])).exists():
+            if wn_models.Exercise.objects.filter(id=received_params['exercise_id']).exists() and wn_models.WorkoutSession.objects.filter(id=int(received_params['workout_session_id']), user=user).exists():
                 exercise = wn_models.Exercise.objects.filter(name=received_params['exercise_id'])
                 workout_session = wn_models.WorkoutSession.objects.get(id=int(received_params['workout_session_id']))
                 lift = wn_models.Lift.objects.create(
@@ -246,7 +245,6 @@ def handle_insert_lift_api(request):
                         'lift_mass': lift.workout_session.lift_mass,
                         'repetitions': lift.workout_session.repetitions,
                         'one_rep_max': lift.workout_session.one_rep_max,
-
                     }
                 })
             else:

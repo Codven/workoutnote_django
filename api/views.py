@@ -88,7 +88,8 @@ def handle_verify_register_api(request):
                     return JsonResponse(data={'success': True})
                 else:
                     return JsonResponse(data={'success': False, 'reason': 'Unknown, please contact backend developer!'})  # whatever the reason could be
-            return JsonResponse(data={'success': False, 'reason': 'incorrect verification code'})
+            else:
+                return JsonResponse(data={'success': False, 'reason': 'incorrect verification code'})
     else:
         return JsonResponse(data={'success': False, 'reason': 'bad params, must provide email and password'})
 

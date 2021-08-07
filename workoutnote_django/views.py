@@ -413,3 +413,19 @@ def handle_add_workout(request):
         )
 
     return JsonResponse(data={'success': True})
+
+
+@login_required
+@require_http_methods(['GET'])
+def handle_calendar(request):
+    workout_sessions = models.WorkoutSession.objects.filter(user=request.user)
+    workout_days = []
+    if workout_sessions.exists():
+        for workout_session in workout_sessions:
+            _time = workout_session.timestamp.replace(hour=0, minute=0, second=0, microsecond=0)
+            workout_days += [int(_time.timestamp() * 1000)]
+    return render(request=request, template_name='calendar.html', context={
+        'title': '내 캘린더',
+        'at_calendar': True,
+        'workout_days_ts': workout_days
+    })

@@ -29,7 +29,7 @@
             <img src="{% static 'Home-white.svg' %}" height="30" style="margin-left: 15px; margin-right: 5px">
             <span>홈</span>
         </a>
-        <a href="#" class="w3-bar-item w3-button {% if at_calendar %}w3-navcolor{% else %}w3-black{% endif %}">
+        <a href="{% url 'calendar' %}" class="w3-bar-item w3-button {% if at_calendar %}w3-navcolor{% else %}w3-black{% endif %}">
             <img src="{% static 'Calendar-white.svg' %}" height="30" style="margin-left: 15px; margin-right: 5px">
             <span>내 캘린더</span>
         </a>

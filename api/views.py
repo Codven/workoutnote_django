@@ -64,7 +64,7 @@ def handle_send_verification_code_api(request):
 
 
 def handle_verify_register_api(request):
-    required_params = ['name', 'email', 'password']
+    required_params = ['name', 'email', 'password', 'verification_code']
     received_params = json.loads(request.body.decode('utf8'))
     if False not in [x in received_params for x in required_params]:
         name = received_params['name']

@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
     <div id="calendar_navigator">
-        <a id="month_text" class="w3-center">August, 2021</a>
-        <a class="w3-left w3-button arrow left calendar_navigation_button" onclick="previousMonthClick();"></a>
-        <a class="w3-right w3-button arrow right calendar_navigation_button" onclick="nextMonthClick();"></a>
+        <a class="arrow_left calendar_navigation_button" onclick="previousMonthClick();"></a>
+        <a id="month_text">August, 2021</a>
+        <a class="arrow_right calendar_navigation_button" onclick="nextMonthClick();"></a>
     </div>
     <table id="calendar_table">
         <tr>
@@ -16,90 +16,191 @@
             <th>S</th>
         </tr>
     </table>
-
     <div id="selected_date_content">
     </div>
 
     <style>
-        #calendar_navigator {
-            height: 100px;
-            margin-left: 40px;
-            margin-right: 40px;
-            border: none;
-            border-spacing: 0;
-            width: calc(100% - 80px);
-            text-align: center;
-            margin-top: 40px;
+        @media (min-width: 801px) {
+            #month_text {
+                font-size: xx-large;
+                padding: 0;
+                margin: 0;
+                line-height: 1;
+            }
+
+            .arrow_right {
+                cursor: pointer;
+                border: solid black;
+                border-width: 0 3px 3px 0;
+                display: inline-block;
+                transform: rotate(-45deg);
+                -webkit-transform: rotate(-45deg);
+
+                padding: 0;
+                margin: 0;
+                line-height: 1;
+            }
+
+            .arrow_left {
+                cursor: pointer;
+                border: solid black;
+                border-width: 0 3px 3px 0;
+                display: inline-block;
+                transform: rotate(135deg);
+                -webkit-transform: rotate(135deg);
+
+                padding: 0;
+                margin: 0;
+                line-height: 1;
+            }
+
+            #calendar_navigator {
+                height: 100px;
+                margin-left: 40px;
+                margin-right: 40px;
+                border: none;
+                border-spacing: 0;
+                width: calc(100% - 80px);
+                text-align: center;
+                margin-top: 40px;
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .calendar_navigation_button {
+                width: 26px;
+                height: 26px;
+            }
+
+            #calendar_table {
+                margin-left: 40px;
+                margin-right: 40px;
+                margin-bottom: 100px;
+                border: none;
+                border-spacing: 0;
+                width: calc(100% - 80px);
+                text-align: center;
+            }
+
+            #calendar_table th {
+                padding: 10px;
+                color: #6633CC;
+                background: #F6F5F5;
+            }
+
+            .calendar_cell {
+                width: 64px;
+                height: 64px;
+                border-radius: 32px;
+                margin-top: 4px;
+                font-weight: bold;
+
+                cursor: pointer;
+                background: none;
+                border: none;
+                text-align: center;
+                vertical-align: middle;
+            }
+
+            .today_cell, .calendar_cell:hover {
+                background: #C5BDEC;
+            }
+
+            .calendar_cell_outline {
+                border-radius: 32px;
+                border: 4px solid #6633CC;
+            }
+
+            .workout_day {
+                font-weight: bolder;
+                color: #6633CC;
+            }
         }
 
-        #month_text {
-            font-size: xx-large;
+        @media (max-width: 800px) {
+            #calendar_navigator {
+                margin-top: 32px;
+                margin-bottom: 8px;
+                text-align: center;
+                display: flex;
+                justify-content: space-between;
+            }
+
+            #month_text {
+                font-size: x-large;
+
+                padding: 0;
+                margin: 0;
+                line-height: 1;
+            }
+
+            .arrow_right {
+                width: 24px;
+                height: 24px;
+                cursor: pointer;
+                border: solid black;
+                border-width: 0 3px 3px 0;
+                transform: rotate(-45deg);
+                -webkit-transform: rotate(-45deg);
+            }
+
+            .arrow_left {
+                width: 24px;
+                height: 24px;
+                cursor: pointer;
+                border: solid black;
+                border-width: 0 3px 3px 0;
+                transform: rotate(135deg);
+                -webkit-transform: rotate(135deg);
+            }
+
+            #calendar_table {
+                width: 100%;
+                margin-bottom: 32px;
+                margin-top: 32px;
+                border: none;
+                border-spacing: 0;
+                text-align: center;
+            }
+
+            #calendar_table th {
+                padding: 2px;
+                color: #6633CC;
+                background: #F6F5F5;
+            }
+
+            .calendar_cell {
+                width: 36px;
+                height: 36px;
+                border-radius: 18px;
+                margin: 4px;
+                padding: 0;
+                font-weight: bold;
+
+                cursor: pointer;
+                background: none;
+                border: none;
+                text-align: center;
+                vertical-align: middle;
+            }
+
+            .today_cell, .calendar_cell:hover {
+                background: #C5BDEC;
+            }
+
+            .calendar_cell_outline {
+                border-radius: 18px;
+                border: 2px solid #6633CC;
+            }
+
+            .workout_day {
+                font-weight: bolder;
+                color: #6633CC;
+            }
         }
 
-        .arrow {
-            border: solid black;
-            border-width: 0 3px 3px 0;
-            display: inline-block;
-            padding: 3px;
-        }
-
-        .right {
-            transform: rotate(-45deg);
-            -webkit-transform: rotate(-45deg);
-        }
-
-        .left {
-            transform: rotate(135deg);
-            -webkit-transform: rotate(135deg);
-        }
-
-        .calendar_navigation_button {
-            width: 26px;
-            height: 26px;
-        }
-
-        #calendar_table {
-            margin-left: 40px;
-            margin-right: 40px;
-            margin-bottom: 100px;
-            border: none;
-            border-spacing: 0;
-            width: calc(100% - 80px);
-            text-align: center;
-        }
-
-        #calendar_table th {
-            padding: 10px;
-            color: #6633CC;
-            background: #F6F5F5;
-        }
-
-        .calendar_cell {
-            width: 64px;
-            height: 64px;
-            border-radius: 32px;
-            margin-top: 4px;
-            font-weight: bold;
-
-            cursor: pointer;
-            background: none;
-            border: none;
-            text-align: center;
-            vertical-align: middle;
-        }
-
-        .today_cell, .calendar_cell:hover {
-            background: #C5BDEC;
-        }
-
-        .calendar_cell_outline {
-            border-radius: 32px;
-            border: 4px solid #6633CC;
-        }
-
-        .workout_day {
-            font-weight: bolder;
-            color: #6633CC;
+        td {
+            color: #3a3a3a;
         }
     </style>
 

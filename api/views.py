@@ -1,13 +1,16 @@
-import time, json
-
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import login, logout, authenticate
-from api import models
-from utils.tools import Tools
-from workoutnote_django import models as wn_models
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User as django_User
+from workoutnote_django import models as wn_models, settings
+from django.core.mail import EmailMessage
 from datetime import datetime, timedelta
+from django.http import JsonResponse
+from utils.tools import Tools
+from api import models
+import random
+import time
+import json
 
 
 # region auth
@@ -33,6 +36,55 @@ def handle_login_api(request):
             return JsonResponse(data={'success': True, 'sessionKey': session_key})
         else:
             return JsonResponse(data={'success': False})
+    else:
+        return JsonResponse(data={'success': False, 'reason': 'bad params, must provide email and password'})
+
+
+def handle_send_verification_code_api(request):
+    required_params = ['email']
+    received_params = json.loads(request.body.decode('utf8'))
+    if False not in [x in received_params for x in required_params]:
+        email = received_params['email']
+        if not wn_models.EmailConfirmationCodes.objects.filter(email=email).exists():
+            verification_code = ''.join([str(random.randint(0, 9)) for _ in range(6)])
+            email_message = EmailMessage(
+                'Workoutnote.com email verification',
+                f'Email verification code is : {verification_code}',
+                settings.EMAIL_HOST_USER,
+                [email],
+            )
+            email_message.fail_silently = False
+            email_message.send()
+            wn_models.EmailConfirmationCodes.objects.create(email=email, verification_code=verification_code)
+            return JsonResponse(data={'success': True})
+        else:
+            return JsonResponse(data={'success': False, 'reason': 'already sent'})
+    else:
+        return JsonResponse(data={'success': False, 'reason': 'bad params, must provide email and password'})
+
+
+def handle_verify_register_api(request):
+    required_params = ['name', 'email', 'password']
+    received_params = json.loads(request.body.decode('utf8'))
+    if False not in [x in received_params for x in required_params]:
+        name = received_params['name']
+        email = received_params['email']
+        password = received_params['password']
+        if django_User.objects.filter(username=email).exists() or len(password) < 4:
+            return JsonResponse(data={'success': False, 'reason': 'user already exists or password is too short'})
+        else:
+            expected_code = wn_models.EmailConfirmationCodes.objects.get(email=email).verification_code
+            provided_code = received_params['verification_code']
+            if provided_code == expected_code:
+                wn_models.EmailConfirmationCodes.objects.filter(email=email).delete()
+                django_User.objects.create_user(username=email, password=password)
+                user = authenticate(request, username=email, password=password)
+                if user:
+                    wn_models.Preferences.objects.create(user=user, name=name)
+                    return JsonResponse(data={'success': True})
+                else:
+                    return JsonResponse(data={'success': False, 'reason': 'Unknown, please contact backend developer!'})  # whatever the reason could be
+            return JsonResponse(data={'success': False, 'reason': 'incorrect verification code'})
     else:
         return JsonResponse(data={'success': False, 'reason': 'bad params, must provide email and password'})
 

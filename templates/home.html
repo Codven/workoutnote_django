@@ -16,10 +16,8 @@
             <span id="exerciseDurationDisplay" style="font-size: xx-large; color: #0006b1;">{% now "G:i:s" %}</span>
             <input id="exerciseDuration" type="number" name="exerciseDuration" value="0" hidden>
             <div style="display: inline-block;" class="w3-right">
-                <a onclick="stopwatchControlButtonClick();" class="w3-button w3-buttoncolor"
-                   style="padding: 8px 30px 8px 30px; border-radius: 10px;"><img id="timerControlButton"
-                                                                                 src="{% static 'play.png' %}"
-                                                                                 height="16px"></a>
+                <a onclick="stopwatchResetClick();" class="w3-button w3-buttoncolor stopwatchControlButton" style="display: none" id="timerResetButton"><img src="{% static 'stop.png' %}" height="16px"></a>
+                <a onclick="stopwatchControlButtonClick();" class="w3-button w3-buttoncolor stopwatchControlButton"><img id="timerControlButton" src="{% static 'play.png' %}" height="16px"></a>
             </div>
         </div>
         <!-- body -->
@@ -30,7 +28,6 @@
                     <th class="arrow_column"></th>
                     <th class="set_column">세트</th>
                     <th class="exercise_column">운동</th>
-                    <th class="body_part_column">부분</th>
                     <th class="weight_column">KG</th>
                     <th class="repetition_column">반복</th>
                     <th class="rm_column">RM</th>
@@ -40,8 +37,8 @@
                     <td class="arrow_column"></td>
                     <td class="set_column light-grey-text"></td>
                     <td class="exercise_column" id="selectedExerciseName"
-                        onclick="showExerciseSelectorDivClick();">{{ exercises.0.name }}</td>
-                    <td class="body_part_column" id="selectedBodyPart">{{ exercises.0.body_part.name }}</td>
+                        onclick="showExerciseSelectorDivClick();">{{ exercises.0.name }} ({{ exercises.0.body_part.name }})
+                    </td>
                     <td class="weight_column"><input id="newLiftWeight" class="newLiftWeight" type="number" min="1"
                                                      max="200" placeholder="1"
                                                      value="1"></td>
@@ -104,6 +101,14 @@
             text-align: left;
         }
 
+        .stopwatchControlButton {
+            border-radius: 16px;
+        }
+
+        .stopwatchControlButton:hover {
+            border-radius: 16px;
+        }
+
         #workoutTitle::placeholder {
             color: #C5BDEC;
         }
@@ -125,11 +130,7 @@
         }
 
         .exercise_column {
-            width: 30%;
-        }
-
-        .body_part_column {
-            width: 10%;
+            width: 40%;
         }
 
         .weight_column {
@@ -281,7 +282,7 @@
                     newExercises = event.value;
                     setNewExercisesOnUI(newExercises);
                 } else if (event.action === 'stopwatchData') {
-                    let stopwatchData = JSON.parse(localStorage.getItem('stopwatchData'));
+                    let stopwatchData = event.value;
                     $('#exerciseDurationDisplay').html(pad(stopwatchData.hours, 2) + ':' + pad(stopwatchData.minutes, 2) + ':' + pad(stopwatchData.seconds, 2));
                     $('#exerciseDuration').attr('value', stopwatchSeconds.toString());
                 }
@@ -327,8 +328,7 @@
                         `<tr id="exerciseRow${i}">` +
                         `   <td class="arrow_column">${i === 0 ? '' : `<a onclick="shiftLiftUp(${i});">△</a>`}${i === 0 || i === exercises.length - 1 ? '' : '<br>'}${i === exercises.length - 1 ? '' : `<a onclick="shiftLiftDown(${i});">▽</a>`}</td>` +
                         `   <td onclick="copyExercise(${i});" class="set_column dark-blue-text">${i + 1}</td>` +
-                        `   <td onclick="copyExercise(${i});" class="exercise_column dark-blue-text">${exercises[i].exercise.name}</td>` +
-                        `   <td onclick="copyExercise(${i});" class="body_part_column dark-blue-text">${exercises[i].exercise.bodyPart}</td>` +
+                        `   <td onclick="copyExercise(${i});" class="exercise_column dark-blue-text">${exercises[i].exercise.name} (${exercises[i].exercise.bodyPart})</td>` +
                         `   <td class="weight_column">` +
                         `       <input id="liftWeight${i}" class="newLiftWeight dark-blue-text" type="number" min="1" max="200" placeholder="1" value="${exercises[i].liftMass}">` +
                         `   </td>` +
@@ -358,8 +358,7 @@
                         `<tr id="exerciseRow${i}">` +
                         `   <td class="arrow_column">${i === 0 ? '' : `<a onclick="shiftLiftUp(${i});">△</a>`}${i === 0 || i === exercises.length - 1 ? '' : '<br>'}${i === exercises.length - 1 ? '' : `<a onclick="shiftLiftDown(${i});">▽</a>`}</td>` +
                         `	<td onclick="copyExercise(${i});" class="set_column light-grey-text">${i}</td>` +
-                        `	<td onclick="copyExercise(${i});" class="exercise_column light-grey-text">${exercises[i].exercise.name}</td>` +
-                        `	<td onclick="copyExercise(${i});" class="body_part_column light-grey-text">${exercises[i].exercise.bodyPart}</td>` +
+                        `	<td onclick="copyExercise(${i});" class="exercise_column light-grey-text">${exercises[i].exercise.name} (${exercises[i].exercise.bodyPart})</td>` +
                         `	<td class="weight_column light-grey-text">${exercises[i].liftMass}</td>` +
                         `	<td class="repetition_column light-grey-text">${exercises[i].reps}</td>` +
                         `	<td class="rm_column light-grey-text">${exercises[i].rmMax}</td>` +
@@ -470,18 +469,40 @@
 
                     // broadcast to other tabs
                     message_broadcast({
-                        action: 'stopwatch', value: {
+                        action: 'stopwatchData', value: {
                             seconds: seconds,
                             minutes: minutes,
                             hours: hours
                         }
                     });
                 }, 1000);
+                $('#timerResetButton').show();
             } else {
                 $('#timerControlButton').attr('src', "{% static 'play.png' %}");
                 clearInterval(stopwatchId);
                 stopwatchId = null;
+
+                if (stopwatchSeconds === 0)
+                    $('#timerResetButton').hide();
             }
+        }
+
+        function stopwatchResetClick() {
+            clearInterval(stopwatchId);
+            $('#exerciseDurationDisplay').html('00:00:00');
+            $('#exerciseDuration').attr('value', 0);
+            stopwatchSeconds = 0;
+            $('#timerResetButton').hide();
+            $('#timerControlButton').attr('src', "{% static 'play.png' %}");
+
+            // broadcast to other tabs
+            message_broadcast({
+                action: 'stopwatchData', value: {
+                    seconds: 0,
+                    minutes: 0,
+                    hours: 0
+                }
+            });
         }
 
         function addNewExercise() {

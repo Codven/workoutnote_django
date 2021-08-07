@@ -106,25 +106,36 @@
     <script>
         const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         const weekdayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-        const workoutDays = [{% for workout_day_ts in workout_days_ts %}{{ workout_day_ts }}{% if not forloop.last %}, {% endif %}{% endfor %}]
-        let currentMonth;
+        const workoutDays = [{% for workout_day in workout_days %}'{{ workout_day }}'{% if not forloop.last %}, {% endif %}{% endfor %}]
+        let selectedMonth;
         let sessionKey;
 
         $(document).ready(function () {
-            currentMonth = new Date();
-            currentMonth.setDate(1);
-            loadMonth(currentMonth);
+            selectedMonth = new Date();
+            selectedMonth.setDate(1);
+            selectedMonth.setHours(0);
+            selectedMonth.setMinutes(0);
+            selectedMonth.setSeconds(0);
+            selectedMonth.setMilliseconds(0);
+            loadMonth(selectedMonth);
+
+            let today = new Date();
+            today.setHours(1);
+            today.setMinutes(0);
+            today.setSeconds(0);
+            today.setMilliseconds(0);
+            fetchDayWorkouts(today.getTime());
         });
 
         function loadMonth(date) {
-            let mo = new Date(date.getTime());
-
             $("#calendar_table tr:not(:first-child)").empty();
-            mo.setUTCDate(1);
-            mo.setUTCHours(0);
-            mo.setUTCMinutes(0);
-            mo.setUTCSeconds(0);
-            mo.setUTCMilliseconds(0);
+
+            let mo = new Date(date.getTime());
+            mo.setDate(1);
+            mo.setHours(0);
+            mo.setMinutes(0);
+            mo.setSeconds(0);
+            mo.setMilliseconds(0);
 
             $('#month_text').html(`${monthNames[mo.getMonth()]}, ${mo.getFullYear()}`);
 
@@ -136,11 +147,10 @@
             }
 
             const today = new Date();
-            today.setUTCDate(1);
-            today.setUTCHours(0);
-            today.setUTCMinutes(0);
-            today.setUTCSeconds(0);
-            today.setUTCMilliseconds(0);
+            today.setHours(0);
+            today.setMinutes(0);
+            today.setSeconds(0);
+            today.setMilliseconds(0);
 
             // current month days
             let currentMonth = mo.getMonth();
@@ -148,20 +158,27 @@
                 if (mo.getDay() === 0)
                     $('#calendar_table tr:last').after('<tr></tr>');
 
-                $('#calendar_table tr:last').append(`<td><button onclick="fetchDayWorkouts(${mo.getTime()});" class="calendar_cell ${$.inArray(mo.getTime(), workoutDays) > -1 ? "calendar_cell_outline" : ""} ${today.getTime() === mo.getTime() ? "today_cell" : ""}">${mo.getDate()}</button></td>`);
+                let moNoTz = new Date(mo.getTime());
+                moNoTz.setUTCHours(0);
+                moNoTz.setUTCMinutes(0);
+                moNoTz.setUTCSeconds(0);
+                moNoTz.setUTCMilliseconds(0);
+                let moNoTzStr = `${moNoTz.getFullYear()}/${moNoTz.getMonth() + 1}/${moNoTz.getDate()}`;
+
+                $('#calendar_table tr:last').append(`<td><button onclick="fetchDayWorkouts(${mo.getTime()});" class="calendar_cell ${$.inArray(moNoTzStr, workoutDays) > -1 ? "calendar_cell_outline" : ""} ${today.getTime() === mo.getTime() ? "today_cell" : ""}">${mo.getDate()}</button></td>`);
 
                 mo.setDate(mo.getDate() + 1);
             }
         }
 
         function previousMonthClick() {
-            currentMonth.setMonth(currentMonth.getMonth() - 1);
-            loadMonth(currentMonth);
+            selectedMonth.setMonth(selectedMonth.getMonth() - 1);
+            loadMonth(selectedMonth);
         }
 
         function nextMonthClick() {
-            currentMonth.setMonth(currentMonth.getMonth() + 1);
-            loadMonth(currentMonth);
+            selectedMonth.setMonth(selectedMonth.getMonth() + 1);
+            loadMonth(selectedMonth);
         }
 
         function displayWorkouts(ts, workouts) {

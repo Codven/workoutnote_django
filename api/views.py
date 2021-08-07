@@ -197,7 +197,7 @@ def handle_fetch_body_parts_api(request):
 @csrf_exempt
 @require_http_methods(['POST'])
 def handle_insert_workout_api(request):
-    required_params = ['title', 'timestamp', 'duration']
+    required_params = ['title', 'duration']
     received_params = json.loads(request.body.decode('utf8'))
     if False not in [x in received_params for x in required_params]:
         session_key = received_params['sessionKey']
@@ -205,7 +205,7 @@ def handle_insert_workout_api(request):
             user = models.SessionKey.objects.get(key=session_key).user
             workout_session = wn_models.WorkoutSession.objects.create(
                 user=user,
-                timestamp=int(received_params['timestamp']),
+                timestamp=int(datetime.now().timestamp() * 1000),
                 title=received_params['title'],
                 duration=int(received_params['duration']),
             )
@@ -274,7 +274,7 @@ def handle_fetch_workouts_api(request):
 @csrf_exempt
 @require_http_methods(['POST'])
 def handle_insert_lift_api(request):
-    required_params = ['sessionKey', 'timestamp', 'exercise_id', 'workout_session_id', 'lift_mass', 'repetitions']
+    required_params = ['sessionKey', 'exercise_id', 'workout_session_id', 'lift_mass', 'repetitions']
     received_params = json.loads(request.body.decode('utf8'))
     if False not in [x in received_params for x in required_params]:
         session_key = received_params['sessionKey']
@@ -286,7 +286,7 @@ def handle_insert_lift_api(request):
                 lift_mass = float(received_params['lift_mass'])
                 repetitions = int(received_params['repetitions'])
                 lift = wn_models.Lift.objects.create(
-                    timestamp=int(received_params['timestamp']),
+                    timestamp=int(datetime.now().timestamp() * 1000),
                     workout_session=workout_session,
                     exercise=exercise,
                     lift_mass=lift_mass,

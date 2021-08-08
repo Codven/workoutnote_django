@@ -28,7 +28,9 @@
                 </div>
                 <!-- body -->
                 <div id="liftCreatorBody">
-                    <button class="dummy_button" style="margin-bottom: 3px;" disabled>Fetch a prescribed exercise</button>
+                    <div style="display: block; height: 40px">
+                        <a href="{% url 'favorite workouts' %}" id="favorite_workouts_button">운동세트 불러오기</a>
+                    </div>
                     <table id="newExercisesTable">
                         <tr>
                             <th class="arrow_column"></th>
@@ -219,6 +221,20 @@
             }
         }
 
+        #favorite_workouts_button {
+            margin: 3px;
+            padding: 6px 12px;
+            cursor: pointer;
+            border-radius: 16px;
+            text-decoration: none;
+            background-color: #020079;
+            color: white;
+        }
+
+        #favorite_workouts_button:hover {
+            background-color: #DDDDDD;
+            color: black;
+        }
     </style>
 
     <script>
@@ -252,6 +268,7 @@
         let newExercises = [];
         let newSetNumber = 1, newExercise = "{{ exercises.0.name }}", newWeight = 1, newReps = 1;
 
+        {% load tools %}
         let allWorkouts = [
             {% for _, workout_sessions in workouts_by_days.items %}
                 {% for workout_session, lifts in workout_sessions.items %}
@@ -305,7 +322,7 @@
                 today.setMinutes(0);
                 today.setSeconds(0);
                 today.setMilliseconds(0);
-                fetchDayWorkouts(today.getTime());
+                fetchTodayDayWorkouts(today.getTime());
                 // endregion
             });
 
@@ -386,7 +403,7 @@
             today.setMinutes(0);
             today.setSeconds(0);
             today.setMilliseconds(0);
-            fetchDayWorkouts(today.getTime());
+            fetchTodayDayWorkouts(today.getTime());
         });
 
         function setNewExercisesOnUI(exercises) {
@@ -735,7 +752,7 @@
             }
         }
 
-        function displayWorkouts(ts, workouts) {
+        function displayTodayWorkouts(ts, workouts) {
             let date = new Date(ts);
 
             let rootDiv = $('#today_workouts');
@@ -745,9 +762,9 @@
             for (let i = 0; i < workouts.length; i++) {
                 rootDiv.append(`<div class="sub_content" ></div>`);
                 let subDiv = $('#today_workouts .sub_content:last');
-                subDiv.append(`<div style="height: 12px;">
+                subDiv.append(`<div style="height: 12px; display: flex; align-content: center; justify-content: space-between;">
                     <span style="color: #3f51b5; font-weight: bold;" class="w3-left">${workouts[i].title}</span>
-                    <span class="w3-right">...</span>
+                    <img onclick="favoriteWorkoutsClick(this, ${workouts[i].id});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="${workouts[i].isFavorite ? '{% static 'favorite_checked.png' %}' : '{% static 'favorite_unchecked.png' %}'}" width="22px" height="22px">
                 </div>`);
                 subDiv.append('<hr style="border: 1px solid lightgrey;">');
                 subDiv.append('<div style="display: inline-block; padding: 8px;"></div>');
@@ -782,8 +799,8 @@
             }
         }
 
-        function fetchDayWorkouts(ts) {
-            $.post('/api/fetch_workouts', `{"sessionKey": "{{ sessionKey }}", "dateTimestampMs": ${ts}}`).done((res) => res.success ? displayWorkouts(ts, res.workouts) : null);
+        function fetchTodayDayWorkouts(ts) {
+            $.post('/api/fetch_workouts', `{"sessionKey": "{{ sessionKey }}", "dateTimestampMs": ${ts}}`).done((res) => res.success ? displayTodayWorkouts(ts, res.workouts) : null);
         }
     </script>
 {% endblock %}

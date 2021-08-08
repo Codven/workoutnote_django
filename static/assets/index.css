@@ -137,11 +137,6 @@ button, input, select, textarea, optgroup {
     margin: 0
 }
 
-button.dummy_button {
-    border: 1px solid gray;
-    border-radius: 4px;
-}
-
 optgroup {
     font-weight: bold
 }

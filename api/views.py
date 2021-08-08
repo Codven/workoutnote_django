@@ -256,6 +256,7 @@ def handle_fetch_workouts_api(request):
                         'title': workout_session.title,
                         'timestamp': int(workout_session.timestamp.timestamp() * 1000),
                         'duration': workout_session.duration,
+                        'isFavorite': wn_models.FavoriteWorkouts.objects.filter(user=user, workout_session=workout_session).exists(),
                         'lifts': lifts
                     }
                 ]
@@ -402,34 +403,13 @@ def handle_set_favorite_workout_api(request):
         session_key = received_params['sessionKey']
         if models.SessionKey.objects.filter(key=session_key).exists():
             user = models.SessionKey.objects.get(key=session_key).user
-            if wn_models.Exercise.objects.filter(id=received_params['exercise_id']).exists() and wn_models.WorkoutSession.objects.filter(id=int(received_params['workout_session_id']), user=user).exists():
-                exercise = wn_models.Exercise.objects.get(id=received_params['exercise_id'])
-                workout_session = wn_models.WorkoutSession.objects.get(id=int(received_params['workout_session_id']))
-                lift_mass = float(received_params['lift_mass'])
-                repetitions = int(received_params['repetitions'])
-                lift = wn_models.Lift.objects.create(
-                    timestamp=int(datetime.now().timestamp() * 1000),
-                    workout_session=workout_session,
-                    exercise=exercise,
-                    lift_mass=lift_mass,
-                    repetitions=repetitions,
-                    one_rep_max=Tools.calculate_one_rep_max(lift_mass=lift_mass, repetitions=repetitions),
-                )
-                return JsonResponse(data={
-                    'success': True,
-                    'lift': {
-                        'id': lift.id,
-                        'timestamp': int(lift.timestamp.timestamp() * 1000),
-                        'exercise_id': lift.exercise.id,
-                        'exercise_name': lift.exercise.name,
-                        'workout_session_id': lift.workout_session.id,
-                        'lift_mass': lift.lift_mass,
-                        'repetitions': lift.repetitions,
-                        'one_rep_max': lift.one_rep_max,
-                    }
-                })
+            workout_session_id = int(received_params['workout_session_id'])
+            if wn_models.WorkoutSession.objects.filter(id=workout_session_id).exists():
+                if not wn_models.FavoriteWorkouts.objects.filter(user=user, workout_session__id=workout_session_id).exists():
+                    wn_models.FavoriteWorkouts.objects.create(user=user, workout_session_id=workout_session_id)
+                return JsonResponse(data={'success': True})
             else:
-                return JsonResponse(data={'success': False, 'reason': 'double check workout_session_id and exercise_id'})
+                return JsonResponse(data={'success': False, 'reason': 'invalid workout_session_id'})
         else:
             return JsonResponse(data={'success': False, 'reason': 'double check sessionKey value'})
     else:
@@ -445,34 +425,13 @@ def handle_unset_favorite_workout_api(request):
         session_key = received_params['sessionKey']
         if models.SessionKey.objects.filter(key=session_key).exists():
             user = models.SessionKey.objects.get(key=session_key).user
-            if wn_models.Exercise.objects.filter(id=received_params['exercise_id']).exists() and wn_models.WorkoutSession.objects.filter(id=int(received_params['workout_session_id']), user=user).exists():
-                exercise = wn_models.Exercise.objects.get(id=received_params['exercise_id'])
-                workout_session = wn_models.WorkoutSession.objects.get(id=int(received_params['workout_session_id']))
-                lift_mass = float(received_params['lift_mass'])
-                repetitions = int(received_params['repetitions'])
-                lift = wn_models.Lift.objects.create(
-                    timestamp=int(datetime.now().timestamp() * 1000),
-                    workout_session=workout_session,
-                    exercise=exercise,
-                    lift_mass=lift_mass,
-                    repetitions=repetitions,
-                    one_rep_max=Tools.calculate_one_rep_max(lift_mass=lift_mass, repetitions=repetitions),
-                )
-                return JsonResponse(data={
-                    'success': True,
-                    'lift': {
-                        'id': lift.id,
-                        'timestamp': int(lift.timestamp.timestamp() * 1000),
-                        'exercise_id': lift.exercise.id,
-                        'exercise_name': lift.exercise.name,
-                        'workout_session_id': lift.workout_session.id,
-                        'lift_mass': lift.lift_mass,
-                        'repetitions': lift.repetitions,
-                        'one_rep_max': lift.one_rep_max,
-                    }
-                })
+            workout_session_id = int(received_params['workout_session_id'])
+            if wn_models.WorkoutSession.objects.filter(id=workout_session_id).exists():
+                if wn_models.FavoriteWorkouts.objects.filter(user=user, workout_session__id=workout_session_id).exists():
+                    wn_models.FavoriteWorkouts.objects.filter(user=user, workout_session_id=workout_session_id).delete()
+                return JsonResponse(data={'success': True})
             else:
-                return JsonResponse(data={'success': False, 'reason': 'double check workout_session_id and exercise_id'})
+                return JsonResponse(data={'success': False, 'reason': 'invalid workout_session_id'})
         else:
             return JsonResponse(data={'success': False, 'reason': 'double check sessionKey value'})
     else:
@@ -487,19 +446,30 @@ def handle_fetch_favorite_workouts_api(request):
         session_key = received_params['sessionKey']
         if models.SessionKey.objects.filter(key=session_key).exists():
             user = models.SessionKey.objects.get(key=session_key).user
-            exercises_arr = []
-            for favorite_exercise in wn_models.FavoriteExercises.objects.filter(user=user):
-                exercises_arr += [{
-                    'id': favorite_exercise.exercise.id,
-                    'name': favorite_exercise.exercise.name,
-                    'name_translations': favorite_exercise.exercise.name_translations,
-                    'body_part_str': favorite_exercise.exercise.body_part.name,
-                    'category_str': favorite_exercise.exercise.category.name,
-                    'icon_str': favorite_exercise.exercise.icon.name,
+            workout_sessions_arr = []
+            for favorite_workout in wn_models.FavoriteWorkouts.objects.filter(user=user):
+                lifts_arr = []
+                for lift in wn_models.Lift.objects.filter(workout_session=favorite_workout.workout_session):
+                    lifts_arr += [{
+                        'id': lift.id,
+                        'timestamp': int(lift.timestamp.timestamp() * 1000),
+                        'one_rep_max': lift.one_rep_max,
+                        'exercise_id': lift.exercise.id,
+                        'exercise_name': lift.exercise.name,
+                        'exercise_name_translations': lift.exercise.name_translations,
+                        'lift_mass': lift.lift_mass,
+                        'repetitions': lift.repetitions,
+                    }]
+                workout_sessions_arr += [{
+                    'id': favorite_workout.workout_session.id,
+                    'title': favorite_workout.workout_session.title,
+                    'timestamp': int(favorite_workout.workout_session.timestamp.timestamp() * 1000),
+                    'duration': favorite_workout.workout_session.duration,
+                    'lifts': lifts_arr
                 }]
             return JsonResponse(data={
                 'success': True,
-                'exercises': exercises_arr
+                'workoutSessions': workout_sessions_arr
             })
         else:
             return JsonResponse(data={'success': False, 'reason': 'double check sessionKey value'})

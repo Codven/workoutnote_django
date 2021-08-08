@@ -117,8 +117,8 @@ class WorkoutSession(models.Model):
 
 
 class FavoriteWorkouts(models.Model):
-    user = models.OneToOneField(to=django_User, on_delete=models.CASCADE)
-    workout_session = models.OneToOneField(to='WorkoutSession', on_delete=models.CASCADE)
+    user = models.ForeignKey(to=django_User, on_delete=models.CASCADE)
+    workout_session = models.ForeignKey(to='WorkoutSession', on_delete=models.CASCADE)
 
 
 class Lift(models.Model):

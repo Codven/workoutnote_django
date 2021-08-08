@@ -137,7 +137,7 @@ button, input, select, textarea, optgroup {
     margin: 0
 }
 
-button.dummy_button {
+button.favorite_workouts_button {
     border: 1px solid gray;
     border-radius: 4px;
 }
@@ -1527,12 +1527,6 @@ a {
 .w3-navcolor, .w3-hover-navcolor:hover {
     color: #c5bdec !important;
     background-color: #000 !important
-}
-
-.w3-buttoncolor, .w3-hover-buttoncolor:hover {
-    color: #fff !important;
-    background-color: #020079 !important;
-    border: 1px solid #020079;
 }
 
 .w3-disabledbuttoncolor, .w3-hover-disabledbuttoncolor:hover {

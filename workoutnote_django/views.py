@@ -426,3 +426,38 @@ def handle_calendar(request):
         'workout_days': list(workout_days),
         'sessionKey': session_key
     })
+
+
+@login_required
+@require_http_methods(['GET'])
+def handle_favorite_workouts(request):
+    favorite_workout_sessions = models.FavoriteWorkouts.objects.filter(user=request.user)
+    workouts_by_days = {}
+    for favorite_workout in favorite_workout_sessions:
+        db_lifts = models.Lift.objects.filter(workout_session=favorite_workout.workout_session).order_by('id')
+        day_str = favorite_workout.workout_session.get_day_str()
+        for db_lift in db_lifts:
+            if day_str in workouts_by_days:
+                if favorite_workout.workout_session in workouts_by_days[day_str]:
+                    workouts_by_days[day_str][favorite_workout.workout_session] += [db_lift]
+                else:
+                    workouts_by_days[day_str][favorite_workout.workout_session] = [db_lift]
+            else:
+                workouts_by_days[day_str] = {favorite_workout.workout_session: [db_lift]}
+    if not api_models.SessionKey.objects.filter(user=request.user).exists():
+        session_key = api_models.SessionKey.generate_key(email=request.user.email)
+        while api_models.SessionKey.objects.filter(key=session_key).exists():
+            time.sleep(0.001)
+            session_key = api_models.SessionKey.generate_key(email=request.user.email)
+        api_models.SessionKey.objects.create(user=request.user, key=session_key)
+    else:
+        session_key = api_models.SessionKey.objects.get(user=request.user).key
+    # todo plot as in https://simpleisbetterthancomplex.com/tutorial/2020/01/19/how-to-use-chart-js-with-django.html
+    # todo customize plot as in https://www.chartjs.org/docs/latest/charts/line.html
+    return render(request=request, template_name='favoriteWorkouts.html', context={
+        'title': '좋아하는 운동 불러오기',
+        'at_home': True,
+        'sessionKey': session_key,
+        'exercises': models.Exercise.objects.all(),
+        'workouts_by_days': workouts_by_days,
+    })

@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% load static tools %}
+    <div id="favorite_workouts">
+        {% for day_str, workouts in workouts_by_days.items %}
+            <h4 style="color: #3f51b5"><b>{{ day_str }}</b></h4>
+            {% for workout, lifts in workouts.items %}
+                <div class="sub_content" style="min-height: 190px;">
+                    <div style="height: 12px; display: flex; align-content: center; justify-content: space-between;">
+                        <span style="color: #3f51b5; font-weight: bold;" class="w3-left">{{ workout.title }}</span>
+                        <img onclick="favoriteWorkoutsClick(this, {{ workout.id }});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="{% static 'favorite_checked.png' %}" width="22px" height="22px">
+                    </div>
+                    <hr style="border: 1px solid lightgrey;">
+                    <div style="display: inline-block; padding: 8px;">
+                        {% for lift in lifts %}
+                            <span>{{ forloop.counter }}. </span>
+                            <span>{{ lift.exercise.name }}</span>,
+                            <span>{{ lift.exercise.body_part.name }}</span>,
+                            <span>{{ lift.lift_mass|floatformat }} KG</span>,
+                            <span>{{ lift.repetitions|floatformat }} Reps </span>,
+                            <span>{{ lift.one_rep_max|floatformat }} RM </span>
+                            <br>
+                            <br>
+                        {% endfor %}
+                    </div>
+                    <div style="padding: 8px; text-align: center;" class="repeatButton">
+                    <span style="font-weight: bold; font-size: large;"
+                          class="light-blue-text">{{ workout.get_duration_str }}</span> <br>
+                        <a onclick="repeatFavoriteWorkoutSession({{ workout.id }});" class="w3-button w3-buttoncolor"
+                           style="padding: 5px 30px 5px 30px; border-radius: 4px; display: block; margin-top: 10px;">불러오기</a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+
+    <script>
+        const ONE_REP_MAX_CONST = 0.025;
+
+        let favoriteWorkouts = [
+            {% for _, workout_sessions in workouts_by_days.items %}
+                {% for workout_session, lifts in workout_sessions.items %}
+                    {
+                        workout_session_id: {{ workout_session.id }},
+                        title: "{{ workout_session.title }}",
+                        lifts: [{% for lift in lifts %}{exerciseName: "{{ lift.exercise.name }}",liftMass: {{ lift.lift_mass }},reps: {{ lift.repetitions }},rmMax: {{ lift.one_rep_max }}}, {% endfor %}]
+                    },
+                {% endfor %}
+            {% endfor %}];
+        let allExercises = [{% for exercise in exercises %}{id: {{ exercise.id }},
+                name: '{{ exercise.name }}',
+                nameTranslations: {{ exercise.name_translations|safe }},
+                iconUrl: '{{ exercise.icon.url }}',
+                bodyPart: '{{ exercise.body_part.name }}',
+                category: '{{ exercise.category.name }}'},{% endfor %}];
+
+        function findExerciseByName(name) {
+            for (let i = 0; i < allExercises.length; i++)
+                if (allExercises[i].name === name)
+                    return allExercises[i];
+            return null;
+        }
+
+        function repeatFavoriteWorkoutSession(workoutSessionId) {
+            let exercises = [];
+
+            for (let i = 0; i < favoriteWorkouts.length; i++)
+                if (favoriteWorkouts[i].workout_session_id === workoutSessionId) {
+                    $("#workoutTitle").val(favoriteWorkouts[i].title);
+                    for (let j = 0; j < favoriteWorkouts[i].lifts.length; j++) {
+                        exercises.push({
+                            id: exercises.length + 1,
+                            exercise: findExerciseByName(favoriteWorkouts[i].lifts[j].exerciseName),
+                            liftMass: favoriteWorkouts[i].lifts[j].liftMass,
+                            reps: favoriteWorkouts[i].lifts[j].reps,
+                            enabled: true,
+                            rmMax: Math.trunc((favoriteWorkouts[i].lifts[j].liftMass + favoriteWorkouts[i].lifts[j].liftMass * favoriteWorkouts[i].lifts[j].reps * ONE_REP_MAX_CONST) * 100) / 100
+                        });
+                    }
+                    break;
+                }
+
+            // send as a broadcast to all tabs i.e. save locally
+            message_broadcast({action: 'exercises', value: exercises});
+
+            // redirect to index page
+            window.location.href = '{% url 'index' %}';
+        }
+    </script>
+{% endblock %}

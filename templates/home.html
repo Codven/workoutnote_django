@@ -202,11 +202,13 @@
         let selectExerciseDiv, exercisesListDiv, filterExerciseBodyPart, filterExerciseCategory, filterText;
         let allExercises = [{% for exercise in exercises %}{id: {{ exercise.id }},
                 name: '{{ exercise.name }}',
+                nameTranslations: {{ exercise.name_translations|safe }},
                 iconUrl: '{{ exercise.icon.url }}',
                 bodyPart: '{{ exercise.body_part.name }}',
                 category: '{{ exercise.category.name }}'},{% endfor %}];
         let selectedExercise = {
             name: '{{ exercises.0.name }}',
+            nameTranslations: {{ exercises.0.name_translations|safe }},
             iconUrl: '{{ exercises.0.icon.url }}',
             bodyPart: '{{ exercises.0.body_part.name }}',
             category: '{{ exercises.0.category.name }}'
@@ -634,7 +636,6 @@
 
         function displayWorkouts(ts, workouts) {
             let date = new Date(ts);
-            console.log(ts);
 
             let rootDiv = $('#today_workouts');
             rootDiv.empty();

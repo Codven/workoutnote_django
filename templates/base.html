@@ -99,13 +99,14 @@
                     <div style="margin-right: 5px;">
                         <div class="select is-small">
                             <select id="filterExerciseBodyPart" style="cursor: pointer;" required>
+                                <option value="all">모두</option>
                                 {% for bodyPart in body_parts %}
                                     <option value="{{ bodyPart.name }}">{{ bodyPart.name }}</option>
                                 {% endfor %}
                             </select>
                         </div>
                     </div>
-                    <div class="control">
+                    <div class="control" style="display: none">
                         <div class="select is-small">
                             <select id="filterExerciseCategory" style="cursor: pointer;" required>
                                 {% for category in categories %}
@@ -122,9 +123,11 @@
                         <a onclick="selectExerciseClick('{{ exercise.name }}')" style="display: flex; align-content: center; border-top: 1px solid lightgrey; padding: 3px; cursor: pointer;">
                             <img src="{{ exercise.icon.url }}" height="35" width="35" style="margin: 5px">
                             <div style="display: inline-block; margin-left: 6px;">
-                                <span style="display: block">{{ exercise.name }} ({{ exercise.body_part.name }})</span>
                                 {% if exercise.name_translations and 'EN' in exercise.name_translations %}
-                                    <span style="display: block; font-size: small; color: #6f94c6">(EN : {{ exercise.name_translations.EN }})</span>
+                                    <span style="display: block">{{ exercise.name_translations.EN }}</span>
+                                    <span style="display: block; font-size: small; color: #6f94c6">{{ exercise.name }} ({{ exercise.body_part.name }})</span>
+                                {% else %}
+                                    <span style="display: block">{{ exercise.name }} ({{ exercise.body_part.name }})</span>
                                 {% endif %}
                             </div>
                         </a>

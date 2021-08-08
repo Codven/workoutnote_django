@@ -251,7 +251,7 @@
             exercisesListDiv = document.getElementById('exercisesListDiv');
 
             document.getElementById('filterExerciseBodyPart').addEventListener('change', (event) => {
-                filterExerciseBodyPart = event.target.value === 'none' ? null : event.target.value;
+                filterExerciseBodyPart = event.target.value === 'all' ? null : event.target.value;
                 filterExercises();
             });
             document.getElementById('filterExerciseCategory').addEventListener('change', (event) => {

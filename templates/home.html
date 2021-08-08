@@ -252,6 +252,17 @@
         let newExercises = [];
         let newSetNumber = 1, newExercise = "{{ exercises.0.name }}", newWeight = 1, newReps = 1;
 
+        let allWorkouts = [
+            {% for _, workout_sessions in workouts_by_days.items %}
+                {% for workout_session, lifts in workout_sessions.items %}
+                    {
+                        workout_session_id: {{ workout_session.id }},
+                        title: "{{ workout_session.title }}",
+                        lifts: [{% for lift in lifts %}{exerciseName: "{{ lift.exercise.name }}",liftMass: {{ lift.lift_mass }},reps: {{ lift.repetitions }},rmMax: {{ lift.one_rep_max }}}, {% endfor %}]
+                    },
+                {% endfor %}
+            {% endfor %}];
+
         $(document).ready(function () {
             $(".default_option").click(function () {
                 $(".dropdown ul").addClass("active");

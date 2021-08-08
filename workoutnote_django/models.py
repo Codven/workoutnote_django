@@ -4,6 +4,10 @@ from django.db import models
 from django.utils import timezone
 
 
+def exercise_name_translations_default():
+    return {}
+
+
 class Preferences(models.Model):
     class Gender:
         MALE = "MALE"
@@ -65,6 +69,7 @@ class Category(models.Model):
 class Exercise(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=64, unique=True)
+    name_translations = models.JSONField(default=exercise_name_translations_default)
     icon = models.ImageField(upload_to='exercise_icons', default='default_icon.svg')
     body_part = models.ForeignKey(to=BodyPart, null=True, on_delete=models.SET_NULL)
     category = models.ForeignKey(to=Category, null=True, on_delete=models.SET_NULL)

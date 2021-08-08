@@ -1,10 +1,10 @@
-from workoutnote_django.models import Exercise, Lift, Preferences, WorkoutSession, BodyPart, Category
+from workoutnote_django.models import Exercise, Lift, Preferences, WorkoutSession, BodyPart, Category, EmailConfirmationCodes
 from django.contrib import admin
 
 
 @admin.register(Exercise)
 class ExerciseAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'body_part', 'category']
+    list_display = ['id', 'name', 'name_translations', 'body_part', 'category']
 
 
 @admin.register(BodyPart)
@@ -30,3 +30,8 @@ class WorkoutSessionAdmin(admin.ModelAdmin):
 @admin.register(Lift)
 class LiftAdmin(admin.ModelAdmin):
     list_display = ['id', 'timestamp', 'exercise', 'workout_session', 'lift_mass', 'repetitions', 'one_rep_max']
+
+
+@admin.register(EmailConfirmationCodes)
+class EmailConfirmationCodesAdmin(admin.ModelAdmin):
+    list_display = ['email', 'verification_code']

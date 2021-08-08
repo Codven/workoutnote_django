@@ -202,11 +202,13 @@
         let selectExerciseDiv, exercisesListDiv, filterExerciseBodyPart, filterExerciseCategory, filterText;
         let allExercises = [{% for exercise in exercises %}{id: {{ exercise.id }},
                 name: '{{ exercise.name }}',
+                nameTranslations: {{ exercise.name_translations|safe }},
                 iconUrl: '{{ exercise.icon.url }}',
                 bodyPart: '{{ exercise.body_part.name }}',
                 category: '{{ exercise.category.name }}'},{% endfor %}];
         let selectedExercise = {
             name: '{{ exercises.0.name }}',
+            nameTranslations: {{ exercises.0.name_translations|safe }},
             iconUrl: '{{ exercises.0.icon.url }}',
             bodyPart: '{{ exercises.0.body_part.name }}',
             category: '{{ exercises.0.category.name }}'
@@ -249,7 +251,7 @@
             exercisesListDiv = document.getElementById('exercisesListDiv');
 
             document.getElementById('filterExerciseBodyPart').addEventListener('change', (event) => {
-                filterExerciseBodyPart = event.target.value === 'none' ? null : event.target.value;
+                filterExerciseBodyPart = event.target.value === 'all' ? null : event.target.value;
                 filterExercises();
             });
             document.getElementById('filterExerciseCategory').addEventListener('change', (event) => {
@@ -396,8 +398,16 @@
                 let filterTextLower = filterText.toLowerCase();
                 for (let i = 0; i < displayedExercises.length; i++)
                     if (!displayedExercises[i].name.toLowerCase().includes(filterTextLower)) {
-                        displayedExercises.splice(i, 1);
-                        i--;
+                        let del = true;
+                        for (let language in displayedExercises[i].nameTranslations)
+                            if (displayedExercises[i].nameTranslations[language].toLowerCase().includes(filterTextLower)) {
+                                del = false;
+                                break;
+                            }
+                        if (del) {
+                            displayedExercises.splice(i, 1);
+                            i--;
+                        }
                     }
                 let newArray = [];
                 for (let i = 0; i < displayedExercises.length; i++) {
@@ -425,7 +435,24 @@
 
             exercisesListDiv.innerHTML = '';
             for (let i = 0; i < displayedExercises.length; i++) {
-                let newElementHtml = '<a onclick="selectExerciseClick(\'' + displayedExercises[i].name + '\')" style="display: block; border-top: 1px solid lightgrey; padding: 3px; cursor: pointer;"> <img src="' + displayedExercises[i].iconUrl + '" height="35" width="35" style="margin: 5px">' + displayedExercises[i].name + ' (' + displayedExercises[i].bodyPart + ')</a>';
+                let newElementHtml;
+                if (displayedExercises[i].nameTranslations.hasOwnProperty('EN'))
+                    newElementHtml = `
+                        <a onclick="selectExerciseClick('${displayedExercises[i].name}')" style="display: flex; border-top: 1px solid lightgrey; padding: 3px; cursor: pointer;">
+                            <img src="${displayedExercises[i].iconUrl}" height="35" width="35" style="margin: 5px">
+                            <div style="display: inline-block; margin-left: 6px;">
+                                <span style="display: block">${displayedExercises[i].nameTranslations.EN}</span>
+                                <span style="display: block; font-size: small; color: #6f94c6">${displayedExercises[i].name}(${displayedExercises[i].bodyPart})</span>
+                            </div>
+                        </a>`;
+                else
+                    newElementHtml = `
+                        <a onclick="selectExerciseClick('${displayedExercises[i].name}')" style="display: flex; border-top: 1px solid lightgrey; padding: 3px; cursor: pointer;">
+                            <img src="${displayedExercises[i].iconUrl}" height="35" width="35" style="margin: 5px">
+                            <div style="display: inline-block; margin-left: 6px;">
+                                <span style="display: block">${displayedExercises[i].name}(${displayedExercises[i].bodyPart})</span>
+                            </div>
+                        </a>`;
                 let newElement = document.createElement('div');
                 newElement.className = 'card';
                 newElement.innerHTML = newElementHtml;
@@ -590,12 +617,12 @@
         }
 
         function clearExercises() {
-            {#for (let i = 0; i < newExercises.length; i++)#}
-            {#    if (newExercises[i].enabled) {#}
-            {#        newExercises.splice(i, 1);#}
-            {#        i--;#}
-            {#    }#}
-            message_broadcast({action: 'exercises', value: []});
+            for (let i = 0; i < newExercises.length; i++)
+                if (newExercises[i].enabled) {
+                    newExercises.splice(i, 1);
+                    i--;
+                }
+            message_broadcast({action: 'exercises', value: newExercises});
         }
 
         function saveExercises() {
@@ -634,7 +661,6 @@
 
         function displayWorkouts(ts, workouts) {
             let date = new Date(ts);
-            console.log(ts);
 
             let rootDiv = $('#today_workouts');
             rootDiv.empty();

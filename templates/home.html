@@ -1,73 +1,78 @@
 {% extends 'base.html' %}
 {% block content %}
     {% load static %}
-    <div class="sub_content" xmlns="http://www.w3.org/1999/html">
-        <!-- head -->
-        <div id="liftCreatorHead">
-            <div class="w3-text-grey w3-left" style="display: inline-block;">
-                <p style="font-size: small; margin: 0;">
-                    <span id="stopwatch">{% now "SHORT_DATE_FORMAT" %}</span>
-                    <span>{% now "D" %}</span>
-                </p>
-                <input id="workoutTitle" type="text" placeholder="예 : 내 운동" value="">
-                <img onclick="document.getElementById('workoutTitle').focus();" src="{% static 'edit.png' %}"
-                     width="14px" style="cursor: pointer;">
+    <div id = "rootDiv">
+            <div id="width_workout_table">
+                <div class="sub_content"  xmlns="http://www.w3.org/1999/html">
+                <!-- head -->
+                <div id="liftCreatorHead">
+                    <div class="w3-text-grey w3-left" style="display: inline-block;">
+                        <p style="font-size: small; margin: 0;">
+                            <span id="stopwatch">{% now "SHORT_DATE_FORMAT" %}</span>
+                            <span>{% now "D" %}</span>
+                        </p>
+                        <input id="workoutTitle" type="text" placeholder="예 : 내 운동" value="">
+                        <img onclick="document.getElementById('workoutTitle').focus();" src="{% static 'edit.png' %}"
+                             width="14px" style="cursor: pointer;">
+                    </div>
+                    <span id="exerciseDurationDisplay" style="font-size: xx-large; color: #0006b1;">{% now "G:i:s" %}</span>
+                    <input id="exerciseDuration" type="number" name="exerciseDuration" value="0" hidden>
+                    <div style="display: inline-block;" class="w3-right">
+                        <a onclick="stopwatchResetClick();" class="w3-button w3-buttoncolor stopwatchControlButton" style="display: none" id="timerResetButton"><img src="{% static 'stop.png' %}" height="16px"></a>
+                        <a onclick="stopwatchControlButtonClick();" class="w3-button w3-buttoncolor stopwatchControlButton"><img id="timerControlButton" src="{% static 'play.png' %}" height="16px"></a>
+                    </div>
+                </div>
+                <!-- body -->
+                <div id="liftCreatorBody">
+                    <button class="dummy_button" style="margin-bottom: 3px;" disabled>Fetch a prescribed exercise</button>
+                    <table id="newExercisesTable">
+                        <tr>
+                            <th class="arrow_column"></th>
+                            <th class="set_column">세트</th>
+                            <th class="exercise_column">운동</th>
+                            <th class="weight_column" id = "kg" onclick="changeToPound();">KG</th>
+                            <th class="repetition_column">반복</th>
+                            <th class="rm_column">RM</th>
+                            <th class="done_column"></th>
+                        </tr>
+                        <tr style="color: #777">
+                            <td class="arrow_column"></td>
+                            <td class="set_column light-grey-text"></td>
+                            <td class="exercise_column" id="selectedExerciseName"
+                                onclick="showExerciseSelectorDivClick();">{{ exercises.0.name }} ({{ exercises.0.body_part.name }})
+                            </td>
+                            <td class="weight_column"><input id="newLiftWeight" class="newLiftWeight" type="number" min="1"
+                                                             max="200" placeholder="1"
+                                                             value="1"></td>
+                            <td class="repetition_column"><input id="newLiftReps" class="newLiftReps" type="number" min="1"
+                                                                 max="30" placeholder="1"
+                                                                 value="1"></td>
+                            <td class="rm_column" id="newRmMax"></td>
+                            <td class="done_column">
+                                <button onclick="addNewExercise();"
+                                        style="padding: 5px 5px 5px 5px; margin: 0 0 0 0; line-height: 1; border-radius: 15px; background: transparent; border: none; cursor: pointer;">
+                                    <img id="timerControlButton" src="{% static 'add.svg' %}" height="20px"></button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- tail -->
+                <div style="height: 30px; margin-top: 50px;">
+                    <div style="display: inline-block;" class="w3-right">
+                        <a id="saveExerciseButton" onclick="saveExercises()" class="w3-button w3-buttoncolor"
+                           style="padding: 8px 40px 8px 40px; border-radius: 8px; display: block;">저장</a>
+                    </div>
+                    <div style="display: inline-block;" class="w3-left">
+                        <a id="saveExerciseButton" onclick="clearExercises()" class="w3-button w3-buttoncolor"
+                           style="padding: 8px 40px 8px 40px; border-radius: 8px; display: block;">삭제</a>
+                    </div>
+                </div>
             </div>
-            <span id="exerciseDurationDisplay" style="font-size: xx-large; color: #0006b1;">{% now "G:i:s" %}</span>
-            <input id="exerciseDuration" type="number" name="exerciseDuration" value="0" hidden>
-            <div style="display: inline-block;" class="w3-right">
-                <a onclick="stopwatchResetClick();" class="w3-button w3-buttoncolor stopwatchControlButton" style="display: none" id="timerResetButton"><img src="{% static 'stop.png' %}" height="16px"></a>
-                <a onclick="stopwatchControlButtonClick();" class="w3-button w3-buttoncolor stopwatchControlButton"><img id="timerControlButton" src="{% static 'play.png' %}" height="16px"></a>
             </div>
-        </div>
-        <!-- body -->
-        <div id="liftCreatorBody">
-            <button class="dummy_button" style="margin-bottom: 3px;" disabled>Fetch a prescribed exercise</button>
-            <table id="newExercisesTable">
-                <tr>
-                    <th class="arrow_column"></th>
-                    <th class="set_column">세트</th>
-                    <th class="exercise_column">운동</th>
-                    <th class="weight_column">KG</th>
-                    <th class="repetition_column">반복</th>
-                    <th class="rm_column">RM</th>
-                    <th class="done_column"></th>
-                </tr>
-                <tr style="color: #777">
-                    <td class="arrow_column"></td>
-                    <td class="set_column light-grey-text"></td>
-                    <td class="exercise_column" id="selectedExerciseName"
-                        onclick="showExerciseSelectorDivClick();">{{ exercises.0.name }} ({{ exercises.0.body_part.name }})
-                    </td>
-                    <td class="weight_column"><input id="newLiftWeight" class="newLiftWeight" type="number" min="1"
-                                                     max="200" placeholder="1"
-                                                     value="1"></td>
-                    <td class="repetition_column"><input id="newLiftReps" class="newLiftReps" type="number" min="1"
-                                                         max="30" placeholder="1"
-                                                         value="1"></td>
-                    <td class="rm_column" id="newRmMax"></td>
-                    <td class="done_column">
-                        <button onclick="addNewExercise();"
-                                style="padding: 5px 5px 5px 5px; margin: 0 0 0 0; line-height: 1; border-radius: 15px; background: transparent; border: none; cursor: pointer;">
-                            <img id="timerControlButton" src="{% static 'add.svg' %}" height="20px"></button>
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <!-- tail -->
-        <div style="height: 30px; margin-top: 50px;">
-            <div style="display: inline-block;" class="w3-right">
-                <a id="saveExerciseButton" onclick="saveExercises()" class="w3-button w3-buttoncolor"
-                   style="padding: 8px 40px 8px 40px; border-radius: 8px; display: block;">저장</a>
+            <div id="width_workout_card">
+                <div id="today_workouts"></div>
             </div>
-            <div style="display: inline-block;" class="w3-left">
-                <a id="saveExerciseButton" onclick="clearExercises()" class="w3-button w3-buttoncolor"
-                   style="padding: 8px 40px 8px 40px; border-radius: 8px; display: block;">삭제</a>
-            </div>
-        </div>
     </div>
-
-    <div id="today_workouts"></div>
 
     <style>
         #liftCreatorHead {
@@ -186,12 +191,27 @@
         }
 
         /* endregion */
-
-        @media (min-width: 601px) {
-            .repeatButton {
-                display: inline-block;
-                float: right !important;
+        #rootDiv {
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: space-between;
             }
+
+        @media (min-width: 801px) {
+            #width_workout_table{
+                width: calc(60% - 10px);
+                margin: 0px;
+                padding: 0px;
+                display: inline-block;
+            }
+            #width_workout_card{
+                width: calc(40% - 10px);
+                margin: 0px;
+                padding: 0px;
+                display: inline-block;
+            }
+
         }
 
     </style>
@@ -335,7 +355,7 @@
                         `   <td class="repetition_column dark-blue-text">` +
                         `       <input id="liftReps${i}" class="newLiftReps dark-blue-text" type="number" min="1" max="30" placeholder="1" value="${exercises[i].reps}">` +
                         `   </td>` +
-                        `   <td id="rmMax${i}" class="rm_column dark-blue-text">${exercises[i].rmMax}</td>` +
+                        `   <td id="rmMax${i}" class="rm_column dark-blue-text">${{if  }}${exercises[i].rmMax}</td>` +
                         `   <td class="done_column">` +
                         `       <a onclick="toggleExercise(${i});" class="w3-button w3-buttoncolor" style="padding: 5px; margin: 0; line-height: 1; border-radius: 2px;">` +
                         `           <img src="{% static 'checked.png' %}" height="20px">` +
@@ -349,7 +369,12 @@
 
                         exercises[i].liftMass = weight;
                         exercises[i].reps = reps;
-                        exercises[i].rmMax = Math.trunc((weight + weight * reps * 0.025) * 100) / 100;
+                        if(document.getElementById("kg").innerHTML === "KG") {
+                            exercises[i].rmMax = Math.trunc((weight + weight * reps * 0.025) * 100) / 100;
+                        }
+                        else{
+                           exercises[i].rmMax = Math.trunc((weight * 2.2 + weight * reps * 0.025 * 2.2) * 100) / 100;
+                        }
 
                         message_broadcast({action: 'exercises', value: exercises});
                     });
@@ -371,6 +396,16 @@
                     );
             }
         }
+        function changeToPound(){
+            if(document.getElementById("kg").innerHTML === "KG"){
+                document.getElementById("kg").innerHTML = "LBS";
+            }
+            else{
+                document.getElementById("kg").innerHTML = "KG";
+            }
+
+        }
+
 
         function showExerciseSelectorDivClick() {
             if (document.readyState === "complete") {
@@ -378,6 +413,7 @@
                 selectExerciseDiv.style.display = 'block';
             }
         }
+
 
         function hideExerciseSelectorDivClick() {
             $('body').css('background', '#fff');
@@ -640,7 +676,7 @@
             rootDiv.empty();
             rootDiv.append(`<h4 style="color: #3f51b5"><b>${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}. ${weekdayNames[date.getDay()]}</b></h4>`);
             for (let i = 0; i < workouts.length; i++) {
-                rootDiv.append(`<div class="sub_content" style="min-height: 190px;"></div>`);
+                rootDiv.append(`<div class="sub_content" ></div>`);
                 let subDiv = $('#today_workouts .sub_content:last');
                 subDiv.append(`<div style="height: 12px;">
                     <span style="color: #3f51b5; font-weight: bold;" class="w3-left">${workouts[i].title}</span>
@@ -654,7 +690,7 @@
                     liftsDiv.append(`<span>${workouts[i].lifts[j].exercise_name}, </span>`);
                     liftsDiv.append(`<span>${workouts[i].lifts[j].lift_mass} KG, </span>`);
                     liftsDiv.append(`<span>${workouts[i].lifts[j].repetitions} REPS, </span>`);
-                    liftsDiv.append(`<span>${workouts[i].lifts[j].one_rep_max} RM, </span>`);
+                    liftsDiv.append(`<span>${workouts[i].lifts[j].one_rep_max} RM </span>`);
                     liftsDiv.append('<br><br>');
                 }
 

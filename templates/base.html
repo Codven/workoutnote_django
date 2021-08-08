@@ -72,13 +72,9 @@
     <div class="w3-hide-large" style="margin-top:83px"></div>
 
     <!-- Top header -->
-    {% if title or name %}
+    {% if title %}
         <header class="w3-container w3-xlarge">
-            {% if title %}
-                <h1 class="w3-left">{{ title }}</h1>
-            {% elif name %}
-                <h2 class="w3-left"><span style="font-weight: bold;">안녕하세요, </span><span style="color: #0006b1; font-weight: bold;">{{ name }}</span></h2>
-            {% endif %}
+            <h1 class="w3-left">{{ title }}</h1>
         </header>
     {% endif %}
 

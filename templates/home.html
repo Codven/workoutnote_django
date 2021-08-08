@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
     {% load static %}
-    <div id = "rootDiv">
-            <div id="width_workout_table">
-                <div class="sub_content"  xmlns="http://www.w3.org/1999/html">
+    <div id="rootDiv">
+        <div id="width_workout_table">
+            <header class="w3-container w3-xlarge">
+                <h1 class="w3-left">{{ title }}</h1>
+                <h2 class="w3-left"><span style="font-weight: bold;">안녕하세요, </span><span style="color: #0006b1; font-weight: bold;">{{ name }}</span></h2>
+            </header>
+            <div class="sub_content" xmlns="http://www.w3.org/1999/html">
                 <!-- head -->
                 <div id="liftCreatorHead">
                     <div class="w3-text-grey w3-left" style="display: inline-block;">
@@ -30,7 +34,7 @@
                             <th class="arrow_column"></th>
                             <th class="set_column">세트</th>
                             <th class="exercise_column">운동</th>
-                            <th class="weight_column" id = "kg" onclick="changeToPound();">KG</th>
+                            <th class="weight_column" id="weight_th" style="cursor: pointer;">KG</th>
                             <th class="repetition_column">반복</th>
                             <th class="rm_column">RM</th>
                             <th class="done_column"></th>
@@ -68,10 +72,10 @@
                     </div>
                 </div>
             </div>
-            </div>
-            <div id="width_workout_card">
-                <div id="today_workouts"></div>
-            </div>
+        </div>
+        <div id="width_workout_card">
+            <div id="today_workouts"></div>
+        </div>
     </div>
 
     <style>
@@ -191,33 +195,36 @@
         }
 
         /* endregion */
-        #rootDiv {
+
+        @media (min-width: 801px) {
+            #rootDiv {
                 margin: 0;
                 padding: 0;
                 display: flex;
                 justify-content: space-between;
             }
 
-        @media (min-width: 801px) {
-            #width_workout_table{
+            #width_workout_table {
                 width: calc(60% - 10px);
                 margin: 0px;
                 padding: 0px;
                 display: inline-block;
             }
-            #width_workout_card{
+
+            #width_workout_card {
                 width: calc(40% - 10px);
                 margin: 0px;
                 padding: 0px;
                 display: inline-block;
             }
-
         }
 
     </style>
 
     <script>
         const weekdayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+        const KG2LBS = 2.20462262185;
+        const ONE_REP_MAX_CONST = 0.025;
 
         let selectExerciseDiv, exercisesListDiv, filterExerciseBodyPart, filterExerciseCategory, filterText;
         let allExercises = [{% for exercise in exercises %}{id: {{ exercise.id }},
@@ -243,17 +250,7 @@
         }
 
         let newExercises = [];
-        let newSetNumber = 1, newExercise = "{{ exercises.0.name }}", newWeight = 1;
-        let allWorkouts = [
-            {% for _, workout_sessions in workouts_by_days.items %}
-                {% for workout_session, lifts in workout_sessions.items %}
-                    {
-                        workout_session_id: {{ workout_session.id }},
-                        title: "{{ workout_session.title }}",
-                        lifts: [{% for lift in lifts %}{exerciseName: "{{ lift.exercise.name }}",liftMass: {{ lift.lift_mass }},reps: {{ lift.repetitions }},rmMax: {{ lift.one_rep_max }}}, {% endfor %}]
-                    },
-                {% endfor %}
-            {% endfor %}];
+        let newSetNumber = 1, newExercise = "{{ exercises.0.name }}", newWeight = 1, newReps = 1;
 
         $(document).ready(function () {
             $(".default_option").click(function () {
@@ -263,6 +260,42 @@
             $(".dropdown ul li").click(function () {
                 $(".default_option").text($(this).text());
                 $(".dropdown ul").removeClass("active");
+            });
+
+            $('#weight_th').click(function () {
+                // switch KG / LBS
+                let el = $('#weight_th');
+                el.html(el.html().toLowerCase() === 'kg' ? 'LBS' : 'KG');
+
+                // region inserted exercise rows
+                setNewExercisesOnUI(newExercises);
+                // endregion
+                // region new exercise row
+                let newLiftWeight = $('#newLiftWeight');
+                let newRmMax = $('#newRmMax');
+                newLiftWeight.prop('disabled', true);
+                newRmMax.prop('disabled', true);
+                if (el.html().toLowerCase() === 'kg') {
+                    let rmMax = Math.trunc((newWeight + newWeight * newReps * ONE_REP_MAX_CONST) * 100) / 100;
+                    $('#newLiftWeight').val(newWeight);
+                    $('#newRmMax').html(rmMax);
+                } else {
+                    let massLbs = Math.trunc(newWeight * 2.2 * 10) / 10;
+                    let rmMaxLbs = Math.trunc((newWeight * KG2LBS + newWeight * KG2LBS * newReps * ONE_REP_MAX_CONST) * 100) / 100;
+                    $('#newLiftWeight').val(massLbs);
+                    $('#newRmMax').html(rmMaxLbs);
+                }
+                newLiftWeight.prop('disabled', false);
+                newRmMax.prop('disabled', false);
+                // endregion
+                // region workouts
+                let today = new Date();
+                today.setHours(1);
+                today.setMinutes(0);
+                today.setSeconds(0);
+                today.setMilliseconds(0);
+                fetchDayWorkouts(today.getTime());
+                // endregion
             });
 
             $('#exerciseDurationDisplay').html("00:00:00");
@@ -281,20 +314,24 @@
 
             let weight = parseInt($('#newLiftWeight').val());
             let reps = parseInt($('#newLiftReps').val());
-            let rm = Math.trunc((weight + weight * reps * 0.025) * 100) / 100;
+            let rm = Math.trunc((weight + weight * reps * ONE_REP_MAX_CONST) * 100) / 100;
             $('#newRmMax').html(rm);
 
             $('#newLiftWeight').change(function () {
-                let weight = parseInt($('#newLiftWeight').val());
-                let reps = parseInt($('#newLiftReps').val());
-                let rm = Math.trunc((weight + weight * reps * 0.025) * 100) / 100;
-                $('#newRmMax').html(rm);
+                let kgMode = $('#weight_th').html().toLowerCase() === 'kg';
+                newWeight = kgMode ? parseFloat($('#newLiftWeight').val()) : parseFloat($('#newLiftWeight').val()) * KG2LBS;
+                if (kgMode)
+                    $('#newRmMax').html(Math.trunc((newWeight + newWeight * newReps * ONE_REP_MAX_CONST) * 100) / 100);
+                else
+                    $('#newRmMax').html(Math.trunc((newWeight * KG2LBS + newWeight * KG2LBS * newReps * ONE_REP_MAX_CONST) * 100) / 100);
             });
             $('#newLiftReps').change(function () {
-                let weight = parseInt($('#newLiftWeight').val());
-                let reps = parseInt($('#newLiftReps').val());
-                let rm = Math.trunc((weight + weight * reps * 0.025) * 100) / 100;
-                $('#newRmMax').html(rm);
+                let kgMode = $('#weight_th').html().toLowerCase() === 'kg';
+                newReps = parseInt($('#newLiftReps').val());
+                if (kgMode)
+                    $('#newRmMax').html(Math.trunc((newWeight + newWeight * newReps * ONE_REP_MAX_CONST) * 100) / 100);
+                else
+                    $('#newRmMax').html(Math.trunc((newWeight * KG2LBS + newWeight * KG2LBS * newReps * ONE_REP_MAX_CONST) * 100) / 100);
             });
 
             // tabs communication
@@ -345,6 +382,7 @@
             $("#newExercisesTable tr:not(:last-child, :first-child)").empty();
 
             for (let i = 0; i < exercises.length; i++) {
+                let rmMaxLbs = Math.trunc((exercises[i].liftMass * KG2LBS + exercises[i].liftMass * KG2LBS * exercises[i].reps * ONE_REP_MAX_CONST) * 100) / 100;
                 if (exercises[i].enabled) {
                     $('#newExercisesTable tr:last').before(
                         `<tr id="exerciseRow${i}">` +
@@ -352,12 +390,12 @@
                         `   <td onclick="copyExercise(${i});" class="set_column dark-blue-text">${i + 1}</td>` +
                         `   <td onclick="copyExercise(${i});" class="exercise_column dark-blue-text">${exercises[i].exercise.name} (${exercises[i].exercise.bodyPart})</td>` +
                         `   <td class="weight_column">` +
-                        `       <input id="liftWeight${i}" class="newLiftWeight dark-blue-text" type="number" min="1" max="200" placeholder="1" value="${exercises[i].liftMass}">` +
+                        `       <input id="liftWeight${i}" class="newLiftWeight dark-blue-text" style="text-alight: center;" type="number" min="1" max="200" placeholder="1" value="${$('#weight_th').html().toLowerCase() === 'kg' ? exercises[i].liftMass : Math.trunc(exercises[i].liftMass * KG2LBS * 10) / 10}">` +
                         `   </td>` +
                         `   <td class="repetition_column dark-blue-text">` +
-                        `       <input id="liftReps${i}" class="newLiftReps dark-blue-text" type="number" min="1" max="30" placeholder="1" value="${exercises[i].reps}">` +
+                        `       <input id="liftReps${i}" class="newLiftReps dark-blue-text" style="text-alight: center;" type="number" min="1" max="30" placeholder="1" value="${exercises[i].reps}">` +
                         `   </td>` +
-                        `   <td id="rmMax${i}" class="rm_column dark-blue-text">${{if  }}${exercises[i].rmMax}</td>` +
+                        `   <td id="rmMax${i}" class="rm_column dark-blue-text">${$('#weight_th').html().toLowerCase() === 'kg' ? exercises[i].rmMax : rmMaxLbs}</td>` +
                         `   <td class="done_column">` +
                         `       <a onclick="toggleExercise(${i});" class="w3-button w3-buttoncolor" style="padding: 5px; margin: 0; line-height: 1; border-radius: 2px;">` +
                         `           <img src="{% static 'checked.png' %}" height="20px">` +
@@ -371,12 +409,7 @@
 
                         exercises[i].liftMass = weight;
                         exercises[i].reps = reps;
-                        if(document.getElementById("kg").innerHTML === "KG") {
-                            exercises[i].rmMax = Math.trunc((weight + weight * reps * 0.025) * 100) / 100;
-                        }
-                        else{
-                           exercises[i].rmMax = Math.trunc((weight * 2.2 + weight * reps * 0.025 * 2.2) * 100) / 100;
-                        }
+                        exercises[i].rmMax = Math.trunc((weight + weight * reps * ONE_REP_MAX_CONST) * 100) / 100;
 
                         message_broadcast({action: 'exercises', value: exercises});
                     });
@@ -386,9 +419,9 @@
                         `   <td class="arrow_column">${i === 0 ? '' : `<a onclick="shiftLiftUp(${i});">△</a>`}${i === 0 || i === exercises.length - 1 ? '' : '<br>'}${i === exercises.length - 1 ? '' : `<a onclick="shiftLiftDown(${i});">▽</a>`}</td>` +
                         `	<td onclick="copyExercise(${i});" class="set_column light-grey-text">${i}</td>` +
                         `	<td onclick="copyExercise(${i});" class="exercise_column light-grey-text">${exercises[i].exercise.name} (${exercises[i].exercise.bodyPart})</td>` +
-                        `	<td class="weight_column light-grey-text">${exercises[i].liftMass}</td>` +
+                        `	<td class="weight_column light-grey-text">${$('#weight_th').html().toLowerCase() === 'kg' ? exercises[i].liftMass : Math.trunc(exercises[i].liftMass * KG2LBS * 10) / 10}</td>` +
                         `	<td class="repetition_column light-grey-text">${exercises[i].reps}</td>` +
-                        `	<td class="rm_column light-grey-text">${exercises[i].rmMax}</td>` +
+                        `	<td class="rm_column light-grey-text">${$('#weight_th').html().toLowerCase() === 'kg' ? exercises[i].rmMax : rmMaxLbs}</td>` +
                         `	<td class="done_column">` +
                         `		<a onclick="toggleExercise(${i});" class="w3-button w3-buttondisabledcolor" style="padding: 5px; margin: 0; line-height: 1; border-radius: 2px;">` +
                         `			<img src="{% static 'unchecked.png' %}" height="20px">` +
@@ -398,16 +431,6 @@
                     );
             }
         }
-        function changeToPound(){
-            if(document.getElementById("kg").innerHTML === "KG"){
-                document.getElementById("kg").innerHTML = "LBS";
-            }
-            else{
-                document.getElementById("kg").innerHTML = "KG";
-            }
-
-        }
-
 
         function showExerciseSelectorDivClick() {
             if (document.readyState === "complete") {
@@ -415,7 +438,6 @@
                 selectExerciseDiv.style.display = 'block';
             }
         }
-
 
         function hideExerciseSelectorDivClick() {
             $('body').css('background', '#fff');
@@ -569,29 +591,23 @@
         }
 
         function addNewExercise() {
-            let weight = parseInt($('#newLiftWeight').val());
-            let reps = parseInt($('#newLiftReps').val());
-            let rm = Math.trunc((weight + weight * reps * 0.025) * 100) / 100;
-            $('#newRmMax').html(rm);
-            if (weight != null && reps != null && parseFloat(weight) > 0 && parseFloat(reps) > 0) {
-                // add to array
-                newExercise = {
-                    id: newExercises.length + 1,
-                    exercise: selectedExercise,
-                    liftMass: Math.floor(parseFloat(weight)),
-                    reps: Math.floor(parseFloat(reps)),
-                    enabled: true,
-                    rmMax: rm // todo double check
-                };
-                newExercises.push(newExercise);
+            // add to array
+            newExercise = {
+                id: newExercises.length + 1,
+                exercise: selectedExercise,
+                liftMass: newWeight,
+                reps: newReps,
+                enabled: true,
+                rmMax: Math.trunc((newWeight + newWeight * newReps * ONE_REP_MAX_CONST) * 100) / 100
+            };
+            newExercises.push(newExercise);
 
-                // send as a broadcast to all tabs i.e. save locally
-                message_broadcast({action: 'exercises', value: newExercises});
-            }
+            // send as a broadcast to all tabs i.e. save locally
+            message_broadcast({action: 'exercises', value: newExercises});
         }
 
         function addNewExerciseWithRawValues(liftMass, reps, exerciseName, rmMax) {
-            rmMax = Math.trunc((liftMass + liftMass * reps * 0.025) * 100) / 100;
+            rmMax = Math.trunc((liftMass + liftMass * reps * ONE_REP_MAX_CONST) * 100) / 100;
             // add to array
             newExercise = {
                 id: newExercises.length + 1,
@@ -701,6 +717,7 @@
             let rootDiv = $('#today_workouts');
             rootDiv.empty();
             rootDiv.append(`<h4 style="color: #3f51b5"><b>${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}. ${weekdayNames[date.getDay()]}</b></h4>`);
+            let kgMode = $('#weight_th').html().toLowerCase() === 'kg';
             for (let i = 0; i < workouts.length; i++) {
                 rootDiv.append(`<div class="sub_content" ></div>`);
                 let subDiv = $('#today_workouts .sub_content:last');
@@ -714,9 +731,17 @@
                 for (let j = 0; j < workouts[i].lifts.length; j++) {
                     liftsDiv.append(`<span>${j + 1}. </span>`);
                     liftsDiv.append(`<span>${workouts[i].lifts[j].exercise_name}, </span>`);
-                    liftsDiv.append(`<span>${workouts[i].lifts[j].lift_mass} KG, </span>`);
+                    if (kgMode)
+                        liftsDiv.append(`<span>${workouts[i].lifts[j].lift_mass} KG, </span>`);
+                    else {
+                        liftsDiv.append(`<span>${Math.trunc(workouts[i].lifts[j].lift_mass * KG2LBS * 10) / 10} LBS, </span>`);
+                    }
                     liftsDiv.append(`<span>${workouts[i].lifts[j].repetitions} REPS, </span>`);
-                    liftsDiv.append(`<span>${workouts[i].lifts[j].one_rep_max} RM </span>`);
+                    if (kgMode)
+                        liftsDiv.append(`<span>${workouts[i].lifts[j].one_rep_max} RM </span>`);
+                    else {
+                        liftsDiv.append(`<span>${Math.trunc((workouts[i].lifts[j].lift_mass * KG2LBS + workouts[i].lifts[j].lift_mass * KG2LBS * workouts[i].lifts[j].repetitions * ONE_REP_MAX_CONST) * 100) / 100} RM </span>`);
+                    }
                     liftsDiv.append('<br><br>');
                 }
 

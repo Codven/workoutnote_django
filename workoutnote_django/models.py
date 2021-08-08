@@ -91,6 +91,11 @@ class Exercise(models.Model):
         return f'{self.name} ({self.body_part}, {self.category})'
 
 
+class FavoriteExercises(models.Model):
+    user = models.ForeignKey(to=django_User, on_delete=models.CASCADE)
+    exercise = models.ForeignKey(to='Exercise', on_delete=models.CASCADE)
+
+
 class WorkoutSession(models.Model):
     id = models.AutoField(primary_key=True)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -109,6 +114,11 @@ class WorkoutSession(models.Model):
 
     def __str__(self):
         return f'{self.user.username}, {self.timestamp}, {self.title}, {self.duration}'
+
+
+class FavoriteWorkouts(models.Model):
+    user = models.OneToOneField(to=django_User, on_delete=models.CASCADE)
+    workout_session = models.OneToOneField(to='WorkoutSession', on_delete=models.CASCADE)
 
 
 class Lift(models.Model):

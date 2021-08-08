@@ -484,7 +484,14 @@
                         newArray.push(displayedExercises[i]);
                         displayedExercises.splice(i, 1);
                         i--;
-                    }
+                    } else
+                        for (let language in displayedExercises[i].nameTranslations)
+                            if (displayedExercises[i].nameTranslations[language].toLowerCase().startsWith(filterTextLower)) {
+                                newArray.push(displayedExercises[i]);
+                                displayedExercises.splice(i, 1);
+                                i--;
+                                break;
+                            }
                 }
                 displayedExercises = newArray.concat(displayedExercises);
             }
@@ -507,20 +514,26 @@
                 let newElementHtml;
                 if (displayedExercises[i].nameTranslations.hasOwnProperty('EN'))
                     newElementHtml = `
-                        <a onclick="selectExerciseClick('${displayedExercises[i].name}')" style="display: flex; border-top: 1px solid lightgrey; padding: 3px; cursor: pointer;">
-                            <img src="${displayedExercises[i].iconUrl}" height="35" width="35" style="margin: 5px">
-                            <div style="display: inline-block; margin-left: 6px;">
-                                <span style="display: block">${displayedExercises[i].nameTranslations.EN}</span>
-                                <span style="display: block; font-size: small; color: #6f94c6">${displayedExercises[i].name}(${displayedExercises[i].bodyPart})</span>
+                        <a style="display: flex; align-content: center; align-items: center; justify-content: space-between; border-top: 1px solid lightgrey; padding: 3px; cursor: pointer;">
+                            <div onclick="selectExerciseClick('${displayedExercises[i].name}')" style="display: flex; align-items: center;">
+                                <img src="${displayedExercises[i].iconUrl}" height="35" width="35" style="margin: 5px">
+                                <div style="display: inline-block; margin-left: 6px;">
+                                    <span style="display: block">${displayedExercises[i].nameTranslations.EN}</span>
+                                    <span style="display: block; font-size: small; color: #6f94c6">${displayedExercises[i].name}(${displayedExercises[i].bodyPart})</span>
+                                </div>
                             </div>
+                            <img onclick="favoriteExerciseClick(this, ${displayedExercises[i].id});" style="vertical-align: middle;" src="${favoriteExercises.hasOwnProperty(displayedExercises[i].id) ? '{% static 'favorite_checked.png' %}' : '{% static 'favorite_unchecked.png' %}'}" width="28px" height="28px">
                         </a>`;
                 else
                     newElementHtml = `
-                        <a onclick="selectExerciseClick('${displayedExercises[i].name}')" style="display: flex; border-top: 1px solid lightgrey; padding: 3px; cursor: pointer;">
-                            <img src="${displayedExercises[i].iconUrl}" height="35" width="35" style="margin: 5px">
-                            <div style="display: inline-block; margin-left: 6px;">
-                                <span style="display: block">${displayedExercises[i].name}(${displayedExercises[i].bodyPart})</span>
+                        <a style="display: flex; align-content: center; align-items: center; justify-content: space-between; border-top: 1px solid lightgrey; padding: 3px; cursor: pointer;">
+                            <div onclick="selectExerciseClick('${displayedExercises[i].name}')" style="display: flex; align-items: center;">
+                                <img src="${displayedExercises[i].iconUrl}" height="35" width="35" style="margin: 5px">
+                                <div style="display: inline-block; margin-left: 6px;">
+                                    <span style="display: block">${displayedExercises[i].name}(${displayedExercises[i].bodyPart})</span>
+                                </div>
                             </div>
+                            <img onclick="favoriteExerciseClick(this, ${displayedExercises[i].id});" style="vertical-align: middle;" src="${favoriteExercises.hasOwnProperty(displayedExercises[i].id) ? '{% static 'favorite_checked.png' %}' : '{% static 'favorite_unchecked.png' %}'}" width="28px" height="28px">
                         </a>`;
                 let newElement = document.createElement('div');
                 newElement.className = 'card';

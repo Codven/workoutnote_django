@@ -21,4 +21,13 @@ urlpatterns = [
 
     # lifts
     re_path('^insert_lift/?', views.handle_insert_lift_api),
+
+    # favorites
+    re_path('^set_favorite_exercise/?', views.handle_set_favorite_exercise_api),
+    re_path('^unset_favorite_exercise/?', views.handle_unset_favorite_exercise_api),
+    re_path('^fetch_favorite_exercises/?', views.handle_fetch_favorite_exercises_api),
+
+    re_path('^set_favorite_workout/?', views.handle_set_favorite_workout_api),
+    re_path('^unset_favorite_workout/?', views.handle_unset_favorite_workout_api),
+    re_path('^fetch_favorite_workouts/?', views.handle_fetch_favorite_workouts_api),
 ]

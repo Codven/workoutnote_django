@@ -314,4 +314,195 @@ def handle_insert_lift_api(request):
             return JsonResponse(data={'success': False, 'reason': 'double check sessionKey value'})
     else:
         return JsonResponse(data={'success': False, 'reason': f'bad params, must provide {",".join(required_params)}'})
+
+
+# endregion
+
+
+# region favorites
+
+@csrf_exempt
+@require_http_methods(['POST'])
+def handle_set_favorite_exercise_api(request):
+    required_params = ['sessionKey', 'exercise_id']
+    received_params = json.loads(request.body.decode('utf8'))
+    if False not in [x in received_params for x in required_params]:
+        session_key = received_params['sessionKey']
+        if models.SessionKey.objects.filter(key=session_key).exists():
+            user = models.SessionKey.objects.get(key=session_key).user
+            exercise_id = int(received_params['exercise_id'])
+            if wn_models.Exercise.objects.filter(id=exercise_id).exists():
+                if not wn_models.FavoriteExercises.objects.filter(user=user, exercise__id=exercise_id).exists():
+                    wn_models.FavoriteExercises.objects.create(user=user, exercise_id=exercise_id)
+                return JsonResponse(data={'success': True})
+            else:
+                return JsonResponse(data={'success': False, 'reason': 'invalid exercise id'})
+        else:
+            return JsonResponse(data={'success': False, 'reason': 'double check sessionKey value'})
+    else:
+        return JsonResponse(data={'success': False, 'reason': f'bad params, must provide {",".join(required_params)}'})
+
+
+@csrf_exempt
+@require_http_methods(['POST'])
+def handle_unset_favorite_exercise_api(request):
+    required_params = ['sessionKey', 'exercise_id']
+    received_params = json.loads(request.body.decode('utf8'))
+    if False not in [x in received_params for x in required_params]:
+        session_key = received_params['sessionKey']
+        if models.SessionKey.objects.filter(key=session_key).exists():
+            user = models.SessionKey.objects.get(key=session_key).user
+            exercise_id = int(received_params['exercise_id'])
+            if wn_models.Exercise.objects.filter(id=exercise_id).exists():
+                if wn_models.FavoriteExercises.objects.filter(user=user, exercise__id=exercise_id).exists():
+                    wn_models.FavoriteExercises.objects.filter(user=user, exercise_id=exercise_id).delete()
+                return JsonResponse(data={'success': True})
+            else:
+                return JsonResponse(data={'success': False, 'reason': 'invalid exercise id'})
+        else:
+            return JsonResponse(data={'success': False, 'reason': 'double check sessionKey value'})
+    else:
+        return JsonResponse(data={'success': False, 'reason': f'bad params, must provide {",".join(required_params)}'})
+
+
+@csrf_exempt
+@require_http_methods(['POST'])
+def handle_fetch_favorite_exercises_api(request):
+    received_params = json.loads(request.body.decode('utf8'))
+    if 'sessionKey' in received_params:
+        session_key = received_params['sessionKey']
+        if models.SessionKey.objects.filter(key=session_key).exists():
+            user = models.SessionKey.objects.get(key=session_key).user
+            exercises_arr = []
+            for favorite_exercise in wn_models.FavoriteExercises.objects.filter(user=user):
+                exercises_arr += [{
+                    'id': favorite_exercise.exercise.id,
+                    'name': favorite_exercise.exercise.name,
+                    'name_translations': favorite_exercise.exercise.name_translations,
+                    'body_part_str': favorite_exercise.exercise.body_part.name,
+                    'category_str': favorite_exercise.exercise.category.name,
+                    'icon_str': favorite_exercise.exercise.icon.name,
+                }]
+            return JsonResponse(data={
+                'success': True,
+                'exercises': exercises_arr
+            })
+        else:
+            return JsonResponse(data={'success': False, 'reason': 'double check sessionKey value'})
+    else:
+        return JsonResponse(data={'success': False, 'reason': f'bad params, must provide sessionKey'})
+
+
+@csrf_exempt
+@require_http_methods(['POST'])
+def handle_set_favorite_workout_api(request):
+    required_params = ['sessionKey', 'workout_session_id']
+    received_params = json.loads(request.body.decode('utf8'))
+    if False not in [x in received_params for x in required_params]:
+        session_key = received_params['sessionKey']
+        if models.SessionKey.objects.filter(key=session_key).exists():
+            user = models.SessionKey.objects.get(key=session_key).user
+            if wn_models.Exercise.objects.filter(id=received_params['exercise_id']).exists() and wn_models.WorkoutSession.objects.filter(id=int(received_params['workout_session_id']), user=user).exists():
+                exercise = wn_models.Exercise.objects.get(id=received_params['exercise_id'])
+                workout_session = wn_models.WorkoutSession.objects.get(id=int(received_params['workout_session_id']))
+                lift_mass = float(received_params['lift_mass'])
+                repetitions = int(received_params['repetitions'])
+                lift = wn_models.Lift.objects.create(
+                    timestamp=int(datetime.now().timestamp() * 1000),
+                    workout_session=workout_session,
+                    exercise=exercise,
+                    lift_mass=lift_mass,
+                    repetitions=repetitions,
+                    one_rep_max=Tools.calculate_one_rep_max(lift_mass=lift_mass, repetitions=repetitions),
+                )
+                return JsonResponse(data={
+                    'success': True,
+                    'lift': {
+                        'id': lift.id,
+                        'timestamp': int(lift.timestamp.timestamp() * 1000),
+                        'exercise_id': lift.exercise.id,
+                        'exercise_name': lift.exercise.name,
+                        'workout_session_id': lift.workout_session.id,
+                        'lift_mass': lift.lift_mass,
+                        'repetitions': lift.repetitions,
+                        'one_rep_max': lift.one_rep_max,
+                    }
+                })
+            else:
+                return JsonResponse(data={'success': False, 'reason': 'double check workout_session_id and exercise_id'})
+        else:
+            return JsonResponse(data={'success': False, 'reason': 'double check sessionKey value'})
+    else:
+        return JsonResponse(data={'success': False, 'reason': f'bad params, must provide {",".join(required_params)}'})
+
+
+@csrf_exempt
+@require_http_methods(['POST'])
+def handle_unset_favorite_workout_api(request):
+    required_params = ['sessionKey', 'workout_session_id']
+    received_params = json.loads(request.body.decode('utf8'))
+    if False not in [x in received_params for x in required_params]:
+        session_key = received_params['sessionKey']
+        if models.SessionKey.objects.filter(key=session_key).exists():
+            user = models.SessionKey.objects.get(key=session_key).user
+            if wn_models.Exercise.objects.filter(id=received_params['exercise_id']).exists() and wn_models.WorkoutSession.objects.filter(id=int(received_params['workout_session_id']), user=user).exists():
+                exercise = wn_models.Exercise.objects.get(id=received_params['exercise_id'])
+                workout_session = wn_models.WorkoutSession.objects.get(id=int(received_params['workout_session_id']))
+                lift_mass = float(received_params['lift_mass'])
+                repetitions = int(received_params['repetitions'])
+                lift = wn_models.Lift.objects.create(
+                    timestamp=int(datetime.now().timestamp() * 1000),
+                    workout_session=workout_session,
+                    exercise=exercise,
+                    lift_mass=lift_mass,
+                    repetitions=repetitions,
+                    one_rep_max=Tools.calculate_one_rep_max(lift_mass=lift_mass, repetitions=repetitions),
+                )
+                return JsonResponse(data={
+                    'success': True,
+                    'lift': {
+                        'id': lift.id,
+                        'timestamp': int(lift.timestamp.timestamp() * 1000),
+                        'exercise_id': lift.exercise.id,
+                        'exercise_name': lift.exercise.name,
+                        'workout_session_id': lift.workout_session.id,
+                        'lift_mass': lift.lift_mass,
+                        'repetitions': lift.repetitions,
+                        'one_rep_max': lift.one_rep_max,
+                    }
+                })
+            else:
+                return JsonResponse(data={'success': False, 'reason': 'double check workout_session_id and exercise_id'})
+        else:
+            return JsonResponse(data={'success': False, 'reason': 'double check sessionKey value'})
+    else:
+        return JsonResponse(data={'success': False, 'reason': f'bad params, must provide {",".join(required_params)}'})
+
+
+@csrf_exempt
+@require_http_methods(['POST'])
+def handle_fetch_favorite_workouts_api(request):
+    received_params = json.loads(request.body.decode('utf8'))
+    if 'sessionKey' in received_params:
+        session_key = received_params['sessionKey']
+        if models.SessionKey.objects.filter(key=session_key).exists():
+            user = models.SessionKey.objects.get(key=session_key).user
+            exercises_arr = []
+            for favorite_exercise in wn_models.FavoriteExercises.objects.filter(user=user):
+                exercises_arr += [{
+                    'id': favorite_exercise.exercise.id,
+                    'name': favorite_exercise.exercise.name,
+                    'name_translations': favorite_exercise.exercise.name_translations,
+                    'body_part_str': favorite_exercise.exercise.body_part.name,
+                    'category_str': favorite_exercise.exercise.category.name,
+                    'icon_str': favorite_exercise.exercise.icon.name,
+                }]
+            return JsonResponse(data={
+                'success': True,
+                'exercises': exercises_arr
+            })
+        else:
+            return JsonResponse(data={'success': False, 'reason': 'double check sessionKey value'})
+    else:
+        return JsonResponse(data={'success': False, 'reason': f'bad params, must provide sessionKey'})
 # endregion

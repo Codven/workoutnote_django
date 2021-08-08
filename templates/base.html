@@ -115,17 +115,22 @@
             </section>
             <section class="modal-card-body">
                 <div id="exercisesListDiv" style="min-height: 415px;">
+                    {% load tools %}
                     {% for exercise in exercises %}
-                        <a onclick="selectExerciseClick('{{ exercise.name }}')" style="display: flex; align-content: center; border-top: 1px solid lightgrey; padding: 3px; cursor: pointer;">
-                            <img src="{{ exercise.icon.url }}" height="35" width="35" style="margin: 5px">
-                            <div style="display: inline-block; margin-left: 6px;">
-                                {% if exercise.name_translations and 'EN' in exercise.name_translations %}
-                                    <span style="display: block">{{ exercise.name_translations.EN }}</span>
-                                    <span style="display: block; font-size: small; color: #6f94c6">{{ exercise.name }} ({{ exercise.body_part.name }})</span>
-                                {% else %}
-                                    <span style="display: block">{{ exercise.name }} ({{ exercise.body_part.name }})</span>
-                                {% endif %}
+                        <a style="display: flex; align-content: center; align-items: center; justify-content: space-between; border-top: 1px solid lightgrey; padding: 3px; cursor: pointer;">
+                            <div onclick="selectExerciseClick('{{ exercise.name }}')" style="display: flex; align-items: center;">
+                                <img src="{{ exercise.icon.url }}" height="35" width="35" style="margin: 5px">
+                                <div style="display: inline-block; margin-left: 6px;">
+                                    {% if exercise.name_translations and 'EN' in exercise.name_translations %}
+                                        <span style="display: block">{{ exercise.name_translations.EN }}</span>
+                                        <span style="display: block; font-size: small; color: #6f94c6">{{ exercise.name }} ({{ exercise.body_part.name }})</span>
+                                    {% else %}
+                                        <span style="display: block">{{ exercise.name }} ({{ exercise.body_part.name }})</span>
+                                    {% endif %}
+                                </div>
                             </div>
+                            {% is_favorite_exercise user exercise as is_favorite_exercise %}
+                            <img onclick="favoriteExerciseClick(this, {{ exercise.id }});" style="vertical-align: middle;" src="{% if is_favorite_exercise %}{% static 'favorite_checked.png' %}{% else %}{% static 'favorite_unchecked.png' %}{% endif %}" width="28px" height="28px">
                         </a>
                     {% endfor %}
                 </div>
@@ -140,6 +145,37 @@
 </body>
 
 <script>
+    let favoriteExercises = {};
+    let favoriteWorkouts = {};
+
+    $(document).ready(function () {
+        reloadFavorites();
+    });
+
+    function reloadFavorites() {
+        favoriteExercises = {};
+        $.post('/api/fetch_favorite_exercises', `{"sessionKey": "{{ sessionKey }}"}`).done(function (res) {
+            if (res.success) {
+                for (let i = 0; i < res.exercises.length; i++)
+                    favoriteExercises[res.exercises[i].id] = res.exercises[i];
+            } else {
+                console.log('failed to fetch favorite exercises');
+                favoriteExercises = {};
+            }
+        });
+
+        {#favoriteWorkouts = {};#}
+        {#$.post('/api/fetch_favorite_workouts', `{"sessionKey": "{{ sessionKey }}"}`).done(function (res) {#}
+        {#    if (res.success) {#}
+        {#        for (let i = 0; i < res.workouts.length; i++)#}
+        {#            favoriteWorkouts[res.workouts[i].id] = res.workouts[i];#}
+        {#    } else {#}
+        {#        console.log('failed to fetch favorite workouts');#}
+        {#        favoriteWorkouts = {};#}
+        {#    }#}
+        {#\});#}
+    }
+
     function toggleSidebar() {
         let sidebar = document.getElementById('mySidebar');
         let overlay = document.getElementById('myOverlay');
@@ -158,6 +194,29 @@
             localStorage.setItem('exercises_backup', JSON.stringify(value.value));
         localStorage.setItem('message', JSON.stringify(value));
         window.dispatchEvent(new Event('storage'));
+    }
+
+    function favoriteExerciseClick(button, exerciseId) {
+        let isFavorite = button.src.endsWith('{% static 'favorite_checked.png' %}');
+        if (isFavorite) {
+            // remove from favorites
+            $.post('/api/unset_favorite_exercise', `{"sessionKey": "{{ sessionKey }}", "exercise_id": "${exerciseId}"}`).done(function (res) {
+                if (res.success)
+                    button.src = '{% static 'favorite_unchecked.png' %}';
+                else
+                    console.log(`failed to remove exercise(id=${exerciseId}) from favorites`);
+            });
+        } else {
+            // add to favorite
+            $.post('/api/set_favorite_exercise', `{"sessionKey": "{{ sessionKey }}", "exercise_id": "${exerciseId}"}`).done(function (res) {
+                if (res.success)
+                    button.src = '{% static 'favorite_checked.png' %}';
+                else
+                    console.log(`failed to add exercise(id=${exerciseId}) to favorites`);
+            });
+        }
+
+        reloadFavorites();
     }
 </script>
 

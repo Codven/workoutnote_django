@@ -398,8 +398,16 @@
                 let filterTextLower = filterText.toLowerCase();
                 for (let i = 0; i < displayedExercises.length; i++)
                     if (!displayedExercises[i].name.toLowerCase().includes(filterTextLower)) {
-                        displayedExercises.splice(i, 1);
-                        i--;
+                        let del = true;
+                        for (let language in displayedExercises[i].nameTranslations)
+                            if (displayedExercises[i].nameTranslations[language].toLowerCase().includes(filterTextLower)) {
+                                del = false;
+                                break;
+                            }
+                        if (del) {
+                            displayedExercises.splice(i, 1);
+                            i--;
+                        }
                     }
                 let newArray = [];
                 for (let i = 0; i < displayedExercises.length; i++) {
@@ -427,7 +435,24 @@
 
             exercisesListDiv.innerHTML = '';
             for (let i = 0; i < displayedExercises.length; i++) {
-                let newElementHtml = '<a onclick="selectExerciseClick(\'' + displayedExercises[i].name + '\')" style="display: block; border-top: 1px solid lightgrey; padding: 3px; cursor: pointer;"> <img src="' + displayedExercises[i].iconUrl + '" height="35" width="35" style="margin: 5px">' + displayedExercises[i].name + ' (' + displayedExercises[i].bodyPart + ')</a>';
+                let newElementHtml;
+                if (displayedExercises[i].nameTranslations.hasOwnProperty('EN'))
+                    newElementHtml = `
+                        <a onclick="selectExerciseClick('${displayedExercises[i].name}')" style="display: flex; border-top: 1px solid lightgrey; padding: 3px; cursor: pointer;">
+                            <img src="${displayedExercises[i].iconUrl}" height="35" width="35" style="margin: 5px">
+                            <div style="display: inline-block; margin-left: 6px;">
+                                <span style="display: block">${displayedExercises[i].nameTranslations.EN}</span>
+                                <span style="display: block; font-size: small; color: #6f94c6">${displayedExercises[i].name}(${displayedExercises[i].bodyPart})</span>
+                            </div>
+                        </a>`;
+                else
+                    newElementHtml = `
+                        <a onclick="selectExerciseClick('${displayedExercises[i].name}')" style="display: flex; border-top: 1px solid lightgrey; padding: 3px; cursor: pointer;">
+                            <img src="${displayedExercises[i].iconUrl}" height="35" width="35" style="margin: 5px">
+                            <div style="display: inline-block; margin-left: 6px;">
+                                <span style="display: block">${displayedExercises[i].name}(${displayedExercises[i].bodyPart})</span>
+                            </div>
+                        </a>`;
                 let newElement = document.createElement('div');
                 newElement.className = 'card';
                 newElement.innerHTML = newElementHtml;

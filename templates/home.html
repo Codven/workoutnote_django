@@ -590,12 +590,12 @@
         }
 
         function clearExercises() {
-            {#for (let i = 0; i < newExercises.length; i++)#}
-            {#    if (newExercises[i].enabled) {#}
-            {#        newExercises.splice(i, 1);#}
-            {#        i--;#}
-            {#    }#}
-            message_broadcast({action: 'exercises', value: []});
+            for (let i = 0; i < newExercises.length; i++)
+                if (newExercises[i].enabled) {
+                    newExercises.splice(i, 1);
+                    i--;
+                }
+            message_broadcast({action: 'exercises', value: newExercises});
         }
 
         function saveExercises() {

@@ -147,6 +147,8 @@ def handle_index(request):
         api_models.SessionKey.objects.create(user=request.user, key=session_key)
     else:
         session_key = api_models.SessionKey.objects.get(user=request.user).key
+    # todo plot as in https://simpleisbetterthancomplex.com/tutorial/2020/01/19/how-to-use-chart-js-with-django.html
+    # todo customize plot as in https://www.chartjs.org/docs/latest/charts/line.html
     return render(request=request, template_name='home.html', context={
         'name': name if name else request.user.username,
         'at_home': True,
@@ -366,30 +368,6 @@ def handle_settings(request):
         'preferences': preferences,
         'gender': models.Preferences.Gender,
         'at_settings': True
-    })
-
-
-@login_required
-@require_http_methods(['GET', 'POST'])
-def handle_exercises(request):
-    then = timezone.now() - timedelta(days=6 * 30)
-    lifts = models.Lift.objects.filter(user=request.user, timestamp__gte=then)
-    plot_data = []
-    if lifts.exists():
-        for lift in lifts:
-            plot_data += [(lift.timestamp, lift.one_rep_max)]
-    plot_data.sort(key=lambda x: x[0])
-    days = []
-    one_rep_maxes = []
-    for day, one_rep_max in plot_data:
-        days += [Tools.date2str(timezone.localtime(day), readable=True)]
-        one_rep_maxes += [one_rep_max]
-
-    # todo plot as in https://simpleisbetterthancomplex.com/tutorial/2020/01/19/how-to-use-chart-js-with-django.html
-    # todo customize plot as in https://www.chartjs.org/docs/latest/charts/line.html
-    return render(request=request, template_name='profile/exercises.html', context={
-        'days': days,
-        'one_rep_maxes': one_rep_maxes
     })
 
 

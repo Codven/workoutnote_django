@@ -164,6 +164,7 @@ def handle_fetch_exercises_api(request):
         exercises_arr += [{
             'id': exercise.id,
             'name': exercise.name,
+            'name_translations': exercise.name_translations,
             'body_part_str': exercise.body_part.name,
             'category_str': exercise.category.name,
             'icon_str': exercise.icon.name,
@@ -245,6 +246,7 @@ def handle_fetch_workouts_api(request):
                         'one_rep_max': lift.one_rep_max,
                         'exercise_id': lift.exercise.id,
                         'exercise_name': lift.exercise.name,
+                        'exercise_name_translations': lift.exercise.name_translations,
                         'lift_mass': lift.lift_mass,
                         'repetitions': lift.repetitions,
                     }]

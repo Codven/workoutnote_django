@@ -178,7 +178,7 @@
     }
 
     function message_broadcast(value) {
-        if (value.action === 'exercises')
+        if (value.action === 'lifts')
             localStorage.setItem('exercises_backup', JSON.stringify(value.value));
         localStorage.setItem('message', JSON.stringify(value));
         window.dispatchEvent(new Event('storage'));

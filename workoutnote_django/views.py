@@ -446,11 +446,6 @@ def handle_add_workout(request):
 @login_required
 @require_http_methods(['GET'])
 def handle_calendar(request):
-    workout_sessions = models.WorkoutSession.objects.filter(user=request.user)
-    workout_days = set()
-    if workout_sessions.exists():
-        for workout_session in workout_sessions:
-            workout_days.add(f'{workout_session.timestamp.year}/{workout_session.timestamp.month}/{workout_session.timestamp.day}')
     if not api_models.SessionKey.objects.filter(user=request.user).exists():
         session_key = api_models.SessionKey.generate_key(email=request.user.email)
         while api_models.SessionKey.objects.filter(key=session_key).exists():
@@ -462,8 +457,8 @@ def handle_calendar(request):
     return render(request=request, template_name='calendar.html', context={
         'title': '내 캘린더',
         'at_calendar': True,
-        'workout_days': list(workout_days),
-        'sessionKey': session_key
+        'sessionKey': session_key,
+        'exercises': models.Exercise.objects.all(),
     })
 
 

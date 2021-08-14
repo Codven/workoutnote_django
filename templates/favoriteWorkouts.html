@@ -62,14 +62,14 @@
         }
 
         function repeatFavoriteWorkoutSession(workoutSessionId) {
-            let exercises = [];
+            let lifts = [];
 
             for (let i = 0; i < favoriteWorkouts.length; i++)
                 if (favoriteWorkouts[i].workout_session_id === workoutSessionId) {
                     $("#workoutTitle").val(favoriteWorkouts[i].title);
                     for (let j = 0; j < favoriteWorkouts[i].lifts.length; j++) {
-                        exercises.push({
-                            id: exercises.length + 1,
+                        lifts.push({
+                            id: lifts.length + 1,
                             exercise: findExerciseByName(favoriteWorkouts[i].lifts[j].exerciseName),
                             liftMass: favoriteWorkouts[i].lifts[j].liftMass,
                             reps: favoriteWorkouts[i].lifts[j].reps,
@@ -81,7 +81,7 @@
                 }
 
             // send as a broadcast to all tabs i.e. save locally
-            message_broadcast({action: 'exercises', value: exercises});
+            message_broadcast({action: 'lifts', value: lifts});
 
             // redirect to index page
             window.location.href = '{% url 'index' %}';

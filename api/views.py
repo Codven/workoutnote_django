@@ -1,8 +1,8 @@
 from django.views.decorators.http import require_http_methods
-from django.contrib.auth import login, authenticate
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.models import User as django_User
 from workoutnote_django import models as wn_models, settings
+from django.contrib.auth.models import User as django_User
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import login, authenticate
 from django.core.mail import EmailMessage
 from datetime import datetime, timedelta
 from django.http import JsonResponse
@@ -11,6 +11,7 @@ from api import models
 import random
 import time
 import json
+import pytz
 
 
 # region auth
@@ -313,7 +314,7 @@ def handle_insert_workout_api(request):
 @csrf_exempt
 def handle_fetch_workouts_api(request):
     # 0. expected and received params
-    required_params = ['sessionKey', 'dateTimestampMs']
+    required_params = ['sessionKey', 'fromTimestampMs', 'tillTimestampMs']
     received_params = json.loads(request.body.decode('utf8'))
 
     # 1. all params check
@@ -321,9 +322,8 @@ def handle_fetch_workouts_api(request):
         return JsonResponse(data={'success': False, 'reason': f'bad params, must provide {",".join(required_params)}'})
     else:
         session_key = received_params['sessionKey']
-        date = datetime.utcfromtimestamp(int(received_params['dateTimestampMs']) / 1000)
-        date_from_ts = date.replace(hour=0, minute=0, second=0, microsecond=0)
-        date_till_ts = date.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1)
+        date_from_ts = datetime.utcfromtimestamp(int(received_params['fromTimestampMs']) / 1000)
+        date_till_ts = datetime.utcfromtimestamp(int(received_params['tillTimestampMs']) / 1000)
 
     # 2. sessionKey check
     if not models.SessionKey.objects.filter(key=session_key).exists():
@@ -440,6 +440,41 @@ def handle_remove_workout_api(request):
             'duration': workout_session.duration,
         }
     })
+
+
+# endregion
+
+
+# region calendar
+@csrf_exempt
+@require_http_methods(['POST'])
+def handle_fetch_workout_days(request):
+    # 0. expected and received params
+    required_params = ['sessionKey', 'timezoneOffsetMinutes']
+    received_params = json.loads(request.body.decode('utf8'))
+
+    # 1. all params check
+    if False in [x in received_params for x in required_params]:
+        return JsonResponse(data={'success': False, 'reason': f'bad params, must provide {",".join(required_params)}'})
+    else:
+        session_key = received_params['sessionKey']
+        timezone_offset_minutes = int(received_params['timezoneOffsetMinutes'])
+
+    # 2. sessionKey check
+    if not models.SessionKey.objects.filter(key=session_key).exists():
+        return JsonResponse(data={'success': False, 'reason': 'double check sessionKey value'})
+    else:
+        user = models.SessionKey.objects.get(key=session_key).user
+
+    # 3. fetch workout days
+    workout_sessions = wn_models.WorkoutSession.objects.filter(user=user)
+    workout_days = set()
+    tss = set()
+    if workout_sessions.exists():
+        for workout_session in workout_sessions:
+            timestamp = workout_session.timestamp - timedelta(minutes=timezone_offset_minutes)
+            workout_days.add(f'{timestamp.year}/{timestamp.month}/{timestamp.day}')
+    return JsonResponse(data={'success': True, 'workoutDays': list(workout_days)})
 
 
 # endregion

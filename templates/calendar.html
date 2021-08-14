@@ -210,43 +210,62 @@
     <script>
         const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         const weekdayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-        const workoutDays = [{% for workout_day in workout_days %}'{{ workout_day }}'{% if not forloop.last %}, {% endif %}{% endfor %}]
+        const KG2LBS = 2.20462262185;
+        const ONE_REP_MAX_CONST = 0.025;
+        let workoutDays = [];
+        let displayedWorkouts = [];
+        let allExercises = [{% for exercise in exercises %}{id: {{ exercise.id }},
+                name: '{{ exercise.name }}',
+                nameTranslations: {{ exercise.name_translations|safe }},
+                iconUrl: '{{ exercise.icon.url }}',
+                bodyPart: '{{ exercise.body_part.name }}',
+                category: '{{ exercise.category.name }}'},{% endfor %}];
         let selectedMonth;
         let sessionKey;
 
         $(document).ready(function () {
-            selectedMonth = new Date();
-            selectedMonth.setDate(1);
-            selectedMonth.setHours(0);
-            selectedMonth.setMinutes(0);
-            selectedMonth.setSeconds(0);
-            selectedMonth.setMilliseconds(0);
-            loadMonth(selectedMonth);
+            let timezoneOffsetMinutes = new Date().getTimezoneOffset();
+            workoutDays = [];
+            $.post('/api/fetch_workout_days', `{"sessionKey": "{{ sessionKey }}", "timezoneOffsetMinutes": ${timezoneOffsetMinutes}}`, function (res) {
+                if (res.success)
+                    for (let i = 0; i < res.workoutDays.length; i++)
+                        workoutDays.push(res.workoutDays[i]);
 
-            let today = new Date();
-            today.setHours(1);
-            today.setMinutes(0);
-            today.setSeconds(0);
-            today.setMilliseconds(0);
-            fetchDayWorkouts(today.getTime());
+                selectedMonth = new Date();
+                selectedMonth.setDate(1);
+                selectedMonth.setHours(0);
+                selectedMonth.setMinutes(0);
+                selectedMonth.setSeconds(0);
+                selectedMonth.setMilliseconds(0);
+                loadMonth(selectedMonth);
+
+                let fromTs = new Date();
+                fromTs.setHours(0);
+                fromTs.setMinutes(0);
+                fromTs.setSeconds(0);
+                fromTs.setMilliseconds(0);
+                let tillTs = new Date(fromTs);
+                tillTs.setDate(fromTs.getDate() + 1);
+                fetchDayWorkouts(fromTs.getTime(), tillTs.getTime());
+            });
         });
 
         function loadMonth(date) {
             $("#calendar_table tr:not(:first-child)").empty();
 
-            let mo = new Date(date.getTime());
-            mo.setDate(1);
-            mo.setHours(0);
-            mo.setMinutes(0);
-            mo.setSeconds(0);
-            mo.setMilliseconds(0);
+            let dateTs = new Date(date.getTime());
+            dateTs.setDate(1);
+            dateTs.setHours(0);
+            dateTs.setMinutes(0);
+            dateTs.setSeconds(0);
+            dateTs.setMilliseconds(0);
 
-            $('#month_text').html(`${monthNames[mo.getMonth()]}, ${mo.getFullYear()}`);
+            $('#month_text').html(`${monthNames[dateTs.getMonth()]}, ${dateTs.getFullYear()}`);
 
             // days before this month
-            if (mo.getDay() !== 0) {
+            if (dateTs.getDay() !== 0) {
                 $('#calendar_table tr:last').after('<tr></tr>');
-                for (let i = 0; i < mo.getDay(); i++)
+                for (let i = 0; i < dateTs.getDay(); i++)
                     $('#calendar_table tr:last').append('<td></td>');
             }
 
@@ -257,21 +276,18 @@
             today.setMilliseconds(0);
 
             // current month days
-            let currentMonth = mo.getMonth();
-            while (mo.getMonth() === currentMonth) {
-                if (mo.getDay() === 0)
+            let currentMonth = dateTs.getMonth();
+            while (dateTs.getMonth() === currentMonth) {
+                if (dateTs.getDay() === 0)
                     $('#calendar_table tr:last').after('<tr></tr>');
+                let dateStr = `${dateTs.getFullYear()}/${dateTs.getMonth() + 1}/${dateTs.getDate()}`;
 
-                let moNoTz = new Date(mo.getTime());
-                moNoTz.setUTCHours(0);
-                moNoTz.setUTCMinutes(0);
-                moNoTz.setUTCSeconds(0);
-                moNoTz.setUTCMilliseconds(0);
-                let moNoTzStr = `${moNoTz.getFullYear()}/${moNoTz.getMonth() + 1}/${moNoTz.getDate()}`;
+                let tillTs = new Date(dateTs.getTime());
+                tillTs.setDate(dateTs.getDate() + 1);
 
-                $('#calendar_table tr:last').append(`<td><button onclick="fetchDayWorkouts(${mo.getTime()});" class="calendar_cell ${$.inArray(moNoTzStr, workoutDays) > -1 ? "calendar_cell_outline" : ""} ${today.getTime() === mo.getTime() ? "today_cell" : ""}">${mo.getDate()}</button></td>`);
+                $('#calendar_table tr:last').append(`<td><button onclick="fetchDayWorkouts(${dateTs.getTime()}, ${tillTs.getTime()});" class="calendar_cell ${$.inArray(dateStr, workoutDays) > -1 ? "calendar_cell_outline" : ""} ${today.getTime() === dateTs.getTime() ? "today_cell" : ""}">${dateTs.getDate()}</button></td>`);
 
-                mo.setDate(mo.getDate() + 1);
+                dateTs.setDate(dateTs.getDate() + 1);
             }
         }
 
@@ -286,6 +302,7 @@
         }
 
         function displayWorkouts(ts, workouts) {
+            displayedWorkouts = workouts;
             let date = new Date(ts);
 
             let rootDiv = $('#selected_date_content');
@@ -319,11 +336,48 @@
                             ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}
                         </span> <br>
                     </div>`);
+                subDiv.append(
+                    `<div style="padding: 8px; text-align: center;" class="repeatButton">
+                        <a onclick="repeatWorkoutSession(${workouts[i].id});" class="w3-button w3-buttoncolor" style="padding: 5px 30px 5px 30px; border-radius: 4px; display: block; margin-top: 10px;">반복하기</a>
+                    </div>`
+                );
             }
         }
 
-        function fetchDayWorkouts(ts) {
-            $.post('/api/fetch_workouts', `{"sessionKey": "{{ sessionKey }}", "dateTimestampMs": ${ts}}`).done((res) => res.success ? displayWorkouts(ts, res.workouts) : alert('No workout data found on selected day!'));
+        function findExerciseByName(name) {
+            for (let i = 0; i < allExercises.length; i++)
+                if (allExercises[i].name === name)
+                    return allExercises[i];
+            return null;
+        }
+
+        function repeatWorkoutSession(workoutSessionId) {
+            let lifts = [];
+
+            for (let i = 0; i < displayedWorkouts.length; i++)
+                if (displayedWorkouts[i].id === workoutSessionId) {
+                    for (let j = 0; j < displayedWorkouts[i].lifts.length; j++) {
+                        lifts.push({
+                            id: lifts.length + 1,
+                            exercise: findExerciseByName(displayedWorkouts[i].lifts[j].exercise_name),
+                            liftMass: displayedWorkouts[i].lifts[j].lift_mass,
+                            reps: displayedWorkouts[i].lifts[j].repetitions,
+                            enabled: true,
+                            rmMax: Math.trunc((displayedWorkouts[i].lifts[j].lift_mass + displayedWorkouts[i].lifts[j].lift_mass * displayedWorkouts[i].lifts[j].repetitions * ONE_REP_MAX_CONST) * 100) / 100
+                        });
+                    }
+                    break;
+                }
+
+            // send as a broadcast to all tabs i.e. save locally
+            message_broadcast({action: 'lifts', value: lifts});
+
+            // redirect to index page
+            window.location.href = '{% url 'index' %}';
+        }
+
+        function fetchDayWorkouts(fromTs, tillTs) {
+            $.post('/api/fetch_workouts', `{"sessionKey": "{{ sessionKey }}", "fromTimestampMs": ${fromTs}, "tillTimestampMs": ${tillTs}}`).done((res) => res.success ? displayWorkouts(fromTs, res.workouts) : alert('No workout data found on selected day!'));
         }
     </script>
 {% endblock %}

@@ -265,8 +265,8 @@
             return null;
         }
 
-        let newExercises = [];
-        let newSetNumber = 1, newExercise = "{{ exercises.0.name }}", newWeight = 1, newReps = 1;
+        let newLifts = [];
+        let newSetNumber = 1, newLift = "{{ exercises.0.name }}", newWeight = 1, newReps = 1;
 
         {% load tools %}
         let allWorkouts = [
@@ -296,7 +296,7 @@
                 el.html(el.html().toLowerCase() === 'kg' ? 'LBS' : 'KG');
 
                 // region inserted exercise rows
-                setNewExercisesOnUI(newExercises);
+                setNewLiftsOnUI(newLifts);
                 // endregion
                 // region new exercise row
                 let newLiftWeight = $('#newLiftWeight');
@@ -317,12 +317,14 @@
                 newRmMax.prop('disabled', false);
                 // endregion
                 // region workouts
-                let today = new Date();
-                today.setHours(1);
-                today.setMinutes(0);
-                today.setSeconds(0);
-                today.setMilliseconds(0);
-                fetchTodayDayWorkouts(today.getTime());
+                let fromTs = new Date();
+                fromTs.setUTCHours(0);
+                fromTs.setUTCMinutes(0);
+                fromTs.setUTCSeconds(0);
+                fromTs.setUTCMilliseconds(0);
+                let tillTs = new Date(fromTs);
+                tillTs.setDate(fromTs.getDate() + 1);
+                fetchTodayDayWorkouts(fromTs.getTime(), tillTs.getTime());
                 // endregion
             });
 
@@ -365,9 +367,9 @@
             // tabs communication
             window.addEventListener("storage", function (_) {
                 let event = JSON.parse(localStorage.getItem('message'));
-                if (event.action === 'exercises') {
-                    newExercises = event.value;
-                    setNewExercisesOnUI(newExercises);
+                if (event.action === 'lifts') {
+                    newLifts = event.value;
+                    setNewLiftsOnUI(newLifts);
                 } else if (event.action === 'stopwatchData') {
                     let stopwatchData = event.value;
                     $('#exerciseDurationDisplay').html(pad(stopwatchData.hours, 2) + ':' + pad(stopwatchData.minutes, 2) + ':' + pad(stopwatchData.seconds, 2));
@@ -378,8 +380,8 @@
             // recovers exercises from local storage (backupped when closing tab)
             let prevExercises = localStorage.getItem('exercises_backup');
             if (prevExercises != null) {
-                newExercises = JSON.parse(prevExercises);
-                setNewExercisesOnUI(newExercises);
+                newLifts = JSON.parse(prevExercises);
+                setNewLiftsOnUI(newLifts);
             }
 
             let params = window.location.search.substr(1).split("&");
@@ -398,32 +400,34 @@
                 selectExerciseClick(exercise.name);
             }
 
-            let today = new Date();
-            today.setHours(1);
-            today.setMinutes(0);
-            today.setSeconds(0);
-            today.setMilliseconds(0);
-            fetchTodayDayWorkouts(today.getTime());
+            let fromTs = new Date();
+            fromTs.setHours(0);
+            fromTs.setMinutes(0);
+            fromTs.setSeconds(0);
+            fromTs.setMilliseconds(0);
+            let tillTs = new Date(fromTs);
+            tillTs.setDate(fromTs.getDate() + 1);
+            fetchTodayDayWorkouts(fromTs.getTime(), tillTs.getTime());
         });
 
-        function setNewExercisesOnUI(exercises) {
+        function setNewLiftsOnUI(lifts) {
             $("#newExercisesTable tr:not(:last-child, :first-child)").empty();
 
-            for (let i = 0; i < exercises.length; i++) {
-                let rmMaxLbs = Math.trunc((exercises[i].liftMass * KG2LBS + exercises[i].liftMass * KG2LBS * exercises[i].reps * ONE_REP_MAX_CONST) * 100) / 100;
-                if (exercises[i].enabled) {
+            for (let i = 0; i < lifts.length; i++) {
+                let rmMaxLbs = Math.trunc((lifts[i].liftMass * KG2LBS + lifts[i].liftMass * KG2LBS * lifts[i].reps * ONE_REP_MAX_CONST) * 100) / 100;
+                if (lifts[i].enabled) {
                     $('#newExercisesTable tr:last').before(
                         `<tr id="exerciseRow${i}">` +
-                        `   <td class="arrow_column">${i === 0 ? '' : `<a onclick="shiftLiftUp(${i});">△</a>`}${i === 0 || i === exercises.length - 1 ? '' : '<br>'}${i === exercises.length - 1 ? '' : `<a onclick="shiftLiftDown(${i});">▽</a>`}</td>` +
+                        `   <td class="arrow_column">${i === 0 ? '' : `<a onclick="shiftLiftUp(${i});">△</a>`}${i === 0 || i === lifts.length - 1 ? '' : '<br>'}${i === lifts.length - 1 ? '' : `<a onclick="shiftLiftDown(${i});">▽</a>`}</td>` +
                         `   <td onclick="copyExercise(${i});" class="set_column dark-blue-text">${i + 1}</td>` +
-                        `   <td onclick="copyExercise(${i});" class="exercise_column dark-blue-text">${exercises[i].exercise.name} (${exercises[i].exercise.bodyPart})</td>` +
+                        `   <td onclick="copyExercise(${i});" class="exercise_column dark-blue-text">${lifts[i].exercise.name} (${lifts[i].exercise.bodyPart})</td>` +
                         `   <td class="weight_column">` +
-                        `       <input id="liftWeight${i}" class="newLiftWeight dark-blue-text" style="text-alight: center;" type="number" min="1" max="200" placeholder="1" value="${$('#weight_th').html().toLowerCase() === 'kg' ? exercises[i].liftMass : Math.trunc(exercises[i].liftMass * KG2LBS * 10) / 10}">` +
+                        `       <input id="liftWeight${i}" class="newLiftWeight dark-blue-text" style="text-alight: center;" type="number" min="1" max="200" placeholder="1" value="${$('#weight_th').html().toLowerCase() === 'kg' ? lifts[i].liftMass : Math.trunc(lifts[i].liftMass * KG2LBS * 10) / 10}">` +
                         `   </td>` +
                         `   <td class="repetition_column dark-blue-text">` +
-                        `       <input id="liftReps${i}" class="newLiftReps dark-blue-text" style="text-alight: center;" type="number" min="1" max="30" placeholder="1" value="${exercises[i].reps}">` +
+                        `       <input id="liftReps${i}" class="newLiftReps dark-blue-text" style="text-alight: center;" type="number" min="1" max="30" placeholder="1" value="${lifts[i].reps}">` +
                         `   </td>` +
-                        `   <td id="rmMax${i}" class="rm_column dark-blue-text">${$('#weight_th').html().toLowerCase() === 'kg' ? exercises[i].rmMax : rmMaxLbs}</td>` +
+                        `   <td id="rmMax${i}" class="rm_column dark-blue-text">${$('#weight_th').html().toLowerCase() === 'kg' ? lifts[i].rmMax : rmMaxLbs}</td>` +
                         `   <td class="done_column">` +
                         `       <a onclick="toggleExercise(${i});" class="w3-button w3-buttoncolor" style="padding: 5px; margin: 0; line-height: 1; border-radius: 2px;">` +
                         `           <img src="{% static 'checked.png' %}" height="20px">` +
@@ -435,21 +439,21 @@
                         let weight = parseInt($(`#liftWeight${i}`).val());
                         let reps = parseInt($(`#liftReps${i}`).val());
 
-                        exercises[i].liftMass = weight;
-                        exercises[i].reps = reps;
-                        exercises[i].rmMax = Math.trunc((weight + weight * reps * ONE_REP_MAX_CONST) * 100) / 100;
+                        lifts[i].liftMass = weight;
+                        lifts[i].reps = reps;
+                        lifts[i].rmMax = Math.trunc((weight + weight * reps * ONE_REP_MAX_CONST) * 100) / 100;
 
-                        message_broadcast({action: 'exercises', value: exercises});
+                        message_broadcast({action: 'lifts', value: lifts});
                     });
                 } else
                     $('#newExercisesTable tr:last').before(
                         `<tr id="exerciseRow${i}">` +
-                        `   <td class="arrow_column">${i === 0 ? '' : `<a onclick="shiftLiftUp(${i});">△</a>`}${i === 0 || i === exercises.length - 1 ? '' : '<br>'}${i === exercises.length - 1 ? '' : `<a onclick="shiftLiftDown(${i});">▽</a>`}</td>` +
+                        `   <td class="arrow_column">${i === 0 ? '' : `<a onclick="shiftLiftUp(${i});">△</a>`}${i === 0 || i === lifts.length - 1 ? '' : '<br>'}${i === lifts.length - 1 ? '' : `<a onclick="shiftLiftDown(${i});">▽</a>`}</td>` +
                         `	<td onclick="copyExercise(${i});" class="set_column light-grey-text">${i}</td>` +
-                        `	<td onclick="copyExercise(${i});" class="exercise_column light-grey-text">${exercises[i].exercise.name} (${exercises[i].exercise.bodyPart})</td>` +
-                        `	<td class="weight_column light-grey-text">${$('#weight_th').html().toLowerCase() === 'kg' ? exercises[i].liftMass : Math.trunc(exercises[i].liftMass * KG2LBS * 10) / 10}</td>` +
-                        `	<td class="repetition_column light-grey-text">${exercises[i].reps}</td>` +
-                        `	<td class="rm_column light-grey-text">${$('#weight_th').html().toLowerCase() === 'kg' ? exercises[i].rmMax : rmMaxLbs}</td>` +
+                        `	<td onclick="copyExercise(${i});" class="exercise_column light-grey-text">${lifts[i].exercise.name} (${lifts[i].exercise.bodyPart})</td>` +
+                        `	<td class="weight_column light-grey-text">${$('#weight_th').html().toLowerCase() === 'kg' ? lifts[i].liftMass : Math.trunc(lifts[i].liftMass * KG2LBS * 10) / 10}</td>` +
+                        `	<td class="repetition_column light-grey-text">${lifts[i].reps}</td>` +
+                        `	<td class="rm_column light-grey-text">${$('#weight_th').html().toLowerCase() === 'kg' ? lifts[i].rmMax : rmMaxLbs}</td>` +
                         `	<td class="done_column">` +
                         `		<a onclick="toggleExercise(${i});" class="w3-button w3-buttondisabledcolor" style="padding: 5px; margin: 0; line-height: 1; border-radius: 2px;">` +
                         `			<img src="{% static 'unchecked.png' %}" height="20px">` +
@@ -633,70 +637,70 @@
 
         function addNewExercise() {
             // add to array
-            newExercise = {
-                id: newExercises.length + 1,
+            newLift = {
+                id: newLifts.length + 1,
                 exercise: selectedExercise,
                 liftMass: newWeight,
                 reps: newReps,
                 enabled: true,
                 rmMax: Math.trunc((newWeight + newWeight * newReps * ONE_REP_MAX_CONST) * 100) / 100
             };
-            newExercises.push(newExercise);
+            newLifts.push(newLift);
 
             // send as a broadcast to all tabs i.e. save locally
-            message_broadcast({action: 'exercises', value: newExercises});
+            message_broadcast({action: 'lifts', value: newLifts});
         }
 
         function addNewExerciseWithRawValues(liftMass, reps, exerciseName, rmMax) {
             rmMax = Math.trunc((liftMass + liftMass * reps * ONE_REP_MAX_CONST) * 100) / 100;
             // add to array
-            newExercise = {
-                id: newExercises.length + 1,
+            newLift = {
+                id: newLifts.length + 1,
                 exercise: findExerciseByName(exerciseName),
                 liftMass: liftMass,
                 reps: reps,
                 enabled: true,
                 rmMax: rmMax // todo double check
             };
-            newExercises.push(newExercise);
+            newLifts.push(newLift);
 
             // send as a broadcast to all tabs i.e. save locally
-            message_broadcast({action: 'exercises', value: newExercises});
+            message_broadcast({action: 'lifts', value: newLifts});
         }
 
         function toggleExercise(idx) {
-            newExercises[idx].enabled = !newExercises[idx].enabled;
-            message_broadcast({action: 'exercises', value: newExercises});
+            newLifts[idx].enabled = !newLifts[idx].enabled;
+            message_broadcast({action: 'lifts', value: newLifts});
         }
 
         function copyExercise(idx) {
-            $('#selectedExerciseName').html(newExercises[idx].exercise.name);
-            $('#selectedBodyPart').html(newExercises[idx].exercise.bodyPart);
-            selectedExercise = newExercises[idx].exercise;
+            $('#selectedExerciseName').html(newLifts[idx].exercise.name);
+            $('#selectedBodyPart').html(newLifts[idx].exercise.bodyPart);
+            selectedExercise = newLifts[idx].exercise;
 
-            $('#newLiftWeight').val(newExercises[idx].liftMass);
-            $('#newLiftReps').val(newExercises[idx].reps);
-            $('#newRmMax').html(newExercises[idx].rmMax);
+            $('#newLiftWeight').val(newLifts[idx].liftMass);
+            $('#newLiftReps').val(newLifts[idx].reps);
+            $('#newRmMax').html(newLifts[idx].rmMax);
         }
 
         function shiftLiftUp(idx) {
             // swap lifts
-            let temp = newExercises[idx];
-            newExercises[idx] = newExercises[idx - 1];
-            newExercises[idx - 1] = temp;
+            let temp = newLifts[idx];
+            newLifts[idx] = newLifts[idx - 1];
+            newLifts[idx - 1] = temp;
 
             // update UI
-            message_broadcast({action: 'exercises', value: newExercises});
+            message_broadcast({action: 'lifts', value: newLifts});
         }
 
         function shiftLiftDown(idx) {
             // swap lifts
-            let temp = newExercises[idx];
-            newExercises[idx] = newExercises[idx + 1];
-            newExercises[idx + 1] = temp;
+            let temp = newLifts[idx];
+            newLifts[idx] = newLifts[idx + 1];
+            newLifts[idx + 1] = temp;
 
             // update UI
-            message_broadcast({action: 'exercises', value: newExercises});
+            message_broadcast({action: 'lifts', value: newLifts});
         }
 
         function repeatWorkoutSession(workoutSessionId) {
@@ -710,23 +714,23 @@
         }
 
         function clearExercises() {
-            for (let i = 0; i < newExercises.length; i++)
-                if (newExercises[i].enabled) {
-                    newExercises.splice(i, 1);
+            for (let i = 0; i < newLifts.length; i++)
+                if (newLifts[i].enabled) {
+                    newLifts.splice(i, 1);
                     i--;
                 }
-            message_broadcast({action: 'exercises', value: newExercises});
+            message_broadcast({action: 'lifts', value: newLifts});
         }
 
         function saveExercises() {
             // filter out disabled exercises
             let resExercises = [];
-            for (let i = 0; i < newExercises.length; i++)
-                if (newExercises[i].enabled)
+            for (let i = 0; i < newLifts.length; i++)
+                if (newLifts[i].enabled)
                     resExercises.push({
-                        exerciseName: newExercises[i].exercise.name,
-                        liftMass: newExercises[i].liftMass,
-                        repetitions: newExercises[i].reps,
+                        exerciseName: newLifts[i].exercise.name,
+                        liftMass: newLifts[i].liftMass,
+                        repetitions: newLifts[i].reps,
                     });
 
             if (resExercises.length > 0) {
@@ -740,7 +744,7 @@
                 }, function (response) {
                     try {
                         if (response.success) {
-                            message_broadcast({action: 'exercises', value: []});
+                            message_broadcast({action: 'lifts', value: []});
                             location.reload();
                         }
                     } catch (e) {
@@ -799,8 +803,8 @@
             }
         }
 
-        function fetchTodayDayWorkouts(ts) {
-            $.post('/api/fetch_workouts', `{"sessionKey": "{{ sessionKey }}", "dateTimestampMs": ${ts}}`).done((res) => res.success ? displayTodayWorkouts(ts, res.workouts) : null);
+        function fetchTodayDayWorkouts(fromTs, tillTs) {
+            $.post('/api/fetch_workouts', `{"sessionKey": "{{ sessionKey }}", "fromTimestampMs": ${fromTs}, "tillTimestampMs": ${tillTs}}`).done((res) => res.success ? displayTodayWorkouts(fromTs, res.workouts) : null);
         }
     </script>
 {% endblock %}

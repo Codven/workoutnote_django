@@ -74,11 +74,11 @@ def handle_register(request):
         password = request.POST['password']
         if django_User.objects.filter(username=email).exists() or len(password) < 4:
             return redirect(to='login')
-        elif 'verification_code' in request.POST and models.EmailConfirmationCodes.objects.filter(email=email).exists():
-            expected_code = models.EmailConfirmationCodes.objects.get(email=email).verification_code
+        elif 'verification_code' in request.POST and models.EmailConfirmationCode.objects.filter(email=email).exists():
+            expected_code = models.EmailConfirmationCode.objects.get(email=email).verification_code
             provided_code = request.POST['verification_code']
             if provided_code == expected_code:
-                models.EmailConfirmationCodes.objects.filter(email=email).delete()
+                models.EmailConfirmationCode.objects.filter(email=email).delete()
                 django_User.objects.create_user(username=email, password=password)
                 user = authenticate(request, username=email, password=password)
                 if user:
@@ -92,7 +92,7 @@ def handle_register(request):
                     return redirect(to='register')  # whatever the reason could be
             return redirect(to='login')
         else:
-            if not models.EmailConfirmationCodes.objects.filter(email=email).exists():
+            if not models.EmailConfirmationCode.objects.filter(email=email).exists():
                 verification_code = ''.join([str(random.randint(0, 9)) for _ in range(6)])
                 email_message = EmailMessage(
                     'Workoutnote.com email verification',
@@ -102,7 +102,7 @@ def handle_register(request):
                 )
                 email_message.fail_silently = False
                 email_message.send()
-                models.EmailConfirmationCodes.objects.create(email=email, verification_code=verification_code)
+                models.EmailConfirmationCode.objects.create(email=email, verification_code=verification_code)
             return render(request=request, template_name='auth.html', context={
                 'verify_now': True,
                 'name': name,
@@ -431,7 +431,7 @@ def handle_calendar(request):
 @login_required
 @require_http_methods(['GET'])
 def handle_favorite_workouts(request):
-    favorite_workout_sessions = models.FavoriteWorkouts.objects.filter(user=request.user)
+    favorite_workout_sessions = models.FavoriteWorkout.objects.filter(user=request.user)
     workouts_by_days = {}
     for favorite_workout in favorite_workout_sessions:
         db_lifts = models.Lift.objects.filter(workout_session=favorite_workout.workout_session).order_by('id')

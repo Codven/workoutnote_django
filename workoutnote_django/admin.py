@@ -4,9 +4,9 @@ from workoutnote_django.models import Preferences
 from workoutnote_django.models import WorkoutSession
 from workoutnote_django.models import BodyPart
 from workoutnote_django.models import Category
-from workoutnote_django.models import EmailConfirmationCodes
-from workoutnote_django.models import FavoriteExercises
-from workoutnote_django.models import FavoriteWorkouts
+from workoutnote_django.models import EmailConfirmationCode
+from workoutnote_django.models import FavoriteExercise
+from workoutnote_django.models import FavoriteWorkout
 from django.contrib import admin
 
 
@@ -15,7 +15,7 @@ class ExerciseAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'name_translations', 'body_part', 'category']
 
 
-@admin.register(FavoriteExercises)
+@admin.register(FavoriteExercise)
 class FavoriteExercisesAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'exercise']
 
@@ -40,7 +40,7 @@ class WorkoutSessionAdmin(admin.ModelAdmin):
     list_display = ['id', 'timestamp', 'user', 'title', 'duration']
 
 
-@admin.register(FavoriteWorkouts)
+@admin.register(FavoriteWorkout)
 class FavoriteWorkoutsAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'workout_session']
 
@@ -50,6 +50,6 @@ class LiftAdmin(admin.ModelAdmin):
     list_display = ['id', 'timestamp', 'exercise', 'workout_session', 'lift_mass', 'repetitions', 'one_rep_max']
 
 
-@admin.register(EmailConfirmationCodes)
+@admin.register(EmailConfirmationCode)
 class EmailConfirmationCodesAdmin(admin.ModelAdmin):
     list_display = ['email', 'verification_code']

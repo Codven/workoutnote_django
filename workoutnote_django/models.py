@@ -35,7 +35,7 @@ class Preferences(models.Model):
         return today.year - self.date_of_birth.year - ((today.month, today.day) < (self.date_of_birth.month, self.date_of_birth.day))
 
 
-class EmailConfirmationCodes(models.Model):
+class EmailConfirmationCode(models.Model):
     email = models.CharField(max_length=128, primary_key=True)
     verification_code = models.CharField(max_length=16)
 
@@ -91,7 +91,7 @@ class Exercise(models.Model):
         return f'{self.name} ({self.body_part}, {self.category})'
 
 
-class FavoriteExercises(models.Model):
+class FavoriteExercise(models.Model):
     user = models.ForeignKey(to=django_User, on_delete=models.CASCADE)
     exercise = models.ForeignKey(to='Exercise', on_delete=models.CASCADE)
 
@@ -116,7 +116,7 @@ class WorkoutSession(models.Model):
         return f'{self.user.username}, {self.timestamp}, {self.title}, {self.duration}'
 
 
-class FavoriteWorkouts(models.Model):
+class FavoriteWorkout(models.Model):
     user = models.ForeignKey(to=django_User, on_delete=models.CASCADE)
     workout_session = models.ForeignKey(to='WorkoutSession', on_delete=models.CASCADE)
 

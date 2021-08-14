@@ -60,8 +60,8 @@ def handle_send_verification_code_api(request):
         email = received_params['email']
 
     # 2. check pre-existing email confirmation code
-    if wn_models.EmailConfirmationCodes.objects.filter(email=email).exists():
-        wn_models.EmailConfirmationCodes.objects.filter(email=email).delete()
+    if wn_models.EmailConfirmationCode.objects.filter(email=email).exists():
+        wn_models.EmailConfirmationCode.objects.filter(email=email).delete()
 
     # 3. generate email confirmation code
     verification_code = ''.join([str(random.randint(0, 9)) for _ in range(6)])
@@ -73,7 +73,7 @@ def handle_send_verification_code_api(request):
     )
     email_message.fail_silently = False
     email_message.send()
-    wn_models.EmailConfirmationCodes.objects.create(email=email, verification_code=verification_code)
+    wn_models.EmailConfirmationCode.objects.create(email=email, verification_code=verification_code)
     return JsonResponse(data={'success': True})
 
 
@@ -94,10 +94,10 @@ def handle_verify_register_api(request):
         provided_verification_code = received_params['verification_code']
 
     # 2. expected email verification code check
-    if not wn_models.EmailConfirmationCodes.objects.filter(email=email).exists():
+    if not wn_models.EmailConfirmationCode.objects.filter(email=email).exists():
         return JsonResponse(data={'success': False, 'reason': 'user already exists or password is too short'})
     else:
-        email_confirmation = wn_models.EmailConfirmationCodes.objects.get(email=email)
+        email_confirmation = wn_models.EmailConfirmationCode.objects.get(email=email)
 
     # 3. pre-existing user and password length check
     if django_User.objects.filter(username=email).exists() or len(password) < 4:
@@ -313,7 +313,7 @@ def handle_fetch_workouts_api(request):
                 'title': workout_session.title,
                 'timestamp': int(workout_session.timestamp.timestamp() * 1000),
                 'duration': workout_session.duration,
-                'isFavorite': wn_models.FavoriteWorkouts.objects.filter(user=user, workout_session=workout_session).exists(),
+                'isFavorite': wn_models.FavoriteWorkout.objects.filter(user=user, workout_session=workout_session).exists(),
                 'lifts': lifts
             }
         ]
@@ -610,8 +610,8 @@ def handle_set_favorite_exercise_api(request):
         exercise = wn_models.Exercise.objects.get(id=exercise_id)
 
     # 4. set exercise as favorite
-    if not wn_models.FavoriteExercises.objects.filter(user=user, exercise=exercise).exists():
-        wn_models.FavoriteExercises.objects.create(user=user, exercise=exercise)
+    if not wn_models.FavoriteExercise.objects.filter(user=user, exercise=exercise).exists():
+        wn_models.FavoriteExercise.objects.create(user=user, exercise=exercise)
     return JsonResponse(data={'success': True})
 
 
@@ -642,8 +642,8 @@ def handle_unset_favorite_exercise_api(request):
         exercise = wn_models.Exercise.objects.get(id=exercise_id)
 
     # 4. set exercise as favorite
-    if wn_models.FavoriteExercises.objects.filter(user=user, exercise=exercise).exists():
-        wn_models.FavoriteExercises.objects.filter(user=user, exercise=exercise).delete()
+    if wn_models.FavoriteExercise.objects.filter(user=user, exercise=exercise).exists():
+        wn_models.FavoriteExercise.objects.filter(user=user, exercise=exercise).delete()
     return JsonResponse(data={'success': True})
 
 
@@ -668,7 +668,7 @@ def handle_fetch_favorite_exercises_api(request):
 
     # 3. fetch favorite exercises
     exercises_arr = []
-    for favorite_exercise in wn_models.FavoriteExercises.objects.filter(user=user):
+    for favorite_exercise in wn_models.FavoriteExercise.objects.filter(user=user):
         exercises_arr += [{
             'id': favorite_exercise.exercise.id,
             'name': favorite_exercise.exercise.name,
@@ -710,8 +710,8 @@ def handle_set_favorite_workout_api(request):
         workout_session = wn_models.WorkoutSession.objects.get(id=workout_session_id, user=user)
 
     # 4. set workout session as favorite
-    if not wn_models.FavoriteWorkouts.objects.filter(user=user, workout_session=workout_session).exists():
-        wn_models.FavoriteWorkouts.objects.create(user=user, workout_session=workout_session)
+    if not wn_models.FavoriteWorkout.objects.filter(user=user, workout_session=workout_session).exists():
+        wn_models.FavoriteWorkout.objects.create(user=user, workout_session=workout_session)
     return JsonResponse(data={'success': True})
 
 
@@ -742,8 +742,8 @@ def handle_unset_favorite_workout_api(request):
         workout_session = wn_models.WorkoutSession.objects.get(id=workout_session_id, user=user)
 
     # 4. set workout session as favorite
-    if wn_models.FavoriteWorkouts.objects.filter(user=user, workout_session=workout_session).exists():
-        wn_models.FavoriteWorkouts.objects.filter(user=user, workout_session=workout_session).delete()
+    if wn_models.FavoriteWorkout.objects.filter(user=user, workout_session=workout_session).exists():
+        wn_models.FavoriteWorkout.objects.filter(user=user, workout_session=workout_session).delete()
     return JsonResponse(data={'success': True})
 
 
@@ -768,7 +768,7 @@ def handle_fetch_favorite_workouts_api(request):
 
     # 3. fetch favorite workouts
     workout_sessions_arr = []
-    for favorite_workout in wn_models.FavoriteWorkouts.objects.filter(user=user):
+    for favorite_workout in wn_models.FavoriteWorkout.objects.filter(user=user):
         lifts_arr = []
         for lift in wn_models.Lift.objects.filter(workout_session=favorite_workout.workout_session):
             lifts_arr += [{

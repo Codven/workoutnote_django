@@ -10,6 +10,7 @@ urlpatterns = [
     # settings
     re_path('^fetch_settings/?', views.handle_fetch_settings_api),
     re_path('^update_settings/?', views.handle_update_settings_api),
+    re_path('^request_password_reset/?', views.handle_send_reset_password_email_api),
 
     # exercises & body parts
     re_path('^fetch_exercises/?', views.handle_fetch_exercises_api),

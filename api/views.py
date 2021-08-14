@@ -192,6 +192,45 @@ def handle_update_settings_api(request):
     return JsonResponse(data={'success': True})
 
 
+@csrf_exempt
+@require_http_methods(['POST'])
+def handle_send_reset_password_email_api(request):
+    # 0. expected and received params
+    required_params = ['email']
+    received_params = json.loads(request.body.decode('utf8'))
+
+    # 1. all params check
+    if False in [x in received_params for x in required_params]:
+        return JsonResponse(data={'success': False, 'reason': f'bad params, must provide {",".join(required_params)}'})
+    else:
+        email = received_params['email']
+
+    # 2. check user and session_key
+    if not django_User.objects.filter(username=email).exists():
+        return JsonResponse(data={'success': False, 'reason': 'user does not exist'})
+    else:
+        user = django_User.objects.get(username=email)
+    if not models.SessionKey.objects.filter(user__username=email).exists():
+        session_key = models.SessionKey.generate_key(email=email)
+        while models.SessionKey.objects.filter(key=session_key).exists():
+            time.sleep(0.001)
+            session_key = models.SessionKey.generate_key(email=email)
+        models.SessionKey.objects.create(user=user, key=session_key)
+    else:
+        session_key = models.SessionKey.objects.get(user=user).key
+
+    # 3. generate email confirmation code
+    email_message = EmailMessage(
+        'Workoutnote.com password reset link (do not share this!)',
+        f'Please proceed to the following link if you forgot your password, and would like to change it.\nhttps://workoutnote.com/reset_password/?k={session_key}"',
+        settings.EMAIL_HOST_USER,
+        [email],
+    )
+    email_message.fail_silently = False
+    email_message.send()
+    return JsonResponse(data={'success': True})
+
+
 # endregion
 
 

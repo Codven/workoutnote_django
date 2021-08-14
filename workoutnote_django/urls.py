@@ -21,6 +21,7 @@ urlpatterns = [
     path('accounts/logout/', views.handle_logout, name='logout'),
 
     path('settings/', views.handle_settings, name='settings'),
+    path('reset_password/', views.handle_password_reset, name='reset password'),
     path('add-workout/', views.handle_add_workout, name='add workout'),
     path('calendar/', views.handle_calendar, name='calendar'),
     path('favorite-workouts/', views.handle_favorite_workouts, name='favorite workouts'),

@@ -51,7 +51,7 @@ def handle_login(request, *args, **kwargs):
         if 'email' in request.POST and 'password' in request.POST:
             email = request.POST['email']
             password = request.POST['password']
-            user = authenticate(username=email, password=password)
+            user = authenticate(request, username=email, password=password)
             if user and user.is_authenticated:
                 login(request=request, user=user)
                 if 'next' in request.POST and len(request.POST['next']) > 0:
@@ -369,6 +369,45 @@ def handle_settings(request):
         'gender': models.Preferences.Gender,
         'at_settings': True
     })
+
+
+@require_http_methods(['GET', 'POST'])
+def handle_password_reset(request):
+    if request.method == 'GET':
+        # param check
+        if 'k' not in request.GET:
+            return redirect(to='login')
+        else:
+            session_key = request.GET['k']
+        # session_key check
+        if not api_models.SessionKey.objects.filter(key=session_key).exists():
+            return redirect(to='login')
+        # render reset password html
+        return render(request=request, template_name='resetPassword.html', context={
+            'title': '잊어버린 비밀번호 변경',
+            'sessionKey': session_key
+        })
+    else:
+        # param check
+        if 'sessionKey' not in request.POST or 'new_password' not in request.POST:
+            return redirect(to='login')
+        else:
+            session_key = request.POST['sessionKey']
+            new_password = request.POST['new_password']
+        # session_key check
+        if not api_models.SessionKey.objects.filter(key=session_key).exists():
+            return redirect(to='login')
+        else:
+            user = api_models.SessionKey.objects.get(key=session_key).user
+        # check password length
+        if len(new_password) < 4:
+            return redirect(to='login')
+        # update password
+        user.set_password(new_password)
+        user.save()
+        authenticate(request, username=user.username, password=new_password)
+        login(request=request, user=user)
+        return redirect(to='login')
 
 
 @login_required

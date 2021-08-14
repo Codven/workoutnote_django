@@ -466,18 +466,29 @@ def handle_calendar(request):
 @require_http_methods(['GET'])
 def handle_favorite_workouts(request):
     favorite_workout_sessions = models.FavoriteWorkout.objects.filter(user=request.user)
-    workouts_by_days = {}
+    # map day->workout->lift
+    temp = {}
     for favorite_workout in favorite_workout_sessions:
         db_lifts = models.Lift.objects.filter(workout_session=favorite_workout.workout_session).order_by('id')
         day_str = favorite_workout.workout_session.get_day_str()
         for db_lift in db_lifts:
-            if day_str in workouts_by_days:
-                if favorite_workout.workout_session in workouts_by_days[day_str]:
-                    workouts_by_days[day_str][favorite_workout.workout_session] += [db_lift]
+            if day_str in temp:
+                if favorite_workout.workout_session in temp[day_str]:
+                    temp[day_str][favorite_workout.workout_session] += [db_lift]
                 else:
-                    workouts_by_days[day_str][favorite_workout.workout_session] = [db_lift]
+                    temp[day_str][favorite_workout.workout_session] = [db_lift]
             else:
-                workouts_by_days[day_str] = {favorite_workout.workout_session: [db_lift]}
+                temp[day_str] = {favorite_workout.workout_session: [db_lift]}
+    # copy & sort by recency
+    workouts_by_days = []
+    for day_str in temp:
+        workout_sessions = []
+        for workout_session in temp[day_str]:
+            workout_sessions += [(workout_session, temp[day_str][workout_session])]
+        workout_sessions.sort(key=lambda x: x[0].timestamp, reverse=True)
+        workouts_by_days += [(day_str, workout_sessions)]
+    workouts_by_days.sort(key=lambda x: x[0], reverse=True)
+
     if not api_models.SessionKey.objects.filter(user=request.user).exists():
         session_key = api_models.SessionKey.generate_key(email=request.user.email)
         while api_models.SessionKey.objects.filter(key=session_key).exists():

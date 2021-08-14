@@ -864,6 +864,6 @@ def handle_fetch_favorite_workouts_api(request):
         }]
     return JsonResponse(data={
         'success': True,
-        'workoutSessions': workout_sessions_arr
+        'workouts': workout_sessions_arr
     })
 # endregion

@@ -308,6 +308,7 @@
             let rootDiv = $('#selected_date_content');
             rootDiv.empty();
             rootDiv.append(`<h4 style="color: #3f51b5"><b>${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}. ${weekdayNames[date.getDay()]}</b></h4>`);
+            workouts.sort((l, r) => l.timestamp < r.timestamp);
             for (let i = 0; i < workouts.length; i++) {
                 rootDiv.append(`<div class="sub_content" style="min-height: 190px;"></div>`);
                 let subDiv = $('.sub_content:last');

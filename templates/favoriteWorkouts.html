@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
     {% load static tools %}
+
+    <div id="favorite_workouts"></div>
+
     <div id="favorite_workouts">
-        {% for day_str, workouts in workouts_by_days.items %}
+        {% for day_str, workouts in workouts_by_days %}
             <h4 style="color: #3f51b5"><b>{{ day_str }}</b></h4>
-            {% for workout, lifts in workouts.items %}
+            {% for workout, lifts in workouts %}
                 <div class="sub_content" style="min-height: 190px;">
                     <div style="height: 12px; display: flex; align-content: center; justify-content: space-between;">
                         <span style="color: #3f51b5; font-weight: bold;" class="w3-left">{{ workout.title }}</span>
@@ -24,8 +27,8 @@
                         {% endfor %}
                     </div>
                     <div style="padding: 8px; text-align: center;" class="repeatButton">
-                    <span style="font-weight: bold; font-size: large;"
-                          class="light-blue-text">{{ workout.get_duration_str }}</span> <br>
+                        <span style="font-weight: bold; font-size: large;"
+                              class="light-blue-text">{{ workout.get_duration_str }}</span> <br>
                         <a onclick="repeatFavoriteWorkoutSession({{ workout.id }});" class="w3-button w3-buttoncolor"
                            style="padding: 5px 30px 5px 30px; border-radius: 4px; display: block; margin-top: 10px;">불러오기</a>
                     </div>
@@ -36,10 +39,9 @@
 
     <script>
         const ONE_REP_MAX_CONST = 0.025;
-
         let favoriteWorkouts = [
-            {% for _, workout_sessions in workouts_by_days.items %}
-                {% for workout_session, lifts in workout_sessions.items %}
+            {% for _, workout_sessions in workouts_by_days %}
+                {% for workout_session, lifts in workout_sessions %}
                     {
                         workout_session_id: {{ workout_session.id }},
                         title: "{{ workout_session.title }}",
@@ -47,6 +49,7 @@
                     },
                 {% endfor %}
             {% endfor %}];
+
         let allExercises = [{% for exercise in exercises %}{id: {{ exercise.id }},
                 name: '{{ exercise.name }}',
                 nameTranslations: {{ exercise.name_translations|safe }},

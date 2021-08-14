@@ -71,8 +71,8 @@ class Exercise(models.Model):
     name = models.CharField(max_length=64, unique=True)
     name_translations = models.JSONField(default=exercise_name_translations_default)
     icon = models.ImageField(upload_to='exercise_icons', default='default_icon.svg')
-    body_part = models.ForeignKey(to=BodyPart, null=True, on_delete=models.SET_NULL)
-    category = models.ForeignKey(to=Category, null=True, on_delete=models.SET_NULL)
+    body_part = models.ForeignKey(to=BodyPart, null=True, on_delete=models.CASCADE)
+    category = models.ForeignKey(to=Category, null=True, on_delete=models.CASCADE)
 
     @staticmethod
     def init_from_csv():
@@ -124,8 +124,8 @@ class FavoriteWorkouts(models.Model):
 class Lift(models.Model):
     id = models.AutoField(primary_key=True)
     timestamp = models.DateTimeField(auto_now_add=True)
-    workout_session = models.ForeignKey(to=WorkoutSession, null=True, on_delete=models.SET_NULL)
-    exercise = models.ForeignKey(to=Exercise, null=True, on_delete=models.SET_NULL)
+    workout_session = models.ForeignKey(to=WorkoutSession, null=True, on_delete=models.CASCADE)
+    exercise = models.ForeignKey(to=Exercise, null=True, on_delete=models.CASCADE)
     lift_mass = models.FloatField()
     repetitions = models.IntegerField()
     one_rep_max = models.FloatField(default=None)

@@ -18,6 +18,8 @@ urlpatterns = [
     # workout
     re_path('^insert_workout/?', views.handle_insert_workout_api),
     re_path('^fetch_workouts/?', views.handle_fetch_workouts_api),
+    re_path('^update_workout/?', views.handle_update_workout_api),
+    re_path('^remove_workout/?', views.handle_remove_workout_api),
 
     # lifts
     re_path('^insert_lift/?', views.handle_insert_lift_api),

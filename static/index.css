@@ -22,11 +22,7 @@ body {
 
 .sub_content {
     background-color: #fff;
-    box-shadow: 2px 2px 4px 0 rgba(0, 6, 177, 0.1),
-    -2px -2px 5px 0 rgba(2, 0, 121, 0.1),
-    2px -2px 5px 0 rgba(2, 0, 121, 0.1),
-    -2px 2px 5px 0 rgba(2, 0, 121, 0.1);
-    border-radius: 16px;
+    border-radius: 24px;
     margin-bottom: 30px;
     padding: 24px;
 }
@@ -349,8 +345,8 @@ a {
 
 .w3-buttoncolor, .w3-hover-buttoncolor:hover {
     color: #fff !important;
-    background-color: #020079 !important;
-    border: 1px solid #020079;
+    background-color: #5F36C4 !important;
+    border: 1px solid #5F36C4;
 }
 
 .w3-btn:hover {
@@ -505,7 +501,7 @@ a {
 }
 
 .w3-main, #main {
-    padding: 20px 20px 20px 20px;
+    padding: 40px;
     transition: margin-left .4s;
 }
 
@@ -1012,10 +1008,6 @@ a {
 
 .w3-row-padding, .w3-row-padding > .w3-half, .w3-row-padding > .w3-third, .w3-row-padding > .w3-twothird, .w3-row-padding > .w3-threequarter, .w3-row-padding > .w3-quarter, .w3-row-padding > .w3-col {
     padding: 0 8px
-}
-
-.w3-container, .w3-panel {
-    padding: 0.01em 16px
 }
 
 .w3-panel {

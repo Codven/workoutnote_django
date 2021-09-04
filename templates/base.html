@@ -27,15 +27,15 @@
     <div id="sidebar_middle_part" class="w3-padding-64 w3-large w3-text-grey" style="font-weight:bold">
         <a href="{% url 'index' %}" class="w3-bar-item w3-button {% if at_home %}w3-navcolor{% else %}w3-black{% endif %}">
             <img src="{% static 'Home-white.svg' %}" height="30" style="margin-left: 15px; margin-right: 5px">
-            <span>워킇아웃노트</span>
+            <span style="font-size: smaller;">워킇아웃노트</span>
         </a>
         <a href="{% url 'calendar' %}" class="w3-bar-item w3-button {% if at_calendar %}w3-navcolor{% else %}w3-black{% endif %}">
             <img src="{% static 'Calendar-white.svg' %}" height="30" style="margin-left: 15px; margin-right: 5px">
-            <span>캘린더</span>
+            <span style="font-size: smaller;">캘린더</span>
         </a>
         <a href="{% url 'calculators' %}" class="w3-bar-item w3-button {% if at_calculators %}w3-navcolor{% else %}w3-black{% endif %}">
             <img src="{% static 'Ranking-white.svg' %}" height="30" style="margin-left: 15px; margin-right: 5px">
-            <span>체력계산기</span>
+            <span style="font-size: smaller;">체력계산기</span>
         </a>
     </div>
     <div id="sidebar_bottom_part">
@@ -181,6 +181,18 @@
     #splashDiv img {
         display: none;
     }
+
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
 </style>
 
 <script>
@@ -257,12 +269,12 @@
     }
 
     function favoriteWorkoutsClick(button, workoutSessionId) {
-        let isFavorite = button.src.endsWith('{% static 'favorite_checked.png' %}');
+        let isFavorite = button.src.endsWith('{% static 'favorite-filled.png' %}');
         if (isFavorite) {
             // remove from favorites
             $.post('/api/unset_favorite_workout', `{"sessionKey": "{{ sessionKey }}", "workout_session_id": "${workoutSessionId}"}`).done(function (res) {
                 if (res.success)
-                    button.src = '{% static 'favorite_unchecked.png' %}';
+                    button.src = '{% static 'favorite-outlined.png' %}';
                 else
                     console.log(`failed to remove workoutSession(id=${workoutSessionId}) from favorites`);
             });
@@ -270,7 +282,7 @@
             // add to favorite
             $.post('/api/set_favorite_workout', `{"sessionKey": "{{ sessionKey }}", "workout_session_id": "${workoutSessionId}"}`).done(function (res) {
                 if (res.success)
-                    button.src = '{% static 'favorite_checked.png' %}';
+                    button.src = '{% static 'favorite-filled.png' %}';
                 else
                     console.log(`failed to add workoutSession(id=${workoutSessionId}) to favorites`);
             });

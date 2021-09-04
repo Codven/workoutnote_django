@@ -27,25 +27,25 @@
     <div id="sidebar_middle_part" class="w3-padding-64 w3-large w3-text-grey" style="font-weight:bold">
         <a href="{% url 'index' %}" class="w3-bar-item w3-button {% if at_home %}w3-navcolor{% else %}w3-black{% endif %}">
             <img src="{% static 'Home-white.svg' %}" height="30" style="margin-left: 15px; margin-right: 5px">
-            <span>홈</span>
+            <span>워킇아웃노트</span>
         </a>
         <a href="{% url 'calendar' %}" class="w3-bar-item w3-button {% if at_calendar %}w3-navcolor{% else %}w3-black{% endif %}">
             <img src="{% static 'Calendar-white.svg' %}" height="30" style="margin-left: 15px; margin-right: 5px">
-            <span>내 캘린더</span>
+            <span>캘린더</span>
         </a>
         <a href="{% url 'calculators' %}" class="w3-bar-item w3-button {% if at_calculators %}w3-navcolor{% else %}w3-black{% endif %}">
             <img src="{% static 'Ranking-white.svg' %}" height="30" style="margin-left: 15px; margin-right: 5px">
-            <span>체력 순위</span>
+            <span>체력계산기</span>
         </a>
     </div>
     <div id="sidebar_bottom_part">
-        <a href="{% url 'settings' %}" class="w3-bar-item w3-button {% if at_settings %}w3-navcolor{% else %}w3-black{% endif %}">
-            <img src="{% static 'Settings-white.svg' %}" height="50" width="50">
-            <span>설정</span>
-        </a>
-        <a href="{% url 'logout' %}" class="w3-bar-item w3-button" style="margin-bottom: 20px;">
+        <a id="logoutButton" href="{% url 'logout' %}" class="w3-bar-item w3-button">
             <img src="{% static 'Logout-white.svg' %}" height="30" style="margin-left: 15px; margin-right: 5px">
             <span>로그아웃</span>
+        </a>
+        <a id="myPageButton" href="{% url 'settings' %}" class="w3-bar-item w3-button {% if at_settings %}w3-navcolor{% else %}w3-black{% endif %}" style="margin-bottom: 20px;">
+            <img src="{% static 'Settings-white.svg' %}" height="50" width="50">
+            <span>마이페이지</span>
         </a>
         <span style="font-size: x-small; margin-left: 10px;">©2021 by Deltoid. All rights reserved.</span>
     </div>
@@ -142,13 +142,62 @@
     </div>
 </div>
 
+<div id="splashDiv">
+    <img alt="Workoutnote" src="{% static 'Logo-white.svg' %}" height="75" tabindex="0">
+</div>
+
 </body>
+
+<style>
+    body {
+        background-color: #E6DFF5;
+    }
+
+    #sidebar_bottom_part {
+        width: 250px;
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        margin-bottom: 24px;
+    }
+
+    .w3-main {
+        display: {% if request.user.is_authenticated %}block{% else %}none{% endif %};
+    }
+
+    #splashDiv {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #5F36C4;
+        z-index: 999;
+        display: {% if request.user.is_authenticated %}none{% else %}flex{% endif %};
+        align-items: center;
+        justify-content: center;
+    }
+
+    #splashDiv img {
+        display: none;
+    }
+</style>
 
 <script>
     let favoriteExercises = {};
 
     $(document).ready(function () {
         reloadFavoriteExercises();
+
+        let contentRoot = $('.w3-main');
+        let splash = $('#splashDiv');
+        let splashLogo = $('#splashDiv img');
+
+        {% if not request.user.is_authenticated %}
+            splash.delay(2000).fadeOut(300);
+            splashLogo.delay(1000).fadeIn(300);
+            setTimeout(() => contentRoot.show(), 2000);
+        {% endif %}
     });
 
     function reloadFavoriteExercises() {

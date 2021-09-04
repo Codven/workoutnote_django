@@ -756,6 +756,10 @@
             }
         }
 
+        function optionsClick(idx) {
+            console.log(idx);
+        }
+
         function displayTodayWorkouts(ts, workouts) {
             let date = new Date(ts);
 
@@ -768,8 +772,11 @@
                 rootDiv.append(`<div class="sub_content" ></div>`);
                 let subDiv = $('#today_workouts .sub_content:last');
                 subDiv.append(`<div style="height: 12px; display: flex; align-content: center; justify-content: space-between;">
-                    <span style="color: #3f51b5; font-weight: bold;" class="w3-left">${workouts[i].title}</span>
-                    <img onclick="favoriteWorkoutsClick(this, ${workouts[i].id});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="${workouts[i].isFavorite ? '{% static 'favorite_checked.png' %}' : '{% static 'favorite_unchecked.png' %}'}" width="22px" height="22px">
+                    <div>
+                        <span style="color: #3f51b5; font-weight: bold;" class="w3-left">${workouts[i].title}</span>
+                        <img onclick="favoriteWorkoutsClick(this, ${workouts[i].id});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="${workouts[i].isFavorite ? '{% static 'favorite_checked.png' %}' : '{% static 'favorite_unchecked.png' %}'}" width="22px" height="22px">
+                    </div>
+                    <img onclick="optionsClick(${workouts[i].id});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="{% static 'options.png' %}" width="22px" height="22px">
                 </div>`);
                 subDiv.append('<hr style="border: 1px solid lightgrey;">');
                 subDiv.append('<div style="display: inline-block; padding: 8px;"></div>');

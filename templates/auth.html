@@ -1,86 +1,123 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="login-page">
-        <div class="form">
-            <form action="{% url 'register' %}" method="post" class="register-form">
-                {% csrf_token %}
-                <input type="hidden" name="next" value="{{ request.GET.next }}"/>
-                <input type="text" name="name" placeholder="이름" {% if name %}value="{{ name }}" {% endif %} required/>
-                <input type="email" name="email" placeholder="이메일 주소" {% if email %}value="{{ email }}" {% endif %} required/>
-                <input type="password" name="password" placeholder="비밀번호" {% if password %}value="{{ password }}" {% endif %} required/>
-                {% if verify_now %}
-                    <input type="number" name="verification_code" placeholder="Verification code" required/>
-                {% endif %}
-                {% if verify_now %}
-                    <button>확인 및 등록</button>
-                {% else %}
-                    <button>등록</button>
-                    <p class="message">이미 등록되었습니까? <a href="#">로그인</a></p>
-                {% endif %}
-            </form>
-            <form action="{% url 'login' %}" method="post" class="login-form">
-                {% csrf_token %}
-                <input type="hidden" name="next" value="{{ request.GET.next }}"/>
-                <input id="email_input" type="email" name="email" placeholder="이메일 주소" required/>
-                <input type="password" name="password" placeholder="비밀번호" required/>
-                <button>로그인</button>
-                <p class="message">회원가입 안하셨나요? <a href="#">계정 생성</a></p>
-                <p class="message">비밀번호를 잊어 버렸습니까?? <a id="reset_password_text" href="#" style="cursor: pointer;">암호를 재설정</a></p>
-            </form>
+    <div id="loginDiv" class="formContainer">
+        <div>
+            <span>LOG IN</span>
+            <span>로그인합니다.</span>
+        </div>
+        <form action="{% url 'login' %}" id="loginForm" class="form" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}"/>
+            <input class="emailInput" type="email" name="email" placeholder="EMAIL / PHONE NUMBER"/>
+            <input class="passwordInput" type="password" name="password" placeholder="PASSWORD"/>
+            <button id="loginButton" class="button">로그인</button>
+            <p class="message">비밀번호를 잊어 버렸습니까?? <a id="reset_password_text" href="#" style="cursor: pointer;">암호를 재설정</a></p>
+            <a class="button" id="move2RegistrationButton">회원가입</a>
+        </form>
+    </div>
+
+    <div id="registerDiv" class="formContainer" style="display: none;">
+        <div>
+            <span>SIGN UP</span>
+            <span>회원가입이 필요합니다.</span>
+        </div>
+        <div id="registerForm" class="form">
+            <input class="nameInput" type="text" name="name" placeholder="NAME" {% if name %}value="{{ name }}" {% endif %}/>
+            <input class="emailInput" type="email" name="email" placeholder="EMAIL / PHONE NUMBER" {% if email %}value="{{ email }}" {% endif %}/>
+            <input class="passwordInput" type="password" name="password" placeholder="PASSWORD" {% if password %}value="{{ password }}" {% endif %}/>
+            <a id="registerButton" class="button" style="margin-bottom: 24px;">등록</a>
+            <a class="button" id="move2LoginButton">로그인</a>
+        </div>
+    </div>
+
+    <div id="verificationDiv" class="formContainer" style="display: none;">
+        <div>
+            <span>VERIFICATION</span>
+            <span>인증번호를 입력해주세요.</span>
+        </div>
+        <div id="verificationForm" class="form">
+            <input class="verificationInput" placeholder="인증번호입력"/>
+            <a id="verificationButton" class="button">완료</a>
         </div>
     </div>
 
     <style>
-        .login-page {
+        .formContainer {
+            background-color: white;
             width: 360px;
             padding: 3% 0 0;
-            margin: auto;
+            margin: 5% auto 5%;
+            border-radius: 36px;
+        }
+
+        .formContainer div:first-child {
+            padding: 24px 24px;
+            text-align: center;
+        }
+
+        .formContainer div:first-child span:first-child {
+            color: #6035C5;
+            font-weight: bold;
+            font-size: x-large;
+            display: block;
+        }
+
+        .formContainer div:first-child span:last-child {
+            color: black;
+            font-size: larger;
+            display: block;
         }
 
         .form {
             position: relative;
             z-index: 1;
-            background: #FFFFFF;
             max-width: 360px;
-            margin: 0 auto 100px;
             padding: 45px;
             text-align: center;
-            box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
         }
 
         .form input {
             font-family: "Roboto", sans-serif;
             outline: 0;
-            background: #f2f2f2;
             width: 100%;
-            border: 0;
-            margin: 0 0 15px;
-            padding: 15px;
             box-sizing: border-box;
             font-size: 14px;
+            border: 2px solid #5F36C4;
+            border-radius: 24px;
+            padding: 12px 18px;
+            margin-bottom: 6px;
         }
 
-        .form button {
+        .form .button {
+            display: block;
+            text-decoration: none;
             font-family: "Roboto", sans-serif;
             text-transform: uppercase;
             outline: 0;
-            background: #0006b1;
             width: 100%;
-            border: 0;
-            padding: 15px;
-            color: #FFFFFF;
             font-size: 14px;
-            -webkit-transition: all 0.3s ease;
-            transition: all 0.3s ease;
             cursor: pointer;
+            background-color: #5F36C4;
+            border: none;
+            color: white;
+            border-radius: 24px;
+            padding: 12px 18px;
+            margin-bottom: 6px;
+
+            transition: all 0.3s ease;
+            -webkit-transition: all 0.3s ease;
         }
 
-        .form button:hover, .form button:active, .form button:focus {
+        .form .button:hover {
+            background-color: #2F0694;
+        }
+
+        .form button:hover, .loginForm button:active, .loginForm button:focus {
             background: #020079;
         }
 
         .form .message {
-            margin: 15px 0 0;
+            margin: 6px 0 24px;
             color: #b3b3b3;
             font-size: 12px;
         }
@@ -89,37 +126,9 @@
             color: #020079;
             text-decoration: none;
         }
-
-        .form .register-form {
-            display: none;
-        }
-
-        .container .info h1 {
-            margin: 0 0 15px;
-            padding: 0;
-            font-size: 36px;
-            font-weight: 300;
-            color: #1a1a1a;
-        }
-
-        .container .info span {
-            color: #4d4d4d;
-            font-size: 12px;
-        }
-
-        .container .info span a {
-            color: #000000;
-            text-decoration: none;
-        }
     </style>
 
     <script>
-        {% if verify_now %}
-            document.addEventListener('DOMContentLoaded', (_) => {
-                $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
-            });
-        {% endif %}
-
         $('.message a:not(#reset_password_text)').click(function () {
             $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
         });
@@ -147,96 +156,76 @@
                         $('#reset_password_text').show();
                     });
             })
+
+            $('#move2RegistrationButton').click(function () {
+                $('#loginDiv').fadeOut(200);
+                $('#registerDiv').delay(200).fadeIn(200);
+            });
+            $('#move2LoginButton').click(function () {
+                $('#registerDiv').fadeOut(200);
+                $('#loginDiv').delay(200).fadeIn(200);
+            });
+
+            $('#registerButton').click(function () {
+                let name = $('#registerForm .nameInput').val();
+                let email = $('#registerForm .emailInput').val();
+                let password = $('#registerForm .passwordInput').val();
+                if (name.length < 2) {
+                    alert('Please enter your name, must be at least 2 characters!');
+                }
+                if (!isValidEmail(email)) {
+                    alert(`"${email}" is invalid email!`);
+                    return;
+                }
+                if (password.length < 4) {
+                    alert('Password is too short, must be at least 4 characters!');
+                    return;
+                }
+                $('#registerForm .button').fadeOut();
+                $.post('/api/send_verification_code', `{"email": "${email}"}`).done(function (res) {
+                    if (res.success) {
+                        $('#registerDiv').fadeOut(200);
+                        $('#verificationDiv').delay(200).fadeIn(200);
+                    } else
+                        alert('Failed to send verification code to the email, please try again later!');
+                    $('#registerForm .button').fadeIn();
+                });
+            });
+            $('#verificationButton').click(function () {
+                let name = $('#registerForm .nameInput').val();
+                let email = $('#registerForm .emailInput').val();
+                let password = $('#registerForm .passwordInput').val();
+                let verification = $('#verificationForm .verificationInput').val();
+                if (name.length < 2) {
+                    alert('Please enter your name, must be at least 2 characters!');
+                }
+                if (!isValidEmail(email)) {
+                    alert(`"${email}" is invalid email!`);
+                    return;
+                }
+                if (password.length < 4) {
+                    alert('Password is too short, must be at least 4 characters!');
+                    return;
+                }
+                if (verification.length < 6) {
+                    alert('Verification number is invalid, please try again!');
+                    return;
+                }
+                $('#verificationForm .button').fadeOut();
+                $.post('/api/verify_register', `{"name":"${name}", "email":"${email}", "password":"${password}", "verification_code":"${verification}"}`).done(function (res) {
+                    if (res.success) {
+                        alert('Successfully registered, you can sign in now!');
+                        $('#verificationDiv').fadeOut(200);
+                        $('#loginDiv').delay(200).fadeIn(200);
+                    } else {
+                        alert('Verification number is invalid, please try again!');
+                        $('#verificationDiv').fadeOut(200);
+                        $('#registerDiv').delay(200).fadeIn(200);
+                    }
+                    $('#verificationForm .button').fadeIn();
+                });
+            });
         });
     </script>
-
-    <div class="sub_content">
-        <h1>1 Rep Max 계산기</h1>
-        <div class="section-box">
-            <p>
-                모든 리프트에 대해 최대 1RM을 계산하기. 1rep max는 주어진 운동을 한 번 반복할 때 들 수 있는 최대 무게입니다.
-            </p>
-            <form id="oneRepMaxCalculator" action="{% url 'one rep max calculator' %}" method="post">
-                {% csrf_token %}
-                <div>
-                    <div><label for="liftmass" class="label">
-                        Lift
-                    </label></div>
-                    <div>
-                        <div class="field has-addons">
-                            <div class="control is-expanded">
-                                <input type="number" id="liftmass" name="liftmass" min="1" max="1500" required="required" step="0.1" class="input">
-                            </div>
-                            <div class="control"><span class="button is-static">kg</span></div>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div><label for="repetitions" class="label">반복</label></div>
-                    <div>
-                        <input type="number" name="repetitions" id="repetitions" min="1" max="500" class="input" required="required">
-                    </div>
-                </div>
-                <br>
-                <div>
-                    <div></div>
-                    <div>
-                        <div>
-                            <div class="control">
-                                <input type="submit" value="Calculate One Rep Max" class="button is-primary is-medium">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-        {% if calculator_result_status == 'OK' %}
-            <div class="section-box">
-                <h2 class="title is-3 is-size-4-mobile">
-                    Your one rep max is
-                    <strong>{{ result_number }} kg</strong>
-                </h2>
-                <table class="table is-fullwidth is-striped">
-                    <thead>
-                    <tr>
-                        <th style="width: 33%; text-align: left;">Percentage of 1RM</th>
-                        <th style="width: 33%; text-align: left;">Lift Weight</th>
-                        <th style="text-align: left;">1RM 반복</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for result_item in result_table_1 %}
-                        <tr>
-                            <td>{{ result_item.percentage }}%</td>
-                            <td>{{ result_item.liftmass }} kg</td>
-                            <td>{{ result_item.reps_of_1rm }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-
-                <div class="notification " style="background-color: #f0d500;">
-                    <table>
-                        <tbody>
-                        <tr>
-                            <td style="vertical-align: middle; width: 124px;" class="pr-2">
-                                <a href="https://runninglevel.com/?utm_source=runninglevel&amp;utm_medium=banner&amp;utm_campaign=launch&amp;utm_content=1rm_result" class="is-text" target="_blank">
-                                    <img src="/images/runninglevel.svg" width="112" height="28" alt="Running Level">
-                                </a>
-                            </td>
-                            <td style="vertical-align: middle">
-                                <strong>New!</strong> <a href="https://runninglevel.com/?utm_source=runninglevel&amp;utm_medium=banner&amp;utm_campaign=launch&amp;utm_content=1rm_result"
-                                                         class="is-text"
-                                                         target="_blank">Calculate your Running Level</a>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        {% elif calculator_result_status == 'FAIL' %}
-            <!---TODO: place the fail case here--->
-        {% endif %}
-    </div>
 
 {% endblock %}

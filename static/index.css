@@ -490,14 +490,6 @@ a {
     overflow: auto;
 }
 
-#sidebar_bottom_part {
-    height: 120px;
-    width: 250px;
-    position: fixed;
-    left: 0;
-    bottom: 0;
-}
-
 .w3-bar-block .w3-dropdown-hover, .w3-bar-block .w3-dropdown-click {
     width: 100%
 }

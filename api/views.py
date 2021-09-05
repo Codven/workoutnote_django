@@ -20,7 +20,7 @@ import pytz
 def handle_login_api(request):
     # 0. expected and received params
     required_params = ['email', 'password']
-    received_params = json.loads(request.body.decode('utf8'))
+    received_params = request.POST if 'email' in request.POST else json.loads(request.body.decode('utf8'))
 
     # 1. all params check
     if False in [x in received_params for x in required_params]:
@@ -52,7 +52,7 @@ def handle_login_api(request):
 def handle_send_verification_code_api(request):
     # 0. expected and received params
     required_params = ['email']
-    received_params = json.loads(request.body.decode('utf8'))
+    received_params = request.POST if 'email' in request.POST else json.loads(request.body.decode('utf8'))
 
     # 1. all params check
     if False in [x in received_params for x in required_params]:
@@ -83,7 +83,7 @@ def handle_send_verification_code_api(request):
 def handle_verify_register_api(request):
     # 0. expected and received params
     required_params = ['name', 'email', 'password', 'verification_code']
-    received_params = json.loads(request.body.decode('utf8'))
+    received_params = request.POST if 'email' in request.POST else json.loads(request.body.decode('utf8'))
 
     # 1. all params check
     if False in [x in received_params for x in required_params]:
@@ -127,7 +127,7 @@ def handle_verify_register_api(request):
 def handle_fetch_settings_api(request):
     # 0. expected and received params
     required_params = ['sessionKey']
-    received_params = json.loads(request.body.decode('utf8'))
+    received_params = request.POST if 'sessionKey' in request.POST else json.loads(request.body.decode('utf8'))
 
     # 1. all params check
     if False in [x in received_params for x in required_params]:
@@ -161,7 +161,7 @@ def handle_fetch_settings_api(request):
 def handle_update_settings_api(request):
     # 0. expected and received params
     required_params = ['sessionKey', 'new_name', 'new_date_of_birth', 'new_gender', 'new_is_profile_shared']
-    received_params = json.loads(request.body.decode('utf8'))
+    received_params = request.POST if 'sessionKey' in request.POST else json.loads(request.body.decode('utf8'))
 
     # 1. all params check
     if False in [x in received_params for x in required_params]:
@@ -198,7 +198,7 @@ def handle_update_settings_api(request):
 def handle_send_reset_password_email_api(request):
     # 0. expected and received params
     required_params = ['email']
-    received_params = json.loads(request.body.decode('utf8'))
+    received_params = request.POST if 'email' in request.POST else json.loads(request.body.decode('utf8'))
 
     # 1. all params check
     if False in [x in received_params for x in required_params]:
@@ -281,7 +281,7 @@ def handle_fetch_body_parts_api(request):
 def handle_insert_workout_api(request):
     # 0. expected and received params
     required_params = ['sessionKey', 'title', 'duration']
-    received_params = json.loads(request.body.decode('utf8'))
+    received_params = request.POST if 'sessionKey' in request.POST else json.loads(request.body.decode('utf8'))
 
     # 1. all params check
     if False in [x in received_params for x in required_params]:
@@ -315,7 +315,7 @@ def handle_insert_workout_api(request):
 def handle_fetch_workouts_api(request):
     # 0. expected and received params
     required_params = ['sessionKey', 'fromTimestampMs', 'tillTimestampMs']
-    received_params = json.loads(request.body.decode('utf8'))
+    received_params = request.POST if 'sessionKey' in request.POST else json.loads(request.body.decode('utf8'))
 
     # 1. all params check
     if False in [x in received_params for x in required_params]:
@@ -366,7 +366,7 @@ def handle_fetch_workouts_api(request):
 def handle_update_workout_api(request):
     # 0. expected and received params
     required_params = ['sessionKey', 'workout_session_id', 'new_title', 'new_duration']
-    received_params = json.loads(request.body.decode('utf8'))
+    received_params = request.POST if 'sessionKey' in request.POST else json.loads(request.body.decode('utf8'))
 
     # 1. all params check
     if False in [x in received_params for x in required_params]:
@@ -408,7 +408,7 @@ def handle_update_workout_api(request):
 def handle_remove_workout_api(request):
     # 0. expected and received params
     required_params = ['sessionKey', 'workout_session_id']
-    received_params = json.loads(request.body.decode('utf8'))
+    received_params = request.POST if 'sessionKey' in request.POST else json.loads(request.body.decode('utf8'))
 
     # 1. all params check
     if False in [x in received_params for x in required_params]:
@@ -451,7 +451,7 @@ def handle_remove_workout_api(request):
 def handle_fetch_workout_days(request):
     # 0. expected and received params
     required_params = ['sessionKey', 'timezoneOffsetMinutes']
-    received_params = json.loads(request.body.decode('utf8'))
+    received_params = request.POST if 'sessionKey' in request.POST else json.loads(request.body.decode('utf8'))
 
     # 1. all params check
     if False in [x in received_params for x in required_params]:
@@ -486,7 +486,7 @@ def handle_fetch_workout_days(request):
 def handle_insert_lift_api(request):
     # 0. expected and received params
     required_params = ['sessionKey', 'workout_session_id', 'exercise_id', 'lift_mass', 'repetitions']
-    received_params = json.loads(request.body.decode('utf8'))
+    received_params = request.POST if 'sessionKey' in request.POST else json.loads(request.body.decode('utf8'))
 
     # 1. all params check
     if False in [x in received_params for x in required_params]:
@@ -545,7 +545,7 @@ def handle_insert_lift_api(request):
 def handle_update_lift_api(request):
     # 0. expected and received params
     required_params = ['sessionKey', 'workout_session_id', 'lift_id', 'new_exercise_id', 'new_lift_mass', 'new_repetitions']
-    received_params = json.loads(request.body.decode('utf8'))
+    received_params = request.POST if 'sessionKey' in request.POST else json.loads(request.body.decode('utf8'))
 
     # 1. all params check
     if False in [x in received_params for x in required_params]:
@@ -607,7 +607,7 @@ def handle_update_lift_api(request):
 def handle_remove_lift_api(request):
     # 0. expected and received params
     required_params = ['sessionKey', 'workout_session_id', 'lift_id']
-    received_params = json.loads(request.body.decode('utf8'))
+    received_params = request.POST if 'sessionKey' in request.POST else json.loads(request.body.decode('utf8'))
 
     # 1. all params check
     if False in [x in received_params for x in required_params]:
@@ -662,7 +662,7 @@ def handle_remove_lift_api(request):
 def handle_set_favorite_exercise_api(request):
     # 0. expected and received params
     required_params = ['sessionKey', 'exercise_id']
-    received_params = json.loads(request.body.decode('utf8'))
+    received_params = request.POST if 'sessionKey' in request.POST else json.loads(request.body.decode('utf8'))
 
     # 1. all params check
     if False in [x in received_params for x in required_params]:
@@ -694,7 +694,7 @@ def handle_set_favorite_exercise_api(request):
 def handle_unset_favorite_exercise_api(request):
     # 0. expected and received params
     required_params = ['sessionKey', 'exercise_id']
-    received_params = json.loads(request.body.decode('utf8'))
+    received_params = request.POST if 'sessionKey' in request.POST else json.loads(request.body.decode('utf8'))
 
     # 1. all params check
     if False in [x in received_params for x in required_params]:
@@ -726,7 +726,7 @@ def handle_unset_favorite_exercise_api(request):
 def handle_fetch_favorite_exercises_api(request):
     # 0. expected and received params
     required_params = ['sessionKey']
-    received_params = json.loads(request.body.decode('utf8'))
+    received_params = request.POST if 'sessionKey' in request.POST else json.loads(request.body.decode('utf8'))
 
     # 1. all params check
     if False in [x in received_params for x in required_params]:
@@ -762,7 +762,7 @@ def handle_fetch_favorite_exercises_api(request):
 def handle_set_favorite_workout_api(request):
     # 0. expected and received params
     required_params = ['sessionKey', 'workout_session_id']
-    received_params = json.loads(request.body.decode('utf8'))
+    received_params = request.POST if 'sessionKey' in request.POST else json.loads(request.body.decode('utf8'))
 
     # 1. all params check
     if False in [x in received_params for x in required_params]:
@@ -794,7 +794,7 @@ def handle_set_favorite_workout_api(request):
 def handle_unset_favorite_workout_api(request):
     # 0. expected and received params
     required_params = ['sessionKey', 'workout_session_id']
-    received_params = json.loads(request.body.decode('utf8'))
+    received_params = request.POST if 'sessionKey' in request.POST else json.loads(request.body.decode('utf8'))
 
     # 1. all params check
     if False in [x in received_params for x in required_params]:
@@ -826,7 +826,7 @@ def handle_unset_favorite_workout_api(request):
 def handle_fetch_favorite_workouts_api(request):
     # 0. expected and received params
     required_params = ['sessionKey']
-    received_params = json.loads(request.body.decode('utf8'))
+    received_params = request.POST if 'sessionKey' in request.POST else json.loads(request.body.decode('utf8'))
 
     # 1. all params check
     if False in [x in received_params for x in required_params]:

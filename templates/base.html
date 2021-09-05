@@ -30,11 +30,11 @@
             <span style="font-size: smaller;">워킇아웃노트</span>
         </a>
         <a href="{% url 'calendar' %}" class="w3-bar-item w3-button {% if at_calendar %}w3-navcolor{% else %}w3-black{% endif %}">
-            <img src="{% static 'Calendar-white.svg' %}" height="30" style="margin-left: 15px; margin-right: 5px">
+            <img src="{% static 'calendar.svg' %}" height="30" style="margin-left: 15px; margin-right: 5px">
             <span style="font-size: smaller;">캘린더</span>
         </a>
         <a href="{% url 'calculators' %}" class="w3-bar-item w3-button {% if at_calculators %}w3-navcolor{% else %}w3-black{% endif %}">
-            <img src="{% static 'Ranking-white.svg' %}" height="30" style="margin-left: 15px; margin-right: 5px">
+            <img src="{% static 'reward.svg' %}" height="30" style="margin-left: 15px; margin-right: 5px">
             <span style="font-size: smaller;">체력계산기</span>
         </a>
     </div>
@@ -146,6 +146,24 @@
     <img alt="Workoutnote" src="{% static 'Logo-white.svg' %}" height="75" tabindex="0">
 </div>
 
+<div id="optionsDivRoot" class="alertDivRoot" style="display: none;">
+    <div id="optionsDiv" style="z-index: 999;">
+        <a style="color: black;">수정하기</a>
+        <hr style="border-top: 1px solid lightgray;">
+        <a style="color: red;">삭제하기</a>
+    </div>
+</div>
+
+<div id="deleteAlertDivRoot" class="alertDivRoot" style="display: none;">
+    <div id="deleteAlertDiv" style="z-index: 997;">
+        <a style="color: black; display: block;">삭제하면 복구할 수 없읍니다. 정말 삭제하시겠읍니까?</a>
+        <div>
+            <a style="color: dodgerblue;">취소</a>
+            <a style="color: red;">삭제</a>
+        </div>
+    </div>
+</div>
+
 </body>
 
 <style>
@@ -182,17 +200,88 @@
         display: none;
     }
 
-    /* Chrome, Safari, Edge, Opera */
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
         -webkit-appearance: none;
         margin: 0;
     }
 
-    /* Firefox */
     input[type=number] {
         -moz-appearance: textfield;
     }
+
+    .alertDivRoot {
+        background-color: #3334;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 998;
+    }
+
+    #optionsDiv {
+        position: fixed;
+        top: 100px;
+        left: 300px;
+        width: 200px;
+    }
+
+    #optionsDiv hr {
+        margin: 0;
+    }
+
+    #optionsDiv a {
+        text-align: center;
+        margin: 0;
+        padding: 6px;
+        display: block;
+        background-color: white;
+        cursor: pointer;
+        transition: 200ms;
+    }
+
+    #optionsDiv a:hover {
+        background-color: #eee;
+        transition: 200ms;
+    }
+
+    #optionsDiv a:first-child {
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+        box-shadow: 2px 2px 4px 0 rgba(0, 6, 177, 0.1),
+        -2px -2px 5px 0 rgba(2, 0, 121, 0.1),
+        2px -2px 5px 0 rgba(2, 0, 121, 0.1);
+    }
+
+    #optionsDiv a:last-child {
+        border-bottom-left-radius: 16px;
+        border-bottom-right-radius: 16px;
+        box-shadow: 2px 2px 4px 0 rgba(0, 6, 177, 0.1),
+        -2px 2px 5px 0 rgba(2, 0, 121, 0.1);
+    }
+
+    #deleteAlertDiv {
+        background-color: white;
+        border-radius: 32px;
+        text-align: left;
+        padding: 32px 64px;
+        margin: 64px 300px;
+    }
+
+    #deleteAlertDiv div:last-child {
+        text-align: end;
+    }
+
+    #deleteAlertDiv a {
+        font-size: larger;
+        margin-right: 32px;
+    }
+
+    #deleteAlertDiv div:last-child a {
+        cursor: pointer;
+    }
+
 </style>
 
 <script>
@@ -210,6 +299,9 @@
             splashLogo.delay(1000).fadeIn(300);
             setTimeout(() => contentRoot.show(), 2000);
         {% endif %}
+
+        $('#optionsDivRoot').click(() => $('#optionsDivRoot').fadeOut(100));
+        $('#deleteAlertDivRoot').click(() => $('#deleteAlertDivRoot').fadeOut(100));
     });
 
     function reloadFavoriteExercises() {
@@ -241,6 +333,11 @@
     function message_broadcast(value) {
         if (value.action === 'lifts')
             localStorage.setItem('exercises_backup', JSON.stringify(value.value));
+        else if (value.action === 'workout')
+            if (value.value == null)
+                localStorage.removeItem('workout_backup');
+            else
+                localStorage.setItem('workout_backup', JSON.stringify(value.value));
         localStorage.setItem('message', JSON.stringify(value));
         window.dispatchEvent(new Event('storage'));
     }

@@ -43,9 +43,9 @@
             {% for _, workout_sessions in workouts_by_days %}
                 {% for workout_session, lifts in workout_sessions %}
                     {
-                        workout_session_id: {{ workout_session.id }},
+                        id: {{ workout_session.id }},
                         title: "{{ workout_session.title }}",
-                        lifts: [{% for lift in lifts %}{exerciseName: "{{ lift.exercise.name }}",liftMass: {{ lift.lift_mass }},reps: {{ lift.repetitions }},rmMax: {{ lift.one_rep_max }}}, {% endfor %}]
+                        lifts: [{% for lift in lifts %}{exerciseName: "{{ lift.exercise.name }}",liftMass: {{ lift.lift_mass }},repetitions: {{ lift.repetitions }},rmMax: {{ lift.one_rep_max }}}, {% endfor %}]
                     },
                 {% endfor %}
             {% endfor %}];
@@ -68,16 +68,16 @@
             let lifts = [];
 
             for (let i = 0; i < favoriteWorkouts.length; i++)
-                if (favoriteWorkouts[i].workout_session_id === workoutSessionId) {
+                if (favoriteWorkouts[i].id === workoutSessionId) {
                     $("#workoutTitle").val(favoriteWorkouts[i].title);
                     for (let j = 0; j < favoriteWorkouts[i].lifts.length; j++) {
                         lifts.push({
                             id: lifts.length + 1,
                             exercise: findExerciseByName(favoriteWorkouts[i].lifts[j].exerciseName),
                             liftMass: favoriteWorkouts[i].lifts[j].liftMass,
-                            reps: favoriteWorkouts[i].lifts[j].reps,
+                            repetitions: favoriteWorkouts[i].lifts[j].repetitions,
                             enabled: true,
-                            rmMax: Math.trunc((favoriteWorkouts[i].lifts[j].liftMass + favoriteWorkouts[i].lifts[j].liftMass * favoriteWorkouts[i].lifts[j].reps * ONE_REP_MAX_CONST) * 100) / 100
+                            rmMax: Math.trunc((favoriteWorkouts[i].lifts[j].liftMass + favoriteWorkouts[i].lifts[j].liftMass * favoriteWorkouts[i].lifts[j].repetitions * ONE_REP_MAX_CONST) * 100) / 100
                         });
                     }
                     break;

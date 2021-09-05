@@ -11,21 +11,21 @@
                 <!-- head -->
                 <div id="liftCreatorHead">
                     <div style="display: inline-block;">
-                        <span style="font-size: small; text-align: start; max-width: 128px; color: darkgray;">{% now "Y. m. d" %} {% now "D" %}</span> <br>
+                        <span id="workoutDate" style="font-size: small; text-align: start; max-width: 128px; color: darkgray;">{% now "Y. m. d" %} {% now "D" %}</span> <br>
                         <input id="workoutTitle" type="text" placeholder="예 : 내 운동" value="" style="width: 128px; border-bottom: 1px solid #5F36C4; font-size: 17px;">
                         <img onclick="document.getElementById('workoutTitle').focus();" src="{% static 'edit.png' %}"
                              width="14px" style="cursor: pointer; margin: 0; padding: 0;">
                     </div>
                     <span id="exerciseDurationDisplay" style="font-size: xx-large; color: #5F36C4;">{% now "G:i:s" %}</span>
                     <input id="exerciseDuration" type="number" name="exerciseDuration" value="0" hidden>
-                    <div style="display: inline-block;">
+                    <div style="display: inline-block;" id="stopwatchControls">
                         <a onclick="stopwatchControlButtonClick();" class="stopwatchControlButton darkBlueBackground"><img id="timerControlButton" src="{% static 'play.png' %}" height="16px"></a>
                         <a onclick="stopwatchResetClick();" class="stopwatchControlButton grayBackground" style="display: none" id="timerResetButton"><img src="{% static 'stop.png' %}" height="16px"></a>
                     </div>
                 </div>
                 <!-- body -->
                 <div id="liftCreatorBody">
-                    <div style="display: inline-block; font-size: small; margin-bottom: 8px;">
+                    <div id="loadFavoriteWorkoutDiv" style="display: inline-block; font-size: small; margin-bottom: 8px;">
                         <a href="{% url 'favorite workouts' %}" id="favorite_workouts_button" style="padding: 5px 16px;">운동세트 불러오기</a>
                     </div>
                     <table id="newExercisesTable">
@@ -52,7 +52,7 @@
                                                                  value="1"></td>
                             <td class="rm_column" id="newRmMax"></td>
                             <td class="done_column">
-                                <button onclick="addNewExercise();" class="grayBackground" style="padding: 8px; margin: 0; line-height: 1; border-radius: 16px; border: none; cursor: pointer;">
+                                <button onclick="addNewLift();" class="grayBackground" style="padding: 8px; margin: 0; line-height: 1; border-radius: 16px; border: none; cursor: pointer;">
                                     <img id="timerControlButton" src="{% static 'add.png' %}" height="16px"></button>
                             </td>
                         </tr>
@@ -60,7 +60,8 @@
                 </div>
                 <!-- tail -->
                 <div style="margin-left: auto; height: 30px; margin-top: 50px; text-align: right;">
-                    <a id="saveExerciseButton" onclick="clearExercises()" class="grayBackground" style="color: white; padding: 4px 52px; border-radius: 16px; display: inline-block; cursor: pointer">삭제</a>
+                    <a id="fullResetButton" onclick="fullResetClick()" class="grayBackground" style="color: white; padding: 4px 52px; border-radius: 16px; display: inline-block; cursor: pointer">취소</a>
+                    <a id="removeExercisesButton" onclick="clearExercises()" class="grayBackground" style="color: white; padding: 4px 52px; border-radius: 16px; display: inline-block; cursor: pointer">삭제</a>
                     <a id="saveExerciseButton" onclick="saveExercises()" class="darkBlueBackground" style="color: white; padding: 4px 52px; border-radius: 16px; display: inline-block; margin-left: 16px; cursor: pointer">저장</a>
                 </div>
             </div>
@@ -195,10 +196,12 @@
             color: #5F36C4;
             font-weight: normal;
         }
+
         tr:first-child th:first-child {
             border-bottom-left-radius: 16px;
             border-top-left-radius: 16px;
         }
+
         tr:first-child th:last-child {
             border-bottom-right-radius: 16px;
             border-top-right-radius: 16px;
@@ -265,13 +268,15 @@
         const ONE_REP_MAX_CONST = 0.025;
 
         let selectExerciseDiv, exercisesListDiv, filterExerciseBodyPart, filterExerciseCategory, filterText;
-        let allExercises = [{% for exercise in exercises %}{id: {{ exercise.id }},
+        let allExercises = [{% for exercise in exercises %}{
+                id: {{ exercise.id }},
                 name: '{{ exercise.name }}',
                 nameTranslations: {{ exercise.name_translations|safe }},
                 iconUrl: '{{ exercise.icon.url }}',
                 bodyPart: '{{ exercise.body_part.name }}',
                 category: '{{ exercise.category.name }}'},{% endfor %}];
         let selectedExercise = {
+            id: {{ exercises.0.id }},
             name: '{{ exercises.0.name }}',
             nameTranslations: {{ exercises.0.name_translations|safe }},
             iconUrl: '{{ exercises.0.icon.url }}',
@@ -287,22 +292,27 @@
             return null;
         }
 
+        let editWorkout = null;
         let newLifts = [];
         let newSetNumber = 1, newLift = "{{ exercises.0.name }}", newWeight = 1, newReps = 1;
 
         {% load tools %}
         let allWorkouts = [
-            {% for _, workout_sessions in workouts_by_days.items %}
+            {% for day_str, workout_sessions in workouts_by_days.items %}
                 {% for workout_session, lifts in workout_sessions.items %}
                     {
-                        workout_session_id: {{ workout_session.id }},
+                        id: {{ workout_session.id }},
                         title: "{{ workout_session.title }}",
-                        lifts: [{% for lift in lifts %}{exerciseName: "{{ lift.exercise.name }}",liftMass: {{ lift.lift_mass }},reps: {{ lift.repetitions }},rmMax: {{ lift.one_rep_max }}}, {% endfor %}]
+                        dayStr: "{{ day_str }}",
+                        duration: {{ workout_session.duration }},
+                        lifts: [{% for lift in lifts %}{id: {{ lift.id }}, exerciseName: "{{ lift.exercise.name }}", liftMass: {{ lift.lift_mass }}, repetitions: {{ lift.repetitions }}, rmMax: {{ lift.one_rep_max }}}{% if not forloop.last %}, {% endif %}{% endfor %}]
                     },
                 {% endfor %}
             {% endfor %}];
 
         $(document).ready(function () {
+            $('#fullResetButton').hide();
+
             $(".default_option").click(function () {
                 $(".dropdown ul").addClass("active");
             });
@@ -338,12 +348,13 @@
                 newLiftWeight.prop('disabled', false);
                 newRmMax.prop('disabled', false);
                 // endregion
+
                 // region workouts
                 let fromTs = new Date();
-                fromTs.setUTCHours(0);
-                fromTs.setUTCMinutes(0);
-                fromTs.setUTCSeconds(0);
-                fromTs.setUTCMilliseconds(0);
+                fromTs.setHours(0);
+                fromTs.setMinutes(0);
+                fromTs.setSeconds(0);
+                fromTs.setMilliseconds(0);
                 let tillTs = new Date(fromTs);
                 tillTs.setDate(fromTs.getDate() + 1);
                 fetchTodayDayWorkouts(fromTs.getTime(), tillTs.getTime());
@@ -389,7 +400,13 @@
             // tabs communication
             window.addEventListener("storage", function (_) {
                 let event = JSON.parse(localStorage.getItem('message'));
-                if (event.action === 'lifts') {
+                if (event.action === 'workout') {
+                    editWorkout = event.value;
+                    if (editWorkout != null)
+                        displayWorkoutForEditing(editWorkout);
+                    else
+                        clearWorkoutDetails();
+                } else if (event.action === 'lifts') {
                     newLifts = event.value;
                     setNewLiftsOnUI(newLifts);
                 } else if (event.action === 'stopwatchData') {
@@ -404,6 +421,11 @@
             if (prevExercises != null) {
                 newLifts = JSON.parse(prevExercises);
                 setNewLiftsOnUI(newLifts);
+            }
+            let prevWorkout = localStorage.getItem('workout_backup');
+            if (prevWorkout != null) {
+                editWorkout = JSON.parse(prevWorkout);
+                displayWorkoutForEditing(editWorkout);
             }
 
             let params = window.location.search.substr(1).split("&");
@@ -436,7 +458,7 @@
             $("#newExercisesTable tr:not(:last-child, :first-child)").empty();
 
             for (let i = 0; i < lifts.length; i++) {
-                let rmMaxLbs = Math.trunc((lifts[i].liftMass * KG2LBS + lifts[i].liftMass * KG2LBS * lifts[i].reps * ONE_REP_MAX_CONST) * 100) / 100;
+                let rmMaxLbs = Math.trunc((lifts[i].liftMass * KG2LBS + lifts[i].liftMass * KG2LBS * lifts[i].repetitions * ONE_REP_MAX_CONST) * 100) / 100;
                 if (lifts[i].enabled) {
                     $('#newExercisesTable tr:last').before(
                         `<tr id="exerciseRow${i}">` +
@@ -447,7 +469,7 @@
                         `       <input id="liftWeight${i}" class="newLiftWeight dark-blue-text" style="text-alight: center;" type="number" min="1" max="200" placeholder="1" value="${$('#weight_th').html().toLowerCase() === 'kg' ? lifts[i].liftMass : Math.trunc(lifts[i].liftMass * KG2LBS * 10) / 10}">` +
                         `   </td>` +
                         `   <td class="repetition_column dark-blue-text">` +
-                        `       <input id="liftReps${i}" class="newLiftReps dark-blue-text" style="text-alight: center;" type="number" min="1" max="30" placeholder="1" value="${lifts[i].reps}">` +
+                        `       <input id="liftReps${i}" class="newLiftReps dark-blue-text" style="text-alight: center;" type="number" min="1" max="30" placeholder="1" value="${lifts[i].repetitions}">` +
                         `   </td>` +
                         `   <td id="rmMax${i}" class="rm_column dark-blue-text">${$('#weight_th').html().toLowerCase() === 'kg' ? lifts[i].rmMax : rmMaxLbs}</td>` +
                         `   <td class="done_column">` +
@@ -462,7 +484,7 @@
                         let reps = parseInt($(`#liftReps${i}`).val());
 
                         lifts[i].liftMass = weight;
-                        lifts[i].reps = reps;
+                        lifts[i].repetitions = reps;
                         lifts[i].rmMax = Math.trunc((weight + weight * reps * ONE_REP_MAX_CONST) * 100) / 100;
 
                         message_broadcast({action: 'lifts', value: lifts});
@@ -474,7 +496,7 @@
                         `   <td onclick="copyExercise(${i});" class="set_column light-grey-text">${i + 1}</td>` +
                         `	<td onclick="copyExercise(${i});" class="exercise_column light-grey-text">${lifts[i].exercise.name} (${lifts[i].exercise.bodyPart})</td>` +
                         `	<td class="weight_column light-grey-text">${$('#weight_th').html().toLowerCase() === 'kg' ? lifts[i].liftMass : Math.trunc(lifts[i].liftMass * KG2LBS * 10) / 10}</td>` +
-                        `	<td class="repetition_column light-grey-text">${lifts[i].reps}</td>` +
+                        `	<td class="repetition_column light-grey-text">${lifts[i].repetitions}</td>` +
                         `	<td class="rm_column light-grey-text">${$('#weight_th').html().toLowerCase() === 'kg' ? lifts[i].rmMax : rmMaxLbs}</td>` +
                         `	<td class="done_column">` +
                         `       <button onclick="toggleExercise(${i});" style="background-color: transparent; padding: 8px; margin: 0; line-height: 1; border-radius: 16px; border: none; cursor: pointer;">` +
@@ -487,14 +509,11 @@
         }
 
         function showExerciseSelectorDivClick() {
-            if (document.readyState === "complete") {
-                $('body').css('background', '#e2e1e0');
+            if (document.readyState === "complete")
                 selectExerciseDiv.style.display = 'block';
-            }
         }
 
         function hideExerciseSelectorDivClick() {
-            $('body').css('background', '#fff');
             selectExerciseDiv.style.display = 'none';
         }
 
@@ -657,13 +676,13 @@
             });
         }
 
-        function addNewExercise() {
+        function addNewLift() {
             // add to array
             newLift = {
                 id: newLifts.length + 1,
                 exercise: selectedExercise,
                 liftMass: newWeight,
-                reps: newReps,
+                repetitions: newReps,
                 enabled: true,
                 rmMax: Math.trunc((newWeight + newWeight * newReps * ONE_REP_MAX_CONST) * 100) / 100
             };
@@ -680,9 +699,9 @@
                 id: newLifts.length + 1,
                 exercise: findExerciseByName(exerciseName),
                 liftMass: liftMass,
-                reps: reps,
+                repetitions: reps,
                 enabled: true,
-                rmMax: rmMax // todo double check
+                rmMax: rmMax
             };
             newLifts.push(newLift);
 
@@ -701,7 +720,7 @@
             selectedExercise = newLifts[idx].exercise;
 
             $('#newLiftWeight').val(newLifts[idx].liftMass);
-            $('#newLiftReps').val(newLifts[idx].reps);
+            $('#newLiftReps').val(newLifts[idx].repetitions);
             $('#newRmMax').html(newLifts[idx].rmMax);
         }
 
@@ -727,10 +746,10 @@
 
         function repeatWorkoutSession(workoutSessionId) {
             for (let i = 0; i < allWorkouts.length; i++)
-                if (allWorkouts[i].workout_session_id === workoutSessionId) {
+                if (allWorkouts[i].id === workoutSessionId) {
                     $("#workoutTitle").val(allWorkouts[i].title);
                     for (let j = 0; j < allWorkouts[i].lifts.length; j++)
-                        addNewExerciseWithRawValues(allWorkouts[i].lifts[j].liftMass, allWorkouts[i].lifts[j].reps, allWorkouts[i].lifts[j].exerciseName);
+                        addNewExerciseWithRawValues(allWorkouts[i].lifts[j].liftMass, allWorkouts[i].lifts[j].repetitions, allWorkouts[i].lifts[j].exerciseName);
                     break;
                 }
         }
@@ -746,40 +765,118 @@
 
         function saveExercises() {
             // filter out disabled exercises
-            let resExercises = [];
+            let resLifts = [];
             for (let i = 0; i < newLifts.length; i++)
                 if (newLifts[i].enabled)
-                    resExercises.push({
+                    resLifts.push({
                         exerciseName: newLifts[i].exercise.name,
                         liftMass: newLifts[i].liftMass,
-                        repetitions: newLifts[i].reps,
+                        repetitions: newLifts[i].repetitions,
                     });
 
-            if (resExercises.length > 0) {
+            if (resLifts.length > 0) {
                 let title = $("#workoutTitle").val();
 
-                $.post('{% url 'add workout' %}', {
-                    csrfmiddlewaretoken: $('{% csrf_token %}').val(),
-                    title: title === '' ? '[이름없는 운동]' : title,
-                    duration: stopwatchSeconds,
-                    exercises: JSON.stringify(resExercises)
-                }, function (response) {
-                    try {
-                        if (response.success) {
-                            message_broadcast({action: 'lifts', value: []});
-                            location.reload();
+                if (editWorkout == null)
+                    $.post('{% url 'add workout' %}', {
+                        csrfmiddlewaretoken: $('{% csrf_token %}').val(),
+                        title: title === '' ? '[이름없는 운동]' : title,
+                        duration: stopwatchSeconds,
+                        exercises: JSON.stringify(resLifts)
+                    }, function (response) {
+                        try {
+                            if (response.success) {
+                                message_broadcast({action: 'lifts', value: []});
+                                location.reload();
+                            }
+                        } catch (e) {
+                            console.log(e);
                         }
-                    } catch (e) {
-                        console.log(e);
+                    });
+                else {
+                    let prevIds = new Set();
+                    for (let i = 0; i < editWorkout.lifts.length; i++)
+                        prevIds.add(editWorkout.lifts[i].id);
+
+                    console.log(`Previous lifts : ${prevIds.size}`);
+                    for (let i = 0; i < newLifts.length; i++) {
+                        if (!newLifts[i].enabled)
+                            // remove
+                            $.post('/api/remove_lift', {sessionKey: "{{ sessionKey }}", workout_session_id: editWorkout.id, lift_id: newLifts[i].id});
+                        else if (!prevIds.has(newLifts[i].id)) {
+                            // add
+                            $.post('/api/insert_lift', {sessionKey: "{{ sessionKey }}", workout_session_id: editWorkout.id, exercise_id: newLifts[i].exercise.id, lift_mass: newLifts[i].liftMass, repetitions: newLifts[i].repetitions});
+                            console.log(`New lift: ${newLifts[i].id}`);
+                            console.log({sessionKey: "{{ sessionKey }}", workout_session_id: editWorkout.id, exercise_id: newLifts[i].exercise.id, liftMass: newLifts[i].liftMass, repetitions: newLifts[i].repetitions});
+                        } else {
+                            // update
+                            $.post('/api/update_lift', {sessionKey: "{{ sessionKey }}", workout_session_id: editWorkout.id, lift_id: newLifts[i].id, new_exercise_id: newLifts[i].exercise.id, new_lift_mass: newLifts[i].liftMass, new_repetitions: newLifts[i].repetitions});
+                        }
                     }
-                });
+
+                    $.post('/api/update_workout', {
+                        sessionKey: "{{ sessionKey }}",
+                        workout_session_id: editWorkout.id,
+                        new_title: title === '' ? '[이름없는 운동]' : title,
+                        new_duration: editWorkout.duration
+                    }, function (response) {
+                        try {
+                            if (response.success) {
+                                fullResetClick();
+                                location.reload();
+                            }
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    });
+                    // todo post update workout
+                }
             } else {
                 alert('You need to add at least one exercise for one workout session!');
             }
         }
 
-        function optionsClick(idx) {
-            console.log(idx);
+        function fullResetClick() {
+            message_broadcast({action: 'workout', value: null});
+            message_broadcast({action: 'lifts', value: []});
+            message_broadcast({action: 'stopwatchData', value: {hours: 0, minutes: 0, seconds: 0}});
+        }
+
+        function optionsClick(img, workoutId) {
+            // set location and size
+            let r = img.parentElement.getBoundingClientRect();
+            let o = $('#optionsDiv');
+            o.width(r.width - 30);
+            o.css({left: r.left + 15, top: r.top + 15});
+
+            // set listeners
+            for (let i = 0; i < allWorkouts.length; i++)
+                if (allWorkouts[i].id === workoutId) {
+                    let editButton = $('#optionsDiv a:first-child');
+                    let deleteButton = $('#optionsDiv a:last-child');
+                    editButton.unbind();
+                    deleteButton.unbind();
+                    editButton.click(function () {
+                        message_broadcast({action: 'workout', value: allWorkouts[i]});
+                        window.scrollTo(0, 0);
+                    });
+                    deleteButton.click(function () {
+                        $('#deleteAlertDivRoot').fadeIn(100);
+                        let agreeButton = $('#deleteAlertDiv div a:last-child');
+                        agreeButton.unbind();
+                        agreeButton.click(function () {
+                            $.post('/api/remove_workout', {sessionKey: "{{ sessionKey }}", workout_session_id: allWorkouts[i].id}, function (res) {
+                                if (res.success) {
+                                    location.reload();
+                                } else
+                                    alert('Failed to remove, please try again later!');
+                            });
+                        });
+                    });
+                }
+
+            // display options
+            $('#optionsDivRoot').fadeIn(100);
         }
 
         function displayTodayWorkouts(ts, workouts) {
@@ -798,7 +895,7 @@
                         <span style="color: #5F36C4; font-weight: bold;" class="w3-left">${workouts[i].title}</span>
                         <img onclick="favoriteWorkoutsClick(this, ${workouts[i].id});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="${workouts[i].isFavorite ? '{% static 'favorite-filled.png' %}' : '{% static 'favorite-outlined.png' %}'}" width="22px" height="22px">
                     </div>
-                    <img onclick="optionsClick(${workouts[i].id});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="{% static 'options.png' %}" width="22px" height="22px">
+                    <img onclick="optionsClick(this, ${workouts[i].id});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="{% static 'options.png' %}" width="22px" height="22px">
                 </div>`);
                 subDiv.append('<hr style="border: 1px solid lightgrey;">');
                 subDiv.append('<div style="display: inline-block; padding: 8px; font-size: small; line-height: 1;"></div>');
@@ -821,8 +918,7 @@
                 let seconds = workouts[i].duration % 60
                 let minutes = (Math.trunc(workouts[i].duration - seconds) / 60) % 60;
                 let hours = Math.trunc(((Math.trunc((workouts[i].duration - seconds) / 60)) % 60 - minutes) / 60)
-                subDiv.append(
-                    `<div style="padding: 8px; text-align: center;" class="repeatButton">
+                subDiv.append(`<div style="padding: 8px; text-align: center;" class="repeatButton">
                         <span style="font-weight: bold; font-size: large; color: #5F36C4;">
                             ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}
                         </span> <br>
@@ -833,6 +929,48 @@
 
         function fetchTodayDayWorkouts(fromTs, tillTs) {
             $.post('/api/fetch_workouts', `{"sessionKey": "{{ sessionKey }}", "fromTimestampMs": ${fromTs}, "tillTimestampMs": ${tillTs}}`).done((res) => res.success ? displayTodayWorkouts(fromTs, res.workouts) : null);
+        }
+
+        function displayWorkoutForEditing(workout) {
+            $('#fullResetButton').show();
+
+            $('#stopwatchControls').hide();
+            $('#removeExercisesButton').hide();
+            $('#loadFavoriteWorkoutDiv').hide();
+
+            $('#workoutDate').html(workout.dayStr);
+            $('#workoutTitle').val(workout.title);
+
+            let seconds = workout.duration % 60;
+            let minutes = ((workout.duration - seconds) / 60) % 60;
+            let hours = (((workout.duration - seconds) / 60) - minutes) / 60;
+            $('#exerciseDurationDisplay').html(pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2));
+            $('#exerciseDuration').attr('value', workout.duration.toString());
+
+            let lifts = [];
+            console.log(workout.lifts);
+            for (let i = 0; i < workout.lifts.length; i++)
+                lifts.push({
+                    id: workout.lifts[i].id,
+                    exercise: findExerciseByName(workout.lifts[i].exerciseName),
+                    liftMass: workout.lifts[i].liftMass,
+                    repetitions: workout.lifts[i].repetitions,
+                    enabled: true,
+                    rmMax: workout.lifts[i].rmMax
+                });
+            lifts.sort((l, r) => l.id > r.id);
+            newLifts = lifts;
+            setNewLiftsOnUI(lifts);
+        }
+
+        function clearWorkoutDetails() {
+            $('#fullResetButton').hide();
+            $('#stopwatchControls').show();
+            $('#removeExercisesButton').show();
+            $('#loadFavoriteWorkoutDiv').show();
+
+            $('#workoutDate').html('{% now "Y. m. d" %} {% now "D" %}');
+            $('#workoutTitle').val("");
         }
     </script>
 {% endblock %}

@@ -5,12 +5,13 @@ from django.conf import settings
 from . import views
 
 urlpatterns = [
+    path('', views.handle_index, name='index'),
     path('admin/', admin.site.urls, name='admin'),
+    path('api/', include('api.urls')),
 
     path('init-configs/', views.handle_init_configs),
     path('generate-dummy-data/', views.handle_generate_dummy_data),
 
-    path('', views.handle_index, name='index'),
     path('calculators/', views.handle_calculators, name='calculators'),
     path('one-rep-max-calculator/', views.handle_one_rep_max_calculator, name='one rep max calculator'),
     path('plate-barbell-racking-calculator/', views.handle_plate_barbell_racking_calculator, name='plate barbell racking calculator'),
@@ -25,9 +26,6 @@ urlpatterns = [
     path('add-workout/', views.handle_add_workout, name='add workout'),
     path('calendar/', views.handle_calendar, name='calendar'),
     path('favorite-workouts/', views.handle_favorite_workouts, name='favorite workouts'),
-
-    # APIs
-    path('api/', include('api.urls')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -1,32 +1,75 @@
 {% extends 'base.html' %}
 {% block content %}
     {% load static %}
-    <div id="calendar_navigator">
-        <a class="arrow_left calendar_navigation_button" onclick="previousMonthClick();"></a>
-        <a id="month_text">August, 2021</a>
-        <a class="arrow_right calendar_navigation_button" onclick="nextMonthClick();"></a>
-    </div>
-    <table id="calendar_table">
-        <tr>
-            <th>S</th>
-            <th>M</th>
-            <th>T</th>
-            <th>W</th>
-            <th>T</th>
-            <th>F</th>
-            <th>S</th>
-        </tr>
-    </table>
-    <div id="selected_date_content">
+
+    <div id="rootDiv">
+        <div id="calendarDiv">
+            <div class="sub_content" style="padding: 0;">
+                <div id="calendar_navigator">
+                    <a class="arrow_left calendar_navigation_button" onclick="previousMonthClick();"></a>
+                    <a id="month_text">August, 2021</a>
+                    <a class="arrow_right calendar_navigation_button" onclick="nextMonthClick();"></a>
+                </div>
+                <table id="calendar_table">
+                    <tr>
+                        <th>S</th>
+                        <th>M</th>
+                        <th>T</th>
+                        <th>W</th>
+                        <th>T</th>
+                        <th>F</th>
+                        <th>S</th>
+                    </tr>
+                </table>
+                <hr style="border-top: 2px solid lightgray; margin: 40px 64px 0 64px;">
+                <span style="display: block; color: #5F36C4; font-size: large; font-weight: bold; padding: 20px 64px;">NOTE</span>
+                <span id="savingLabel" style="font-size: x-small; margin-left: 64px; display: none">Saving...</span>
+                <textarea id="noteTextArea" cols="30" rows="10" maxlength="1024"></textarea>
+            </div>
+        </div>
+        <div id="workoutsDiv">
+            <div id="selected_date_content">
+            </div>
+        </div>
     </div>
 
     <style>
         @media (min-width: 801px) {
+            #rootDiv {
+                display: flex;
+                margin: 0;
+                padding: 0;
+                justify-content: space-between;
+            }
+
+            #calendarDiv {
+                width: calc(65% - 10px);
+                flex-wrap: wrap;
+                padding: 0;
+            }
+
+            #workoutsDiv {
+                width: calc(35% - 10px);
+                margin: 0px;
+                padding: 0px;
+                display: inline-block;
+            }
+
             #month_text {
-                font-size: xx-large;
+                font-size: 20px;
+                font-weight: bold;
+                color: #5F36C4;
                 padding: 0;
                 margin: 0;
                 line-height: 1;
+            }
+
+            #calendar_navigator {
+                padding: 0 48px;
+                height: 96px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
             }
 
             .arrow_right {
@@ -55,38 +98,30 @@
                 line-height: 1;
             }
 
-            #calendar_navigator {
-                height: 100px;
-                margin-left: 40px;
-                margin-right: 40px;
-                border: none;
-                border-spacing: 0;
-                width: calc(100% - 80px);
-                text-align: center;
-                margin-top: 40px;
-                display: flex;
-                justify-content: space-between;
-            }
-
             .calendar_navigation_button {
-                width: 26px;
-                height: 26px;
+                width: 18px;
+                height: 18px;
             }
 
             #calendar_table {
-                margin-left: 40px;
-                margin-right: 40px;
-                margin-bottom: 100px;
                 border: none;
                 border-spacing: 0;
-                width: calc(100% - 80px);
+                width: calc(100%);
                 text-align: center;
             }
 
             #calendar_table th {
                 padding: 10px;
-                color: #6633CC;
+                color: black;
                 background: #F6F5F5;
+            }
+
+            #calendar_table tr td:first-child, #calendar_table tr th:first-child {
+                padding-left: 64px;
+            }
+
+            #calendar_table tr td:last-child, #calendar_table tr th:last-child {
+                padding-right: 64px;
             }
 
             .calendar_cell {
@@ -102,20 +137,62 @@
                 border: none;
                 text-align: center;
                 vertical-align: middle;
+
+                transition: 200ms;
             }
 
-            .today_cell, .calendar_cell:hover {
+            .calendar_cell a {
+                display: block;
+            }
+
+            .calendar_cell:hover {
                 background: #C5BDEC;
+                transition: 200ms;
             }
 
-            .calendar_cell_outline {
-                border-radius: 32px;
-                border: 4px solid #6633CC;
+            .cell_with_event a:first-child {
+                position: relative;
+                width: 12px;
+                height: 12px;
+                top: calc(15%);
+                left: calc(50% - 6px);
+                background-color: #6633CC;
+                border-radius: 6px;
+                margin-bottom: 4px;
             }
 
-            .workout_day {
-                font-weight: bolder;
-                color: #6633CC;
+            .cell_with_event a:last-child {
+                position: relative;
+                top: calc(10%);
+            }
+
+            .calendar_cell:not(.cell_with_event) a:last-child {
+                position: relative;
+                top: calc(50% - 13px);
+            }
+
+            .today_cell {
+                background: #6633CC;
+                color: white;
+            }
+
+            .today_cell.cell_with_event a:first-child {
+                background-color: white;
+            }
+
+            #noteTextArea {
+                resize: none;
+                width: calc(100% - 128px);
+                height: 128px;
+                margin: 0 64px 64px 64px;
+                border: none;
+                background-color: #eee;
+                -webkit-box-shadow: none;
+                -moz-box-shadow: none;
+                box-shadow: none;
+                outline: none;
+                overflow: auto;
+                padding: 12px;
             }
         }
 
@@ -205,6 +282,14 @@
         td {
             color: #3a3a3a;
         }
+
+        .darkBlueBackground {
+            background-color: #5F36C4;
+        }
+
+        .grayBackground {
+            background-color: darkgray;
+        }
     </style>
 
     <script>
@@ -222,11 +307,13 @@
                 category: '{{ exercise.category.name }}'},{% endfor %}];
         let selectedMonth;
         let sessionKey;
+        let selectedDateTimestamp;
+        let updateNoteNecessary = false;
 
         $(document).ready(function () {
             let timezoneOffsetMinutes = new Date().getTimezoneOffset();
             workoutDays = [];
-            $.post('/api/fetch_workout_days', `{"sessionKey": "{{ sessionKey }}", "timezoneOffsetMinutes": ${timezoneOffsetMinutes}}`, function (res) {
+            $.post('/api/fetch_workout_days', {sessionKey: "{{ sessionKey }}", timezoneOffsetMinutes: timezoneOffsetMinutes}, function (res) {
                 if (res.success)
                     for (let i = 0; i < res.workoutDays.length; i++)
                         workoutDays.push(res.workoutDays[i]);
@@ -247,6 +334,39 @@
                 let tillTs = new Date(fromTs);
                 tillTs.setDate(fromTs.getDate() + 1);
                 fetchDayWorkouts(fromTs.getTime(), tillTs.getTime());
+            });
+            let date = new Date();
+            date.setHours(0, 0, 0, 0);
+            $.post('/api/fetch_note', {sessionKey: "{{ sessionKey }}", timestamp: date.getTime()}, function (res) {
+                if (res.success)
+                    $('#noteTextArea').val(res.note);
+            });
+            let updateNoteTextArea = function () {
+                if (updateNoteNecessary) {
+                    $.post('/api/set_note', {sessionKey: "{{ sessionKey }}", timestamp: selectedDateTimestamp, note: $('#noteTextArea').val()}, function (res) {
+                        let log = $('#savingLabel');
+                        if (res.success) {
+                            log.css({color: "green"});
+                            log.html('Successfully saved.');
+                            updateNoteNecessary = false;
+                        } else {
+                            log.css({color: "red"});
+                            log.html('Failed to save.');
+                            updateNoteNecessary = true;
+                        }
+                        setTimeout(updateNoteTextArea, 5000);
+                    });
+                } else
+                    setTimeout(updateNoteTextArea, 5000);
+            };
+            setTimeout(updateNoteTextArea, 5000);
+
+            $('#noteTextArea').keydown(function () {
+                let log = $('#savingLabel');
+                log.show();
+                log.css({color: "orange"});
+                log.html('Saving...');
+                updateNoteNecessary = true;
             });
         });
 
@@ -285,10 +405,15 @@
                 let tillTs = new Date(dateTs.getTime());
                 tillTs.setDate(dateTs.getDate() + 1);
 
-                $('#calendar_table tr:last').append(`<td><button onclick="fetchDayWorkouts(${dateTs.getTime()}, ${tillTs.getTime()});" class="calendar_cell ${$.inArray(dateStr, workoutDays) > -1 ? "calendar_cell_outline" : ""} ${today.getTime() === dateTs.getTime() ? "today_cell" : ""}">${dateTs.getDate()}</button></td>`);
+                $('#calendar_table tr:last').append(`<td onclick="fetchDayWorkouts(${dateTs.getTime()}, ${tillTs.getTime()});"><div class="calendar_cell ${$.inArray(dateStr, workoutDays) > -1 ? "cell_with_event" : ""} ${today.getTime() === dateTs.getTime() ? "today_cell" : ""}"><a></a><a>${dateTs.getDate()}</a></div></td>`);
 
                 dateTs.setDate(dateTs.getDate() + 1);
             }
+
+            // days after this month
+            if (dateTs.getDay() !== 0)
+                for (let i = dateTs.getDay() + 1; i < 7; i++)
+                    $('#calendar_table tr:last').append('<td></td>');
         }
 
         function previousMonthClick() {
@@ -307,42 +432,46 @@
 
             let rootDiv = $('#selected_date_content');
             rootDiv.empty();
-            rootDiv.append(`<h4 style="color: #3f51b5"><b>${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}. ${weekdayNames[date.getDay()]}</b></h4>`);
+            rootDiv.append(`<h4 style="color: #5F36C4"><b>${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}. ${weekdayNames[date.getDay()]}</b></h4>`);
             workouts.sort((l, r) => l.timestamp < r.timestamp);
             for (let i = 0; i < workouts.length; i++) {
                 rootDiv.append(`<div class="sub_content" style="min-height: 190px;"></div>`);
                 let subDiv = $('.sub_content:last');
                 subDiv.append(`<div style="height: 12px; display: flex; align-content: center; justify-content: space-between;">
-                    <span style="color: #3f51b5; font-weight: bold;" class="w3-left">${workouts[i].title}</span>
-                    <img onclick="favoriteWorkoutsClick(this, ${workouts[i].id});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="${workouts[i].isFavorite ? '{% static 'favorite_checked.png' %}' : '{% static 'favorite_unchecked.png' %}'}" width="22px" height="22px">
+                    <span style="color: #5F36C4; font-weight: bold;" class="w3-left">${workouts[i].title}</span>
+                    <img onclick="favoriteWorkoutsClick(this, ${workouts[i].id});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="${workouts[i].isFavorite ? '{% static 'favorite-filled.png' %}' : '{% static 'favorite-outlined.png' %}'}" width="22px" height="22px">
                 </div>`);
                 subDiv.append('<hr style="border: 1px solid lightgrey;">');
-                subDiv.append('<div style="display: inline-block; padding: 8px;"></div>');
+                subDiv.append('<div style="display: inline-block; padding: 8px; line-height: 1; font-size: small;"></div>');
                 let liftsDiv = $('.sub_content:last div:last');
                 for (let j = 0; j < workouts[i].lifts.length; j++) {
                     liftsDiv.append(`<span>${j + 1}. </span>`);
                     liftsDiv.append(`<span>${workouts[i].lifts[j].exercise_name}, </span>`);
                     liftsDiv.append(`<span>${workouts[i].lifts[j].lift_mass} KG, </span>`);
                     liftsDiv.append(`<span>${workouts[i].lifts[j].repetitions} REPS, </span>`);
-                    liftsDiv.append(`<span>${workouts[i].lifts[j].one_rep_max} RM, </span>`);
+                    liftsDiv.append(`<span>${workouts[i].lifts[j].one_rep_max} RM </span>`);
                     liftsDiv.append('<br><br>');
                 }
 
                 let seconds = workouts[i].duration % 60
                 let minutes = (Math.trunc(workouts[i].duration - seconds) / 60) % 60;
                 let hours = Math.trunc(((Math.trunc((workouts[i].duration - seconds) / 60)) % 60 - minutes) / 60)
-                subDiv.append(
-                    `<div style="padding: 8px; text-align: center;" class="repeatButton">
-                        <span style="font-weight: bold; font-size: large;" class="light-blue-text">
+                subDiv.append(`<div style="padding: 8px; text-align: center;" class="repeatButton">
+                        <span style="font-weight: bold; font-size: large; color: #5F36C4;">
                             ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}
                         </span> <br>
+                        <a onclick="repeatWorkoutSession(${workouts[i].id});" class="darkBlueBackground" style="padding: 8px 36px; border-radius: 18px; display: block; margin-top: 10px; color:white; cursor: pointer;">반복하기</a>
                     </div>`);
-                subDiv.append(
-                    `<div style="padding: 8px; text-align: center;" class="repeatButton">
-                        <a onclick="repeatWorkoutSession(${workouts[i].id});" class="w3-button w3-buttoncolor" style="padding: 5px 30px 5px 30px; border-radius: 4px; display: block; margin-top: 10px;">반복하기</a>
-                    </div>`
-                );
             }
+
+            date.setHours(0, 0, 0, 0);
+            selectedDateTimestamp = date.getTime();
+            $('#noteTextArea').val('');
+            $('#savingLabel').hide();
+            $.post('/api/fetch_note', {sessionKey: "{{ sessionKey }}", timestamp: selectedDateTimestamp}, function (res) {
+                if (res.success)
+                    $('#noteTextArea').val(res.note);
+            });
         }
 
         function findExerciseByName(name) {

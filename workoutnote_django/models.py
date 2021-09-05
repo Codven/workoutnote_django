@@ -129,3 +129,12 @@ class Lift(models.Model):
     lift_mass = models.FloatField()
     repetitions = models.IntegerField()
     one_rep_max = models.FloatField(default=None)
+
+
+class Note(models.Model):
+    user = models.ForeignKey(to=django_User, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField()
+    note = models.CharField(max_length=2048)
+
+    class Meta:
+        unique_together = ('user', 'timestamp',)

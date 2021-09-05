@@ -4,14 +4,13 @@ from django.contrib.auth.models import User as django_User
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import login, authenticate
 from django.core.mail import EmailMessage
-from datetime import datetime, timedelta
+from django.utils import timezone as tz
 from django.http import JsonResponse
 from utils.tools import Tools
 from api import models
 import random
 import time
 import json
-import pytz
 
 
 # region auth
@@ -290,7 +289,7 @@ def handle_insert_workout_api(request):
         session_key = received_params['sessionKey']
         title = received_params['title']
         duration = int(received_params['duration'])
-        timestamp = int(datetime.now().timestamp() * 1000)
+        timestamp = int(tz.datetime.now().timestamp() * 1000)
 
     # 2. sessionKey check
     if not models.SessionKey.objects.filter(key=session_key).exists():
@@ -322,8 +321,8 @@ def handle_fetch_workouts_api(request):
         return JsonResponse(data={'success': False, 'reason': f'bad params, must provide {",".join(required_params)}'})
     else:
         session_key = received_params['sessionKey']
-        date_from_ts = datetime.utcfromtimestamp(int(received_params['fromTimestampMs']) / 1000)
-        date_till_ts = datetime.utcfromtimestamp(int(received_params['tillTimestampMs']) / 1000)
+        date_from_ts = tz.datetime.utcfromtimestamp(int(received_params['fromTimestampMs']) / 1000)
+        date_till_ts = tz.datetime.utcfromtimestamp(int(received_params['tillTimestampMs']) / 1000)
 
     # 2. sessionKey check
     if not models.SessionKey.objects.filter(key=session_key).exists():
@@ -472,7 +471,7 @@ def handle_fetch_workout_days(request):
     tss = set()
     if workout_sessions.exists():
         for workout_session in workout_sessions:
-            timestamp = workout_session.timestamp - timedelta(minutes=timezone_offset_minutes)
+            timestamp = workout_session.timestamp - tz.timedelta(minutes=timezone_offset_minutes)
             workout_days.add(f'{timestamp.year}/{timestamp.month}/{timestamp.day}')
     return JsonResponse(data={'success': True, 'workoutDays': list(workout_days)})
 
@@ -518,7 +517,7 @@ def handle_insert_lift_api(request):
 
     # 5. create lift
     lift = wn_models.Lift.objects.create(
-        timestamp=int(datetime.now().timestamp() * 1000),
+        timestamp=int(tz.datetime.now().timestamp() * 1000),
         workout_session=workout_session,
         exercise=exercise,
         lift_mass=lift_mass,
@@ -866,4 +865,72 @@ def handle_fetch_favorite_workouts_api(request):
         'success': True,
         'workouts': workout_sessions_arr
     })
+
+
+# endregion
+
+
+# region notes
+@csrf_exempt
+@require_http_methods(['POST'])
+def handle_fetch_note_api(request):
+    # 0. expected and received params
+    required_params = ['sessionKey', 'timestamp']
+    received_params = request.POST if 'sessionKey' in request.POST else json.loads(request.body.decode('utf8'))
+
+    # 1. all params check
+    if False in [x in received_params for x in required_params]:
+        return JsonResponse(data={'success': False, 'reason': f'bad params, must provide {",".join(required_params)}'})
+    else:
+        session_key = received_params['sessionKey']
+
+    # 2. sessionKey check
+    if not models.SessionKey.objects.filter(key=session_key).exists():
+        return JsonResponse(data={'success': False, 'reason': 'double check sessionKey value'})
+    else:
+        user = models.SessionKey.objects.get(key=session_key).user
+
+    # 3. fetch note
+    dt = tz.datetime.fromtimestamp(int(received_params['timestamp']) / 1000)
+    if wn_models.Note.objects.filter(user=user, timestamp=dt).exists():
+        return JsonResponse(data={
+            'success': True,
+            'note': wn_models.Note.objects.get(user=user, timestamp=dt).note
+        })
+    else:
+        return JsonResponse(data={
+            'success': True,
+            'note': ''
+        })
+
+
+@csrf_exempt
+@require_http_methods(['POST'])
+def handle_set_note_api(request):
+    # 0. expected and received params
+    required_params = ['sessionKey', 'timestamp', 'note']
+    received_params = request.POST if 'sessionKey' in request.POST else json.loads(request.body.decode('utf8'))
+
+    # 1. all params check
+    if False in [x in received_params for x in required_params]:
+        return JsonResponse(data={'success': False, 'reason': f'bad params, must provide {",".join(required_params)}'})
+    else:
+        session_key = received_params['sessionKey']
+
+    # 2. sessionKey check
+    if not models.SessionKey.objects.filter(key=session_key).exists():
+        return JsonResponse(data={'success': False, 'reason': 'double check sessionKey value'})
+    else:
+        user = models.SessionKey.objects.get(key=session_key).user
+
+    # 3. set note
+    dt = tz.datetime.fromtimestamp(int(received_params['timestamp']) / 1000)
+    if wn_models.Note.objects.filter(user=user, timestamp=dt).exists():
+        note = wn_models.Note.objects.get(user=user, timestamp=dt)
+        note.note = received_params['note']
+        note.save()
+        return JsonResponse(data={'success': True})
+    else:
+        wn_models.Note.objects.create(user=user, timestamp=dt, note=received_params['note'])
+        return JsonResponse(data={'success': True})
 # endregion

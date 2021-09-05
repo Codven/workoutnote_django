@@ -2,9 +2,8 @@ import json
 import random
 import re
 import time
-from datetime import datetime, timedelta
+from datetime import datetime
 
-import pytz
 from django.conf import settings
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
@@ -12,7 +11,6 @@ from django.contrib.auth.models import User as django_User
 from django.core.mail import EmailMessage
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
@@ -455,7 +453,6 @@ def handle_calendar(request):
     else:
         session_key = api_models.SessionKey.objects.get(user=request.user).key
     return render(request=request, template_name='calendar.html', context={
-        'title': '내 캘린더',
         'at_calendar': True,
         'sessionKey': session_key,
         'exercises': models.Exercise.objects.all(),

@@ -39,4 +39,8 @@ urlpatterns = [
     re_path('^set_favorite_workout/?', views.handle_set_favorite_workout_api),
     re_path('^unset_favorite_workout/?', views.handle_unset_favorite_workout_api),
     re_path('^fetch_favorite_workouts/?', views.handle_fetch_favorite_workouts_api),
+
+    # notes
+    re_path('^fetch_note/?', views.handle_fetch_note_api),
+    re_path('^set_note/?', views.handle_set_note_api),
 ]

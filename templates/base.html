@@ -11,11 +11,11 @@
     <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
 </head>
 
-<body class="w3-content">
+<body>
 
 <!-- Sidebar/menu -->
 <nav class="w3-sidebar w3-bar-block w3-black w3-collapse w3-top" style="z-index: 3; width: 250px; display: none;" id="mySidebar">
@@ -80,86 +80,72 @@
 
     {% block content %}
     {% endblock %}
-
-    <div id="selectExerciseDiv" class="modal w3-top" style="display: none; margin-top: 20px;">
-        <div onclick="hideExerciseSelectorDivClick();" class="modal-background"></div>
-        <div class="modal-card">
-            <header class="modal-card-head"><p class="modal-card-title">운동 선택</p></header>
-            <section class="modal-card-search">
-                <div>
-                    <div class="control is-expanded has-icons-left">
-                        <input onchange="onFilterTextChanged(this);" type="text" placeholder="Search..." autocomplete="off" class="input">
-                    </div>
-                </div>
-                <div class="is-grouped is-grouped-multiline" style="margin-top: 5px;">
-                    <div style="margin-right: 5px;">
-                        <div class="select is-small">
-                            <select id="filterExerciseBodyPart" style="cursor: pointer;" required>
-                                <option value="all">모두</option>
-                                {% for bodyPart in body_parts %}
-                                    <option value="{{ bodyPart.name }}">{{ bodyPart.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="control" style="display: none">
-                        <div class="select is-small">
-                            <select id="filterExerciseCategory" style="cursor: pointer;" required>
-                                {% for category in categories %}
-                                    <option value="{{ category.name }}">{{ category.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <section class="modal-card-body">
-                <div id="exercisesListDiv" style="min-height: 415px;">
-                    {% load tools %}
-                    {% for exercise in exercises %}
-                        <a style="display: flex; align-content: center; align-items: center; justify-content: space-between; border-top: 1px solid lightgrey; padding: 3px; cursor: pointer;">
-                            <div onclick="selectExerciseClick('{{ exercise.name }}')" style="display: flex; align-items: center;">
-                                <img src="{{ exercise.icon.url }}" height="35" width="35" style="margin: 5px">
-                                <div style="display: inline-block; margin-left: 6px;">
-                                    {% if exercise.name_translations and 'EN' in exercise.name_translations %}
-                                        <span style="display: block">{{ exercise.name_translations.EN }}</span>
-                                        <span style="display: block; font-size: small; color: #6f94c6">{{ exercise.name }} ({{ exercise.body_part.name }})</span>
-                                    {% else %}
-                                        <span style="display: block">{{ exercise.name }} ({{ exercise.body_part.name }})</span>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            {% is_favorite_exercise user exercise as is_favorite_exercise %}
-                            <img onclick="favoriteExerciseClick(this, {{ exercise.id }});" style="vertical-align: middle;" src="{% if is_favorite_exercise %}{% static 'favorite_checked.png' %}{% else %}{% static 'favorite_unchecked.png' %}{% endif %}" width="28px" height="28px">
-                        </a>
-                    {% endfor %}
-                </div>
-            </section>
-            <footer class="modal-card-foot">
-                <a onclick="hideExerciseSelectorDivClick();" style="cursor: pointer;">닫기</a>
-            </footer>
-        </div>
-    </div>
 </div>
 
 <div id="splashDiv">
     <img alt="Workoutnote" src="{% static 'Logo-white.svg' %}" height="75" tabindex="0">
 </div>
 
-<div id="optionsDivRoot" class="alertDivRoot" style="display: none;">
-    <div id="optionsDiv" style="z-index: 999;">
+<div id="optionsDivRoot" class="alertDivRoot" style="display: none; z-index: 999;">
+    <div id="optionsDiv">
         <a style="color: black;">수정하기</a>
         <hr style="border-top: 1px solid lightgray;">
         <a style="color: red;">삭제하기</a>
     </div>
 </div>
 
-<div id="deleteAlertDivRoot" class="alertDivRoot" style="display: none;">
-    <div id="deleteAlertDiv" style="z-index: 997;">
+<div id="deleteAlertDivRoot" class="alertDivRoot" style="display: none; z-index: 997;">
+    <div id="deleteAlertDiv">
         <a style="color: black; display: block;">삭제하면 복구할 수 없읍니다. 정말 삭제하시겠읍니까?</a>
         <div>
             <a style="color: dodgerblue;">취소</a>
             <a style="color: red;">삭제</a>
+        </div>
+    </div>
+</div>
+
+<div id="selectExerciseDivRoot" class="w3-top" style="display: none; z-index: 996">
+    <div id="selectExerciseDiv">
+        <div style="display: flex; justify-content: space-between;">
+            <span></span>
+            <span style="color: #5F36C4; font-weight: bold; font-size: large;">EXERCISE</span>
+            <img onclick="hideExerciseSelectorDivClick();" style="cursor: pointer;" src="{% static 'close.svg' %}" alt="close" width="16px">
+        </div>
+        <div style="text-align: center; margin-top: 24px;">
+            <div id="searchInputDiv">
+                <img src="{% static 'search.svg' %}" alt="" width="16px;">
+                <input id="searchInput" type="text" placeholder="Search..." autocomplete="off">
+            </div>
+            <div id="bodyPartDiv">
+                <label class="notSelectedBodyPart">내 운동
+                    <input onchange="filterFavoriteExercises(this);" type="checkbox" name="favorites">
+                </label>
+                {% for body_part in body_parts %}
+                    <label class="{% if forloop.first %}selectedBodyPart{% else %}notSelectedBodyPart{% endif %}">{{ body_part.name }}
+                        <input type="radio" {% if forloop.first %}checked{% endif %} name="bodyPart" value="{{ body_part.name }}">
+                    </label>
+                {% endfor %}
+            </div>
+        </div>
+        <div id="exercisesListDiv" style="min-height: 415px;">
+            {% load tools %}
+            {% for exercise in exercises %}
+                <a style="display: flex; align-content: center; align-items: center; justify-content: space-between; border-top: 1px solid lightgrey; padding: 3px; cursor: pointer;">
+                    <div onclick="selectExerciseClick('{{ exercise.name }}')" style="display: flex; align-items: center;">
+                        <img src="{{ exercise.icon.url }}" height="35" width="35" style="margin: 5px">
+                        <div style="display: inline-block; margin-left: 6px;">
+                            {% if exercise.name_translations and 'EN' in exercise.name_translations %}
+                                <span style="display: block">{{ exercise.name_translations.EN }}</span>
+                                <span style="display: block; font-size: small; color: #6f94c6">{{ exercise.name }} ({{ exercise.body_part.name }})</span>
+                            {% else %}
+                                <span style="display: block">{{ exercise.name }} ({{ exercise.body_part.name }})</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% is_favorite_exercise user exercise as is_favorite_exercise %}
+                    <img onclick="favoriteExerciseClick(this, {{ exercise.id }});" style="vertical-align: middle;" src="{% if is_favorite_exercise %}{% static 'favorite_checked.png' %}{% else %}{% static 'favorite_unchecked.png' %}{% endif %}" width="28px" height="28px">
+                </a>
+            {% endfor %}
         </div>
     </div>
 </div>
@@ -181,6 +167,83 @@
 
     .w3-main {
         display: {% if request.user.is_authenticated %}block{% else %}none{% endif %};
+    }
+
+    #selectExerciseDivRoot {
+        background-color: #3334;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 998;
+    }
+
+    #selectExerciseDiv {
+        background-color: white;
+        position: relative;
+        width: 60%;
+        top: 10%;
+        left: 20%;
+        border-radius: 32px;
+        padding: 24px;
+    }
+
+    #exercisesListDiv {
+        margin-top: 6px;
+        max-height: 400px;
+        overflow-y: scroll;
+    }
+
+    #searchInputDiv {
+        display: inline-block;
+        padding: 4px 18px;
+        background-color: white;
+        justify-content: center;
+        align-items: center;
+        border: 2px solid #5F36C4;
+        border-radius: 32px;
+    }
+
+    #searchInputDiv input {
+        border: none;
+        outline: none;
+        box-shadow: none;
+        min-width: 400px;
+    }
+
+    #bodyPartDiv {
+        padding: 16px;
+    }
+
+    #bodyPartDiv label {
+        cursor: pointer;
+        text-align: center;
+        padding-left: 18px;
+    }
+
+    #bodyPartDiv input {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+
+    .selectedBodyPart {
+        background-color: #5F36C4;
+        border-radius: 16px;
+        border: 2px solid #5F36C4;
+        color: white;
+        padding: 4px 8px;
+        margin: 4px;
+    }
+
+    .notSelectedBodyPart {
+        background-color: white;
+        border-radius: 16px;
+        color: black;
+        border: 2px solid #5F36C4;
+        padding: 4px 8px;
+        margin: 4px;
     }
 
     #splashDiv {
@@ -286,6 +349,7 @@
 
 <script>
     let favoriteExercises = {};
+    let filterExerciseBodyPart, filterText, filterFavorites = false;
 
     $(document).ready(function () {
         reloadFavoriteExercises();
@@ -301,7 +365,29 @@
         {% endif %}
 
         $('#optionsDivRoot').click(() => $('#optionsDivRoot').fadeOut(100));
+        $('#optionsDiv').click((event) => event.stopPropagation());
         $('#deleteAlertDivRoot').click(() => $('#deleteAlertDivRoot').fadeOut(100));
+        $('#deleteAlertDiv').click((event) => event.stopPropagation());
+        $('#selectExerciseDivRoot').click(hideExerciseSelectorDivClick);
+        $('#selectExerciseDiv').click((event) => event.stopPropagation());
+
+        $('#searchInput').keyup(onFilterTextChanged);
+
+        const bodyParts = document.querySelectorAll("#bodyPartDiv input[type=radio]");
+        bodyParts.forEach(bodyPart => {
+            bodyPart.addEventListener('change', function () {
+                bodyParts.forEach(bodyPart => {
+                    let checked = bodyPart.checked;
+                    if (checked) {
+                        bodyPart.parentElement.className = "selectedBodyPart";
+                        filterExerciseBodyPart = $(bodyPart).val();
+                        console.log(filterExerciseBodyPart);
+                        filterExercises();
+                    } else
+                        bodyPart.parentElement.className = "notSelectedBodyPart";
+                });
+            });
+        });
     });
 
     function reloadFavoriteExercises() {
@@ -383,6 +469,104 @@
                 else
                     console.log(`failed to add workoutSession(id=${workoutSessionId}) to favorites`);
             });
+        }
+    }
+
+    function onFilterTextChanged() {
+        let value = $('#searchInput').val();
+        filterText = value.length > 0 ? value : null;
+        filterExercises();
+    }
+
+    function filterFavoriteExercises(cb) {
+        filterFavorites = cb.checked;
+        if (filterFavorites)
+            cb.parentElement.className = "selectedBodyPart";
+        else
+            cb.parentElement.className = "notSelectedBodyPart";
+        filterExercises();
+    }
+
+    function filterExercises() {
+        let displayedExercises = allExercises.slice();
+
+        if (filterText != null) {
+            let filterTextLower = filterText.toLowerCase();
+            for (let i = 0; i < displayedExercises.length; i++)
+                if (!displayedExercises[i].name.toLowerCase().includes(filterTextLower)) {
+                    let del = true;
+                    for (let language in displayedExercises[i].nameTranslations)
+                        if (displayedExercises[i].nameTranslations[language].toLowerCase().includes(filterTextLower)) {
+                            del = false;
+                            break;
+                        }
+                    if (del) {
+                        displayedExercises.splice(i, 1);
+                        i--;
+                    }
+                }
+            let newArray = [];
+            for (let i = 0; i < displayedExercises.length; i++) {
+                if (displayedExercises[i].name.toLowerCase().startsWith(filterTextLower)) {
+                    newArray.push(displayedExercises[i]);
+                    displayedExercises.splice(i, 1);
+                    i--;
+                } else
+                    for (let language in displayedExercises[i].nameTranslations)
+                        if (displayedExercises[i].nameTranslations[language].toLowerCase().startsWith(filterTextLower)) {
+                            newArray.push(displayedExercises[i]);
+                            displayedExercises.splice(i, 1);
+                            i--;
+                            break;
+                        }
+            }
+            displayedExercises = newArray.concat(displayedExercises);
+        }
+
+        if (filterExerciseBodyPart != null)
+            for (let i = 0; i < displayedExercises.length; i++)
+                if (displayedExercises[i].bodyPart !== filterExerciseBodyPart) {
+                    displayedExercises.splice(i, 1);
+                    i--;
+                }
+
+        if (filterFavorites)
+            for (let i = 0; i < displayedExercises.length; i++)
+                if (!(displayedExercises[i].id in favoriteExercises)) {
+                    displayedExercises.splice(i, 1);
+                    i--;
+                }
+
+        exercisesListDiv.innerHTML = '';
+        for (let i = 0; i < displayedExercises.length; i++) {
+            let newElementHtml;
+            if (displayedExercises[i].nameTranslations.hasOwnProperty('EN'))
+                newElementHtml = `
+                        <a style="display: flex; align-content: center; align-items: center; justify-content: space-between; border-top: 1px solid lightgrey; padding: 3px; cursor: pointer;">
+                            <div onclick="selectExerciseClick('${displayedExercises[i].name}')" style="display: flex; align-items: center;">
+                                <img src="${displayedExercises[i].iconUrl}" height="35" width="35" style="margin: 5px">
+                                <div style="display: inline-block; margin-left: 6px;">
+                                    <span style="display: block">${displayedExercises[i].nameTranslations.EN}</span>
+                                    <span style="display: block; font-size: small; color: #6f94c6">${displayedExercises[i].name}(${displayedExercises[i].bodyPart})</span>
+                                </div>
+                            </div>
+                            <img onclick="favoriteExerciseClick(this, ${displayedExercises[i].id});" style="vertical-align: middle;" src="${favoriteExercises.hasOwnProperty(displayedExercises[i].id) ? '{% static 'favorite_checked.png' %}' : '{% static 'favorite_unchecked.png' %}'}" width="28px" height="28px">
+                        </a>`;
+            else
+                newElementHtml = `
+                        <a style="display: flex; align-content: center; align-items: center; justify-content: space-between; border-top: 1px solid lightgrey; padding: 3px; cursor: pointer;">
+                            <div onclick="selectExerciseClick('${displayedExercises[i].name}')" style="display: flex; align-items: center;">
+                                <img src="${displayedExercises[i].iconUrl}" height="35" width="35" style="margin: 5px">
+                                <div style="display: inline-block; margin-left: 6px;">
+                                    <span style="display: block">${displayedExercises[i].name}(${displayedExercises[i].bodyPart})</span>
+                                </div>
+                            </div>
+                            <img onclick="favoriteExerciseClick(this, ${displayedExercises[i].id});" style="vertical-align: middle;" src="${favoriteExercises.hasOwnProperty(displayedExercises[i].id) ? '{% static 'favorite_checked.png' %}' : '{% static 'favorite_unchecked.png' %}'}" width="28px" height="28px">
+                        </a>`;
+            let newElement = document.createElement('div');
+            newElement.className = 'card';
+            newElement.innerHTML = newElementHtml;
+            exercisesListDiv.appendChild(newElement);
         }
     }
 </script>

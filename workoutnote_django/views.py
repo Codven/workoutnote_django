@@ -152,7 +152,6 @@ def handle_index(request):
         'at_home': True,
         'exercises': models.Exercise.objects.all(),
         'body_parts': models.BodyPart.objects.all(),
-        'categories': models.Category.objects.all(),
         'sessionKey': session_key,
         'workouts_by_days': workouts_by_days
     })

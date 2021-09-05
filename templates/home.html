@@ -267,7 +267,7 @@
         const KG2LBS = 2.20462262185;
         const ONE_REP_MAX_CONST = 0.025;
 
-        let selectExerciseDiv, exercisesListDiv, filterExerciseBodyPart, filterExerciseCategory, filterText;
+        let selectExerciseDiv, exercisesListDiv;
         let allExercises = [{% for exercise in exercises %}{
                 id: {{ exercise.id }},
                 name: '{{ exercise.name }}',
@@ -363,17 +363,8 @@
 
             $('#exerciseDurationDisplay').html("00:00:00");
 
-            selectExerciseDiv = document.getElementById('selectExerciseDiv');
+            selectExerciseDiv = document.getElementById('selectExerciseDivRoot');
             exercisesListDiv = document.getElementById('exercisesListDiv');
-
-            document.getElementById('filterExerciseBodyPart').addEventListener('change', (event) => {
-                filterExerciseBodyPart = event.target.value === 'all' ? null : event.target.value;
-                filterExercises();
-            });
-            document.getElementById('filterExerciseCategory').addEventListener('change', (event) => {
-                filterExerciseCategory = event.target.value === 'none' ? null : event.target.value;
-                filterExercises();
-            });
 
             let weight = parseInt($('#newLiftWeight').val());
             let reps = parseInt($('#newLiftReps').val());
@@ -515,93 +506,6 @@
 
         function hideExerciseSelectorDivClick() {
             selectExerciseDiv.style.display = 'none';
-        }
-
-        function onFilterTextChanged(input) {
-            filterText = input.value.length > 0 ? input.value : null;
-            filterExercises();
-        }
-
-        function filterExercises() {
-            let displayedExercises = allExercises.slice();
-
-            if (filterText != null) {
-                let filterTextLower = filterText.toLowerCase();
-                for (let i = 0; i < displayedExercises.length; i++)
-                    if (!displayedExercises[i].name.toLowerCase().includes(filterTextLower)) {
-                        let del = true;
-                        for (let language in displayedExercises[i].nameTranslations)
-                            if (displayedExercises[i].nameTranslations[language].toLowerCase().includes(filterTextLower)) {
-                                del = false;
-                                break;
-                            }
-                        if (del) {
-                            displayedExercises.splice(i, 1);
-                            i--;
-                        }
-                    }
-                let newArray = [];
-                for (let i = 0; i < displayedExercises.length; i++) {
-                    if (displayedExercises[i].name.toLowerCase().startsWith(filterTextLower)) {
-                        newArray.push(displayedExercises[i]);
-                        displayedExercises.splice(i, 1);
-                        i--;
-                    } else
-                        for (let language in displayedExercises[i].nameTranslations)
-                            if (displayedExercises[i].nameTranslations[language].toLowerCase().startsWith(filterTextLower)) {
-                                newArray.push(displayedExercises[i]);
-                                displayedExercises.splice(i, 1);
-                                i--;
-                                break;
-                            }
-                }
-                displayedExercises = newArray.concat(displayedExercises);
-            }
-
-            if (filterExerciseBodyPart != null)
-                for (let i = 0; i < displayedExercises.length; i++)
-                    if (displayedExercises[i].bodyPart !== filterExerciseBodyPart) {
-                        displayedExercises.splice(i, 1);
-                        i--;
-                    }
-            if (filterExerciseCategory != null)
-                for (let i = 0; i < displayedExercises.length; i++)
-                    if (displayedExercises[i].category !== filterExerciseCategory) {
-                        displayedExercises.splice(i, 1);
-                        i--;
-                    }
-
-            exercisesListDiv.innerHTML = '';
-            for (let i = 0; i < displayedExercises.length; i++) {
-                let newElementHtml;
-                if (displayedExercises[i].nameTranslations.hasOwnProperty('EN'))
-                    newElementHtml = `
-                        <a style="display: flex; align-content: center; align-items: center; justify-content: space-between; border-top: 1px solid lightgrey; padding: 3px; cursor: pointer;">
-                            <div onclick="selectExerciseClick('${displayedExercises[i].name}')" style="display: flex; align-items: center;">
-                                <img src="${displayedExercises[i].iconUrl}" height="35" width="35" style="margin: 5px">
-                                <div style="display: inline-block; margin-left: 6px;">
-                                    <span style="display: block">${displayedExercises[i].nameTranslations.EN}</span>
-                                    <span style="display: block; font-size: small; color: #6f94c6">${displayedExercises[i].name}(${displayedExercises[i].bodyPart})</span>
-                                </div>
-                            </div>
-                            <img onclick="favoriteExerciseClick(this, ${displayedExercises[i].id});" style="vertical-align: middle;" src="${favoriteExercises.hasOwnProperty(displayedExercises[i].id) ? '{% static 'favorite_checked.png' %}' : '{% static 'favorite_unchecked.png' %}'}" width="28px" height="28px">
-                        </a>`;
-                else
-                    newElementHtml = `
-                        <a style="display: flex; align-content: center; align-items: center; justify-content: space-between; border-top: 1px solid lightgrey; padding: 3px; cursor: pointer;">
-                            <div onclick="selectExerciseClick('${displayedExercises[i].name}')" style="display: flex; align-items: center;">
-                                <img src="${displayedExercises[i].iconUrl}" height="35" width="35" style="margin: 5px">
-                                <div style="display: inline-block; margin-left: 6px;">
-                                    <span style="display: block">${displayedExercises[i].name}(${displayedExercises[i].bodyPart})</span>
-                                </div>
-                            </div>
-                            <img onclick="favoriteExerciseClick(this, ${displayedExercises[i].id});" style="vertical-align: middle;" src="${favoriteExercises.hasOwnProperty(displayedExercises[i].id) ? '{% static 'favorite_checked.png' %}' : '{% static 'favorite_unchecked.png' %}'}" width="28px" height="28px">
-                        </a>`;
-                let newElement = document.createElement('div');
-                newElement.className = 'card';
-                newElement.innerHTML = newElementHtml;
-                exercisesListDiv.appendChild(newElement);
-            }
         }
 
         function selectExerciseClick(name) {

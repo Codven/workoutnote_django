@@ -1,31 +1,584 @@
 {% extends 'base.html' %}
 {% block content %}
-    {% load static %}
-    <div class="section-box content">
-        <h2 class="title is-3 is-size-4-mobile">1 Rep Max 계산기</h2>
-        <p>
-            모든 리프트에 대해 최대 1RM을 계산하기.
-        </p>
-        <p>
-            <a class="button is-primary" href="{% url 'one rep max calculator' %}">1 Rep Max 계산기</a>
-        </p>
+    <div id="rootDiv">
+        <div id="calculatorDiv" class="sub_content">
+            <div id="oneRepMaxDiv">
+                <div>
+                    <p>
+                        모든 리프트에 대해 최대 1RM을 계산하기. Your one-rep max is the max weight you can lift
+                        for a single repetition for a given exercise.
+                    </p>
+                    <div class="sub_content">
+                        <h1>1 Rep Max 계산기</h1>
+                        <div>
+                            <p>
+                                모든 리프트에 대해 최대 1RM을 계산하기. 1rep max는 주어진 운동을 한 번 반복할 때 들 수 있는 최대 무게입니다.
+                            </p>
+                            <form id="oneRepMaxCalculator" action="{% url 'one rep max calculator' %}" method="post">
+                                {% csrf_token %}
+                                <div>
+                                    <div><label for="liftmass" class="label">
+                                        Lift
+                                    </label></div>
+                                    <div>
+                                        <div>
+                                            <div>
+                                                <input type="number" id="liftmass" name="liftmass" min="1" max="1500" required="required" step="0.1">
+                                            </div>
+                                            <div><span>kg</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div><label for="repetitions">반복</label></div>
+                                    <div>
+                                        <input type="number" name="repetitions" id="repetitions" min="1" max="500" required="required">
+                                    </div>
+                                </div>
+                                <br>
+                                <div>
+                                    <div></div>
+                                    <div>
+                                        <div>
+                                            <div>
+                                                <input type="submit" value="Calculate One Rep Max">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        {% if calculator_result_status == 'OK' %}
+                            <div>
+                                <h2>
+                                    Your one rep max is
+                                    <strong>{{ result_number }} kg</strong>
+                                </h2>
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 33%; text-align: left;">Percentage of 1RM</th>
+                                        <th style="width: 33%; text-align: left;">Lift Weight</th>
+                                        <th style="text-align: left;">1RM 반복</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for result_item in result_table_1 %}
+                                        <tr>
+                                            <td>{{ result_item.percentage }}%</td>
+                                            <td>{{ result_item.liftmass }} kg</td>
+                                            <td>{{ result_item.reps_of_1rm }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% elif calculator_result_status == 'FAIL' %}
+                            <!---TODO: place the fail case here--->
+                        {% endif %}
+                    </div>
+                </div>
+                <br>
+                {% if calculator_result_status == 'OK' %}
+                    <div class="sub_content">
+                        <h2>
+                            Your one rep max is
+                            <strong>{{ result_number }} kg</strong>
+                        </h2>
+                        <table>
+                            <thead>
+                            <tr>
+                                <th style="width: 33%; text-align: left;">Percentage of 1RM</th>
+                                <th style="width: 33%; text-align: left;">Lift Weight</th>
+                                <th style="text-align: left;">1RM 반복</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for result_item in result_table_1 %}
+                                <tr>
+                                    <td>{{ result_item.percentage }}%</td>
+                                    <td>{{ result_item.liftmass }} kg</td>
+                                    <td>{{ result_item.reps_of_1rm }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% elif calculator_result_status == 'FAIL' %}
+                    <!---TODO: place the fail case here--->
+                {% endif %}
+                <div class="sub_content">
+                    <h2>Repetition Percentages of 1RM</h2>
+                    <table>
+                        <thead>
+                        <tr>
+                            {% if result_number %}
+                                <th style="width: 33%; text-align: left;">반복</th>
+                                <th style="width: 33%; text-align: left;">Lift Weight</th>
+                            {% else %}
+                                <th style="width: 50%; text-align: left;">반복</th>
+                            {% endif %}
+                            <th>Percentage of 1RM</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for result_item in result_table_2 %}
+                            <tr>
+                                <td>{{ result_item.reps_of_1rm }}</td>
+                                {% if result_number %}
+                                    <td>{{ result_item.liftmass }} kg</td>
+                                {% endif %}
+                                <td>{{ result_item.percentage }}%</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="plateBarbellRackingDiv">
+                <div>
+                    <h2>
+                        Calculate the plates you need to load on your barbell
+                    </h2>
+                    <h3>
+                        Enter the lift you want to perform:
+                    </h3>
+                    <form action="{% url 'plate barbell racking calculator' %}" method="post">
+                        {% csrf_token %}
+                        <div>
+                            <div><label for="totalLiftInput">
+                                Total Lift
+                            </label></div>
+                            <div>
+                                <div>
+                                    <div>
+                                        <input type="number" id="totalLiftInput" name="liftmass" min="1" max="4000" required="required" step="0.1" value="{{ total_lift_mass }}">
+                                    </div>
+                                    <div><span>kg</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div><label for="barWeightInput">
+                                Bar Weight
+                            </label></div>
+                            <div>
+                                <div>
+                                    <div>
+                                        <input type="number" id="barWeightInput" name="barliftmass" min="1" max="4000" required="required" step="0.1" value="{{ bar_weight }}">
+                                    </div>
+                                    <div><span>kg</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div>
+                            <div></div>
+                            <div>
+                                <div>
+                                    <div><input type="submit" value="Calculate Plates" name="calculateTotal"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div>
+                            <h3>
+                                Customize the plates you have available at your gym (optional):
+                            </h3>
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th width="50%">Plate Weight</th>
+                                    <th>Quantity (each side)</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>25 kg</td>
+                                    <td>
+                                        <div>
+                                            <div>
+                                                <input name="plate_quantity_25" type="number" min="0" max="10" value="{{ plate_quantity_25 }}">
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                                <tbody>
+                                <tr>
+                                    <td>20 kg</td>
+                                    <td>
+                                        <div>
+                                            <div>
+                                                <input name="plate_quantity_20" type="number" min="0" max="10" value="{{ plate_quantity_20 }}">
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                                <tbody>
+                                <tr>
+                                    <td>15 kg</td>
+                                    <td>
+                                        <div>
+                                            <div>
+                                                <input name="plate_quantity_15" type="number" min="0" max="10" value="{{ plate_quantity_15 }}">
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                                <tbody>
+                                <tr>
+                                    <td>10 kg</td>
+                                    <td>
+                                        <div>
+                                            <div>
+                                                <input name="plate_quantity_10" type="number" min="0" max="10" value="{{ plate_quantity_10 }}">
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                                <tbody>
+                                <tr>
+                                    <td>5 kg</td>
+                                    <td>
+                                        <div>
+                                            <div>
+                                                <input name="plate_quantity_5" type="number" min="0" max="10" value="{{ plate_quantity_5 }}">
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                                <tbody>
+                                <tr>
+                                    <td>2.5 kg</td>
+                                    <td>
+                                        <div>
+                                            <div>
+                                                <input name="plate_quantity_2_5" type="number" min="0" max="10" value="{{ plate_quantity_2_5 }}">
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
 
-        <h2 class="title is-3 is-size-4-mobile">플레이트 바벨 건 드리는 계산기</h2>
-        <p>
-            Plate Barbell Racking Calculator는 특정 무게를 들어 올리기 위해 바벨에 올려야하는 플레이트를 알려줍니다.
-        </p>
-        <p>
-            <a class="button is-primary" href="{% url 'plate barbell racking calculator' %}">
-                플레이트 계산기
-            </a>
-        </p>
+                    </form>
+                </div>
+                {% if calculator_result_status %}
+                    <div class="sub_content">
+                        <div id="plateCalculatorResults">
+                            <h2>Plates Calculated</h2>
+                            {% if calculator_result_status == 'OK' %}
+                                <div>
+                                    <p>
+                                        You can make
+                                        <strong>{{ total_lift_mass }} kg</strong>
+                                        from
+                                        <strong>{{ num_of_plates }} plate</strong>
+                                        each side plus the bar weight of
+                                        <strong>{{ bar_weight }} kg</strong>.
+                                    </p>
+                                    <h3>Each side</h3>
+                                    <ul>
+                                        {% for key, value in plates_data.items %}
+                                            <li>{{ value }} x {{ key }} kg</li>
+                                        {% endfor %}
+                                    </ul>
+                                    <p>
+                                        Bar: {{ bar_weight }} kg</p>
+                                </div>
+                            {% elif calculator_result_status == 'FAIL' %}
+                                <div>
+                                    <p>
+                                        We couldn't make your lift exactly but you can make
+                                        <strong>{{ fail_lift_mass }} kg</strong>
+                                        from
+                                        <strong>{{ num_of_plates }} plates</strong>
+                                        each side plus the bar weight of
+                                        <strong>{{ bar_weight }} kg</strong>.
+                                    </p>
+                                    <p>
+                                        This is
+                                        <strong>{{ fail_lift_mass_difference }} kg</strong>
+                                        under your target of
+                                        <strong>{{ total_lift_mass }} kg .</strong>
+                                    </p>
+                                    <h3>Each side</h3>
+                                    <ul>
+                                        {% for key, value in plates_data.items %}
+                                            <li>{{ value }} x {{ key }} kg</li>
+                                        {% endfor %}
+                                    </ul>
+                                    <p>
+                                        Bar: {{ bar_weight }} kg</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            <div id="wilksDiv">
+                <div id="wilksContainer">
+                    <h2>
+                        Calculate the Wilks Score for your gender/bodyweight in kg
+                    </h2>
+                    <div>
+                        <p>
+                            The Wilks Score (also known as Wilks Coefficient) measures your strength in powerlifting against
+                            other
+                            powerlifters with different bodyweights across both genders. It was invented by Robert Wilks of
+                            Powerlifting
+                            Australia.
+                        </p>
+                    </div>
+                    <form action="{% url 'wilks calculator' %}" method="post" id="powerliftingForm">
+                        {% csrf_token %}
+                        <div>
+                            <div><label for="splitform_gender">성별</label></div>
+                            <div>
+                                <div>
+                                    <div>
+                                        <div><select id="splitform_gender" name="gender">
+                                            <option value="male">
+                                                남성
+                                            </option>
+                                            <option value="female">
+                                                여자
+                                            </option>
+                                        </select></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div><label for="splitform_bodymass">Bodyweight</label></div>
+                            <div>
+                                <div>
+                                    <div><input type="number" id="splitform_bodymass" name="bodymass" required="required" min="5" max="400" step="0.1"></div>
+                                    <div><span>kg</span></div>
+                                    <!----></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div><label>Method</label></div>
+                            <div>
+                                <div>
+                                    <div>
+                                        <label>
+                                            <input type="radio" onclick="splitTotalCheck()" name="method" value="split" checked id="splitCheck"> Separately
+                                        </label>
+                                        <label>
+                                            <input type="radio" onclick="splitTotalCheck()" name="method" value="total" id="totalCheck"> AddedUp
+                                        </label>
+                                    </div>
+                                    <p>
+                                        Enter your best bench press, squat and deadlift (conventional or sumo)
+                                    </p></div>
+                            </div>
+                        </div>
+                        <div id="splitLiftInputBlock">
+                            <div>
+                                <div><label for="benchliftmass">
+                                    Bench Press </label></div>
+                                <div>
+                                    <div>
+                                        <div><input type="number" id="benchliftmass" name="benchliftmass" min="1" max="1500" required="required" step="0.1"></div>
+                                        <div><span>kg</span></div>
+                                        <div><input type="number" name="benchrepetitions" min="1" max="500"></div>
+                                        <div><span>
+                            반복
+                        </span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div><label for="squatliftmass">
+                                    Back Squat </label></div>
+                                <div>
+                                    <div>
+                                        <div><input type="number" id="squatliftmass" name="squatliftmass" min="1" max="1500" required="required" step="0.1"></div>
+                                        <div><span>kg</span></div>
+                                        <div><input type="number" name="squatrepetitions" min="1" max="500"></div>
+                                        <div><span>
+                            반복
+                        </span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div><label for="deadliftliftmass">
+                                    Deadlift </label></div>
+                                <div>
+                                    <div>
+                                        <div><input type="number" id="deadliftliftmass" name="deadliftliftmass" min="1" max="1500" required="required" step="0.1"></div>
+                                        <div><span>kg</span></div>
+                                        <div><input type="number" name="deadliftrepetitions" min="1" max="500"></div>
+                                        <div><span>
+                            반복
+                        </span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="totalLiftInputBlock" style="display: none">
+                            <div>
+                                <div><label for="totalform_liftmass">
+                                    Total Lift
+                                </label></div>
+                                <div>
+                                    <div>
+                                        <div><input type="number" id="totalform_liftmass" name="totalliftmass" min="1" max="4000" required="required" step="0.1"></div>
+                                        <div><span>kg</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div>
+                            <div></div>
+                            <div>
+                                <div>
+                                    <div>
+                                        <button type="submit" onclick="submit()">Calculate Score</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <br>
+                {% if calculator_result_status == 'OK' %}
+                    <div class="sub_content">
+                        <div id="wilksScoreResults">
+                            <h2>Your Wilks Score is
+                                <strong>{{ wilks_score }}</strong>
+                            </h2>
 
-        <h2 class="title is-3 is-size-4-mobile">Wilks 계산기</h2>
-        <p>
-            Wilks 점수는 두 성별에 걸쳐 다른 체중을 가진 다른 파워 리프터에 대한 파워 리프팅의 강도를 측정합니다.
-        </p>
-        <p>
-            <a class="button is-primary" href="{% url 'wilks calculator' %}">Wilks 계산기</a>
-        </p>
+                            <div>
+                                <p>
+                                    Based on a total lift of
+                                    <strong>
+                                        {{ total_lift_mass }} kg </strong>
+                                    in bench press, squat and deadlift at a bodyweight of
+                                    <strong>
+                                        {{ body_weight }} kg </strong>
+                                </p>
+                            </div>
+
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th width="50%" style="text-align: left;">Level</th>
+                                    <th style="text-align: left;">Score</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>Untrained</td>
+                                    <td>120</td>
+                                </tr>
+                                <tr>
+                                    <td>Novice</td>
+                                    <td>200</td>
+                                </tr>
+                                <tr>
+                                    <td>Intermediate</td>
+                                    <td>238</td>
+                                </tr>
+                                <tr>
+                                    <td>Advanced</td>
+                                    <td>326</td>
+                                </tr>
+                                <tr>
+                                    <td>Elite</td>
+                                    <td>414</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                {% elif calculator_result_status == 'FAIL' %}
+                    <!---TODO: place the fail case here--->
+                {% endif %}
+            </div>
+        </div>
+        <div id="calculatorInfoDiv" class="sub_content">
+            <div id="today_workouts"></div>
+        </div>
     </div>
+
+    <style>
+        @media (min-width: 801px) {
+            #rootDiv {
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: space-between;
+            }
+
+            #calculatorDiv {
+                width: calc(65% - 10px);
+                min-height: 200px;
+                margin: 0;
+                padding: 0;
+                display: inline-block;
+            }
+
+            #calculatorInfoDiv {
+                width: calc(35% - 10px);
+                min-height: 80px;
+                margin: 0;
+                padding: 0;
+                display: inline-block;
+            }
+        }
+    </style>
+
+    <script>
+        // region plate barbell calculator
+        let totalLiftInput, barWeightInput;
+        document.addEventListener('DOMContentLoaded', () => {
+            totalLiftInput = document.getElementById('totalLiftInput');
+            barWeightInput = document.getElementById('barWeightInput');
+            totalLiftInput.addEventListener('change', (event) => {
+                if (totalLiftInput.value === '')
+                    totalLiftInput.value = barWeightInput.value;
+                else if (parseFloat(totalLiftInput.value) < parseFloat(barWeightInput.value)) {
+                    alert('Total lift mass must be greater than bar weight mass')
+                    totalLiftInput.value = barWeightInput.value;
+                }
+            });
+            barWeightInput.addEventListener('change', (event) => {
+                if (barWeightInput.value === '')
+                    barWeightInput.value = totalLiftInput.value;
+                else if (parseFloat(totalLiftInput.value) < parseFloat(barWeightInput.value)) {
+                    alert('Bar weight mass should be smaller than total lift mass')
+                    barWeightInput.value = totalLiftInput.value;
+                }
+            });
+        });
+        // endregion
+
+        // region wilks calculator
+        function splitTotalCheck() {
+            if (document.getElementById('splitCheck').checked) {
+                document.getElementById('totalLiftInputBlock').style.display = 'none';
+                document.getElementById('splitLiftInputBlock').style.display = 'block';
+            } else {
+                document.getElementById('totalLiftInputBlock').style.display = 'block';
+                document.getElementById('splitLiftInputBlock').style.display = 'none';
+            }
+        }
+
+        function submit() {
+            document.theForm.submit();
+        }
+
+        // endregion
+    </script>
 {% endblock %}

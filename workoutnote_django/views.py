@@ -159,10 +159,7 @@ def handle_index(request):
 
 @login_required
 def handle_calculators(request):
-    return render(request=request, template_name='calculators/calculators.html', context={
-        'title': '체력 계산기',
-        'at_calculators': True,
-    })
+    return render(request=request, template_name='calculators/calculators.html', context={'at_calculators': True, })
 
 
 @require_http_methods(['GET', 'POST'])
@@ -181,7 +178,6 @@ def handle_one_rep_max_calculator(request):
             data['result_table_2'].append(
                 {'percentage': item, 'reps_of_1rm': index + 1}
             )
-
         return render(request=request, template_name='calculators/one rep max calculator.html', context=data)
     elif request.method == 'POST':
         result = Tools.calculate_one_rep_max(
@@ -211,7 +207,6 @@ def handle_one_rep_max_calculator(request):
 @require_http_methods(['GET', 'POST'])
 def handle_plate_barbell_racking_calculator(request):
     data = {
-        'title': '플레이트 바벨 건 드리는 계산기',
         'at_calculators': True,
 
         'total_lift_mass': 20,
@@ -282,7 +277,6 @@ def handle_plate_barbell_racking_calculator(request):
         data['plate_quantity_20'] = plate_quantity_20
         data['plate_quantity_25'] = plate_quantity_25
         data['calculator_result_status'] = Status.OK
-
     return render(request=request, template_name='calculators/plate barbell racking calculator.html', context=data)
 
 
@@ -290,7 +284,6 @@ def handle_plate_barbell_racking_calculator(request):
 @require_http_methods(['GET', 'POST'])
 def handle_wilks_calculator(request):
     data = {
-        'title': 'Wilks 계산기',
         'at_calculators': True,
 
         'wilks_score': None,

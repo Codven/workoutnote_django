@@ -1,28 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
-    <script>
-
-        function splitTotalCheck() {
-            if (document.getElementById('splitCheck').checked) {
-                document.getElementById('totalLiftInputBlock').style.display = 'none';
-                document.getElementById('splitLiftInputBlock').style.display = 'block';
-            } else {
-                document.getElementById('totalLiftInputBlock').style.display = 'block';
-                document.getElementById('splitLiftInputBlock').style.display = 'none';
-            }
-        }
-
-        function submit() {
-            document.theForm.submit();
-        }
-    </script>
-    <div class="section-box" id="wilksContainer">
-
-        <h2 class="subtitle is-4 is-size-5-mobile">
+    <div id="wilksContainer">
+        <h2>
             Calculate the Wilks Score for your gender/bodyweight in kg
         </h2>
-
-        <div class="content">
+        <div>
             <p>
                 The Wilks Score (also known as Wilks Coefficient) measures your strength in powerlifting against
                 other
@@ -31,15 +13,14 @@
                 Australia.
             </p>
         </div>
-
-        <form action="{% url 'wilks calculator' %}" method="post" id="powerliftingForm" class="powerliftingcalculator__form">
+        <form action="{% url 'wilks calculator' %}" method="post" id="powerliftingForm">
             {% csrf_token %}
             <div>
-                <div><label for="splitform_gender" class="label">성별</label></div>
+                <div><label for="splitform_gender">성별</label></div>
                 <div>
                     <div>
-                        <div class="control">
-                            <div class="select"><select id="splitform_gender" name="gender">
+                        <div>
+                            <div><select id="splitform_gender" name="gender">
                                 <option value="male">
                                     남성
                                 </option>
@@ -52,69 +33,69 @@
                 </div>
             </div>
             <div>
-                <div><label for="splitform_bodymass" class="label">Bodyweight</label></div>
+                <div><label for="splitform_bodymass">Bodyweight</label></div>
                 <div>
-                    <div class="field has-addons">
-                        <div class="control is-expanded"><input type="number" id="splitform_bodymass" name="bodymass" required="required" min="5" max="400" step="0.1" class="input"></div>
-                        <div class="control"><span class="button is-static">kg</span></div>
+                    <div>
+                        <div><input type="number" id="splitform_bodymass" name="bodymass" required="required" min="5" max="400" step="0.1"></div>
+                        <div><span>kg</span></div>
                         <!----></div>
                 </div>
             </div>
             <div>
-                <div class="field-label"><label class="label">Method</label></div>
+                <div><label>Method</label></div>
                 <div>
                     <div>
-                        <div class="control">
-                            <label class="radio">
+                        <div>
+                            <label>
                                 <input type="radio" onclick="splitTotalCheck()" name="method" value="split" checked id="splitCheck"> Separately
                             </label>
-                            <label class="radio">
+                            <label>
                                 <input type="radio" onclick="splitTotalCheck()" name="method" value="total" id="totalCheck"> AddedUp
                             </label>
                         </div>
-                        <p class="help">
+                        <p>
                             Enter your best bench press, squat and deadlift (conventional or sumo)
                         </p></div>
                 </div>
             </div>
             <div id="splitLiftInputBlock">
                 <div>
-                    <div><label for="benchliftmass" class="label">
+                    <div><label for="benchliftmass">
                         Bench Press </label></div>
                     <div>
-                        <div class="field has-addons">
-                            <div class="control is-expanded"><input type="number" id="benchliftmass" name="benchliftmass" min="1" max="1500" required="required" step="0.1" class="input"></div>
-                            <div class="control"><span class="button is-static">kg</span></div>
-                            <div class="control is-expanded"><input type="number" name="benchrepetitions" min="1" max="500" class="input"></div>
-                            <div class="control"><span class="button is-static">
+                        <div>
+                            <div><input type="number" id="benchliftmass" name="benchliftmass" min="1" max="1500" required="required" step="0.1"></div>
+                            <div><span>kg</span></div>
+                            <div><input type="number" name="benchrepetitions" min="1" max="500"></div>
+                            <div><span>
                             반복
                         </span></div>
                         </div>
                     </div>
                 </div>
                 <div>
-                    <div><label for="squatliftmass" class="label">
+                    <div><label for="squatliftmass">
                         Back Squat </label></div>
                     <div>
-                        <div class="field has-addons">
-                            <div class="control is-expanded"><input type="number" id="squatliftmass" name="squatliftmass" min="1" max="1500" required="required" step="0.1" class="input"></div>
-                            <div class="control"><span class="button is-static">kg</span></div>
-                            <div class="control is-expanded"><input type="number" name="squatrepetitions" min="1" max="500" class="input"></div>
-                            <div class="control"><span class="button is-static">
+                        <div>
+                            <div><input type="number" id="squatliftmass" name="squatliftmass" min="1" max="1500" required="required" step="0.1"></div>
+                            <div><span>kg</span></div>
+                            <div><input type="number" name="squatrepetitions" min="1" max="500"></div>
+                            <div><span>
                             반복
                         </span></div>
                         </div>
                     </div>
                 </div>
                 <div>
-                    <div><label for="deadliftliftmass" class="label">
+                    <div><label for="deadliftliftmass">
                         Deadlift </label></div>
                     <div>
-                        <div class="field has-addons">
-                            <div class="control is-expanded"><input type="number" id="deadliftliftmass" name="deadliftliftmass" min="1" max="1500" required="required" step="0.1" class="input"></div>
-                            <div class="control"><span class="button is-static">kg</span></div>
-                            <div class="control is-expanded"><input type="number" name="deadliftrepetitions" min="1" max="500" class="input"></div>
-                            <div class="control"><span class="button is-static">
+                        <div>
+                            <div><input type="number" id="deadliftliftmass" name="deadliftliftmass" min="1" max="1500" required="required" step="0.1"></div>
+                            <div><span>kg</span></div>
+                            <div><input type="number" name="deadliftrepetitions" min="1" max="500"></div>
+                            <div><span>
                             반복
                         </span></div>
                         </div>
@@ -123,13 +104,13 @@
             </div>
             <div id="totalLiftInputBlock" style="display: none">
                 <div>
-                    <div class="field-label"><label for="totalform_liftmass" class="label">
+                    <div><label for="totalform_liftmass">
                         Total Lift
                     </label></div>
                     <div>
-                        <div class="field has-addons">
-                            <div class="control is-expanded"><input type="number" id="totalform_liftmass" name="totalliftmass" min="1" max="4000" required="required" step="0.1" class="input"></div>
-                            <div class="control"><span class="button is-static">kg</span></div>
+                        <div>
+                            <div><input type="number" id="totalform_liftmass" name="totalliftmass" min="1" max="4000" required="required" step="0.1"></div>
+                            <div><span>kg</span></div>
                         </div>
                     </div>
                 </div>
@@ -139,8 +120,8 @@
                 <div></div>
                 <div>
                     <div>
-                        <div class="control">
-                            <button type="submit" class="button is-primary is-medium" onclick="submit()">Calculate Score</button>
+                        <div>
+                            <button type="submit" onclick="submit()">Calculate Score</button>
                         </div>
                     </div>
                 </div>
@@ -150,12 +131,12 @@
     <br>
     {% if calculator_result_status == 'OK' %}
         <div class="sub_content">
-            <div class="section-box" id="wilksScoreResults">
-                <h2 class="title is-3 is-size-4-mobile">Your Wilks Score is
+            <div id="wilksScoreResults">
+                <h2>Your Wilks Score is
                     <strong>{{ wilks_score }}</strong>
                 </h2>
 
-                <div class="content">
+                <div>
                     <p>
                         Based on a total lift of
                         <strong>
@@ -166,7 +147,7 @@
                     </p>
                 </div>
 
-                <table class="table is-fullwidth is-striped">
+                <table>
                     <thead>
                     <tr>
                         <th width="50%" style="text-align: left;">Level</th>
@@ -201,4 +182,20 @@
     {% elif calculator_result_status == 'FAIL' %}
         <!---TODO: place the fail case here--->
     {% endif %}
+
+    <script>
+        function splitTotalCheck() {
+            if (document.getElementById('splitCheck').checked) {
+                document.getElementById('totalLiftInputBlock').style.display = 'none';
+                document.getElementById('splitLiftInputBlock').style.display = 'block';
+            } else {
+                document.getElementById('totalLiftInputBlock').style.display = 'block';
+                document.getElementById('splitLiftInputBlock').style.display = 'none';
+            }
+        }
+
+        function submit() {
+            document.theForm.submit();
+        }
+    </script>
 {% endblock %}

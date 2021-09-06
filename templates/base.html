@@ -73,8 +73,8 @@
 
     <!-- Top header -->
     {% if title %}
-        <header class="w3-container w3-xlarge">
-            <h1 class="w3-left">{{ title }}</h1>
+        <header id="titleContainer">
+            <h1>{{ title }}</h1>
         </header>
     {% endif %}
 
@@ -153,6 +153,224 @@
 </body>
 
 <style>
+    @media (min-width: 801px) {
+        #deleteAlertDiv {
+            background-color: white;
+            border-radius: 32px;
+            text-align: left;
+            padding: 32px 64px;
+            margin: 64px 300px;
+        }
+
+        #deleteAlertDiv div:last-child {
+            text-align: end;
+        }
+
+        #deleteAlertDiv a {
+            font-size: larger;
+            margin-right: 32px;
+        }
+
+        #deleteAlertDiv div:last-child a {
+            cursor: pointer;
+        }
+
+
+        #selectExerciseDivRoot {
+            background-color: #3334;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 998;
+        }
+
+        #selectExerciseDiv {
+            background-color: white;
+            position: relative;
+            width: 60%;
+            top: 10%;
+            left: 20%;
+            border-radius: 32px;
+            padding: 24px;
+        }
+
+        #exercisesListDiv {
+            margin-top: 6px;
+            max-height: 400px;
+            overflow-y: scroll;
+        }
+
+        #searchInputDiv {
+            display: inline-block;
+            padding: 4px 18px;
+            background-color: white;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #5F36C4;
+            border-radius: 32px;
+        }
+
+        #searchInputDiv input {
+            border: none;
+            outline: none;
+            box-shadow: none;
+            min-width: 400px;
+        }
+
+        #bodyPartDiv {
+            padding: 16px;
+        }
+
+        #bodyPartDiv label {
+            cursor: pointer;
+            text-align: center;
+            padding-left: 18px;
+        }
+
+        #bodyPartDiv input {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        .selectedBodyPart {
+            background-color: #5F36C4;
+            border-radius: 16px;
+            border: 2px solid #5F36C4;
+            color: white;
+            padding: 4px 8px;
+            margin: 4px;
+        }
+
+        .notSelectedBodyPart {
+            background-color: white;
+            border-radius: 16px;
+            color: black;
+            border: 2px solid #5F36C4;
+            padding: 4px 8px;
+            margin: 4px;
+        }
+    }
+
+    @media (max-width: 800px) {
+        #deleteAlertDiv {
+            background-color: white;
+            border-radius: 24px;
+            text-align: center;
+            width: 80%;
+            position: fixed;
+            left: 10%;
+            top: 35%;
+            padding-top: 64px;
+        }
+
+        #deleteAlertDiv div:last-child {
+            display: flex;
+            padding-top: 32px;
+        }
+
+        #deleteAlertDiv div:last-child a {
+            flex-grow: 1;
+            height: 48px;
+            padding-top: 10px;
+            cursor: pointer;
+            transition: 100ms;
+        }
+
+        #deleteAlertDiv div:last-child a:first-child {
+            border-top: 1px solid lightgray;
+            border-right: 1px solid lightgray;
+        }
+
+        #deleteAlertDiv div:last-child a:last-child {
+            border-top: 1px solid lightgray;
+            border-left: 1px solid lightgray;
+        }
+
+
+        #selectExerciseDivRoot {
+            background-color: #3334;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 998;
+        }
+
+        #selectExerciseDiv {
+            background-color: white;
+            position: relative;
+            width: 80%;
+            top: 15%;
+            left: 10%;
+            border-radius: 32px;
+            padding: 24px;
+        }
+
+        #exercisesListDiv {
+            margin-top: 6px;
+            max-height: 400px;
+            overflow-y: scroll;
+        }
+
+        #searchInputDiv {
+            display: inline-block;
+            padding: 4px 18px;
+            background-color: white;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #5F36C4;
+            border-radius: 32px;
+        }
+
+        #searchInputDiv input {
+            border: none;
+            outline: none;
+            box-shadow: none;
+            width: 80%;
+        }
+
+        #bodyPartDiv {
+            padding: 16px;
+            width: 100%;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        #bodyPartDiv label {
+            cursor: pointer;
+            text-align: center;
+            padding-left: 18px;
+        }
+
+        #bodyPartDiv input {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        .selectedBodyPart {
+            background-color: #5F36C4;
+            border-radius: 16px;
+            border: 2px solid #5F36C4;
+            color: white;
+            padding: 4px 8px;
+            margin: 4px;
+        }
+
+        .notSelectedBodyPart {
+            background-color: white;
+            border-radius: 16px;
+            color: black;
+            border: 2px solid #5F36C4;
+            padding: 4px 8px;
+            margin: 4px;
+        }
+    }
+
     body {
         background-color: #E6DFF5;
     }
@@ -167,83 +385,6 @@
 
     .w3-main {
         display: {% if request.user.is_authenticated %}block{% else %}none{% endif %};
-    }
-
-    #selectExerciseDivRoot {
-        background-color: #3334;
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        z-index: 998;
-    }
-
-    #selectExerciseDiv {
-        background-color: white;
-        position: relative;
-        width: 60%;
-        top: 10%;
-        left: 20%;
-        border-radius: 32px;
-        padding: 24px;
-    }
-
-    #exercisesListDiv {
-        margin-top: 6px;
-        max-height: 400px;
-        overflow-y: scroll;
-    }
-
-    #searchInputDiv {
-        display: inline-block;
-        padding: 4px 18px;
-        background-color: white;
-        justify-content: center;
-        align-items: center;
-        border: 2px solid #5F36C4;
-        border-radius: 32px;
-    }
-
-    #searchInputDiv input {
-        border: none;
-        outline: none;
-        box-shadow: none;
-        min-width: 400px;
-    }
-
-    #bodyPartDiv {
-        padding: 16px;
-    }
-
-    #bodyPartDiv label {
-        cursor: pointer;
-        text-align: center;
-        padding-left: 18px;
-    }
-
-    #bodyPartDiv input {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-    }
-
-    .selectedBodyPart {
-        background-color: #5F36C4;
-        border-radius: 16px;
-        border: 2px solid #5F36C4;
-        color: white;
-        padding: 4px 8px;
-        margin: 4px;
-    }
-
-    .notSelectedBodyPart {
-        background-color: white;
-        border-radius: 16px;
-        color: black;
-        border: 2px solid #5F36C4;
-        padding: 4px 8px;
-        margin: 4px;
     }
 
     #splashDiv {
@@ -322,27 +463,6 @@
         border-bottom-right-radius: 16px;
         box-shadow: 2px 2px 4px 0 rgba(0, 6, 177, 0.1),
         -2px 2px 5px 0 rgba(2, 0, 121, 0.1);
-    }
-
-    #deleteAlertDiv {
-        background-color: white;
-        border-radius: 32px;
-        text-align: left;
-        padding: 32px 64px;
-        margin: 64px 300px;
-    }
-
-    #deleteAlertDiv div:last-child {
-        text-align: end;
-    }
-
-    #deleteAlertDiv a {
-        font-size: larger;
-        margin-right: 32px;
-    }
-
-    #deleteAlertDiv div:last-child a {
-        cursor: pointer;
     }
 
 </style>

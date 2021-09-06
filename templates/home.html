@@ -3,24 +3,27 @@
     {% load static %}
     <div id="rootDiv">
         <div id="width_workout_table">
-            <header class="w3-container w3-xlarge" style="margin-bottom: 24px;">
-                <h1 class="w3-left">{{ title }}</h1>
+            <header id="titleHeader" class="w3-container w3-xlarge" style="margin-bottom: 24px;">
                 <h2 class="w3-left"><span>안녕하세요, </span><span style="color: #5F36C4;">{{ name }}</span></h2>
             </header>
             <div class="sub_content">
                 <!-- head -->
-                <div id="liftCreatorHead">
-                    <div style="display: inline-block;">
-                        <span id="workoutDate" style="font-size: small; text-align: start; max-width: 128px; color: darkgray;">{% now "Y. m. d" %} {% now "D" %}</span> <br>
-                        <input id="workoutTitle" type="text" placeholder="예 : 내 운동" value="" style="width: 128px; border-bottom: 1px solid #5F36C4; font-size: 17px;">
-                        <img onclick="document.getElementById('workoutTitle').focus();" src="{% static 'edit.png' %}"
-                             width="14px" style="cursor: pointer; margin: 0; padding: 0;">
+                <div id="header">
+                    <div id="workoutTitleDivParent">
+                        <span id="workoutDate">{% now "Y. m. d" %} {% now "D" %}</span>
+                        <div id="workoutTitleDiv">
+                            <input id="workoutTitle" type="text" placeholder="예 : 내 운동" value="">
+                            <img onclick="$('#workoutTitle').val('');" src="{% static 'close.svg' %}" width="14px" height="14px" style="cursor: pointer; margin: 0; padding: 0;">
+                        </div>
                     </div>
-                    <span id="exerciseDurationDisplay" style="font-size: xx-large; color: #5F36C4;">{% now "G:i:s" %}</span>
-                    <input id="exerciseDuration" type="number" name="exerciseDuration" value="0" hidden>
-                    <div style="display: inline-block;" id="stopwatchControls">
-                        <a onclick="stopwatchControlButtonClick();" class="stopwatchControlButton darkBlueBackground"><img id="timerControlButton" src="{% static 'play.png' %}" height="16px"></a>
-                        <a onclick="stopwatchResetClick();" class="stopwatchControlButton grayBackground" style="display: none" id="timerResetButton"><img src="{% static 'stop.png' %}" height="16px"></a>
+                    <div id="liftCreatorHead">
+                        <a></a>
+                        <span id="exerciseDurationDisplay" style="font-size: xx-large; color: #5F36C4;">{% now "G:i:s" %}</span>
+                        <input id="exerciseDuration" type="number" name="exerciseDuration" value="0" hidden>
+                        <div style="display: inline-block;" id="stopwatchControls">
+                            <a onclick="stopwatchControlButtonClick();" class="stopwatchControlButton darkBlueBackground"><img id="timerControlButton" src="{% static 'play.png' %}" height="16px"></a>
+                            <a onclick="stopwatchResetClick();" class="stopwatchControlButton grayBackground" style="display: none" id="timerResetButton"><img src="{% static 'stop.png' %}" height="16px"></a>
+                        </div>
                     </div>
                 </div>
                 <!-- body -->
@@ -72,16 +75,6 @@
     </div>
 
     <style>
-        #liftCreatorHead {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        #liftCreatorBody {
-            margin-top: 50px;
-        }
-
         #workoutTitle, .newLiftWeight, .newLiftReps, #newRmMax {
             font-size: 14px;
             font-weight: lighter;
@@ -91,10 +84,145 @@
             border: none;
         }
 
-        #workoutTitle {
-            color: black;
-            width: 50%;
-            float: left;
+        @media (min-width: 801px) {
+            #rootDiv {
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: space-between;
+            }
+
+            #header {
+                display: flex;
+            }
+
+            #width_workout_table {
+                width: calc(65% - 10px);
+                margin: 0px;
+                padding: 0px;
+                display: inline-block;
+            }
+
+            #width_workout_card {
+                width: calc(35% - 10px);
+                margin: 0px;
+                padding: 0px;
+                display: inline-block;
+            }
+
+            #workoutTitleDiv a:first-child {
+                display: inline-block;
+            }
+
+            #workoutTitleDiv {
+                display: inline-flex;
+                flex-grow: 1;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            #liftCreatorHead {
+                display: flex;
+                flex-grow: 1;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            #workoutDate {
+                display: inline-block;
+                font-size: small;
+                text-align: start;
+                max-width: 128px;
+                color: darkgray;
+            }
+
+            #workoutTitleDivParent {
+                display: inline-block;
+                width: 160px;
+            }
+
+            #workoutTitle {
+                width: 128px;
+                border-bottom: 1px solid #5F36C4;
+                font-size: 17px;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .w3-main {
+                padding: 0;
+            }
+
+            #header {
+                display: block;
+            }
+
+            #width_workout_table .sub_content {
+                border-radius: 0;
+                margin: 0;
+                padding: 0 0 24px;
+            }
+
+            #header {
+                padding-top: 24px;
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+
+            #titleHeader {
+                padding: 32px 32px 0;
+            }
+
+            #workoutTitleDiv {
+                display: flex;
+                align-items: center;
+                justify-content: space-evenly;
+            }
+
+            #workoutTitleDiv a:first-child {
+                display: none;
+            }
+
+            #workoutTitleDivParent {
+                display: block;
+            }
+
+            #liftCreatorHead {
+                margin-top: 16px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            #liftCreatorHead div:first-child {
+                display: block;
+            }
+
+            #workoutDate {
+                display: block;
+                font-size: small;
+                text-align: start;
+                color: darkgray;
+            }
+
+            #workoutTitle {
+                width: calc(100% - 12px);
+                display: block;
+                border-bottom: 1px solid #5F36C4;
+                font-size: 17px;
+            }
+
+            #loadFavoriteWorkoutDiv a {
+                margin-left: 24px;
+            }
+
+            #today_workouts {
+                padding: 24px;
+            }
+        }
+
+        #liftCreatorBody {
+            margin-top: 50px;
         }
 
         .stopwatchControlButton {
@@ -220,29 +348,6 @@
         }
 
         /* endregion */
-
-        @media (min-width: 801px) {
-            #rootDiv {
-                margin: 0;
-                padding: 0;
-                display: flex;
-                justify-content: space-between;
-            }
-
-            #width_workout_table {
-                width: calc(65% - 10px);
-                margin: 0px;
-                padding: 0px;
-                display: inline-block;
-            }
-
-            #width_workout_card {
-                width: calc(35% - 10px);
-                margin: 0px;
-                padding: 0px;
-                display: inline-block;
-            }
-        }
 
         #favorite_workouts_button {
             margin: 3px;

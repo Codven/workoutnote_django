@@ -444,10 +444,23 @@ def handle_calendar(request):
         api_models.SessionKey.objects.create(user=request.user, key=session_key)
     else:
         session_key = api_models.SessionKey.objects.get(user=request.user).key
+    workouts_by_days = {}
+    for db_workout_session in models.WorkoutSession.objects.filter(user=request.user).order_by('-timestamp'):
+        db_lifts = models.Lift.objects.filter(workout_session=db_workout_session).order_by('id')
+        day_str = db_workout_session.get_day_str()
+        for db_lift in db_lifts:
+            if day_str in workouts_by_days:
+                if db_workout_session in workouts_by_days[day_str]:
+                    workouts_by_days[day_str][db_workout_session] += [db_lift]
+                else:
+                    workouts_by_days[day_str][db_workout_session] = [db_lift]
+            else:
+                workouts_by_days[day_str] = {db_workout_session: [db_lift]}
     return render(request=request, template_name='calendar.html', context={
         'at_calendar': True,
         'sessionKey': session_key,
         'exercises': models.Exercise.objects.all(),
+        'workouts_by_days': workouts_by_days
     })
 
 

@@ -867,7 +867,7 @@
                     deleteButton.unbind();
                     editButton.click(function () {
                         message_broadcast({action: 'workout', value: allWorkouts[i]});
-                        window.scrollTo(0, 0);
+                        location.reload();
                     });
                     deleteButton.click(function () {
                         $('#deleteAlertDivRoot').fadeIn(100);

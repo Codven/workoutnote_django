@@ -22,8 +22,8 @@
                     </tr>
                 </table>
                 <hr style="border-top: 2px solid lightgray; margin: 40px 64px 0 64px;">
-                <span style="display: block; color: #5F36C4; font-size: large; font-weight: bold; padding: 20px 64px;">NOTE</span>
-                <span id="savingLabel" style="font-size: x-small; margin-left: 64px; display: none">Saving...</span>
+                <span style="display: block; color: #5F36C4; font-size: large; font-weight: bold; padding-top: 20px;">NOTE</span>
+                <span id="savingLabel" style="font-size: x-small; display: none">Saving...</span>
                 <textarea id="noteTextArea" cols="30" rows="10" maxlength="1024"></textarea>
             </div>
         </div>
@@ -180,6 +180,10 @@
                 background-color: white;
             }
 
+            #calendarDiv .sub_content span {
+                margin-left: 64px;
+            }
+
             #noteTextArea {
                 resize: none;
                 width: calc(100% - 128px);
@@ -197,16 +201,29 @@
         }
 
         @media (max-width: 800px) {
+            .w3-main {
+                padding: 0;
+            }
+
+            #calendarDiv .sub_content {
+                border-radius: 0;
+            }
+
+            #workoutsDiv {
+                padding: 24px;
+            }
+
             #calendar_navigator {
-                margin-top: 32px;
-                margin-bottom: 8px;
+                padding-top: 32px;
+                padding-bottom: 32px;
                 text-align: center;
                 display: flex;
-                justify-content: space-between;
+                justify-content: space-evenly;
             }
 
             #month_text {
-                font-size: x-large;
+                font-size: large;
+                font-weight: bold;
 
                 padding: 0;
                 margin: 0;
@@ -214,46 +231,43 @@
             }
 
             .arrow_right {
-                width: 24px;
-                height: 24px;
+                width: 18px;
+                height: 18px;
                 cursor: pointer;
-                border: solid black;
+                border: solid #6633CC;
                 border-width: 0 3px 3px 0;
                 transform: rotate(-45deg);
                 -webkit-transform: rotate(-45deg);
             }
 
             .arrow_left {
-                width: 24px;
-                height: 24px;
+                width: 18px;
+                height: 18px;
                 cursor: pointer;
-                border: solid black;
+                border: solid #6633CC;
                 border-width: 0 3px 3px 0;
                 transform: rotate(135deg);
                 -webkit-transform: rotate(135deg);
             }
 
             #calendar_table {
-                width: 100%;
-                margin-bottom: 32px;
-                margin-top: 32px;
                 border: none;
                 border-spacing: 0;
+                width: calc(100%);
                 text-align: center;
             }
 
             #calendar_table th {
-                padding: 2px;
-                color: #6633CC;
+                padding: 10px;
+                color: black;
                 background: #F6F5F5;
             }
 
             .calendar_cell {
-                width: 36px;
-                height: 36px;
-                border-radius: 18px;
-                margin: 4px;
-                padding: 0;
+                width: 64px;
+                height: 64px;
+                border-radius: 32px;
+                margin-top: 4px;
                 font-weight: bold;
 
                 cursor: pointer;
@@ -262,20 +276,66 @@
                 border: none;
                 text-align: center;
                 vertical-align: middle;
+
+                transition: 200ms;
             }
 
-            .today_cell, .calendar_cell:hover {
+            .calendar_cell a {
+                display: block;
+            }
+
+            .calendar_cell:hover {
                 background: #C5BDEC;
+                transition: 200ms;
             }
 
-            .calendar_cell_outline {
-                border-radius: 18px;
-                border: 2px solid #6633CC;
+            .cell_with_event a:first-child {
+                position: relative;
+                width: 12px;
+                height: 12px;
+                top: calc(15%);
+                left: calc(50% - 6px);
+                background-color: #6633CC;
+                border-radius: 6px;
+                margin-bottom: 4px;
             }
 
-            .workout_day {
-                font-weight: bolder;
-                color: #6633CC;
+            .cell_with_event a:last-child {
+                position: relative;
+                top: calc(10%);
+            }
+
+            .calendar_cell:not(.cell_with_event) a:last-child {
+                position: relative;
+                top: calc(50% - 13px);
+            }
+
+            .today_cell {
+                background: #6633CC;
+                color: white;
+            }
+
+            .today_cell.cell_with_event a:first-child {
+                background-color: white;
+            }
+
+            #calendarDiv .sub_content span {
+                margin-left: 24px;
+            }
+
+            #noteTextArea {
+                resize: none;
+                width: calc(100% - 48px);
+                height: 128px;
+                margin: 0 24px 24px 24px;
+                border: none;
+                background-color: #eee;
+                -webkit-box-shadow: none;
+                -moz-box-shadow: none;
+                box-shadow: none;
+                outline: none;
+                overflow: auto;
+                padding: 12px;
             }
         }
 
@@ -309,6 +369,20 @@
         let sessionKey;
         let selectedDateTimestamp;
         let updateNoteNecessary = false;
+
+        {% load tools %}
+        let allWorkouts = [
+            {% for day_str, workout_sessions in workouts_by_days.items %}
+                {% for workout_session, lifts in workout_sessions.items %}
+                    {
+                        id: {{ workout_session.id }},
+                        title: "{{ workout_session.title }}",
+                        dayStr: "{{ day_str }}",
+                        duration: {{ workout_session.duration }},
+                        lifts: [{% for lift in lifts %}{id: {{ lift.id }}, exerciseName: "{{ lift.exercise.name }}", liftMass: {{ lift.lift_mass }}, repetitions: {{ lift.repetitions }}, rmMax: {{ lift.one_rep_max }}}{% if not forloop.last %}, {% endif %}{% endfor %}]
+                    },
+                {% endfor %}
+            {% endfor %}];
 
         $(document).ready(function () {
             let timezoneOffsetMinutes = new Date().getTimezoneOffset();
@@ -354,12 +428,12 @@
                             log.html('Failed to save.');
                             updateNoteNecessary = true;
                         }
-                        setTimeout(updateNoteTextArea, 5000);
+                        setTimeout(updateNoteTextArea, 2000);
                     });
                 } else
-                    setTimeout(updateNoteTextArea, 5000);
+                    setTimeout(updateNoteTextArea, 2000);
             };
-            setTimeout(updateNoteTextArea, 5000);
+            setTimeout(updateNoteTextArea, 2000);
 
             $('#noteTextArea').keydown(function () {
                 let log = $('#savingLabel');
@@ -426,6 +500,47 @@
             loadMonth(selectedMonth);
         }
 
+        function optionsClick(img, workoutId) {
+            // set location and size
+            let r = img.parentElement.getBoundingClientRect();
+            let o = $('#optionsDiv');
+            o.width(r.width - 30);
+            o.css({left: r.left + 15, top: r.top + 15});
+
+            // set listeners
+            for (let i = 0; i < allWorkouts.length; i++)
+                if (allWorkouts[i].id === workoutId) {
+                    let editButton = $('#optionsDiv a:first-child');
+                    let deleteButton = $('#optionsDiv a:last-child');
+                    editButton.unbind();
+                    deleteButton.unbind();
+                    editButton.click(function () {
+                        message_broadcast({action: 'workout', value: allWorkouts[i]});
+                        window.location.href = "{% url 'index' %}";
+                    });
+                    deleteButton.click(function () {
+                        $('#deleteAlertDivRoot').fadeIn(100);
+                        let agreeButton = $('#deleteAlertDiv div a:last-child');
+                        agreeButton.unbind();
+                        agreeButton.click(function () {
+                            $.post('/api/remove_workout', {sessionKey: "{{ sessionKey }}", workout_session_id: allWorkouts[i].id}, function (res) {
+                                if (res.success) {
+                                    location.reload();
+                                } else
+                                    alert('Failed to remove, please try again later!');
+                            });
+                        });
+                    });
+                }
+
+            // display options
+            $('#optionsDivRoot').fadeIn(100);
+        }
+
+        function hideExerciseSelectorDivClick() {
+            selectExerciseDiv.style.display = 'none';
+        }
+
         function displayWorkouts(ts, workouts) {
             displayedWorkouts = workouts;
             let date = new Date(ts);
@@ -438,8 +553,11 @@
                 rootDiv.append(`<div class="sub_content" style="min-height: 190px;"></div>`);
                 let subDiv = $('.sub_content:last');
                 subDiv.append(`<div style="height: 12px; display: flex; align-content: center; justify-content: space-between;">
-                    <span style="color: #5F36C4; font-weight: bold;" class="w3-left">${workouts[i].title}</span>
-                    <img onclick="favoriteWorkoutsClick(this, ${workouts[i].id});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="${workouts[i].isFavorite ? '{% static 'favorite-filled.png' %}' : '{% static 'favorite-outlined.png' %}'}" width="22px" height="22px">
+                    <div>
+                        <span style="color: #5F36C4; font-weight: bold;" class="w3-left">${workouts[i].title}</span>
+                        <img onclick="favoriteWorkoutsClick(this, ${workouts[i].id});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="${workouts[i].isFavorite ? '{% static 'favorite-filled.png' %}' : '{% static 'favorite-outlined.png' %}'}" width="22px" height="22px">
+                    </div>
+                    <img onclick="optionsClick(this, ${workouts[i].id});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="{% static 'options.png' %}" width="22px" height="22px">
                 </div>`);
                 subDiv.append('<hr style="border: 1px solid lightgrey;">');
                 subDiv.append('<div style="display: inline-block; padding: 8px; line-height: 1; font-size: small;"></div>');

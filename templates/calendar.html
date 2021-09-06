@@ -250,23 +250,35 @@
                 -webkit-transform: rotate(135deg);
             }
 
-            #calendar_table {
+            #calendar_table, #calendar_table tbody {
+                display: block;
                 border: none;
                 border-spacing: 0;
-                width: calc(100%);
                 text-align: center;
             }
 
+            #calendar_table tr {
+                display: flex;
+                justify-content: space-around;
+            }
+
             #calendar_table th {
+                flex-grow: 1;
                 padding: 10px;
                 color: black;
                 background: #F6F5F5;
             }
 
+            #calendar_table td {
+                flex-grow: 1;
+            }
+
             .calendar_cell {
-                width: 64px;
-                height: 64px;
-                border-radius: 32px;
+                display: inline-block;
+
+                width: 48px;
+                height: 48px;
+                border-radius: 24px;
                 margin-top: 4px;
                 font-weight: bold;
 
@@ -460,7 +472,7 @@
             if (dateTs.getDay() !== 0) {
                 $('#calendar_table tr:last').after('<tr></tr>');
                 for (let i = 0; i < dateTs.getDay(); i++)
-                    $('#calendar_table tr:last').append('<td></td>');
+                    $('#calendar_table tr:last').append('<td><div class="calendar_cell"></div></td>');
             }
 
             const today = new Date();
@@ -486,8 +498,8 @@
 
             // days after this month
             if (dateTs.getDay() !== 0)
-                for (let i = dateTs.getDay() + 1; i < 7; i++)
-                    $('#calendar_table tr:last').append('<td></td>');
+                for (let i = dateTs.getDay(); i < 7; i++)
+                    $('#calendar_table tr:last').append('<td><div class="calendar_cell"></div></td>');
         }
 
         function previousMonthClick() {

@@ -6,12 +6,15 @@
 
     <div id="favorite_workouts">
         {% for day_str, workouts in workouts_by_days %}
-            <h4 style="color: #3f51b5"><b>{{ day_str }}</b></h4>
+            <h4 style="color: #5F36C4; font-size: 18px;"><b>{{ day_str }}</b></h4>
             {% for workout, lifts in workouts %}
                 <div class="sub_content" style="min-height: 190px;">
                     <div style="height: 12px; display: flex; align-content: center; justify-content: space-between;">
-                        <span style="color: #3f51b5; font-weight: bold;" class="w3-left">{{ workout.title }}</span>
-                        <img onclick="favoriteWorkoutsClick(this, {{ workout.id }});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="{% static 'favorite_checked.png' %}" width="22px" height="22px">
+                        <div>
+                            <span style="color: #5F36C4; font-weight: bold;" class="w3-left">{{ workout.title }}</span>
+                            <img onclick="favoriteWorkoutsClick(this, {{ workout.id }});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="{% static 'favorite-filled.png' %}" width="22px" height="22px">
+                        </div>
+                        <img onclick="optionsClick(this, {{ workout.id }});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="{% static 'options.png' %}" width="22px" height="22px">
                     </div>
                     <hr style="border: 1px solid lightgrey;">
                     <div style="display: inline-block; padding: 8px;">
@@ -27,15 +30,23 @@
                         {% endfor %}
                     </div>
                     <div style="padding: 8px; text-align: center;" class="repeatButton">
-                        <span style="font-weight: bold; font-size: large;"
-                              class="light-blue-text">{{ workout.get_duration_str }}</span> <br>
-                        <a onclick="repeatFavoriteWorkoutSession({{ workout.id }});" class="w3-button w3-buttoncolor"
-                           style="padding: 5px 30px 5px 30px; border-radius: 4px; display: block; margin-top: 10px;">불러오기</a>
+                        <span style="font-weight: bold; font-size: large; color: #5F36C4;">{{ workout.get_duration_str }}</span> <br>
+                        <a onclick="repeatWorkoutSession({{ workout.id }});" class="darkBlueBackground" style="padding: 8px 36px; border-radius: 18px; display: block; margin-top: 10px; color:white; cursor: pointer;">불러오기</a>
                     </div>
                 </div>
             {% endfor %}
         {% endfor %}
     </div>
+
+    <style>
+        .darkBlueBackground {
+            background-color: #5F36C4;
+        }
+
+        .grayBackground {
+            background-color: darkgray;
+        }
+    </style>
 
     <script>
         const ONE_REP_MAX_CONST = 0.025;
@@ -45,7 +56,9 @@
                     {
                         id: {{ workout_session.id }},
                         title: "{{ workout_session.title }}",
-                        lifts: [{% for lift in lifts %}{exerciseName: "{{ lift.exercise.name }}",liftMass: {{ lift.lift_mass }},repetitions: {{ lift.repetitions }},rmMax: {{ lift.one_rep_max }}}, {% endfor %}]
+                        dayStr: "{{ day_str }}",
+                        duration: {{ workout_session.duration }},
+                        lifts: [{% for lift in lifts %}{id: {{ lift.id }}, exerciseName: "{{ lift.exercise.name }}", liftMass: {{ lift.lift_mass }}, repetitions: {{ lift.repetitions }}, rmMax: {{ lift.one_rep_max }}}{% if not forloop.last %}, {% endif %}{% endfor %}]
                     },
                 {% endfor %}
             {% endfor %}];
@@ -82,6 +95,74 @@
                     }
                     break;
                 }
+
+            // send as a broadcast to all tabs i.e. save locally
+            message_broadcast({action: 'lifts', value: lifts});
+
+            // redirect to index page
+            window.location.href = '{% url 'index' %}';
+        }
+
+        function hideExerciseSelectorDivClick() {
+            selectExerciseDiv.style.display = 'none';
+        }
+
+        function optionsClick(img, workoutId) {
+            // set location and size
+            let r = img.parentElement.getBoundingClientRect();
+            let o = $('#optionsDiv');
+            o.width(r.width - 30);
+            o.css({left: r.left + 15, top: r.top + 15});
+
+            // set listeners
+            for (let i = 0; i < favoriteWorkouts.length; i++)
+                if (favoriteWorkouts[i].id === workoutId) {
+                    let editButton = $('#optionsDiv a:first-child');
+                    let deleteButton = $('#optionsDiv a:last-child');
+                    editButton.unbind();
+                    deleteButton.unbind();
+                    editButton.click(function () {
+                        message_broadcast({action: 'workout', value: favoriteWorkouts[i]});
+                        window.location.href = "{% url 'index' %}";
+                    });
+                    deleteButton.click(function () {
+                        $('#deleteAlertDivRoot').fadeIn(100);
+                        let agreeButton = $('#deleteAlertDiv div a:last-child');
+                        agreeButton.unbind();
+                        agreeButton.click(function () {
+                            $.post('/api/remove_workout', {sessionKey: "{{ sessionKey }}", workout_session_id: favoriteWorkouts[i].id}, function (res) {
+                                if (res.success) {
+                                    location.reload();
+                                } else
+                                    alert('Failed to remove, please try again later!');
+                            });
+                        });
+                    });
+                }
+
+            // display options
+            $('#optionsDivRoot').fadeIn(100);
+        }
+
+        function repeatWorkoutSession(workoutSessionId) {
+            let lifts = [];
+
+            for (let i = 0; i < favoriteWorkouts.length; i++)
+                if (favoriteWorkouts[i].id === workoutSessionId) {
+                    for (let j = 0; j < favoriteWorkouts[i].lifts.length; j++) {
+                        lifts.push({
+                            id: lifts.length + 1,
+                            exercise: findExerciseByName(favoriteWorkouts[i].lifts[j].exerciseName),
+                            liftMass: favoriteWorkouts[i].lifts[j].lift_mass,
+                            reps: favoriteWorkouts[i].lifts[j].repetitions,
+                            enabled: true,
+                            rmMax: Math.trunc((favoriteWorkouts[i].lifts[j].lift_mass + favoriteWorkouts[i].lifts[j].lift_mass * favoriteWorkouts[i].lifts[j].repetitions * ONE_REP_MAX_CONST) * 100) / 100
+                        });
+                    }
+                    break;
+                }
+
+            console.log(lifts);
 
             // send as a broadcast to all tabs i.e. save locally
             message_broadcast({action: 'lifts', value: lifts});

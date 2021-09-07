@@ -203,24 +203,30 @@
         }
 
         #searchInputDiv {
-            display: inline-block;
+            margin: 0 auto;
+            display: flex;
             padding: 4px 18px;
             background-color: white;
             justify-content: center;
             align-items: center;
             border: 2px solid #5F36C4;
             border-radius: 32px;
+            max-width: 500px;
         }
 
         #searchInputDiv input {
             border: none;
             outline: none;
             box-shadow: none;
-            min-width: 400px;
+            margin-left: 12px;
+            flex-grow: 1;
         }
 
         #bodyPartDiv {
-            padding: 16px;
+            padding: 16px 0;
+            width: 100%;
+            overflow-x: auto;
+            white-space: nowrap;
         }
 
         #bodyPartDiv label {
@@ -264,6 +270,8 @@
             left: 10%;
             top: 35%;
             padding-top: 64px;
+            padding-left: 24px;
+            padding-right: 24px;
         }
 
         #deleteAlertDiv div:last-child {
@@ -317,7 +325,7 @@
         }
 
         #searchInputDiv {
-            display: inline-block;
+            display: flex;
             padding: 4px 18px;
             background-color: white;
             justify-content: center;
@@ -330,12 +338,15 @@
             border: none;
             outline: none;
             box-shadow: none;
-            width: 80%;
+            margin-left: 12px;
+            flex-grow: 1;
+            min-width: 100px;
+            max-width: 500px;
         }
 
         #bodyPartDiv {
-            padding: 16px;
-            width: 100%;
+            padding: 16px 0;
+            flex-grow: 1;
             overflow-x: auto;
             white-space: nowrap;
         }

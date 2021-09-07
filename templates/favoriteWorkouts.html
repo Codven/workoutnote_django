@@ -1,10 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
     {% load static tools %}
-
-    <div id="favorite_workouts"></div>
-
-    <div id="favorite_workouts">
+    <div id="favoriteWorkouts">
         {% for day_str, workouts in workouts_by_days %}
             <h4 style="color: #5F36C4; font-size: 18px;"><b>{{ day_str }}</b></h4>
             {% for workout, lifts in workouts %}
@@ -39,6 +36,22 @@
     </div>
 
     <style>
+        @media (min-width: 800px) {
+            #favoriteWorkouts {
+                text-align: center;
+            }
+
+            #favoriteWorkouts .sub_content {
+                display: inline-block;
+                width: 48%;
+                line-height: 1;
+            }
+
+            #favoriteWorkouts .sub_content span {
+                font-size: small;
+            }
+        }
+
         .darkBlueBackground {
             background-color: #5F36C4;
         }
@@ -47,7 +60,6 @@
             background-color: darkgray;
         }
     </style>
-
     <script>
         const ONE_REP_MAX_CONST = 0.025;
         let favoriteWorkouts = [

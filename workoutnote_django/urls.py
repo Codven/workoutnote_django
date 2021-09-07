@@ -13,9 +13,6 @@ urlpatterns = [
     path('generate-dummy-data/', views.handle_generate_dummy_data),
 
     path('calculators/', views.handle_calculators, name='calculators'),
-    path('one-rep-max-calculator/', views.handle_one_rep_max_calculator, name='one rep max calculator'),
-    path('plate-barbell-racking-calculator/', views.handle_plate_barbell_racking_calculator, name='plate barbell racking calculator'),
-    path('wilks-calculator/', views.handle_wilks_calculator, name='wilks calculator'),
 
     path('accounts/login/', views.handle_login, name='login'),
     path('accounts/register/', views.handle_register, name='register'),

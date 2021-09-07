@@ -92,7 +92,7 @@
                 justify-content: space-between;
             }
 
-            #header {
+            #calculatorSwitchTabs {
                 display: flex;
             }
 
@@ -153,7 +153,7 @@
                 padding: 0;
             }
 
-            #header {
+            #calculatorSwitchTabs {
                 display: block;
             }
 
@@ -163,7 +163,7 @@
                 padding: 0 0 24px;
             }
 
-            #header {
+            #calculatorSwitchTabs {
                 padding-top: 24px;
                 padding-left: 24px;
                 padding-right: 24px;
@@ -365,8 +365,42 @@
             color: black;
             transition-duration: 200ms;
         }
-    </style>
 
+        @media (max-width: 400px) {
+            .arrow_column {
+                display: none;
+            }
+
+            .set_column {
+                display: none;
+            }
+
+            .exercise_column {
+                width: 35%;
+            }
+
+            .weight_column {
+                width: 15%
+            }
+
+            .repetition_column {
+                width: 15%
+            }
+
+            .rm_column {
+                width: 15%
+            }
+
+            .done_column {
+                width: 15%
+            }
+
+            tr td:nth-child(3), tr th:nth-child(3) {
+                text-align: start;
+                padding-left: 4px;
+            }
+        }
+    </style>
     <script>
         const weekdayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
         const KG2LBS = 2.20462262185;

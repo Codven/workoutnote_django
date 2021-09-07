@@ -9,6 +9,15 @@ def exercise_name_translations_default():
 
 
 class Preferences(models.Model):
+    class Language:
+        ENGLISH = "en"
+        KOREAN = "kr"
+        ALL = [ENGLISH, KOREAN]
+        CHOICES = (
+            (ENGLISH, 'English'),
+            (KOREAN, 'Korean')
+        )
+
     class Gender:
         MALE = "MALE"
         FEMALE = "FEMALE"
@@ -23,6 +32,7 @@ class Preferences(models.Model):
     gender = models.CharField(max_length=24, default=Gender.MALE, choices=Gender.CHOICES)
     date_of_birth = models.DateField(default=None, null=True)
     shared_profile = models.BooleanField(default=True)
+    language = models.CharField(max_length=2, default=Language.ENGLISH, choices=Language.CHOICES)
 
     def gender_str(self):
         return self.gender.__str__()
@@ -33,6 +43,13 @@ class Preferences(models.Model):
     def get_age(self):
         today = timezone.now()
         return today.year - self.date_of_birth.year - ((today.month, today.day) < (self.date_of_birth.month, self.date_of_birth.day))
+
+    def get_language_str(self):
+        if self.language == self.Language.ENGLISH:
+            return 'English 🇺🇸'
+        elif self.language == self.Language.KOREAN:
+            return '한국어 🇰🇷'
+        return 'N/A'
 
 
 class EmailConfirmationCode(models.Model):

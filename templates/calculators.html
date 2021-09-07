@@ -1,0 +1,607 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div id="rootDiv">
+        <div id="calculatorSwitchMenu">
+            <a id="oneRepMaxMenuButton" class="menuButton">One Rep Max 계산기</a>
+            <a id="plateBarbelMenuButton" class="menuButton">플레이트 바벨 계산기</a>
+            <a id="wilksMenuButton" class="menuButton">Wilks 계산기</a>
+        </div>
+        <div id="goBackMenuDiv" style="display: none;">
+            <a id="goBackMenuButton"></a>
+        </div>
+        <div id="calculatorDiv">
+            <div id="calculatorSwitchTabs">
+                <label id="oneRepMaxButton" class="checked">One Rep Max 계산기<input type="radio" name="calc"></label>
+                <label id="plateBarbelButton" class="unchecked">플레이트 바벨 계산기<input type="radio" name="calc"></label>
+                <label id="wilksButton" class="unchecked">Wilks 계산기<input type="radio" name="calc"></label>
+            </div>
+            <div id="oneRepMaxDiv">
+                <h3 style="font-weight: bold;">One Rep Max 계산기</h3>
+                <span>모든 리프트에 대해 1회당 최대 반복 수를 계산합니다.</span>
+                <div class="calculatorContentRoot">
+                    <div id="oneRepMaxCalculatorContent">
+                        <label for="liftMass">KG</label>
+                        <input type="number" id="liftMass" name="liftMass" min="1" max="1500" step="0.1" placeholder="직접 입력">
+
+                        <label for="repetitions">반복</label>
+                        <input type="number" name="repetitions" id="repetitions" min="1" max="500" placeholder="직접 입력">
+
+                        <input type="submit" value="계산하기">
+                    </div>
+                    <div id="oneRepMaxCalculatorResult">
+                        <span>딩신의 1RM은</span>
+                        <div>
+                            <span id="oneRepMaxResult"></span>
+                            <span> kg</span>
+                        </div>
+                        <span>입니다.</span>
+                    </div>
+                </div>
+                <table id="oneRepMaxCalculatorResultDetailed" style="display: none">
+                    <tr>
+                        <th colspan="2">1RM 리프트 중량 백분율</th>
+                        <th>1RM 반복횟수</th>
+                    </tr>
+                </table>
+            </div>
+            <div id="plateBarbellRackingDiv" style="display: none">
+                <h3 style="font-weight: bold;">Plate Barbell 계산기</h3>
+                <span>바벨 리프트에 필요한 플레이트 무게를 계산합니다.</span>
+                <div class="calculatorContentRoot">
+                    <div id="plateBarbellRackingCalculatorContent">
+                        <label for="totalLiftMass">Total Lift (KG)</label>
+                        <input type="number" id="totalLiftMass" name="totalLiftMass" min="1" max="1500" step="0.1" placeholder="직접 입력">
+
+                        <label for="barWeight">Bar Weight (KG)</label>
+                        <input type="number" id="barWeight" name="barWeight" min="1" max="1500" step="0.1" placeholder="직접 입력">
+
+                        <input type="submit" value="계산하기">
+                    </div>
+                    <div id="plateBarbellRackingCalculatorResult"></div>
+                </div>
+            </div>
+            <div id="wilksDiv" style="display: none">
+                <h3 style="font-weight: bold;">Wilks Score 계산기</h3>
+                <span>Wilks Score 계산합니다.</span>
+                <div class="calculatorContentRoot">
+                    <div id="wilksCalculatorContent">
+                        <label>Gender : </label>
+                        <br>
+                        <label style="cursor: pointer">
+                            <input type="radio" name="gender" value="male" checked>
+                            Male
+                        </label>
+                        <label style="cursor: pointer">
+                            <input type="radio" name="gender" value="female">
+                            Female
+                        </label>
+
+                        <hr style="margin: 18px 0; border: none">
+                        <label for="bodyWeight">Body Weight (KG)</label>
+                        <input type="number" id="bodyWeight" name="bodyWeight" min="1" max="1500" step="0.1" placeholder="직접 입력">
+
+                        <hr style="margin: 18px 0; border: none">
+                        <div style="border: 1px solid white; border-radius: 8px; padding: 12px;">
+                            <label for="benchLiftMass">Bench Lift Mass (KG)</label>
+                            <input type="number" id="benchLiftMass" name="benchLiftMass" min="1" max="1500" step="0.1" placeholder="직접 입력">
+                            <label for="benchRepetitions">Bench Repetitions</label>
+                            <input type="number" name="benchRepetitions" id="benchRepetitions" min="1" max="500" placeholder="직접 입력">
+                        </div>
+
+                        <hr style="margin: 18px 0; border: none">
+                        <div style="border: 1px solid white; border-radius: 8px; padding: 12px;">
+                            <label for="squatMass">Squat Mass (KG)</label>
+                            <input type="number" id="squatMass" name="squatMass" min="1" max="1500" step="0.1" placeholder="직접 입력">
+                            <label for="squatRepetitions">Squat Repetitions</label>
+                            <input type="number" name="squatRepetitions" id="squatRepetitions" min="1" max="500" placeholder="직접 입력">
+                        </div>
+
+                        <hr style="margin: 18px 0; border: none">
+                        <div style="border: 1px solid white; border-radius: 8px; padding: 12px;">
+                            <label for="deadliftMass">Deadlift Mass (KG)</label>
+                            <input type="number" id="deadliftMass" name="deadliftMass" min="1" max="1500" step="0.1" placeholder="직접 입력">
+                            <label for="deadliftRepetitions">Deadlift Repetitions</label>
+                            <input type="number" name="deadliftRepetitions" id="deadliftRepetitions" min="1" max="500" placeholder="직접 입력">
+                        </div>
+
+                        <input type="submit" value="계산하기">
+                    </div>
+                    <div id="wilksCalculatorResult">
+                        <span id="wilksScoreResultTitle">당신의 Wilks Score는:</span> <br>
+                        <span id="wilksScoreResult"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="calculatorInfoRootDiv">
+            <div id="calculatorInfoDiv" class="sub_content">
+                <span>One Rep Max (1RM)</span>
+                <span>한 사람의 반복적으로 1회당 들어올릴 수 있는 최대 중량입나다.</span>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @media (min-width: 801px) {
+            #rootDiv {
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: space-between;
+            }
+
+            #calculatorDiv {
+                width: calc(65% - 10px);
+                min-height: 200px;
+                margin: 0;
+                padding: 24px;
+                border-radius: 24px;
+            }
+
+            #calculatorInfoRootDiv {
+                width: calc(35% - 10px);
+                margin: 0;
+                padding: 0;
+                display: inline-block;
+            }
+
+            #calculatorSwitchTabs {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 32px;
+            }
+
+            #calculatorSwitchTabs label {
+                font-weight: bold;
+                cursor: pointer;
+                flex-grow: 1;
+                text-align: center;
+            }
+
+            #calculatorSwitchTabs input[type=radio] {
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+            }
+
+            #wilksCalculatorContent label:not(ignore) {
+                font-weight: bold;
+                cursor: pointer;
+                flex-grow: 1;
+                text-align: center;
+            }
+
+            #calculatorSwitchMenu {
+                display: none;
+            }
+
+            .calculatorContentRoot {
+                display: flex;
+            }
+
+            #oneRepMaxCalculatorContent, #oneRepMaxCalculatorResult, #plateBarbellRackingCalculatorContent, #plateBarbellRackingCalculatorResult {
+                display: inline-block;
+                flex-grow: 1;
+            }
+
+            #oneRepMaxCalculatorResult, #plateBarbellRackingCalculatorResult {
+                width: 70%;
+                margin: 0;
+                padding: 32px;
+            }
+
+            #oneRepMaxCalculatorResultDetailed tr td, #oneRepMaxCalculatorResultDetailed tr th {
+                padding-right: 56px;
+            }
+
+            .liftPlates {
+                background-color: white;
+                border-radius: 12px;
+                color: black;
+                display: inline-block;
+                padding: 12px 24px;
+                margin: 8px;
+            }
+
+            #wilksCalculatorContent {
+                display: block;
+                width: 40%;
+            }
+
+            #wilksCalculatorResult {
+                display: block;
+                width: 60%;
+                text-align: center;
+            }
+
+            #wilksScoreResultTitle {
+                font-size: x-large;
+                margin: 0 auto;
+            }
+
+            #wilksScoreResult {
+                font-size: xx-large;
+                border-bottom: 2px solid lightgray;
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .w3-main {
+                padding: 6px;
+            }
+
+            #calculatorDiv, #calculatorDiv div {
+                padding: 10px;
+            }
+
+            #calculatorDiv, #calculatorInfoRootDiv, #calculatorSwitchTabs, #calculatorInfoDiv {
+                display: none;
+            }
+
+            #calculatorSwitchMenu {
+                display: block;
+                padding-top: 1px;
+            }
+
+            #goBackMenuDiv {
+                padding-top: 4px;
+                padding-bottom: 12px;
+            }
+
+            #goBackMenuButton {
+                width: 12px;
+                height: 12px;
+                cursor: pointer;
+                border: solid black;
+                border-width: 0 2px 2px 0;
+                display: block;
+                transform: rotate(135deg);
+                -webkit-transform: rotate(135deg);
+
+                padding: 0;
+                margin: 0 8px 0;
+                line-height: 1;
+            }
+
+            .menuButton {
+                display: block;
+                padding: 18px;
+                background-color: #5F36C4;
+                border-radius: 14px;
+                margin-top: 24px;
+                color: white;
+                cursor: pointer;
+                font-weight: bold;
+            }
+
+            .calculatorContentRoot {
+                display: block;
+            }
+
+            #oneRepMaxCalculatorContent, #oneRepMaxCalculatorResult, #plateBarbellRackingCalculatorContent, #plateBarbellRackingCalculatorResult {
+                display: block;
+            }
+
+            .liftPlates {
+                background-color: white;
+                border-radius: 12px;
+                color: black;
+                display: inline-block;
+                padding: 12px 24px;
+                margin: 8px;
+            }
+
+            #wilksCalculatorResult {
+                display: block;
+                text-align: center;
+                padding: 0 24px;
+            }
+
+            #wilksScoreResultTitle {
+                font-size: large;
+                margin: 0 auto;
+            }
+
+            #wilksScoreResult {
+                font-size: x-large;
+                border-bottom: 2px solid lightgray;
+                margin: 0 auto;
+            }
+        }
+
+        #calculatorDiv input[type=number], #calculatorDiv input[type=submit] {
+            width: 100%;
+        }
+
+        #oneRepMaxCalculatorResultDetailed {
+            width: 100%;
+        }
+
+        #plateBarbellRackingCalculatorContent {
+            display: block;
+        }
+
+        .checked {
+            background-color: #5F36C4;
+            border-radius: 16px;
+            border: 2px solid #5F36C4;
+            color: white;
+            padding: 4px 8px;
+            margin: 4px;
+            cursor: pointer;
+        }
+
+        .unchecked {
+            background-color: white;
+            border-radius: 16px;
+            color: #5F36C4;
+            border: 2px solid #5F36C4;
+            padding: 4px 8px;
+            margin: 4px;
+            cursor: pointer;
+        }
+
+        #calculatorDiv {
+            background-color: white;
+        }
+
+        .calculatorContentRoot {
+            margin: 32px 0;
+            padding: 32px;
+            border-radius: 12px;
+            color: white;
+            background-color: #5F36C4;
+            box-shadow: -1px 2px 3px darkgray,
+            1px 2px 3px darkgray;
+        }
+
+        input {
+            background-color: inherit;
+            color: inherit;
+            border: none;
+            border-bottom: 2px solid white;
+            font-size: small;
+            padding: 4px 8px;
+        }
+
+        input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+            color: white;
+            opacity: 1; /* Firefox */
+        }
+
+        input:-ms-input-placeholder { /* Internet Explorer 10-11 */
+            color: white;
+        }
+
+        input::-ms-input-placeholder { /* Microsoft Edge */
+            color: white;
+        }
+
+        #oneRepMaxCalculatorContent, #plateBarbellRackingCalculatorContent {
+            flex-grow: 1;
+            margin: 0;
+            padding: 0;
+        }
+
+        #oneRepMaxCalculatorContent label, #plateBarbellRackingCalculatorContent label {
+            font-weight: bold;
+        }
+
+        #liftMass {
+            margin-bottom: 24px;
+        }
+
+        #calculatorDiv input[type=submit] {
+            margin-top: 32px;
+            display: block;
+            background-color: white;
+            font-size: large;
+            font-weight: bold;
+            color: #5F36C4;
+            border: none;
+            border-radius: 32px;
+            padding: 4px;
+            cursor: pointer;
+        }
+
+        #oneRepMaxCalculatorResult span:first-child {
+            font-size: large;
+            display: block;
+            text-align: start;
+        }
+
+        #oneRepMaxCalculatorResult span:last-child {
+            font-size: large;
+            display: block;
+            text-align: end;
+        }
+
+        #oneRepMaxCalculatorResult div {
+            display: block;
+            text-align: center;
+        }
+
+        #oneRepMaxCalculatorResult div span:first-child {
+            display: inline-block;
+            font-size: 50px;
+            min-width: 64px;
+            border-bottom: 2px solid white;
+            text-align: center;
+            min-height: 50px;
+        }
+
+        #oneRepMaxCalculatorResult div span:last-child {
+            display: inline-block;
+            font-size: x-large;
+        }
+
+        #oneRepMaxCalculatorResultDetailed tr:first-child {
+            color: dimgray;
+            font-weight: bold;
+        }
+
+        #calculatorInfoDiv {
+            padding: 40px 24px;
+        }
+
+        #calculatorInfoDiv span {
+            display: block;
+        }
+
+        #calculatorInfoDiv span:first-child {
+            font-size: large;
+            margin-bottom: 10px;
+        }
+    </style>
+
+    <script>
+        const ONE_REP_MAX_CONST = 0.025;
+
+        $(document).ready(function () {
+            $('#calculatorSwitchTabs input[type=radio]').change(function () {
+                let p = $('#calculatorSwitchTabs input[type=radio]:checked').parent();
+                p.removeClass('unchecked');
+                p.addClass('checked');
+                $.each($('#calculatorSwitchTabs input[type=radio]:not(:checked)'), (i, x) => x.parentElement.className = 'unchecked');
+
+                $('#calculatorDiv div:not(:first-child)').hide();
+                switch (p.attr('id')) {
+                    case 'oneRepMaxButton':
+                        $('#oneRepMaxDiv').show();
+                        $('#oneRepMaxDiv div').show();
+                        break;
+                    case 'plateBarbelButton':
+                        $('#plateBarbellRackingDiv').show();
+                        $('#plateBarbellRackingDiv div').show();
+                        break;
+                    case 'wilksButton':
+                        $('#wilksDiv').show();
+                        $('#wilksDiv div').show();
+                        break;
+                    default:
+                        break;
+                }
+            });
+
+            $('#oneRepMaxMenuButton').click(function () {
+                $('#calculatorSwitchMenu').fadeOut(100);
+
+                $('#oneRepMaxDiv').show();
+                $('#oneRepMaxDiv div').show();
+                $('#plateBarbellRackingDiv').hide();
+                $('#wilksDiv').hide();
+
+                $('#goBackMenuDiv').show();
+                $('#calculatorDiv').delay(100).fadeIn(100);
+            });
+            $('#plateBarbelMenuButton').click(function () {
+                $('#calculatorSwitchMenu').fadeOut(100);
+
+                $('#oneRepMaxDiv').hide();
+                $('#plateBarbellRackingDiv').show();
+                $('#plateBarbellRackingDiv div').show();
+                $('#wilksDiv').hide();
+
+                $('#goBackMenuDiv').show();
+                $('#calculatorDiv').delay(100).fadeIn(100);
+            });
+            $('#wilksMenuButton').click(function () {
+                $('#calculatorSwitchMenu').fadeOut(100);
+
+                $('#oneRepMaxDiv').hide();
+                $('#plateBarbellRackingDiv').hide();
+                $('#wilksDiv').show();
+                $('#wilksDiv div').show();
+
+                $('#goBackMenuDiv').show();
+                $('#calculatorDiv').delay(100).fadeIn(100);
+            });
+            $('#goBackMenuButton').click(function () {
+                $('#goBackMenuDiv').hide();
+                $('#calculatorDiv').hide();
+                $('#calculatorSwitchMenu').fadeIn(100);
+            });
+
+            $('#oneRepMaxCalculatorContent input[type=submit]').click(function () {
+                let liftMass = parseFloat($('#liftMass').val());
+                let repetitions = parseInt($('#repetitions').val());
+
+                if (!isNaN(liftMass) && !isNaN(repetitions)) {
+                    let oneRepMax = Math.trunc((liftMass + liftMass * repetitions * ONE_REP_MAX_CONST) * 10) / 10;
+                    $('#oneRepMaxResult').html(oneRepMax.toString());
+
+                    $("#oneRepMaxCalculatorResultDetailed tr:not(:first-child)").empty();
+                    [0.01, 0.02, 0.04, 0.06, 0.08, 0.1, 0.12, 0.16, 0.2, 0.24, 0.3].forEach((v, i) => {
+                        let percentage = 1 - i * 0.05;
+                        $('#oneRepMaxCalculatorResultDetailed tr:last').after(`<tr><td>${Math.trunc(percentage * 100)}</td><td>${Math.trunc(oneRepMax * percentage * 10) / 10} KG</td><td>${Math.trunc(v * 100)}</td></tr>`);
+                        console.log($('#oneRepMaxCalculatorResultDetailed tr'));
+                    });
+                    $('#oneRepMaxCalculatorResultDetailed').show();
+                }
+            });
+            $('#plateBarbellRackingCalculatorContent input[type=submit]').click(function () {
+                let div = $('#plateBarbellRackingCalculatorResult');
+                div.empty();
+                let totalLiftMass = parseFloat($('#totalLiftMass').val());
+                let barWeight = parseInt($('#barWeight').val());
+                totalLiftMass -= barWeight;
+
+                let plates = [];
+                if (!isNaN(totalLiftMass) && !isNaN(barWeight)) {
+                    [25, 20, 15, 10, 5, 2.5, 1.25].forEach((w, _) => {
+                        if (totalLiftMass <= 0)
+                            return;
+                        let count = Math.trunc(totalLiftMass / w);
+                        count -= count % 2 === 1 ? 1 : 0;
+                        if (count > 0) {
+                            plates.push(`${w}KG × ${count}`);
+                            totalLiftMass -= count * w;
+                        }
+                    });
+                    console.log(plates);
+                    if (totalLiftMass === 0)
+                        plates.forEach((plate) => div.append(`<a class="liftPlates">${plate}</a>`));
+                    else
+                        alert('Failed to compute, please try different weight!');
+                } else
+                    alert('Failed to compute, please try different weight!');
+            });
+            $('#wilksCalculatorContent input[type=submit]').click(function () {
+                let gender = $('#wilksCalculatorContent input[type=radio][name=gender]:checked').val();
+                let bodyWeight = parseFloat($('#bodyWeight').val());
+                let benchLiftMass = parseFloat($('#benchLiftMass').val());
+                let benchRepetitions = parseInt($('#benchRepetitions').val());
+                let squatMass = parseFloat($('#squatMass').val());
+                let squatRepetitions = parseInt($('#squatRepetitions').val());
+                let deadliftMass = parseFloat($('#deadliftMass').val());
+                let deadliftRepetitions = parseInt($('#deadliftRepetitions').val());
+
+                if ((gender === 'male' || gender === 'female') && !isNaN(bodyWeight) && !isNaN(benchLiftMass) && !isNaN(benchRepetitions) && !isNaN(squatMass) && !isNaN(squatRepetitions) && !isNaN(deadliftMass) && !isNaN(deadliftRepetitions)) {
+                    let calc1rm = (mass, reps) => mass + mass * reps * 0.025;
+                    let bench1rm = calc1rm(benchLiftMass, benchRepetitions);
+                    let squat1rm = calc1rm(squatMass, squatRepetitions);
+                    let deadLift1rm = calc1rm(deadliftMass, deadliftRepetitions);
+                    let totalLiftMass = bench1rm + squat1rm + deadLift1rm;
+                    let coefficients;
+                    if (gender === 'male')
+                        coefficients = [-216.0475144, 16.2606339, -0.002388645, -0.00113732, 7.01863E-06, -1.291E-08];
+                    else if (gender === 'female')
+                        coefficients = [594.31747775582, -27.23842536447, 0.82112226871, -0.00930733913, 4.731582E-05, -9.054E-08];
+                    if (coefficients != null) {
+                        let denominator = 0;
+                        for (let i = 0; i < coefficients.length; i++)
+                            denominator += coefficients[i] * Math.pow(bodyWeight, i);
+                        let wilksScore = totalLiftMass * 500 / denominator;
+                        $('#wilksScoreResult').html(Math.trunc(wilksScore * 100) / 100);
+                    }
+                } else
+                    alert('Failed to compute, please try different values!');
+            });
+        });
+
+        function hideExerciseSelectorDivClick() {
+            selectExerciseDiv.style.display = 'none';
+        }
+    </script>
+{% endblock %}

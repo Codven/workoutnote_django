@@ -42,12 +42,24 @@
     </div>
 
     <style>
-        .formContainer {
-            background-color: white;
-            width: 360px;
-            padding: 3% 0 0;
-            margin: 5% auto 5%;
-            border-radius: 36px;
+        @media (max-width: 800px) {
+            .formContainer {
+                background-color: white;
+                width: 90%;
+                padding: 24px 0 0;
+                margin: 5% auto 5%;
+                border-radius: 36px;
+            }
+        }
+
+        @media (min-width: 801px) {
+            .formContainer {
+                background-color: white;
+                width: 320px;
+                padding: 24px 0 0;
+                margin: 5% auto 5%;
+                border-radius: 36px;
+            }
         }
 
         .formContainer div:first-child {
@@ -72,8 +84,8 @@
             position: relative;
             z-index: 1;
             max-width: 360px;
-            padding: 45px;
             text-align: center;
+            padding: 24px;
         }
 
         .form input {

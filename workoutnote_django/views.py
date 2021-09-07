@@ -14,7 +14,7 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
-from utils.tools import Tools, Status
+from utils.tools import Tools
 from workoutnote_django import models
 from api import models as api_models
 
@@ -44,7 +44,10 @@ def handle_login(request, *args, **kwargs):
     if request.user.is_authenticated:
         return redirect(to='index')
     elif request.method == 'GET':
-        return render(request=request, template_name='auth.html', context={'title': ''})
+        res = render(request=request, template_name='auth_kr.html' if 'lang' in request.GET and request.GET['lang'] == 'kr' else 'auth_en.html')
+        if 'lang' in request.GET:
+            res.set_cookie('lang', request.GET['lang'])
+        return res
     else:
         if 'email' in request.POST and 'password' in request.POST:
             email = request.POST['email']
@@ -101,7 +104,7 @@ def handle_register(request):
                 email_message.fail_silently = False
                 email_message.send()
                 models.EmailConfirmationCode.objects.create(email=email, verification_code=verification_code)
-            return render(request=request, template_name='auth.html', context={
+            return render(request=request, template_name='auth_en.html', context={
                 'verify_now': True,
                 'name': name,
                 'email': email,
@@ -147,7 +150,8 @@ def handle_index(request):
         session_key = api_models.SessionKey.objects.get(user=request.user).key
     # todo plot as in https://simpleisbetterthancomplex.com/tutorial/2020/01/19/how-to-use-chart-js-with-django.html
     # todo customize plot as in https://www.chartjs.org/docs/latest/charts/line.html
-    return render(request=request, template_name='home.html', context={
+    lang = request.COOKIES.get('lang')
+    return render(request=request, template_name='home_kr.html' if lang is not None and lang == 'kr' else 'home_en.html', context={
         'name': name if name else request.user.username,
         'at_home': True,
         'exercises': models.Exercise.objects.all(),
@@ -159,12 +163,17 @@ def handle_index(request):
 
 @login_required
 def handle_calculators(request):
-    return render(request=request, template_name='calculators.html', context={'at_calculators': True, })
+    lang = request.COOKIES.get('lang')
+    return render(request=request, template_name='calculators_kr.html' if lang is not None and lang == 'kr' else 'calculators_en.html', context={'at_calculators': True, })
 
 
 @login_required
 @require_http_methods(['GET', 'POST'])
 def handle_settings(request):
+    lang = None
+    if 'lang' in request.GET:
+        lang = request.GET['lang']
+
     preferences = models.Preferences.objects.get(user=request.user)
     if request.method == 'POST':
         print(request.POST)
@@ -189,12 +198,23 @@ def handle_settings(request):
                 request.user.save()
         preferences.save()
 
-    return render(request=request, template_name='settings.html', context={
-        'title': '설정',
-        'preferences': preferences,
-        'gender': models.Preferences.Gender,
-        'at_settings': True
-    })
+    if lang is None:
+        lang = request.COOKIES.get('lang')
+        return render(request=request, template_name='settings_kr.html' if lang is not None and lang == 'kr' else 'settings_en.html', context={
+            'title': '설정' if lang is not None and lang == 'kr' else 'My page',
+            'preferences': preferences,
+            'gender': models.Preferences.Gender,
+            'at_settings': True
+        })
+    else:
+        res = render(request=request, template_name='settings_kr.html' if lang is not None and lang == 'kr' else 'settings_en.html', context={
+            'title': '설정' if lang is not None and lang == 'kr' else 'My page',
+            'preferences': preferences,
+            'gender': models.Preferences.Gender,
+            'at_settings': True
+        })
+        res.set_cookie('lang', request.GET['lang'])
+        return res
 
 
 @require_http_methods(['GET', 'POST'])
@@ -209,7 +229,8 @@ def handle_password_reset(request):
         if not api_models.SessionKey.objects.filter(key=session_key).exists():
             return redirect(to='login')
         # render reset password html
-        return render(request=request, template_name='resetPassword.html', context={
+        lang = request.COOKIES.get('lang')
+        return render(request=request, template_name='resetPassword_kr.html' if lang is not None and lang == 'kr' else 'resetPassword_en.html', context={
             'title': '잊어버린 비밀번호 변경',
             'sessionKey': session_key
         })
@@ -292,7 +313,8 @@ def handle_calendar(request):
                     workouts_by_days[day_str][db_workout_session] = [db_lift]
             else:
                 workouts_by_days[day_str] = {db_workout_session: [db_lift]}
-    return render(request=request, template_name='calendar.html', context={
+    lang = request.COOKIES.get('lang')
+    return render(request=request, template_name='calendar_kr.html' if lang is not None and lang == 'kr' else 'calendar_en.html', context={
         'at_calendar': True,
         'sessionKey': session_key,
         'exercises': models.Exercise.objects.all(),
@@ -337,7 +359,8 @@ def handle_favorite_workouts(request):
         session_key = api_models.SessionKey.objects.get(user=request.user).key
     # todo plot as in https://simpleisbetterthancomplex.com/tutorial/2020/01/19/how-to-use-chart-js-with-django.html
     # todo customize plot as in https://www.chartjs.org/docs/latest/charts/line.html
-    return render(request=request, template_name='favoriteWorkouts.html', context={
+    lang = request.COOKIES.get('lang')
+    return render(request=request, template_name='favoriteWorkouts_kr.html' if lang is not None and lang == 'kr' else 'favoriteWorkouts_en.html', context={
         'at_home': True,
         'sessionKey': session_key,
         'exercises': models.Exercise.objects.all(),

@@ -22,7 +22,7 @@ class FavoriteExercisesAdmin(admin.ModelAdmin):
 
 @admin.register(BodyPart)
 class BodyPartAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name']
+    list_display = ['id', 'name', 'name_translations']
 
 
 @admin.register(Category)

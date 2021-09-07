@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Workoutnote.com</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'index.css' %}">
+    <link rel="stylesheet" href="{% static 'slicon.css' %}">
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
+</head>
+
+<body>
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-bar-block w3-black w3-collapse w3-top" style="z-index: 3; width: 250px; display: none;" id="mySidebar">
+    <div class="w3-container w3-display-container w3-padding-16">
+        <a href="{% url 'index' %}">
+            <img alt="Workoutnote" src="{% static 'Logo-white.svg' %}" height="55" style="cursor: pointer;">
+        </a>
+    </div>
+    <div id="sidebar_middle_part" class="w3-padding-64 w3-large w3-text-grey" style="font-weight:bold">
+        <a href="{% url 'index' %}" class="w3-bar-item w3-button {% if at_home %}w3-navcolor{% else %}w3-black{% endif %}">
+            <img src="{% static 'Home-white.svg' %}" height="30" style="margin-left: 15px; margin-right: 5px">
+            <span style="font-size: smaller;">Workoutnote</span>
+        </a>
+        <a href="{% url 'calendar' %}" class="w3-bar-item w3-button {% if at_calendar %}w3-navcolor{% else %}w3-black{% endif %}">
+            <img src="{% static 'calendar.svg' %}" height="30" style="margin-left: 15px; margin-right: 5px">
+            <span style="font-size: smaller;">Calendar</span>
+        </a>
+        <a href="{% url 'calculators' %}" class="w3-bar-item w3-button {% if at_calculators %}w3-navcolor{% else %}w3-black{% endif %}">
+            <img src="{% static 'reward.svg' %}" height="30" style="margin-left: 15px; margin-right: 5px">
+            <span style="font-size: smaller;">Fitness calculator</span>
+        </a>
+    </div>
+    <div id="sidebar_bottom_part">
+        <a id="logoutButton" href="{% url 'logout' %}" class="w3-bar-item w3-button">
+            <img src="{% static 'Logout-white.svg' %}" height="30" style="margin-left: 15px; margin-right: 5px">
+            <span>Logout</span>
+        </a>
+        <a id="myPageButton" href="{% url 'settings' %}" class="w3-bar-item w3-button {% if at_settings %}w3-navcolor{% else %}w3-black{% endif %}" style="margin-bottom: 20px;">
+            <img src="{% static 'Settings-white.svg' %}" height="50" width="50">
+            <span>My page</span>
+        </a>
+        <span style="font-size: x-small; margin-left: 10px;">©2021 by Deltoid. All rights reserved.</span>
+    </div>
+</nav>
+
+<!-- Top menu on small screens -->
+<header class="w3-bar w3-top w3-hide-large w3-black w3-xlarge">
+    <div class="w3-bar-item w3-padding-16 w3-wide">
+        <a href="{% url 'index' %}">
+            <img alt="Workoutnote" src="{% static 'Logo-white.svg' %}" height="45" style="cursor: pointer;">
+        </a>
+    </div>
+    <div class="w3-bar-item w3-padding-16 w3-button w3-right">
+        <img onclick="toggleSidebar();" src="{% static 'menu.png' %}" width="40px" height="40px" style="padding: 5px 5px 5px 5px;">
+    </div>
+</header>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="toggleSidebar();" style="cursor: pointer; display: none;" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:250px;">
+    <!-- Push down content on small screens -->
+    <div class="w3-hide-large" style="margin-top:83px"></div>
+
+    <!-- Top header -->
+    {% if title %}
+        <header id="titleContainer">
+            <h1>{{ title }}</h1>
+        </header>
+    {% endif %}
+
+    {% block content %}
+    {% endblock %}
+</div>
+
+<div id="splashDiv">
+    <img alt="Workoutnote" src="{% static 'Logo-white.svg' %}" height="75" tabindex="0">
+</div>
+
+<div id="optionsDivRoot" class="alertDivRoot" style="display: none; z-index: 999;">
+    <div id="optionsDiv">
+        <a style="color: black;">EDIT</a>
+        <hr style="border-top: 1px solid lightgray;">
+        <a style="color: red;">DELETE</a>
+    </div>
+</div>
+
+<div id="deleteAlertDivRoot" class="alertDivRoot" style="display: none; z-index: 997;">
+    <div id="deleteAlertDiv">
+        <a style="color: black; display: block;">This action is not recoverable. Are you sure you want to proceed with deletion?</a>
+        <div>
+            <a style="color: dodgerblue;">CANCEL</a>
+            <a style="color: red;">DELETE</a>
+        </div>
+    </div>
+</div>
+
+<div id="selectExerciseDivRoot" class="w3-top" style="display: none; z-index: 996">
+    <div id="selectExerciseDiv">
+        <div style="display: flex; justify-content: space-between;">
+            <span></span>
+            <span style="color: #5F36C4; font-weight: bold; font-size: large;">EXERCISE</span>
+            <img onclick="hideExerciseSelectorDivClick();" style="cursor: pointer;" src="{% static 'close.svg' %}" alt="close" width="16px">
+        </div>
+        <div style="text-align: center; margin-top: 24px;">
+            <div id="searchInputDiv">
+                <img src="{% static 'search.svg' %}" alt="" width="16px;">
+                <input id="searchInput" type="text" placeholder="Search..." autocomplete="off">
+            </div>
+            <div id="bodyPartDiv">
+                <label class="notSelectedBodyPart">My favorites
+                    <input onchange="filterFavoriteExercises(this);" type="checkbox" name="favorites">
+                </label>
+                {% for body_part in body_parts %}
+                    <label class="{% if forloop.first %}selectedBodyPart{% else %}notSelectedBodyPart{% endif %}">{% if 'EN' in body_part.name_translations %}{{ body_part.name_translations.EN }}{% else %}{{ body_part.name }}{% endif %}
+                        <input type="radio" {% if forloop.first %}checked{% endif %} name="bodyPart" value="{{ body_part.name }}">
+                    </label>
+                {% endfor %}
+            </div>
+        </div>
+        <div id="exercisesListDiv" style="min-height: 415px;">
+            {% load tools %}
+            {% for exercise in exercises %}
+                <a style="display: flex; align-content: center; align-items: center; justify-content: space-between; border-top: 1px solid lightgrey; padding: 3px; cursor: pointer;">
+                    <div onclick="selectExerciseClick('{{ exercise.name }}')" style="display: flex; align-items: center;">
+                        <img src="{{ exercise.icon.url }}" height="35" width="35" style="margin: 5px">
+                        <div style="display: inline-block; margin-left: 6px;">
+                            {% if exercise.name_translations and 'EN' in exercise.name_translations %}
+                                <span style="display: block">{{ exercise.name_translations.EN }}</span>
+                                <span style="display: block; font-size: small; color: #6f94c6">{{ exercise.name }} ({{ exercise.body_part.name }})</span>
+                            {% else %}
+                                <span style="display: block">{{ exercise.name }} ({{ exercise.body_part.name }})</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% is_favorite_exercise user exercise as is_favorite_exercise %}
+                    <img onclick="favoriteExerciseClick(this, {{ exercise.id }});" style="vertical-align: middle;" src="{% if is_favorite_exercise %}{% static 'favorite_checked.png' %}{% else %}{% static 'favorite_unchecked.png' %}{% endif %}" width="28px" height="28px">
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+</body>
+
+<style>
+    @media (min-width: 801px) {
+        #deleteAlertDiv {
+            background-color: white;
+            border-radius: 32px;
+            text-align: left;
+            padding: 32px 64px;
+            margin: 64px 300px;
+        }
+
+        #deleteAlertDiv div:last-child {
+            text-align: end;
+        }
+
+        #deleteAlertDiv a {
+            font-size: larger;
+            margin-right: 32px;
+        }
+
+        #deleteAlertDiv div:last-child a {
+            cursor: pointer;
+        }
+
+
+        #selectExerciseDivRoot {
+            background-color: #3334;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 998;
+        }
+
+        #selectExerciseDiv {
+            background-color: white;
+            position: relative;
+            width: 60%;
+            top: 10%;
+            left: 20%;
+            border-radius: 32px;
+            padding: 24px;
+        }
+
+        #exercisesListDiv {
+            margin-top: 6px;
+            max-height: 400px;
+            overflow-y: scroll;
+        }
+
+        #searchInputDiv {
+            margin: 0 auto;
+            display: flex;
+            padding: 4px 18px;
+            background-color: white;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #5F36C4;
+            border-radius: 32px;
+            max-width: 500px;
+        }
+
+        #searchInputDiv input {
+            border: none;
+            outline: none;
+            box-shadow: none;
+            margin-left: 12px;
+            flex-grow: 1;
+        }
+
+        #bodyPartDiv {
+            padding: 16px 0;
+            width: 100%;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        #bodyPartDiv label {
+            cursor: pointer;
+            text-align: center;
+            padding-left: 18px;
+        }
+
+        #bodyPartDiv input {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        .selectedBodyPart {
+            background-color: #5F36C4;
+            border-radius: 16px;
+            border: 2px solid #5F36C4;
+            color: white;
+            padding: 4px 8px;
+            margin: 4px;
+        }
+
+        .notSelectedBodyPart {
+            background-color: white;
+            border-radius: 16px;
+            color: black;
+            border: 2px solid #5F36C4;
+            padding: 4px 8px;
+            margin: 4px;
+        }
+    }
+
+    @media (max-width: 800px) {
+        #deleteAlertDiv {
+            background-color: white;
+            border-radius: 24px;
+            text-align: center;
+            width: 80%;
+            position: fixed;
+            left: 10%;
+            top: 35%;
+            padding-top: 64px;
+            padding-left: 24px;
+            padding-right: 24px;
+        }
+
+        #deleteAlertDiv div:last-child {
+            display: flex;
+            padding-top: 32px;
+        }
+
+        #deleteAlertDiv div:last-child a {
+            flex-grow: 1;
+            height: 48px;
+            padding-top: 10px;
+            cursor: pointer;
+            transition: 100ms;
+        }
+
+        #deleteAlertDiv div:last-child a:first-child {
+            border-top: 1px solid lightgray;
+            border-right: 1px solid lightgray;
+        }
+
+        #deleteAlertDiv div:last-child a:last-child {
+            border-top: 1px solid lightgray;
+            border-left: 1px solid lightgray;
+        }
+
+
+        #selectExerciseDivRoot {
+            background-color: #3334;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 998;
+        }
+
+        #selectExerciseDiv {
+            background-color: white;
+            position: relative;
+            width: 80%;
+            top: 15%;
+            left: 10%;
+            border-radius: 32px;
+            padding: 24px;
+        }
+
+        #exercisesListDiv {
+            margin-top: 6px;
+            max-height: 400px;
+            overflow-y: scroll;
+        }
+
+        #searchInputDiv {
+            display: flex;
+            padding: 4px 18px;
+            background-color: white;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #5F36C4;
+            border-radius: 32px;
+        }
+
+        #searchInputDiv input {
+            border: none;
+            outline: none;
+            box-shadow: none;
+            margin-left: 12px;
+            flex-grow: 1;
+            min-width: 100px;
+            max-width: 500px;
+        }
+
+        #bodyPartDiv {
+            padding: 16px 0;
+            flex-grow: 1;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        #bodyPartDiv label {
+            cursor: pointer;
+            text-align: center;
+            padding-left: 18px;
+        }
+
+        #bodyPartDiv input {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        .selectedBodyPart {
+            background-color: #5F36C4;
+            border-radius: 16px;
+            border: 2px solid #5F36C4;
+            color: white;
+            padding: 4px 8px;
+            margin: 4px;
+        }
+
+        .notSelectedBodyPart {
+            background-color: white;
+            border-radius: 16px;
+            color: black;
+            border: 2px solid #5F36C4;
+            padding: 4px 8px;
+            margin: 4px;
+        }
+    }
+
+    body {
+        background-color: #E6DFF5;
+    }
+
+    #sidebar_bottom_part {
+        width: 250px;
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        margin-bottom: 24px;
+    }
+
+    .w3-main {
+        display: {% if request.user.is_authenticated %}block{% else %}none{% endif %};
+    }
+
+    #splashDiv {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #5F36C4;
+        z-index: 999;
+        display: {% if request.user.is_authenticated %}none{% else %}flex{% endif %};
+        align-items: center;
+        justify-content: center;
+    }
+
+    #splashDiv img {
+        display: none;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+
+    .alertDivRoot {
+        background-color: #3334;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 998;
+    }
+
+    #optionsDiv {
+        position: fixed;
+        top: 100px;
+        left: 300px;
+        width: 200px;
+    }
+
+    #optionsDiv hr {
+        margin: 0;
+    }
+
+    #optionsDiv a {
+        text-align: center;
+        margin: 0;
+        padding: 6px;
+        display: block;
+        background-color: white;
+        cursor: pointer;
+        transition: 200ms;
+    }
+
+    #optionsDiv a:hover {
+        background-color: #eee;
+        transition: 200ms;
+    }
+
+    #optionsDiv a:first-child {
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+        box-shadow: 2px 2px 4px 0 rgba(0, 6, 177, 0.1),
+        -2px -2px 5px 0 rgba(2, 0, 121, 0.1),
+        2px -2px 5px 0 rgba(2, 0, 121, 0.1);
+    }
+
+    #optionsDiv a:last-child {
+        border-bottom-left-radius: 16px;
+        border-bottom-right-radius: 16px;
+        box-shadow: 2px 2px 4px 0 rgba(0, 6, 177, 0.1),
+        -2px 2px 5px 0 rgba(2, 0, 121, 0.1);
+    }
+
+</style>
+
+<script>
+    let favoriteExercises = {};
+    let filterExerciseBodyPart, filterText, filterFavorites = false;
+
+    $(document).ready(function () {
+        reloadFavoriteExercises();
+
+        let contentRoot = $('.w3-main');
+        let splash = $('#splashDiv');
+        let splashLogo = $('#splashDiv img');
+
+        {% if not request.user.is_authenticated %}
+            splash.delay(2000).fadeOut(300);
+            splashLogo.delay(1000).fadeIn(300);
+            setTimeout(() => contentRoot.show(), 2000);
+        {% endif %}
+
+        $('#optionsDivRoot').click(() => $('#optionsDivRoot').fadeOut(100));
+        $('#deleteAlertDivRoot').click(() => $('#deleteAlertDivRoot').fadeOut(100));
+        $('#selectExerciseDivRoot').click(hideExerciseSelectorDivClick);
+        $('#selectExerciseDiv').click((event) => event.stopPropagation());
+
+        $('#searchInput').keyup(onFilterTextChanged);
+
+        const bodyParts = document.querySelectorAll("#bodyPartDiv input[type=radio]");
+        bodyParts.forEach(bodyPart => {
+            bodyPart.addEventListener('change', function () {
+                bodyParts.forEach(bodyPart => {
+                    let checked = bodyPart.checked;
+                    if (checked) {
+                        bodyPart.parentElement.className = "selectedBodyPart";
+                        filterExerciseBodyPart = $(bodyPart).val();
+                        console.log(filterExerciseBodyPart);
+                        filterExercises();
+                    } else
+                        bodyPart.parentElement.className = "notSelectedBodyPart";
+                });
+            });
+        });
+    });
+
+    function reloadFavoriteExercises() {
+        favoriteExercises = {};
+        $.post('/api/fetch_favorite_exercises', `{"sessionKey": "{{ sessionKey }}"}`).done(function (res) {
+            if (res.success) {
+                for (let i = 0; i < res.exercises.length; i++)
+                    favoriteExercises[res.exercises[i].id] = res.exercises[i];
+            } else {
+                console.log('failed to fetch favorite exercises');
+                favoriteExercises = {};
+            }
+        });
+    }
+
+    function toggleSidebar() {
+        let sidebar = document.getElementById('mySidebar');
+        let overlay = document.getElementById('myOverlay');
+
+        if (sidebar.style.display === 'none') {
+            sidebar.style.display = 'block';
+            overlay.style.display = 'block';
+        } else {
+            sidebar.style.display = 'none';
+            overlay.style.display = 'none';
+        }
+    }
+
+    function message_broadcast(value) {
+        if (value.action === 'lifts')
+            localStorage.setItem('exercises_backup', JSON.stringify(value.value));
+        else if (value.action === 'workout')
+            if (value.value == null)
+                localStorage.removeItem('workout_backup');
+            else
+                localStorage.setItem('workout_backup', JSON.stringify(value.value));
+        localStorage.setItem('message', JSON.stringify(value));
+        window.dispatchEvent(new Event('storage'));
+    }
+
+    function favoriteExerciseClick(button, exerciseId) {
+        let isFavorite = button.src.endsWith('{% static 'favorite_checked.png' %}');
+        if (isFavorite) {
+            // remove from favorites
+            $.post('/api/unset_favorite_exercise', `{"sessionKey": "{{ sessionKey }}", "exercise_id": "${exerciseId}"}`).done(function (res) {
+                if (res.success)
+                    button.src = '{% static 'favorite_unchecked.png' %}';
+                else
+                    console.log(`failed to remove exercise(id=${exerciseId}) from favorites`);
+            });
+        } else {
+            // add to favorite
+            $.post('/api/set_favorite_exercise', `{"sessionKey": "{{ sessionKey }}", "exercise_id": "${exerciseId}"}`).done(function (res) {
+                if (res.success)
+                    button.src = '{% static 'favorite_checked.png' %}';
+                else
+                    console.log(`failed to add exercise(id=${exerciseId}) to favorites`);
+            });
+        }
+
+        reloadFavoriteExercises();
+    }
+
+    function favoriteWorkoutsClick(button, workoutSessionId) {
+        let isFavorite = button.src.endsWith('{% static 'favorite-filled.png' %}');
+        if (isFavorite) {
+            // remove from favorites
+            $.post('/api/unset_favorite_workout', `{"sessionKey": "{{ sessionKey }}", "workout_session_id": "${workoutSessionId}"}`).done(function (res) {
+                if (res.success)
+                    button.src = '{% static 'favorite-outlined.png' %}';
+                else
+                    console.log(`failed to remove workoutSession(id=${workoutSessionId}) from favorites`);
+            });
+        } else {
+            // add to favorite
+            $.post('/api/set_favorite_workout', `{"sessionKey": "{{ sessionKey }}", "workout_session_id": "${workoutSessionId}"}`).done(function (res) {
+                if (res.success)
+                    button.src = '{% static 'favorite-filled.png' %}';
+                else
+                    console.log(`failed to add workoutSession(id=${workoutSessionId}) to favorites`);
+            });
+        }
+    }
+
+    function onFilterTextChanged() {
+        let value = $('#searchInput').val();
+        filterText = value.length > 0 ? value : null;
+        filterExercises();
+    }
+
+    function filterFavoriteExercises(cb) {
+        filterFavorites = cb.checked;
+        if (filterFavorites)
+            cb.parentElement.className = "selectedBodyPart";
+        else
+            cb.parentElement.className = "notSelectedBodyPart";
+        filterExercises();
+    }
+
+    function filterExercises() {
+        let displayedExercises = allExercises.slice();
+
+        if (filterText != null) {
+            let filterTextLower = filterText.toLowerCase();
+            for (let i = 0; i < displayedExercises.length; i++)
+                if (!displayedExercises[i].name.toLowerCase().includes(filterTextLower)) {
+                    let del = true;
+                    for (let language in displayedExercises[i].nameTranslations)
+                        if (displayedExercises[i].nameTranslations[language].toLowerCase().includes(filterTextLower)) {
+                            del = false;
+                            break;
+                        }
+                    if (del) {
+                        displayedExercises.splice(i, 1);
+                        i--;
+                    }
+                }
+            let newArray = [];
+            for (let i = 0; i < displayedExercises.length; i++) {
+                if (displayedExercises[i].name.toLowerCase().startsWith(filterTextLower)) {
+                    newArray.push(displayedExercises[i]);
+                    displayedExercises.splice(i, 1);
+                    i--;
+                } else
+                    for (let language in displayedExercises[i].nameTranslations)
+                        if (displayedExercises[i].nameTranslations[language].toLowerCase().startsWith(filterTextLower)) {
+                            newArray.push(displayedExercises[i]);
+                            displayedExercises.splice(i, 1);
+                            i--;
+                            break;
+                        }
+            }
+            displayedExercises = newArray.concat(displayedExercises);
+        }
+
+        if (filterExerciseBodyPart != null)
+            for (let i = 0; i < displayedExercises.length; i++)
+                if (displayedExercises[i].bodyPart !== filterExerciseBodyPart) {
+                    displayedExercises.splice(i, 1);
+                    i--;
+                }
+
+        if (filterFavorites)
+            for (let i = 0; i < displayedExercises.length; i++)
+                if (!(displayedExercises[i].id in favoriteExercises)) {
+                    displayedExercises.splice(i, 1);
+                    i--;
+                }
+
+        exercisesListDiv.innerHTML = '';
+        for (let i = 0; i < displayedExercises.length; i++) {
+            let newElementHtml;
+            if (displayedExercises[i].nameTranslations.hasOwnProperty('EN'))
+                newElementHtml = `
+                        <a style="display: flex; align-content: center; align-items: center; justify-content: space-between; border-top: 1px solid lightgrey; padding: 3px; cursor: pointer;">
+                            <div onclick="selectExerciseClick('${displayedExercises[i].name}')" style="display: flex; align-items: center;">
+                                <img src="${displayedExercises[i].iconUrl}" height="35" width="35" style="margin: 5px">
+                                <div style="display: inline-block; margin-left: 6px;">
+                                    <span style="display: block">${displayedExercises[i].nameTranslations.EN}</span>
+                                    <span style="display: block; font-size: small; color: #6f94c6">${displayedExercises[i].name}(${displayedExercises[i].bodyPart})</span>
+                                </div>
+                            </div>
+                            <img onclick="favoriteExerciseClick(this, ${displayedExercises[i].id});" style="vertical-align: middle;" src="${favoriteExercises.hasOwnProperty(displayedExercises[i].id) ? '{% static 'favorite_checked.png' %}' : '{% static 'favorite_unchecked.png' %}'}" width="28px" height="28px">
+                        </a>`;
+            else
+                newElementHtml = `
+                        <a style="display: flex; align-content: center; align-items: center; justify-content: space-between; border-top: 1px solid lightgrey; padding: 3px; cursor: pointer;">
+                            <div onclick="selectExerciseClick('${displayedExercises[i].name}')" style="display: flex; align-items: center;">
+                                <img src="${displayedExercises[i].iconUrl}" height="35" width="35" style="margin: 5px">
+                                <div style="display: inline-block; margin-left: 6px;">
+                                    <span style="display: block">${displayedExercises[i].name}(${displayedExercises[i].bodyPart})</span>
+                                </div>
+                            </div>
+                            <img onclick="favoriteExerciseClick(this, ${displayedExercises[i].id});" style="vertical-align: middle;" src="${favoriteExercises.hasOwnProperty(displayedExercises[i].id) ? '{% static 'favorite_checked.png' %}' : '{% static 'favorite_unchecked.png' %}'}" width="28px" height="28px">
+                        </a>`;
+            let newElement = document.createElement('div');
+            newElement.className = 'card';
+            newElement.innerHTML = newElementHtml;
+            exercisesListDiv.appendChild(newElement);
+        }
+    }
+</script>
+
+</html>

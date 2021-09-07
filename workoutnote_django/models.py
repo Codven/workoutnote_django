@@ -4,7 +4,7 @@ from django.db import models
 from django.utils import timezone
 
 
-def exercise_name_translations_default():
+def empty_json():
     return {}
 
 
@@ -59,6 +59,7 @@ class EmailConfirmationCode(models.Model):
 
 class BodyPart(models.Model):
     name = models.CharField(max_length=16)
+    name_translations = models.JSONField(default=empty_json)
 
     @staticmethod
     def init_body_parts():
@@ -86,7 +87,7 @@ class Category(models.Model):
 class Exercise(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=64, unique=True)
-    name_translations = models.JSONField(default=exercise_name_translations_default)
+    name_translations = models.JSONField(default=empty_json)
     icon = models.ImageField(upload_to='exercise_icons', default='default_icon.svg')
     body_part = models.ForeignKey(to=BodyPart, null=True, on_delete=models.CASCADE)
     category = models.ForeignKey(to=Category, null=True, on_delete=models.CASCADE)

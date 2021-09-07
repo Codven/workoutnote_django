@@ -1,0 +1,266 @@
+{% extends 'base_kr.html' %}
+{% block content %}
+    <div id="loginDiv" class="formContainer">
+        <div>
+            <span>LOG IN</span>
+            <span>로그인합니다.</span>
+        </div>
+        <form action="{% url 'login' %}" id="loginForm" class="form" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}"/>
+            <input class="emailInput" type="email" name="email" placeholder="EMAIL / PHONE NUMBER"/>
+            <input class="passwordInput" type="password" name="password" placeholder="PASSWORD"/>
+            <button id="loginButton" class="button">로그인</button>
+            <p class="message">비밀번호를 잊어 버렸습니까?? <a id="reset_password_text" href="#" style="cursor: pointer;">암호를 재설정</a></p>
+            <a class="button" id="move2RegistrationButton">회원가입</a>
+
+            <div class="languageDiv">
+                <a href="{% url 'login' %}?lang=en" class="english">English 🇺🇸</a>
+                <a href="{% url 'login' %}?lang=kr" class="korean">한국어 🇰🇷</a>
+            </div>
+        </form>
+    </div>
+
+    <div id="registerDiv" class="formContainer" style="display: none;">
+        <div>
+            <span>SIGN UP</span>
+            <span>회원가입이 필요합니다.</span>
+        </div>
+        <div id="registerForm" class="form">
+            <input class="nameInput" type="text" name="name" placeholder="NAME" {% if name %}value="{{ name }}" {% endif %}/>
+            <input class="emailInput" type="email" name="email" placeholder="EMAIL / PHONE NUMBER" {% if email %}value="{{ email }}" {% endif %}/>
+            <input class="passwordInput" type="password" name="password" placeholder="PASSWORD" {% if password %}value="{{ password }}" {% endif %}/>
+            <a id="registerButton" class="button" style="margin-bottom: 24px;">등록</a>
+            <a class="button" id="move2LoginButton">로그인</a>
+
+            <div class="languageDiv">
+                <a href="{% url 'login' %}?lang=en" class="english">English 🇺🇸</a>
+                <a href="{% url 'login' %}?lang=kr" class="korean">한국어 🇰🇷</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="verificationDiv" class="formContainer" style="display: none;">
+        <div>
+            <span>VERIFICATION</span>
+            <span>인증번호를 입력해주세요.</span>
+        </div>
+        <div id="verificationForm" class="form">
+            <input class="verificationInput" placeholder="인증번호입력"/>
+            <a id="verificationButton" class="button">완료</a>
+        </div>
+    </div>
+
+    <style>
+        @media (max-width: 800px) {
+            .formContainer {
+                background-color: white;
+                width: 90%;
+                padding: 24px 0 0;
+                margin: 5% auto 5%;
+                border-radius: 36px;
+            }
+        }
+
+        @media (min-width: 801px) {
+            .formContainer {
+                background-color: white;
+                width: 320px;
+                padding: 24px 0 0;
+                margin: 5% auto 5%;
+                border-radius: 36px;
+            }
+        }
+
+        .formContainer div:first-child {
+            padding: 24px 24px;
+            text-align: center;
+        }
+
+        .formContainer div:first-child span:first-child {
+            color: #6035C5;
+            font-weight: bold;
+            font-size: x-large;
+            display: block;
+        }
+
+        .formContainer div:first-child span:last-child {
+            color: black;
+            font-size: larger;
+            display: block;
+        }
+
+        .form {
+            position: relative;
+            z-index: 1;
+            max-width: 360px;
+            text-align: center;
+            padding: 24px;
+        }
+
+        .form input {
+            font-family: "Roboto", sans-serif;
+            outline: 0;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 14px;
+            border: 2px solid #5F36C4;
+            border-radius: 24px;
+            padding: 12px 18px;
+            margin-bottom: 6px;
+        }
+
+        .form .button {
+            display: block;
+            text-decoration: none;
+            font-family: "Roboto", sans-serif;
+            text-transform: uppercase;
+            outline: 0;
+            width: 100%;
+            font-size: 14px;
+            cursor: pointer;
+            background-color: #5F36C4;
+            border: none;
+            color: white;
+            border-radius: 24px;
+            padding: 12px 18px;
+            margin-bottom: 6px;
+
+            transition: all 0.3s ease;
+            -webkit-transition: all 0.3s ease;
+        }
+
+        .form .button:hover {
+            background-color: #2F0694;
+        }
+
+        .form button:hover, .loginForm button:active, .loginForm button:focus {
+            background: #020079;
+        }
+
+        .form .message {
+            margin: 6px 0 24px;
+            color: #b3b3b3;
+            font-size: 12px;
+        }
+
+        .form .message a {
+            color: #020079;
+            text-decoration: none;
+        }
+
+        .languageDiv {
+            display: block;
+            text-align: center;
+        }
+
+        .languageDiv a {
+            text-decoration: none;
+            margin: 0 3px;
+            font-size: smaller;
+            color: gray;
+            cursor: pointer;
+        }
+    </style>
+
+    <script>
+        $('.message a:not(#reset_password_text)').click(function () {
+            $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+        });
+
+        function isValidEmail(email) {
+            const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(email);
+        }
+
+        $(document).ready(function () {
+            $('#reset_password_text').click(function () {
+                $('#reset_password_text').hide();
+
+                let email = $('#email_input').val();
+                if (email.length === 0)
+                    alert('Please enter your email address first!');
+                else if (email.length < 4 || !isValidEmail(email))
+                    alert('Email invalid, please fix it and try again!')
+                else
+                    $.post('/api/request_password_reset', `{"email": "${email}"}`).done(function (res) {
+                        if (res.success)
+                            alert('Password reset email has been sent to your email!')
+                        else
+                            alert('Failed to reset password, please try again later!');
+                        $('#reset_password_text').show();
+                    });
+            })
+
+            $('#move2RegistrationButton').click(function () {
+                $('#loginDiv').fadeOut(200);
+                $('#registerDiv').delay(200).fadeIn(200);
+            });
+            $('#move2LoginButton').click(function () {
+                $('#registerDiv').fadeOut(200);
+                $('#loginDiv').delay(200).fadeIn(200);
+            });
+
+            $('#registerButton').click(function () {
+                let name = $('#registerForm .nameInput').val();
+                let email = $('#registerForm .emailInput').val();
+                let password = $('#registerForm .passwordInput').val();
+                if (name.length < 2) {
+                    alert('Please enter your name, must be at least 2 characters!');
+                }
+                if (!isValidEmail(email)) {
+                    alert(`"${email}" is invalid email!`);
+                    return;
+                }
+                if (password.length < 4) {
+                    alert('Password is too short, must be at least 4 characters!');
+                    return;
+                }
+                $('#registerForm .button').fadeOut();
+                $.post('/api/send_verification_code', `{"email": "${email}"}`).done(function (res) {
+                    if (res.success) {
+                        $('#registerDiv').fadeOut(200);
+                        $('#verificationDiv').delay(200).fadeIn(200);
+                    } else
+                        alert('Failed to send verification code to the email, please try again later!');
+                    $('#registerForm .button').fadeIn();
+                });
+            });
+            $('#verificationButton').click(function () {
+                let name = $('#registerForm .nameInput').val();
+                let email = $('#registerForm .emailInput').val();
+                let password = $('#registerForm .passwordInput').val();
+                let verification = $('#verificationForm .verificationInput').val();
+                if (name.length < 2) {
+                    alert('Please enter your name, must be at least 2 characters!');
+                }
+                if (!isValidEmail(email)) {
+                    alert(`"${email}" is invalid email!`);
+                    return;
+                }
+                if (password.length < 4) {
+                    alert('Password is too short, must be at least 4 characters!');
+                    return;
+                }
+                if (verification.length < 6) {
+                    alert('Verification number is invalid, please try again!');
+                    return;
+                }
+                $('#verificationForm .button').fadeOut();
+                $.post('/api/verify_register', `{"name":"${name}", "email":"${email}", "password":"${password}", "verification_code":"${verification}"}`).done(function (res) {
+                    if (res.success) {
+                        alert('Successfully registered, you can sign in now!');
+                        $('#verificationDiv').fadeOut(200);
+                        $('#loginDiv').delay(200).fadeIn(200);
+                    } else {
+                        alert('Verification number is invalid, please try again!');
+                        $('#verificationDiv').fadeOut(200);
+                        $('#registerDiv').delay(200).fadeIn(200);
+                    }
+                    $('#verificationForm .button').fadeIn();
+                });
+            });
+        });
+    </script>
+
+{% endblock %}

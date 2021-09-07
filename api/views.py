@@ -152,6 +152,7 @@ def handle_fetch_settings_api(request):
         'date_of_birth': preferences.date_of_birth,
         'gender': preferences.gender,
         'is_profile_shared': preferences.shared_profile,
+        'language': preferences.language,
     })
 
 
@@ -188,7 +189,6 @@ def handle_update_settings_api(request):
     preferences.date_of_birth = new_date_of_birth
     preferences.gender = new_gender
     preferences.shared_profile = new_is_profile_shared
-    preferences.save()
     return JsonResponse(data={'success': True})
 
 

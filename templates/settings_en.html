@@ -1,0 +1,243 @@
+{% extends 'base_en.html' %}
+{% block content %}
+    <div class="sub_content">
+        <form method="post" action="{% url 'settings' %}" class="mt-5"><h2 class="title is-3 is-size-4-mobile">Personal information</h2>
+            {% csrf_token %}
+            <div>
+                <div><label for="name" class="label">Name</label></div>
+                <div>
+                    <div>
+                        <div class="control"><input id="name" name="name" type="text" placeholder="이름을 입력하세요" minlength="3" maxlength="32" class="input" required
+                                                    value="{% if preferences.name is not None %}{{ preferences.name }}{% endif %}"></div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div><label for="gender" class="label">Gender</label></div>
+                <div>
+                    <div>
+                        <div class="control">
+                            <div class="select is-fullwidth"><select id="gender" name="gender">
+                                <option value="{{ gender.MALE }}" {% if preferences.gender_str == gender.MALE %}selected{% endif %}>Male</option>
+                                <option value="{{ gender.FEMALE }}" {% if preferences.gender_str == gender.FEMALE %}selected{% endif %}>Female</option>
+                            </select></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div><label for="birthday" class="label">Birthday</label></div>
+                <div>
+                    <div>
+                        <div class="control">
+                            <div>
+                                <div class="control is-expanded"><input id="birthday" name="birthday" type="number" placeholder="DDMMYYYY" required class="input" maxlength="8"
+                                                                        value="{% if preferences.date_of_birth is not None %}{{ preferences.date_of_birth_str }}{% endif %}"></div>
+                            </div>
+                        </div>
+                        <p class="help">
+                            We use birthday to compute your age, and provide relevant comparisons where necessary.
+                        </p></div>
+                </div>
+            </div>
+            <div>
+                <div></div>
+                <div>
+                    <div>
+                        <div class="control">
+                            <button type="submit" class="button is-primary">Update my profile</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="sub_content">
+        <h2 class="title is-3 is-size-4-mobile">Language</h2>
+        <a href="{% url 'settings' %}?lang=en" class="language">English 🇺🇸</a>
+        <a href="{% url 'settings' %}?lang=kr" class="language">한국어 🇰🇷</a>
+    </div>
+
+    <div class="sub_content">
+        <h2 class="title is-3 is-size-4-mobile">Sharing settings</h2>
+        <label class="switch">
+            <input type="checkbox" id="togBtn" name="sharing" {% if preferences.shared_profile %}checked{% endif %}>
+            <div class="slider round"></div>
+        </label>
+        <p class="help">
+            Shared: we use your data to calculate standards.
+        </p>
+        <p class="help">
+            Private: we do not use your data to calculate standards.
+        </p>
+
+    </div>
+
+    <div class="sub_content">
+        <form method="post" action="{% url 'settings' %}" class="mt-5"><h2 class="title is-3 is-size-4-mobile">Change password</h2>
+            {% csrf_token %}
+            <div>
+                <div>
+                    <div><label for="oldPassword" class="label">Current password</label></div>
+                    <div>
+                        <div>
+                            <div class="control"><input name="oldpassword" id="oldPassword" type="password" required="required" class="input"></div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div><label for="newPassword" class="label">New password</label></div>
+                    <div>
+                        <div>
+                            <div class="control"><input name="newpassword" id="newPassword" type="password" required="required" class="input"></div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div><label for="repeatPassword" class="label">Confirm new password</label></div>
+                    <div>
+                        <div>
+                            <div class="control"><input name="repeatpassword" id="repeatPassword" type="password" required="required" class="input"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div></div>
+                <div>
+                    <div>
+                        <div class="control">
+                            <button id="changePwSubmitButton" disabled type="submit" class="button is-primary">Update my password</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <style>
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 90px;
+            height: 34px;
+        }
+
+        .switch input {
+            display: none;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #cccccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #0006b1;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(55px);
+        }
+
+        /*------ ADDED CSS ---------*/
+        .slider:after {
+            content: 'PRIVATE';
+            color: white;
+            display: block;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            top: 50%;
+            left: 60%;
+            font-size: 10px;
+            font-family: Verdana, sans-serif;
+        }
+
+        input:checked + .slider:after {
+            content: 'SHARED';
+            left: 35%;
+        }
+
+        /*--------- END --------*/
+
+        .language {
+            font-size: large;
+            text-decoration: none;
+            display: block;
+            padding: 24px;
+            margin: 12px 0;
+            background-color: #eee;
+            border-radius: 24px;
+        }
+
+        .language:hover {
+            background-color: lightgray;
+        }
+    </style>
+    <script>
+        $('#togBtn').change(function () {
+            var share = $(this).prop('checked');
+            $.post('{% url 'settings' %}', {
+                csrfmiddlewaretoken: $('{% csrf_token %}').val(),
+                share: share
+            }, function (response) {
+                try {
+                    if (response.success)
+                        location.reload();
+                } catch (e) {
+                    console.log(e);
+                }
+            });
+        });
+
+        $('#newPassword').keyup(function () {
+            let pw1 = $('#newPassword').val();
+            let pw2 = $('#repeatPassword').val();
+
+            if (pw1.length > 4 && pw1 === pw2) {
+                $('#repeatPassword').css("border", "1px solid gray");
+                $('#changePwSubmitButton').removeAttr('disabled');
+            } else {
+                $('#repeatPassword').css("border", "1px solid red");
+                $('#changePwSubmitButton').attr('disabled', true);
+            }
+        });
+
+        $('#repeatPassword').keyup(function () {
+            let pw1 = $('#newPassword').val();
+            let pw2 = $('#repeatPassword').val();
+
+            if (pw1.length > 4 && pw1 === pw2) {
+                $('#repeatPassword').css("border", "1px solid gray");
+                $('#changePwSubmitButton').removeAttr('disabled');
+            } else {
+                $('#repeatPassword').css("border", "1px solid red");
+                $('#changePwSubmitButton').attr('disabled', true);
+            }
+        });
+    </script>
+{% endblock %}

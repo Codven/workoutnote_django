@@ -8,7 +8,7 @@
             </header>
             <div class="sub_content">
                 <!-- head -->
-                <div id="header">
+                <div id="liftCreatorHeader">
                     <div id="workoutTitleDivParent">
                         <span id="workoutDate">{% now "Y. m. d" %} {% now "D" %}</span>
                         <div id="workoutTitleDiv">
@@ -62,7 +62,7 @@
                     </table>
                 </div>
                 <!-- tail -->
-                <div style="margin-left: auto; height: 30px; margin-top: 50px; text-align: right;">
+                <div id="liftCreatorFooter">
                     <a id="fullResetButton" onclick="fullResetClick()" class="grayBackground" style="color: white; padding: 4px 52px; border-radius: 16px; display: inline-block; cursor: pointer">취소</a>
                     <a id="removeExercisesButton" onclick="clearExercises()" class="grayBackground" style="color: white; padding: 4px 52px; border-radius: 16px; display: inline-block; cursor: pointer">삭제</a>
                     <a id="saveExerciseButton" onclick="saveExercises()" class="darkBlueBackground" style="color: white; padding: 4px 52px; border-radius: 16px; display: inline-block; margin-left: 16px; cursor: pointer">저장</a>
@@ -105,8 +105,8 @@
 
             #width_workout_card {
                 width: calc(35% - 10px);
-                margin: 0px;
-                padding: 0px;
+                margin: 0;
+                padding: 0;
                 display: inline-block;
             }
 
@@ -145,6 +145,10 @@
                 width: 128px;
                 border-bottom: 1px solid #5F36C4;
                 font-size: 17px;
+            }
+
+            #liftCreatorFooter {
+                text-align: right;
             }
         }
 
@@ -219,6 +223,21 @@
             #today_workouts {
                 padding: 24px;
             }
+
+            #liftCreatorHeader {
+                padding: 12px;
+            }
+
+            #liftCreatorFooter {
+                display: flex;
+                justify-content: space-between;
+                padding: 0 24px;
+            }
+        }
+
+        #liftCreatorFooter {
+            height: 30px;
+            margin-top: 50px;
         }
 
         #liftCreatorBody {

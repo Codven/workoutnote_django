@@ -943,62 +943,7 @@
         let calculatorDivs;
 
         $(document).ready(function () {
-            loadPreviousOneRepMaxResults(res => {
-                $('._1rmResultName').html(res.name);
-                $('#_1rmResultGender').html(`${res.gender === 'male' ? '남성' : '여성'}`);
-                $('#_1rmResultAge').html(`${res.age}세`);
-                $('#_1rmResultHeight').html(`${res.height}cm`);
-                $('#_1rmResultWeight').html(`${res.weight}kg`);
-
-                if (res.scores.length > 0) {
-                    let shoulder = Math.trunc(res.scores[0].shoulder);
-                    let chest = Math.trunc(res.scores[0].chest);
-                    let back = Math.trunc(res.scores[0].back);
-                    let abs = Math.trunc(res.scores[0].abs);
-                    let legs = Math.trunc(res.scores[0].legs);
-
-                    new Chart(document.getElementById('radarChart'), {
-                        type: 'radar',
-                        data: {
-                            labels: [['어깨', `(${shoulder} del)`], ['가슴', `(${chest} del)`], ['등', `(${back} del)`], ['복근', `(${abs} del)`], ['하체', `(${legs} del)`]],
-                            datasets: [{
-                                data: [shoulder, chest, back, abs, legs],
-                                backgroundColor: '#A97DFF61',
-                                borderColor: '#A67BFF',
-                                borderWidth: 5,
-                                pointerEnabled: false
-                            }]
-                        },
-                        options: {
-                            responsive: false,
-                            maintainAspectRatio: false,
-                            aspectRatio: 1,
-                            scale: {
-                                ticks: {min: 0, display: false},
-                                pointLabels: {fontColor: 'black', fontSize: 15},
-                                gridLines: {
-                                    lineWidth: 1.5,
-                                    color: "#AAAAAA"
-                                },
-                            },
-                            elements: {point: {radius: 0}},
-                            legend: {display: false},
-                            layout: {padding: 20}
-                        }
-                    });
-                    $('#radarChartRootDiv').show();
-
-                    $('#_1rmResultAvgScore').html((shoulder + chest + back + abs + legs) / 5);
-                    $('#_1rmResultTotalScore').html(shoulder + chest + back + abs + legs);
-
-                    $('#shoulderResult').html(`${shoulder}del`);
-                    $('#chestResult').html(`${chest}del`);
-                    $('#backResult').html(`${back}del`);
-                    $('#absResult').html(`${abs}del`);
-                    $('#legsResult').html(`${legs}del`);
-                } else
-                    $('#radarChartRootDiv').hide();
-            });
+            fetchOneRepMaxResults();
 
             calculatorDivs = [
                 $('#oneRepMaxTestDiv'),
@@ -1222,40 +1167,33 @@
 
                 let loadPrevious = false;
                 [name, gender, age, height, weight].forEach(x => loadPrevious |= x.toString().length === 0);
-                if (loadPrevious) {
-                    loadPreviousOneRepMaxResults(function (res) {
+                if (loadPrevious && previousScores.length > 0) {
+                    $.post('/api/insert_1rm_result', {sessionKey: "{{ sessionKey }}", name: previousScores[0].name, gender: previousScores[0].gender, age: previousScores[0].age, height: previousScores[0].height, weight: previousScores[0].weight, shoulder: shoulder, chest: chest, back: back, abs: abs, legs: legs}, function (res) {
                         if (res.success) {
-                            $.post('/api/insert_1rm_result', {sessionKey: "{{ sessionKey }}", name: res.name, gender: res.gender, age: res.age, height: res.height, weight: res.weight, shoulder: shoulder, chest: chest, back: back, abs: abs, legs: legs}, function (res) {
-                                if (res.success)
-                                    console.log('one rep max result inserted');
-                                else
-                                    alert('Failed to save the result, please try again later!');
-                            });
-                            showOneRepMaxResult(res.name, res.gender, res.age, res.height, res.weight, shoulder, chest, back, abs, legs)
-                        }
-                    }, function () {
-                        alert('You have no previous entries, please fill out the form completely!');
+                            console.log('one rep max result inserted');
+                            fetchOneRepMaxResults();
+                        } else
+                            alert('Failed to save the result, please try again later!');
                     });
                 } else {
+                    showPersonalInfo(name, gender, age, height, weight);
                     $.post('/api/insert_1rm_result', {sessionKey: "{{ sessionKey }}", name: name, gender: gender, age: age, height: height, weight: weight, shoulder: shoulder, chest: chest, back: back, abs: abs, legs: legs}, function (res) {
                         if (res.success)
                             console.log('one rep max result inserted');
                         else
                             alert('Failed to save the result, please try again later!');
                     });
-                    showOneRepMaxResult(name, gender, age, height, weight, shoulder, chest, back, abs, legs);
                 }
             });
         });
 
-        function loadPreviousOneRepMaxResults(onsuccess = null, onerror = null) {
+        function fetchOneRepMaxResults() {
             previousScores = [];
             $.post('/api/fetch_1rm_results', {sessionKey: "{{ sessionKey }}"}, function (res) {
                 if (res.success) {
                     if (res.name === '' || res.gender === '' || res.age === -1 || res.height === -1 || res.weight === -1) {
                         $('#oneRepMaxTestDiv input:not([type=submit])').attr('required', 'true');
-                        if (onerror != null)
-                            onerror();
+                        alert('You have no previous entries, please fill out the form completely!');
                     } else {
                         if (res.name != null) {
                             $('#oneRepMaxTestDiv input[name="name"]').val(res.name);
@@ -1274,8 +1212,8 @@
                                     legs: res.scores[i].legs,
                                 });
 
-                            if (onsuccess != null)
-                                onsuccess(res);
+                            showPersonalInfo(res.name, res.gender, res.age, res.height, res.weight);
+                            showCharts(res.scores);
                         }
                     }
                 } else
@@ -1283,13 +1221,13 @@
             });
         }
 
-        function showOneRepMaxResult(name, gender, age, height, weight, shoulder, chest, back, abs, legs) {
+        function showPersonalInfo(name, gender, age, height, weight) {
             // set values on ui
-            $('#1rmResultName').html(name);
-            $('#1rmResultGender').html(gender);
-            $('#1rmResultAge').html(age);
-            $('#1rmResultHeight').html(height);
-            $('#1rmResultWeight').html(weight);
+            $('._1rmResultName').html(name);
+            $('#_1rmResultGender').html(gender);
+            $('#_1rmResultAge').html(age);
+            $('#_1rmResultHeight').html(height);
+            $('#_1rmResultWeight').html(weight);
 
             // switch divs
             $('#calculatorSwitchMenu').fadeOut(100);
@@ -1299,8 +1237,212 @@
             $('#calculatorsDiv').delay(100).fadeIn(100);
         }
 
+        function showCharts(scores) {
+            if (scores.length === 0) {
+                // todo clear charts
+                return;
+            }
+
+            // radar chart
+            let shoulder = Math.trunc(scores[0].shoulder);
+            let chest = Math.trunc(scores[0].chest);
+            let back = Math.trunc(scores[0].back);
+            let abs = Math.trunc(scores[0].abs);
+            let legs = Math.trunc(scores[0].legs);
+
+            new Chart(document.getElementById('radarChart'), {
+                type: 'radar',
+                data: {
+                    labels: [['어깨', `(${shoulder} del)`], ['가슴', `(${chest} del)`], ['등', `(${back} del)`], ['복근', `(${abs} del)`], ['하체', `(${legs} del)`]],
+                    datasets: [{
+                        data: [shoulder, chest, back, abs, legs],
+                        backgroundColor: '#A97DFF61',
+                        borderColor: '#A67BFF',
+                        borderWidth: 5,
+                        pointerEnabled: false
+                    }]
+                },
+                options: {
+                    responsive: false,
+                    maintainAspectRatio: false,
+                    aspectRatio: 1,
+                    scale: {
+                        ticks: {min: 0, display: false},
+                        pointLabels: {fontColor: 'black', fontSize: 15},
+                        gridLines: {
+                            lineWidth: 1.5,
+                            color: "#AAAAAA"
+                        },
+                    },
+                    elements: {point: {radius: 0}},
+                    legend: {display: false},
+                    layout: {padding: 20}
+                }
+            });
+            $('#radarChartRootDiv').show();
+
+            $('#_1rmResultAvgScore').html((shoulder + chest + back + abs + legs) / 5);
+            $('#_1rmResultTotalScore').html(shoulder + chest + back + abs + legs);
+
+            $('#shoulderResult').html(`${shoulder}del`);
+            $('#chestResult').html(`${chest}del`);
+            $('#backResult').html(`${back}del`);
+            $('#absResult').html(`${abs}del`);
+            $('#legsResult').html(`${legs}del`);
+
+            // bar chart
+            let max = 0;
+            let totalScores = Array(4).fill(0);
+            let dates = Array(4).fill("...");
+            let i;
+            for (i = 0; i < scores.length; i++) {
+                totalScores.splice(4 - i, 1, scores[i].shoulder + scores[i].chest + scores[i].back + scores[i].abs + scores[i].legs);
+                let date = new Date(scores[i].timestamp);
+                dates.splice(4 - i, 1, [date.getFullYear().toString(), `${padZero(date.getMonth(), 2)}${padZero(date.getDate(), 2)}`]);
+                max = Math.max(max, totalScores[4 - i]);
+            }
+
+            Chart.helpers.drawRoundedTopRectangle = function (ctx, x, y, width, height, radius) {
+                ctx.beginPath();
+                ctx.moveTo(x + radius, y);
+                // top right corner
+                ctx.lineTo(x + width - radius, y);
+                ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+                // bottom right   corner
+                ctx.lineTo(x + width, y + height);
+                // bottom left corner
+                ctx.lineTo(x, y + height);
+                // top left
+                ctx.lineTo(x, y + radius);
+                ctx.quadraticCurveTo(x, y, x + radius, y);
+                ctx.closePath();
+            };
+            Chart.elements.RoundedTopRectangle = Chart.elements.Rectangle.extend({
+                draw: function () {
+                    var ctx = this._chart.ctx;
+                    var vm = this._view;
+                    var left, right, top, bottom, signX, signY, borderSkipped;
+                    var borderWidth = vm.borderWidth;
+
+                    if (!vm.horizontal) {
+                        // bar
+                        left = vm.x - vm.width / 2;
+                        right = vm.x + vm.width / 2;
+                        top = vm.y;
+                        bottom = vm.base;
+                        signX = 1;
+                        signY = bottom > top ? 1 : -1;
+                        borderSkipped = vm.borderSkipped || 'bottom';
+                    } else {
+                        // horizontal bar
+                        left = vm.base;
+                        right = vm.x;
+                        top = vm.y - vm.height / 2;
+                        bottom = vm.y + vm.height / 2;
+                        signX = right > left ? 1 : -1;
+                        signY = 1;
+                        borderSkipped = vm.borderSkipped || 'left';
+                    }
+
+                    // Canvas doesn't allow us to stroke inside the width so we can
+                    // adjust the sizes to fit if we're setting a stroke on the line
+                    if (borderWidth) {
+                        // borderWidth shold be less than bar width and bar height.
+                        var barSize = Math.min(Math.abs(left - right), Math.abs(top - bottom));
+                        borderWidth = borderWidth > barSize ? barSize : borderWidth;
+                        var halfStroke = borderWidth / 2;
+                        // Adjust borderWidth when bar top position is near vm.base(zero).
+                        var borderLeft = left + (borderSkipped !== 'left' ? halfStroke * signX : 0);
+                        var borderRight = right + (borderSkipped !== 'right' ? -halfStroke * signX : 0);
+                        var borderTop = top + (borderSkipped !== 'top' ? halfStroke * signY : 0);
+                        var borderBottom = bottom + (borderSkipped !== 'bottom' ? -halfStroke * signY : 0);
+                        // not become a vertical line?
+                        if (borderLeft !== borderRight) {
+                            top = borderTop;
+                            bottom = borderBottom;
+                        }
+                        // not become a horizontal line?
+                        if (borderTop !== borderBottom) {
+                            left = borderLeft;
+                            right = borderRight;
+                        }
+                    }
+
+                    // calculate the bar width and roundess
+                    const barWidth = Math.abs(left - right);
+                    const roundness = this._chart.config.options.barRoundness || 0.5;
+                    const radius = barWidth * roundness * 0.5;
+
+                    // keep track of the original top of the bar
+                    const prevTop = top;
+
+                    // move the top down so there is room to draw the rounded top
+                    top = prevTop + radius;
+                    const barRadius = top - prevTop;
+
+                    ctx.beginPath();
+                    ctx.fillStyle = vm.backgroundColor;
+                    ctx.strokeStyle = vm.borderColor;
+                    ctx.lineWidth = borderWidth;
+
+                    // draw the rounded top rectangle
+                    Chart.helpers.drawRoundedTopRectangle(ctx, left, (top - barRadius + 1), barWidth, bottom - prevTop, barRadius);
+
+                    ctx.fill();
+                    if (borderWidth) {
+                        ctx.stroke();
+                    }
+
+                    // restore the original top value so tooltips and scales still work
+                    top = prevTop;
+                },
+            });
+            Chart.defaults.roundedBar = Chart.helpers.clone(Chart.defaults.bar);
+            Chart.controllers.roundedBar = Chart.controllers.bar.extend({dataElementType: Chart.elements.RoundedTopRectangle});
+            new Chart(document.getElementById('barChart'), {
+                type: 'roundedBar',
+                data: {
+                    labels: dates,
+                    datasets: [{
+                        backgroundColor: ["#E7DFF7", "#E7DFF7", "#E7DFF7", "#E7DFF7", "#6633CC"],
+                        data: totalScores
+                    }]
+                },
+                options: {
+                    legend: {display: false},
+                    barRoundness: 0.7,
+                    scales: {
+                        xAxes: [{
+                            gridLines: {color: "white"},
+                            barPercentage: 0.5
+                        }],
+                        yAxes: [{
+                            ticks: {min: 1, stepSize: Math.trunc(max / 4)},
+                            gridLines: {borderDash: [8, 4], color: "lightgray", drawBorder: false}
+                        }]
+                    },
+                    plugins: {
+                        datalabels: {
+                            formatter: (value, ctx) => {
+                                return value !== 0 ? value.toLocaleString(/* ... */) : 'N/A'
+                            },
+                            anchor: 'end',
+                            align: 'end',
+                            color: '#888'
+                        }
+                    }
+                }
+            });
+        }
+
         function hideExerciseSelectorDivClick() {
             selectExerciseDiv.style.display = 'none';
+        }
+
+        function padZero(num, size) {
+            num = num.toString();
+            while (num.length < size) num = "0" + num;
+            return num;
         }
     </script>
 {% endblock %}

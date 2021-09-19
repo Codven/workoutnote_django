@@ -997,13 +997,14 @@ def handle_fetch_1rm_results_api(request):
     name, gender, age, height, weight = '', '', -1, -1, -1
     scores = []
     if wn_models.OneRepMaxResults.objects.filter(user=user).exists():
-        last_result = wn_models.OneRepMaxResults.objects.filter(user=user).order_by('-timestamp').first()
+        results = wn_models.OneRepMaxResults.objects.filter(user=user).order_by('-timestamp')
+        last_result = results.first()
         name = last_result.name
         gender = last_result.gender
         age = last_result.age
         height = last_result.height
         weight = last_result.weight
-        for res in wn_models.OneRepMaxResults.objects.filter(user=user).order_by('timestamp'):
-            scores += [{'timestamp': res.timestamp, 'shoulder': res.shoulder, 'chest': res.chest, 'back': res.back, 'abs': res.abs, 'legs': res.legs}]
+        for res in results[:5]:
+            scores += [{'timestamp': int(res.timestamp.timestamp() * 1000), 'shoulder': res.shoulder, 'chest': res.chest, 'back': res.back, 'abs': res.abs, 'legs': res.legs}]
     return JsonResponse(data={'success': True, 'name': name, 'gender': gender, 'age': age, 'height': height, 'weight': weight, 'scores': scores})
 # endregion

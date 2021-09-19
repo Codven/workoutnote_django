@@ -2,6 +2,22 @@
 {% block content %}
     <div id="rootDiv">
         <div id="calculatorSwitchMenu">
+            <div id="oneRepMaxTestMenuDiv">
+                {% load static %}
+                <img src="{% static 'oneRepMaxTestBg.png' %}" alt="oneRepMaxTest">
+                <div>
+                    <span>Deltoid One Rep Max Test</span>
+                    <hr>
+                    <div>
+                        <a id="oneRepMaxTestMenuButton">Test</a>
+                        <a id="mid_ruler"></a>
+                        <a id="oneRepMaxResultMenuButton">Result</a>
+                    </div>
+                </div>
+            </div>
+            <a id="gripStrengthTestMenuButton" class="menuBlackButton">Grip Strength Test</a>
+            <a id="twelveMinRunTestMenuButton" class="menuBlackButton">12min Run Test</a>
+            <hr>
             <a id="oneRepMaxMenuButton" class="menuButton">One Rep Max Calculator</a>
             <a id="plateBarbelMenuButton" class="menuButton">Plate Barbell Calculator</a>
             <a id="wilksMenuButton" class="menuButton">Wilks Calculator</a>
@@ -9,13 +25,182 @@
         <div id="goBackMenuDiv" style="display: none;">
             <a id="goBackMenuButton"></a>
         </div>
-        <div id="calculatorDiv">
-            <div id="calculatorSwitchTabs">
+        <div id="calculatorsDiv">
+            <div class="calculatorDiv" id="calculatorSwitchTabs">
                 <label id="oneRepMaxButton" class="checked">One Rep Max Calculator<input type="radio" name="calc"></label>
                 <label id="plateBarbelButton" class="unchecked">Plate Barbell Calculator<input type="radio" name="calc"></label>
                 <label id="wilksButton" class="unchecked">Wilks Calculator<input type="radio" name="calc"></label>
             </div>
-            <div id="oneRepMaxDiv">
+            <div class="calculatorDiv" id="oneRepMaxTestDiv">
+                <h3 style="font-weight: bold;">Deltoid One Rep Max Test</h3>
+                <div class="calculatorContentRoot">
+                    <span style="display: block; margin-bottom: 12px; font-size: smaller;">Essential information</span>
+
+                    <label for="name" style="display: block; padding-top: 12px;">Name</label>
+                    <input style="display: block; width: 100%" type="text" id="name" name="name" placeholder="e.g. 송길동">
+
+                    <label for="gender" style="display: block; padding-top: 12px;">Gender</label>
+                    <div>
+                        <label style="cursor: pointer">
+                            <input type="radio" name="oneRmGender" value="male" checked>
+                            Male
+                        </label>
+                        <label style="cursor: pointer">
+                            <input type="radio" name="oneRmGender" value="female">
+                            Female
+                        </label>
+                    </div>
+
+                    <label for="age" style="display: block; padding-top: 12px;">Age</label>
+                    <div style="display: flex; justify-content: space-between">
+                        <input style="flex-grow: 1;" type="number" min="1" max="120" step="1" id="age" name="age" placeholder="e.g. 25">
+                        <span>y.o.</span>
+                    </div>
+
+                    <label for="height" style="display: block; padding-top: 12px;">Height</label>
+                    <div style="display: flex; justify-content: space-between">
+                        <input style="flex-grow: 1;" type="number" id="height" name="height" placeholder="e.g. 90">
+                        <span>cm</span>
+                    </div>
+
+                    <label for="weight" style="display: block; padding-top: 12px;">Weight</label>
+                    <div style="display: flex; justify-content: space-between">
+                        <input style="flex-grow: 1;" type="number" id="weight" name="weight" placeholder="e.g. 35">
+                        <span>kg</span>
+                    </div>
+
+                    <span style="display: block; margin-top: 8px; font-size: x-small;">*If you don't write down your physical information directly, recent information will be automatically entered.</span>
+                </div>
+                <div class="calculatorExtraContentRoot">
+                    <div class="calculatorSubItemDiv">
+                        <div class="bodyPartVisualDiv">
+                            <a style="position: absolute; top: 10px; z-index: 0" class="bodyPartHighlightCircle"></a>
+                            <img style="z-index: 1; padding-left: 16px; padding-top: 10px;" src="{% static 'shoulder.svg' %}" alt="shoulder" width="80px" height="80px">
+                        </div>
+                        <div class="bodyPartInputsDiv">
+                            <span style="display: block; font-size: medium;">Shoulder<span style="font-size: small">(Dumbbell Lateral Raise)</span></span>
+                            <div>
+                                <label>
+                                    Weight(kg)
+                                    <input class="skip" name="shoulderWeight" required type="number" min="0" max="999" maxlength="3" value="0" placeholder="0">
+                                </label>
+
+                                <label>
+                                    Number
+                                    <input class="skip" name="shoulderCount" required type="number" min="0" max="999" maxlength="3" value="0" placeholder="0">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="calculatorSubItemDiv">
+                        <div class="bodyPartVisualDiv">
+                            <a style="position: absolute; top: 0; z-index: 0" class="bodyPartHighlightCircle"></a>
+                            <img style="z-index: 1" src="{% static 'body.svg' %}" alt="chest" width="96px" height="96px">
+                        </div>
+                        <div class="bodyPartInputsDiv">
+                            <span style="display: block; font-size: medium;">Chest<span style="font-size: small">(Push up)</span></span>
+                            <div>
+                                <label>
+                                    Weight(kg)
+                                    <input class="skip" name="chestWeight" required type="number" min="0" max="999" maxlength="3" value="0" placeholder="0">
+                                </label>
+
+                                <label>
+                                    Number
+                                    <input class="skip" name="chestCount" required type="number" min="0" max="999" maxlength="3" value="0" placeholder="0">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="calculatorSubItemDiv">
+                        <div class="bodyPartVisualDiv">
+                            <a style="position: absolute; top: 28px; z-index: 0" class="bodyPartHighlightCircle"></a>
+                            <img style="z-index: 1; padding: 3px" src="{% static 'back.svg' %}" alt="back" width="80px" height="80px">
+                        </div>
+                        <div class="bodyPartInputsDiv">
+                            <span style="display: block; font-size: medium;">Back<span style="font-size: small">(Dumbbell Raw)</span></span>
+                            <div>
+                                <label>
+                                    Weight(kg)
+                                    <input class="skip" name="backWeight" required type="number" min="0" max="999" maxlength="3" value="0" placeholder="0">
+                                </label>
+
+                                <label>
+                                    Number
+                                    <input class="skip" name="backCount" required type="number" min="0" max="999" maxlength="3" value="0" placeholder="0">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="calculatorSubItemDiv">
+                        <div class="bodyPartVisualDiv">
+                            <a style="position: absolute; top: 22px; z-index: 0" class="bodyPartHighlightCircle"></a>
+                            <img style="z-index: 1; padding: 3px" src="{% static 'abs.svg' %}" alt="abs" width="80px" height="80px">
+                        </div>
+                        <div class="bodyPartInputsDiv">
+                            <span style="display: block; font-size: medium;">Abs<span style="font-size: small">(Crunch)</span></span>
+                            <div>
+                                <label>
+                                    Weight(kg)
+                                    <input class="skip" name="absWeight" required type="number" min="0" max="999" maxlength="3" value="0" placeholder="0">
+                                </label>
+
+                                <label>
+                                    Number
+                                    <input class="skip" name="absCount" required type="number" min="0" max="999" maxlength="3" value="0" placeholder="0">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="calculatorSubItemDiv">
+                        <div class="bodyPartVisualDiv">
+                            <a style="position: absolute; top: 22px; z-index: 0" class="bodyPartHighlightCircle"></a>
+                            <img style="z-index: 1;" src="{% static 'legs.svg' %}" alt="legs" width="96px" height="96px">
+                        </div>
+                        <div class="bodyPartInputsDiv">
+                            <span style="display: block; font-size: medium;">Legs<span style="font-size: small">(Dumbbell Squat)</span></span>
+                            <div>
+                                <label>
+                                    Weight(kg)
+                                    <input class="skip" name="legsWeight" required type="number" min="0" max="999" maxlength="3" value="0" placeholder="0">
+                                </label>
+
+                                <label>
+                                    Number
+                                    <input class="skip" name="legsCount" required type="number" min="0" max="999" maxlength="3" value="0" placeholder="0">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <input class="skip" type="submit" value="Result">
+                </div>
+            </div>
+            <div class="calculatorDiv" id="oneRepMaxResultDiv">
+                <h3 style="font-weight: bold;">Deltoid One Rep Max Result</h3>
+                <div class="calculatorContentRoot">
+                    <label for="liftMass">Weight (KG)</label>
+                    <input type="number" id="liftMass" name="liftMass" min="1" max="1500" step="0.1" placeholder="Type here">
+
+                    <label for="repetitions">Repetitions</label>
+                    <input type="number" name="repetitions" id="repetitions" min="1" max="500" placeholder="Type here">
+
+                    <input type="submit" value="CALCULATE">
+                </div>
+            </div>
+            <div class="calculatorDiv" id="gripStrengthTestDiv">
+                <h3 style="font-weight: bold;">Grip Strength Test</h3>
+                <div class="calculatorContentRoot">
+                    <span>Under Construction</span>
+                </div>
+            </div>
+            <div class="calculatorDiv" id="twelveMinRunTestDiv">
+                <h3 style="font-weight: bold;">Grip Strength Test</h3>
+                <div class="calculatorContentRoot">
+                    <span>Under Construction</span>
+                </div>
+            </div>
+            <div class="calculatorDiv" id="oneRepMaxDiv">
                 <h3 style="font-weight: bold;">One Rep Max Calculator</h3>
                 <span>Calculate the one repetition maximum weight for all lifts.</span>
                 <div class="calculatorContentRoot">
@@ -44,7 +229,7 @@
                     </tr>
                 </table>
             </div>
-            <div id="plateBarbellRackingDiv" style="display: none">
+            <div class="calculatorDiv" id="plateBarbellRackingDiv" style="display: none">
                 <h3 style="font-weight: bold;">Plate Barbell Calculator</h3>
                 <span>Compute combination of plates for a specific weight.</span>
                 <div class="calculatorContentRoot">
@@ -60,7 +245,7 @@
                     <div id="plateBarbellRackingCalculatorResult"></div>
                 </div>
             </div>
-            <div id="wilksDiv" style="display: none">
+            <div class="calculatorDiv" id="wilksDiv" style="display: none">
                 <h3 style="font-weight: bold;">Wilks Score Calculator</h3>
                 <span>Calculate Wilks Score.</span>
                 <div class="calculatorContentRoot">
@@ -130,7 +315,7 @@
                 justify-content: space-between;
             }
 
-            #calculatorDiv {
+            #calculatorsDiv {
                 width: calc(65% - 10px);
                 min-height: 200px;
                 margin: 0;
@@ -177,6 +362,8 @@
 
             .calculatorContentRoot {
                 display: flex;
+                margin: 32px 0;
+                padding: 32px;
             }
 
             #oneRepMaxCalculatorContent, #oneRepMaxCalculatorResult, #plateBarbellRackingCalculatorContent, #plateBarbellRackingCalculatorResult {
@@ -224,6 +411,10 @@
                 border-bottom: 2px solid lightgray;
                 margin: 0 auto;
             }
+
+            #oneRepMaxTestDiv, #oneRepMaxResultDiv, #gripStrengthTestDiv, #twelveMinRunTestDiv {
+                display: none;
+            }
         }
 
         @media (max-width: 800px) {
@@ -231,17 +422,24 @@
                 padding: 6px;
             }
 
-            #calculatorDiv, #calculatorDiv div {
+            #calculatorsDiv {
                 padding: 10px;
             }
 
-            #calculatorDiv, #calculatorInfoRootDiv, #calculatorSwitchTabs, #calculatorInfoDiv {
+            #calculatorsDiv, #calculatorInfoRootDiv, #calculatorSwitchTabs, #calculatorInfoDiv {
                 display: none;
             }
 
             #calculatorSwitchMenu {
                 display: block;
                 padding-top: 1px;
+            }
+
+            #calculatorSwitchMenu hr {
+                border: 0.5px solid #5F36C4;
+                margin-top: 36px;
+                margin-left: 12px;
+                margin-right: 12px;
             }
 
             #goBackMenuDiv {
@@ -275,8 +473,21 @@
                 font-weight: bold;
             }
 
+            .menuBlackButton {
+                display: block;
+                padding: 18px;
+                background-color: black;
+                border-radius: 14px;
+                margin-top: 24px;
+                color: white;
+                cursor: pointer;
+                font-weight: bold;
+            }
+
             .calculatorContentRoot {
                 display: block;
+                margin: 10px 0;
+                padding: 12px;
             }
 
             #oneRepMaxCalculatorContent, #oneRepMaxCalculatorResult, #plateBarbellRackingCalculatorContent, #plateBarbellRackingCalculatorResult {
@@ -308,9 +519,130 @@
                 border-bottom: 2px solid lightgray;
                 margin: 0 auto;
             }
+
+            #oneRepMaxTestMenuDiv {
+                height: 240px;
+                position: relative;
+            }
+
+            #oneRepMaxTestMenuDiv img {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 14px;
+            }
+
+            #oneRepMaxTestMenuDiv div {
+                padding: 24px;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+            }
+
+            #oneRepMaxTestMenuDiv div hr {
+                border: 0.5px solid white;
+                margin: 12px 0 36px;
+                padding: 0;
+            }
+
+            #oneRepMaxTestMenuDiv span {
+                color: white;
+                font-weight: bold;
+                font-size: large;
+                display: block;
+            }
+
+            #oneRepMaxTestMenuDiv div div {
+                display: flex;
+                justify-content: space-evenly;
+            }
+
+            #oneRepMaxTestMenuDiv a {
+                color: white;
+                font-weight: bold;
+                cursor: pointer;
+            }
+
+            #mid_ruler {
+                background-color: white;
+                padding: 0.5px;
+            }
+
+            .calculatorExtraContentRoot {
+                margin-top: 24px;
+            }
+
+            .calculatorExtraContentRoot input[type=submit] {
+                margin: 48px auto;
+
+                display: block;
+                background-color: #5F36C4;
+                color: white;
+                border: none;
+                font-size: large;
+                border-radius: 32px;
+                padding: 6px 64px;
+                cursor: pointer;
+            }
+
+            .calculatorSubItemDiv {
+                border: 3px solid #5F36C4;
+                border-radius: 15px;
+                padding: 8px;
+                display: flex;
+                margin-top: 12px;
+            }
+
+            .bodyPartVisualDiv {
+                display: flex;
+                height: 96px;
+                flex: 0 0 96px;
+                text-align: center;
+                margin: 0 auto;
+                padding: 0;
+                position: relative;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .bodyPartHighlightCircle {
+                display: block;
+                width: 64px;
+                height: 64px;
+                border-radius: 32px;
+                background-color: #E7DFF7;
+            }
+
+            .bodyPartInputsDiv {
+                flex-grow: 1;
+                padding: 12px;
+            }
+
+            .bodyPartInputsDiv input {
+                width: 40px;
+                text-align: center;
+                -webkit-appearance: none;
+                -moz-appearance: textfield;
+                margin: 0 0 0 8px;
+                border-bottom: none;
+            }
+
+            .bodyPartInputsDiv div {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .bodyPartInputsDiv label {
+                margin-top: 12px;
+                border-bottom: 1px solid #5F36C4;
+            }
         }
 
-        #calculatorDiv input[type=number], #calculatorDiv input[type=submit] {
+        #calculatorsDiv input[type=number]:not(.skip), #calculatorsDiv input[type=submit]:not(.skip) {
             width: 100%;
         }
 
@@ -342,13 +674,11 @@
             cursor: pointer;
         }
 
-        #calculatorDiv {
+        #calculatorsDiv {
             background-color: white;
         }
 
         .calculatorContentRoot {
-            margin: 32px 0;
-            padding: 32px;
             border-radius: 12px;
             color: white;
             background-color: #5F36C4;
@@ -392,7 +722,7 @@
             margin-bottom: 24px;
         }
 
-        #calculatorDiv input[type=submit] {
+        #calculatorsDiv input[type=submit]:not(.skip) {
             margin-top: 32px;
             display: block;
             background-color: white;
@@ -454,10 +784,24 @@
             margin-bottom: 10px;
         }
     </style>
+
     <script>
         const ONE_REP_MAX_CONST = 0.025;
+        let previousScores = [];
+        let calculatorDivs;
 
         $(document).ready(function () {
+            loadPreviousOneRepMaxResults();
+            calculatorDivs = [
+                $('#oneRepMaxTestDiv'),
+                $('#oneRepMaxResultDiv'),
+                $('#gripStrengthTestDiv'),
+                $('#twelveMinRunTestDiv'),
+                $('#oneRepMaxDiv'),
+                $('#plateBarbellRackingDiv'),
+                $('#wilksDiv')
+            ];
+
             $('#calculatorSwitchTabs input[type=radio]').change(function () {
                 let p = $('#calculatorSwitchTabs input[type=radio]:checked').parent();
                 p.removeClass('unchecked');
@@ -466,7 +810,7 @@
 
                 let title = $('#calculatorInfoRootDiv span:first-child');
                 let description = $('#calculatorInfoRootDiv span:last-child');
-                $('#calculatorDiv div:not(:first-child)').hide();
+                $('#calculatorsDiv div:not(:first-child)').hide();
                 switch (p.attr('id')) {
                     case 'oneRepMaxButton':
                         $('#oneRepMaxDiv').show();
@@ -491,42 +835,76 @@
                 }
             });
 
+            $('#oneRepMaxTestMenuButton').click(function () {
+                $('#calculatorSwitchMenu').fadeOut(100);
+
+                calculatorDivs.forEach(div => div.hide());
+                $('#oneRepMaxTestDiv').show();
+
+                $('#goBackMenuDiv').show();
+                $('#calculatorsDiv').delay(100).fadeIn(100);
+            });
+            $('#oneRepMaxResultMenuButton').click(function () {
+                $('#calculatorSwitchMenu').fadeOut(100);
+
+                calculatorDivs.forEach(div => div.hide());
+                $('#oneRepMaxResultDiv').show();
+
+                $('#goBackMenuDiv').show();
+                $('#calculatorsDiv').delay(100).fadeIn(100);
+            });
+            $('#gripStrengthTestMenuButton').click(function () {
+                $('#calculatorSwitchMenu').fadeOut(100);
+
+                calculatorDivs.forEach(div => div.hide());
+                $('#gripStrengthTestDiv').show();
+
+                $('#goBackMenuDiv').show();
+                $('#calculatorsDiv').delay(100).fadeIn(100);
+            });
+            $('#twelveMinRunTestMenuButton').click(function () {
+                $('#calculatorSwitchMenu').fadeOut(100);
+
+                calculatorDivs.forEach(div => div.hide());
+                $('#twelveMinRunTestDiv').show();
+
+                $('#goBackMenuDiv').show();
+                $('#calculatorsDiv').delay(100).fadeIn(100);
+            });
+
             $('#oneRepMaxMenuButton').click(function () {
                 $('#calculatorSwitchMenu').fadeOut(100);
 
+                calculatorDivs.forEach(div => div.hide());
                 $('#oneRepMaxDiv').show();
-                $('#oneRepMaxDiv div').show();
-                $('#plateBarbellRackingDiv').hide();
-                $('#wilksDiv').hide();
+                $('#oneRepMaxDiv .calculatorDiv').show();
 
                 $('#goBackMenuDiv').show();
-                $('#calculatorDiv').delay(100).fadeIn(100);
+                $('#calculatorsDiv').delay(100).fadeIn(100);
             });
             $('#plateBarbelMenuButton').click(function () {
                 $('#calculatorSwitchMenu').fadeOut(100);
 
-                $('#oneRepMaxDiv').hide();
+                calculatorDivs.forEach(div => div.hide());
                 $('#plateBarbellRackingDiv').show();
-                $('#plateBarbellRackingDiv div').show();
-                $('#wilksDiv').hide();
+                $('#plateBarbellRackingDiv .calculatorDiv').show();
 
                 $('#goBackMenuDiv').show();
-                $('#calculatorDiv').delay(100).fadeIn(100);
+                $('#calculatorsDiv').delay(100).fadeIn(100);
             });
             $('#wilksMenuButton').click(function () {
                 $('#calculatorSwitchMenu').fadeOut(100);
 
-                $('#oneRepMaxDiv').hide();
-                $('#plateBarbellRackingDiv').hide();
+                calculatorDivs.forEach(div => div.hide());
                 $('#wilksDiv').show();
-                $('#wilksDiv div').show();
+                $('#wilksDiv .calculatorDiv').show();
 
                 $('#goBackMenuDiv').show();
-                $('#calculatorDiv').delay(100).fadeIn(100);
+                $('#calculatorsDiv').delay(100).fadeIn(100);
             });
             $('#goBackMenuButton').click(function () {
                 $('#goBackMenuDiv').hide();
-                $('#calculatorDiv').hide();
+                $('#calculatorsDiv').hide();
                 $('#calculatorSwitchMenu').fadeIn(100);
             });
 
@@ -605,7 +983,92 @@
                 } else
                     alert('Failed to compute, please try different values!');
             });
+
+            $('#oneRepMaxTestDiv input[type=submit]').click(function () {
+                // essential info
+                let name = $('#oneRepMaxTestDiv input[name="name"]').val();
+                let gender = $('#oneRepMaxTestDiv input[name="oneRmGender"]:checked').val();
+                let age = $('#oneRepMaxTestDiv input[name="age"]').val();
+                let height = $('#oneRepMaxTestDiv input[name="height"]').val();
+                let weight = $('#oneRepMaxTestDiv input[name="weight"]').val();
+                // body parts
+                let shoulderWeight = $('#oneRepMaxTestDiv input[name="shoulderWeight"]').val();
+                let shoulderCount = $('#oneRepMaxTestDiv input[name="shoulderCount"]').val();
+                let chestWeight = $('#oneRepMaxTestDiv input[name="chestWeight"]').val();
+                let chestCount = $('#oneRepMaxTestDiv input[name="chestCount"]').val();
+                let backWeight = $('#oneRepMaxTestDiv input[name="backWeight"]').val();
+                let backCount = $('#oneRepMaxTestDiv input[name="backCount"]').val();
+                let absWeight = $('#oneRepMaxTestDiv input[name="absWeight"]').val();
+                let absCount = $('#oneRepMaxTestDiv input[name="absCount"]').val();
+                let legsWeight = $('#oneRepMaxTestDiv input[name="legsWeight"]').val();
+                let legsCount = $('#oneRepMaxTestDiv input[name="legsCount"]').val();
+
+                let loadPrevious = false;
+                [name, gender, age, height, weight].forEach(x => loadPrevious |= x.toString().length === 0);
+                if (loadPrevious) {
+                    showOneRepMaxResult(name, gender, age, height, weight, shoulderWeight, shoulderCount, chestWeight, chestCount, backWeight, backCount, absWeight, absCount, legsWeight, legsCount);
+                } else
+                    showOneRepMaxResult(name, gender, age, height, weight, shoulderWeight, shoulderCount, chestWeight, chestCount, backWeight, backCount, absWeight, absCount, legsWeight, legsCount);
+            });
         });
+
+        function loadPreviousOneRepMaxResults() {
+            previousScores = [];
+            $.post('/api/fetch_1rm_results', {sessionKey: "{{ sessionKey }}"}, function (res) {
+                if (res.success) {
+                    if (res.name == null || res.gender == null || res.age == null || res.height == null || res.weight == null)
+                        $('#oneRepMaxTestDiv input:not([type=submit])').attr('required', 'true');
+                    else {
+                        $('#oneRepMaxTestDiv input[name="name"]').val(res.name);
+                        $(`#oneRepMaxTestDiv input[name="oneRmGender"][value="${res.gender}"]`).prop('checked', true);
+                        $('#oneRepMaxTestDiv input[name="age"]').val(res.age);
+                        $('#oneRepMaxTestDiv input[name="height"]').val(res.height);
+                        $('#oneRepMaxTestDiv input[name="weight"]').val(res.weight);
+
+                        for (let i = 0; i < res.scores.length; i++)
+                            previousScores.push({
+                                timestamp: res.scores[i].timestamp,
+                                shoulder: res.scores[i].shoulder,
+                                chest: res.scores[i].chest,
+                                back: res.scores[i].back,
+                                abs: res.scores[i].abs,
+                                legs: res.scores[i].legs,
+                            });
+                    }
+                } else
+                    alert('Failed to load previous one rep max test results!');
+            });
+        }
+
+        function showOneRepMaxResult(name, gender, age, height, weight, shoulderWeight, shoulderCount, chestWeight, chestCount, backWeight, backCount, absWeight, absCount, legsWeight, legsCount) {
+            $.post('/api/insert_1rm_result', {
+                sessionKey: "{{ sessionKey }}",
+                name: name,
+                gender: gender,
+                age: age,
+                height: height,
+                weight: weight,
+                shoulder: Math.trunc((shoulderWeight + shoulderWeight * shoulderCount * ONE_REP_MAX_CONST) * 10) / 10,
+                chest: Math.trunc((chestWeight + chestWeight * chestCount * ONE_REP_MAX_CONST) * 10) / 10,
+                back: Math.trunc((backWeight + backWeight * backCount * ONE_REP_MAX_CONST) * 10) / 10,
+                abs: Math.trunc((absWeight + absWeight * absCount * ONE_REP_MAX_CONST) * 10) / 10,
+                legs: Math.trunc((legsWeight + legsWeight * legsCount * ONE_REP_MAX_CONST) * 10) / 10,
+            }, function (res) {
+                if (res.success) {
+                    console.log('one rep max result inserted');
+                    loadPreviousOneRepMaxResults();
+                } else
+                    alert('Failed to save the result, please try again later!');
+            });
+
+            $('#calculatorSwitchMenu').fadeOut(100);
+
+            calculatorDivs.forEach(div => div.hide());
+            $('#oneRepMaxResultDiv').show();
+
+            $('#goBackMenuDiv').show();
+            $('#calculatorsDiv').delay(100).fadeIn(100);
+        }
 
         function hideExerciseSelectorDivClick() {
             selectExerciseDiv.style.display = 'none';

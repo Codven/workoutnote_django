@@ -183,7 +183,7 @@
                 else if (email.length < 4 || !isValidEmail(email))
                     alert('Email invalid, please fix it and try again!')
                 else
-                    $.post('/api/request_password_reset', `{"email": "${email}"}`).done(function (res) {
+                    $.post('/api/request_password_reset', {email: email}).done(function (res) {
                         if (res.success)
                             alert('Password reset email has been sent to your email!')
                         else
@@ -217,7 +217,7 @@
                     return;
                 }
                 $('#registerForm .button').fadeOut();
-                $.post('/api/send_verification_code', `{"email": "${email}"}`).done(function (res) {
+                $.post('/api/send_verification_code', {email: email}).done(function (res) {
                     if (res.success) {
                         $('#registerDiv').fadeOut(200);
                         $('#verificationDiv').delay(200).fadeIn(200);
@@ -247,7 +247,7 @@
                     return;
                 }
                 $('#verificationForm .button').fadeOut();
-                $.post('/api/verify_register', `{"name":"${name}", "email":"${email}", "password":"${password}", "verification_code":"${verification}"}`).done(function (res) {
+                $.post('/api/verify_register', {name: name, email: email, password: password, verification_code: verification}).done(function (res) {
                     if (res.success) {
                         alert('Successfully registered, you can sign in now!');
                         $('#verificationDiv').fadeOut(200);

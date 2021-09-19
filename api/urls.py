@@ -43,4 +43,8 @@ urlpatterns = [
     # notes
     re_path('^fetch_note/?', views.handle_fetch_note_api),
     re_path('^set_note/?', views.handle_set_note_api),
+
+    # one rep max tests
+    re_path('^insert_1rm_result/?', views.handle_insert_1rm_result_api),
+    re_path('^fetch_1rm_results/?', views.handle_fetch_1rm_results_api),
 ]

@@ -156,3 +156,30 @@ class Note(models.Model):
 
     class Meta:
         unique_together = ('user', 'timestamp',)
+
+
+class OneRepMaxResults(models.Model):
+    class Gender:
+        MALE = "MALE"
+        FEMALE = "FEMALE"
+        ALL = [MALE, FEMALE]
+        CHOICES = (
+            (MALE, 'Male'),
+            (FEMALE, 'Female')
+        )
+
+    user = models.ForeignKey(to=django_User, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now=True)
+    name = models.CharField(max_length=128)
+    gender = models.CharField(max_length=24, choices=Gender.CHOICES)
+    age = models.IntegerField()
+    height = models.IntegerField()
+    weight = models.IntegerField()
+    shoulder = models.FloatField()
+    chest = models.FloatField()
+    back = models.FloatField()
+    abs = models.FloatField()
+    legs = models.FloatField()
+
+    class Meta:
+        unique_together = ('user', 'timestamp',)

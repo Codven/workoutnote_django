@@ -164,7 +164,15 @@ def handle_index(request):
 @login_required
 def handle_calculators(request):
     lang = request.COOKIES.get('lang')
-    return render(request=request, template_name='calculators_kr.html' if lang is not None and lang == 'kr' else 'calculators_en.html', context={'at_calculators': True, })
+    if not api_models.SessionKey.objects.filter(user=request.user).exists():
+        session_key = api_models.SessionKey.generate_key(email=request.user.email)
+        while api_models.SessionKey.objects.filter(key=session_key).exists():
+            time.sleep(0.001)
+            session_key = api_models.SessionKey.generate_key(email=request.user.email)
+        api_models.SessionKey.objects.create(user=request.user, key=session_key)
+    else:
+        session_key = api_models.SessionKey.objects.get(user=request.user).key
+    return render(request=request, template_name='calculators_kr.html' if lang is not None and lang == 'kr' else 'calculators_en.html', context={'at_calculators': True, 'sessionKey': session_key})
 
 
 @login_required

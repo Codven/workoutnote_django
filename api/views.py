@@ -189,6 +189,7 @@ def handle_update_settings_api(request):
     preferences.date_of_birth = new_date_of_birth
     preferences.gender = new_gender
     preferences.shared_profile = new_is_profile_shared
+    preferences.save()
     return JsonResponse(data={'success': True})
 
 
@@ -933,4 +934,76 @@ def handle_set_note_api(request):
     else:
         wn_models.Note.objects.create(user=user, timestamp=dt, note=received_params['note'])
         return JsonResponse(data={'success': True})
+
+
+# endregion
+
+
+# region 1rm tests
+@csrf_exempt
+@require_http_methods(['POST'])
+def handle_insert_1rm_result_api(request):
+    # 0. expected and received params
+    required_params = ['sessionKey', 'name', 'gender', 'age', 'height', 'weight', 'shoulder', 'chest', 'back', 'abs', 'legs']
+    received_params = request.POST if 'sessionKey' in request.POST else json.loads(request.body.decode('utf8'))
+
+    # 1. all params check
+    if False in [x in received_params for x in required_params]:
+        return JsonResponse(data={'success': False, 'reason': f'bad params, must provide {",".join(required_params)}'})
+    else:
+        session_key = received_params['sessionKey']
+        name = received_params['name']
+        gender = received_params['gender']
+        age = received_params['age']
+        height = received_params['height']
+        weight = received_params['weight']
+        shoulder = received_params['shoulder']
+        chest = received_params['chest']
+        back = received_params['back']
+        _abs = received_params['abs']
+        legs = received_params['legs']
+
+    # 2. sessionKey check
+    if not models.SessionKey.objects.filter(key=session_key).exists():
+        return JsonResponse(data={'success': False, 'reason': 'double check sessionKey value'})
+    else:
+        user = models.SessionKey.objects.get(key=session_key).user
+
+    # 3. insert 1rm result
+    wn_models.OneRepMaxResults.objects.create(user=user, name=name, gender=gender, age=age, height=height, weight=weight, shoulder=shoulder, chest=chest, back=back, abs=_abs, legs=legs)
+    return JsonResponse(data={'success': True})
+
+
+@csrf_exempt
+@require_http_methods(['POST'])
+def handle_fetch_1rm_results_api(request):
+    # 0. expected and received params
+    required_params = ['sessionKey']
+    received_params = request.POST if 'sessionKey' in request.POST else json.loads(request.body.decode('utf8'))
+
+    # 1. all params check
+    if False in [x in received_params for x in required_params]:
+        return JsonResponse(data={'success': False, 'reason': f'bad params, must provide {",".join(required_params)}'})
+    else:
+        session_key = received_params['sessionKey']
+
+    # 2. sessionKey check
+    if not models.SessionKey.objects.filter(key=session_key).exists():
+        return JsonResponse(data={'success': False, 'reason': 'double check sessionKey value'})
+    else:
+        user = models.SessionKey.objects.get(key=session_key).user
+
+    # 3. fetch 1rm results
+    name, gender, age, height, weight = '', '', -1, -1, -1
+    scores = []
+    if wn_models.OneRepMaxResults.objects.filter(user=user).exists():
+        last_result = wn_models.OneRepMaxResults.objects.filter(user=user).order_by('-timestamp').first()
+        name = last_result.name
+        gender = last_result.gender
+        age = last_result.age
+        height = last_result.height
+        weight = last_result.weight
+        for res in wn_models.OneRepMaxResults.objects.filter(user=user).order_by('timestamp'):
+            scores += [{'timestamp': res.timestamp, 'shoulder': res.shoulder, 'chest': res.chest, 'back': res.back, 'abs': res.abs, 'legs': res.legs}]
+    return JsonResponse(data={'success': True, 'name': name, 'gender': gender, 'age': age, 'height': height, 'weight': weight, 'scores': scores})
 # endregion

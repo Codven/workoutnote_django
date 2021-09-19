@@ -637,7 +637,7 @@
         }
 
         function fetchDayWorkouts(fromTs, tillTs) {
-            $.post('/api/fetch_workouts', `{"sessionKey": "{{ sessionKey }}", "fromTimestampMs": ${fromTs}, "tillTimestampMs": ${tillTs}}`).done((res) => res.success ? displayWorkouts(fromTs, res.workouts) : alert('No workout data found on selected day!'));
+            $.post('/api/fetch_workouts', {sessionKey: "{{ sessionKey }}", fromTimestampMs: fromTs, "tillTimestampMs": tillTs}).done((res) => res.success ? displayWorkouts(fromTs, res.workouts) : alert('No workout data found on selected day!'));
         }
     </script>
 {% endblock %}

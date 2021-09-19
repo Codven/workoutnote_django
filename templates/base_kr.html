@@ -13,6 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
 </head>
 
 <body>
@@ -521,15 +522,17 @@
 
     function reloadFavoriteExercises() {
         favoriteExercises = {};
-        $.post('/api/fetch_favorite_exercises', `{"sessionKey": "{{ sessionKey }}"}`).done(function (res) {
-            if (res.success) {
-                for (let i = 0; i < res.exercises.length; i++)
-                    favoriteExercises[res.exercises[i].id] = res.exercises[i];
-            } else {
-                console.log('failed to fetch favorite exercises');
-                favoriteExercises = {};
-            }
-        });
+        {% if sessionKey %}
+            $.post('/api/fetch_favorite_exercises', {sessionKey: "{{ sessionKey }}"}).done(function (res) {
+                if (res.success) {
+                    for (let i = 0; i < res.exercises.length; i++)
+                        favoriteExercises[res.exercises[i].id] = res.exercises[i];
+                } else {
+                    console.log('failed to fetch favorite exercises');
+                    favoriteExercises = {};
+                }
+            });
+        {% endif %}
     }
 
     function toggleSidebar() {
@@ -561,7 +564,7 @@
         let isFavorite = button.src.endsWith('{% static 'favorite_checked.png' %}');
         if (isFavorite) {
             // remove from favorites
-            $.post('/api/unset_favorite_exercise', `{"sessionKey": "{{ sessionKey }}", "exercise_id": "${exerciseId}"}`).done(function (res) {
+            $.post('/api/unset_favorite_exercise', {sessionKey: "{{ sessionKey }}", exercise_id: exerciseId}).done(function (res) {
                 if (res.success)
                     button.src = '{% static 'favorite_unchecked.png' %}';
                 else
@@ -569,7 +572,7 @@
             });
         } else {
             // add to favorite
-            $.post('/api/set_favorite_exercise', `{"sessionKey": "{{ sessionKey }}", "exercise_id": "${exerciseId}"}`).done(function (res) {
+            $.post('/api/set_favorite_exercise', {sessionKey: "{{ sessionKey }}", exercise_id: exerciseId}).done(function (res) {
                 if (res.success)
                     button.src = '{% static 'favorite_checked.png' %}';
                 else
@@ -584,7 +587,7 @@
         let isFavorite = button.src.endsWith('{% static 'favorite-filled.png' %}');
         if (isFavorite) {
             // remove from favorites
-            $.post('/api/unset_favorite_workout', `{"sessionKey": "{{ sessionKey }}", "workout_session_id": "${workoutSessionId}"}`).done(function (res) {
+            $.post('/api/unset_favorite_workout', {sessionKey: "{{ sessionKey }}", workout_session_id: workoutSessionId}).done(function (res) {
                 if (res.success)
                     button.src = '{% static 'favorite-outlined.png' %}';
                 else
@@ -592,7 +595,7 @@
             });
         } else {
             // add to favorite
-            $.post('/api/set_favorite_workout', `{"sessionKey": "{{ sessionKey }}", "workout_session_id": "${workoutSessionId}"}`).done(function (res) {
+            $.post('/api/set_favorite_workout', {sessionKey: "{{ sessionKey }}", workout_session_id: workoutSessionId}).done(function (res) {
                 if (res.success)
                     button.src = '{% static 'favorite-filled.png' %}';
                 else
@@ -697,6 +700,10 @@
             newElement.innerHTML = newElementHtml;
             exercisesListDiv.appendChild(newElement);
         }
+    }
+
+    function hideExerciseSelectorDivClick() {
+        selectExerciseDiv.style.display = 'none';
     }
 </script>
 

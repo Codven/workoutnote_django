@@ -990,7 +990,7 @@
         }
 
         function fetchTodayDayWorkouts(fromTs, tillTs) {
-            $.post('/api/fetch_workouts', `{"sessionKey": "{{ sessionKey }}", "fromTimestampMs": ${fromTs}, "tillTimestampMs": ${tillTs}}`).done((res) => res.success ? displayTodayWorkouts(fromTs, res.workouts) : null);
+            $.post('/api/fetch_workouts', {sessionKey: "{{ sessionKey }}", fromTimestampMs: fromTs, tillTimestampMs: tillTs}).done((res) => res.success ? displayTodayWorkouts(fromTs, res.workouts) : null);
         }
 
         function displayWorkoutForEditing(workout) {

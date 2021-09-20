@@ -287,12 +287,24 @@
                     <hr style="border-bottom: 0.5px solid #AAAAAA">
 
                     <div style="text-align: center; padding: 32px 0; margin: 0 32px;">
-                        <span style="font-size: large; border-bottom: 2px solid black; text-align: center;"><span class="_1rmResultName"></span> 님의 총 최대근력</span>
+                        <span style="font-size: large; border-bottom: 2px solid black; text-align: center;"><span class="_1rmResultName"></span>'s cumulative score.</span>
                     </div>
 
                     <div id="barChartRootDiv">
                         <div id="barChartDiv">
                             <canvas id="barChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div id="_1RMResultActionButtons">
+                        <div>
+                            <a id="printButton" class="lightButton">Print</a>
+                            <a id="photoCardButton" class="lightButton">Photo card</a>
+                            <div>
+                                <a id="uploadButton" class="lightButton skip"><img src="{% static 'upload.svg' %}" alt="upload" width="20px" height="20px"></a>
+                                <span style="width: 4px"></span>
+                                <a id="returnButton" class="darkButton skip"> <img src="{% static 'return.svg' %}" alt="return" width="18px" height="18px"> Return</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -771,6 +783,67 @@
             .resultSubItemDiv span:last-child {
                 font-size: xx-large;
             }
+
+            #_1RMResultActionButtons {
+                margin-top: 48px;
+                margin-bottom: 32px;
+                display: flex;
+                justify-content: center;
+            }
+
+            #_1RMResultActionButtons div {
+                width: 256px;
+                text-align: center;
+            }
+
+            #_1RMResultActionButtons div div {
+                display: flex;
+            }
+
+            #_1RMResultActionButtons div div a {
+                flex-grow: 1;
+            }
+
+            .lightButton:not(.skip), .darkButton:not(.skip) {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .lightButton {
+                border-radius: 24px;
+                border: 2px solid #6633CC;
+                color: #6633CC;
+                padding: 3px 32px;
+                text-align: center;
+                margin-top: 12px;
+                height: 40px;
+                cursor: pointer;
+                transition: 200ms;
+            }
+
+            .lightButton:hover {
+                background-color: #E7DFF7;
+                transition: 200ms;
+            }
+
+            .darkButton {
+                border-radius: 24px;
+                border: 2px solid #6633CC;
+                background-color: #6633CC;
+                color: white;
+                padding: 6px 32px;
+                text-align: center;
+                margin-top: 12px;
+                height: 40px;
+                cursor: pointer;
+                transition: 200ms;
+            }
+
+            .darkButton:hover {
+                background-color: #E7DFF7;
+                transition: 200ms;
+            }
         }
 
         #calculatorsDiv input[type=number]:not(.skip), #calculatorsDiv input[type=submit]:not(.skip) {
@@ -1185,6 +1258,19 @@
                     });
                 }
             });
+
+            $('#printButton').click(function () {
+                print(); // todo do better
+            });
+            $('#photoCardButton').click(function () {
+
+            });
+            $('#uploadButton').click(function () {
+
+            });
+            $('#returnButton').click(function () {
+                $('#goBackMenuButton').click();
+            });
         });
 
         function fetchOneRepMaxResults() {
@@ -1228,18 +1314,12 @@
             $('#_1rmResultAge').html(age);
             $('#_1rmResultHeight').html(height);
             $('#_1rmResultWeight').html(weight);
-
-            // switch divs
-            $('#calculatorSwitchMenu').fadeOut(100);
-            calculatorDivs.forEach(div => div.hide());
-            $('#oneRepMaxResultDiv').show();
-            $('#goBackMenuDiv').show();
-            $('#calculatorsDiv').delay(100).fadeIn(100);
         }
 
         function showCharts(scores) {
             if (scores.length === 0) {
                 // todo clear charts
+                $('#goBackMenuButton').click();
                 return;
             }
 

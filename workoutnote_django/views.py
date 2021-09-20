@@ -148,8 +148,6 @@ def handle_index(request):
         api_models.SessionKey.objects.create(user=request.user, key=session_key)
     else:
         session_key = api_models.SessionKey.objects.get(user=request.user).key
-    # todo plot as in https://simpleisbetterthancomplex.com/tutorial/2020/01/19/how-to-use-chart-js-with-django.html
-    # todo customize plot as in https://www.chartjs.org/docs/latest/charts/line.html
     lang = request.COOKIES.get('lang')
     return render(request=request, template_name='home_kr.html' if lang is not None and lang == 'kr' else 'home_en.html', context={
         'name': name if name else request.user.username,
@@ -365,8 +363,6 @@ def handle_favorite_workouts(request):
         api_models.SessionKey.objects.create(user=request.user, key=session_key)
     else:
         session_key = api_models.SessionKey.objects.get(user=request.user).key
-    # todo plot as in https://simpleisbetterthancomplex.com/tutorial/2020/01/19/how-to-use-chart-js-with-django.html
-    # todo customize plot as in https://www.chartjs.org/docs/latest/charts/line.html
     lang = request.COOKIES.get('lang')
     return render(request=request, template_name='favoriteWorkouts_kr.html' if lang is not None and lang == 'kr' else 'favoriteWorkouts_en.html', context={
         'at_home': True,
@@ -374,3 +370,9 @@ def handle_favorite_workouts(request):
         'exercises': models.Exercise.objects.all(),
         'workouts_by_days': workouts_by_days,
     })
+
+
+@login_required
+@require_http_methods(['GET'])
+def handle_report(request):
+    return render(request=request, template_name='report_kr.html')

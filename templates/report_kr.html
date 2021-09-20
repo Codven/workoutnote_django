@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Workoutnote.com report</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'index.css' %}">
+    <link rel="stylesheet" href="{% static 'slicon.css' %}">
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+</head>
+<body>
+<h5 style="color: #6633CC">
+    델토이드 1RM 근력검사 결과
+</h5>
+<div style="height: 7mm; background-color: #E7DFF7"></div>
+<div id="content">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <img src="{% static 'deltoid.svg' %}" alt="deltoid" width="76mm" height="76mm">
+        <div style="width: 48mm">
+            <div style="display: flex; justify-content: space-between;">
+                <span style="font-size: small; color: #777">검사일시</span>
+                <span style="margin-left: 16px; flex-grow: 1; font-size: small">2021년 9월 21일</span>
+            </div>
+            <hr style="margin: 3px 0 6px;border-bottom: 0.5px solid #6633CC">
+            <div style="display: flex; justify-content: space-between;">
+                <span style="font-size: small; color: #777">이&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;름&nbsp;&nbsp;| </span>
+                <span style="margin-left: 10px; flex-grow: 1; font-size: small">Kobiljon</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <span style="font-size: small; color: #777">성&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;별&nbsp;&nbsp;| </span>
+                <span style="margin-left: 10px; flex-grow: 1; font-size: small">남성</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <span style="font-size: small; color: #777">연&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;령&nbsp;&nbsp;| </span>
+                <span style="margin-left: 10px; flex-grow: 1; font-size: small">25세</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <span style="font-size: small; color: #777">신&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;장&nbsp;&nbsp;| </span>
+                <span style="margin-left: 10px; flex-grow: 1; font-size: small">177cm</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <span style="font-size: small; color: #777">체&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;중&nbsp;&nbsp;| </span>
+                <span style="margin-left: 10px; flex-grow: 1; font-size: small; text-align: start">69kg</span>
+            </div>
+        </div>
+    </div>
+
+    <h6 style="color: #6633CC; margin: 0">
+        부위별 쵀대근력 분석
+    </h6>
+    <div style="height: 1mm; background-color: #E7DFF7"></div>
+
+    <div style="height: 140mm; padding: 4px; display: flex; justify-content: space-between">
+        <div style="width: 55%; height: 100%; border: 1px dashed lightblue;">
+        </div>
+        <div style="width: 40%; height: 100%; border: 1px dashed lightblue;">
+        </div>
+    </div>
+
+    <h6 style="color: #6633CC; margin: 0">
+        쵀대근력 평균 그래프
+    </h6>
+    <div style="height: 1mm; background-color: #E7DFF7"></div>
+    <div style="height: 32mm; padding: 4px; display: flex; justify-content: space-between">
+        <div style="height: 100%; width: 30%; padding: 6px; border: 1px dashed lightblue;">
+            <span style="font-size: medium;">상체</span> <span style="font-size: small">(del)</span>
+        </div>
+        <div style="height: 100%; width: 30%; padding: 6px; border: 1px dashed lightblue;">
+            <span style="font-size: medium;">몸통</span> <span style="font-size: small">(del)</span>
+        </div>
+        <div style="height: 100%; width: 30%; padding: 6px; border: 1px dashed lightblue;">
+            <span style="font-size: medium;">하제</span> <span style="font-size: small">(del)</span>
+        </div>
+    </div>
+
+    <div style="height: 32mm; padding: 4px; display: flex; justify-content: space-between">
+        <div style="height: 100%; width: 30%; padding: 6px; border: 1px dashed lightblue;">
+            <span style="font-size: medium;">총 쵀대근력</span> <span style="font-size: small">(del)</span>
+        </div>
+        <div style="height: 100%; width: 65%; padding: 6px; border: 1px dashed lightblue;">
+            <span style="font-size: medium;">특이사항 및 메모</span>
+        </div>
+    </div>
+
+    <div style="padding: 0 10px; height: 10mm; margin-top: 10px; background-color: #E7DFF7; display: flex; align-items: center; justify-content: space-between">
+        <span></span>
+        <img src="{% static 'deltoidText.svg' %}" alt="deltoid" height="16mm" style="margin: 0; padding: 0">
+    </div>
+</div>
+<div>
+
+</div>
+</body>
+
+<style>
+    @media print {
+        @page {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+    }
+
+    body {
+        width: 210mm;
+        height: 297mm;
+        padding: 4mm;
+        border: 1px dashed lightblue;
+    }
+
+    #content {
+        padding: 3mm;
+    }
+</style>
+
+<script>
+
+</script>
+</html>

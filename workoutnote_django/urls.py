@@ -23,6 +23,8 @@ urlpatterns = [
     path('add-workout/', views.handle_add_workout, name='add workout'),
     path('calendar/', views.handle_calendar, name='calendar'),
     path('favorite-workouts/', views.handle_favorite_workouts, name='favorite workouts'),
+
+    path('report/', views.handle_report, name='report'),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

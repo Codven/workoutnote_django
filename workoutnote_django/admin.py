@@ -7,6 +7,7 @@ from workoutnote_django.models import Category
 from workoutnote_django.models import EmailConfirmationCode
 from workoutnote_django.models import FavoriteExercise
 from workoutnote_django.models import FavoriteWorkout
+from workoutnote_django.models import OneRepMaxResults
 from django.contrib import admin
 
 
@@ -53,3 +54,8 @@ class LiftAdmin(admin.ModelAdmin):
 @admin.register(EmailConfirmationCode)
 class EmailConfirmationCodesAdmin(admin.ModelAdmin):
     list_display = ['email', 'verification_code']
+
+
+@admin.register(OneRepMaxResults)
+class OneRepMaxResultsAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'timestamp', 'name', 'gender', 'age', 'height', 'weight', 'shoulder', 'chest', 'back', 'abs', 'legs']

@@ -1492,17 +1492,18 @@
                 if (loadPrevious && previousScores.length > 0) {
                     $.post('/api/insert_1rm_result', {sessionKey: "{{ sessionKey }}", name: previousScores[0].name, gender: previousScores[0].gender, age: previousScores[0].age, height: previousScores[0].height, weight: previousScores[0].weight, shoulder: shoulder, chest: chest, back: back, abs: abs, legs: legs}, function (res) {
                         if (res.success) {
-                            console.log('one rep max result inserted');
-                            fetchOneRepMaxResults();
+                            alert('One rep max result inserted');
+                            window.location.href = '{% url 'calculators' %}';
                         } else
                             alert('Failed to save the result, please try again later!');
                     });
                 } else {
                     showPersonalInfo(name, gender, age, height, weight);
                     $.post('/api/insert_1rm_result', {sessionKey: "{{ sessionKey }}", name: name, gender: gender, age: age, height: height, weight: weight, shoulder: shoulder, chest: chest, back: back, abs: abs, legs: legs}, function (res) {
-                        if (res.success)
-                            console.log('one rep max result inserted');
-                        else
+                        if (res.success) {
+                            alert('One rep max result inserted');
+                            window.location.href = '{% url 'calculators' %}';
+                        } else
                             alert('Failed to save the result, please try again later!');
                     });
                 }

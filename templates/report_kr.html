@@ -15,60 +15,188 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
 </head>
+
 <body>
-<h5 style="color: #6633CC">
-    델토이드 1RM 근력검사 결과
-</h5>
-<div style="height: 7mm; background-color: #E7DFF7"></div>
-<div id="content">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
+{# header #}
+<h6 style="color: #6633CC; padding: 0; margin: 0 0 5px;">델토이드 1RM 근력검사 결과</h6>
+<div style="height: 5mm; background-color: #E7DFF7"></div>
+
+<div>
+    {# top #}
+    <div style="display: flex; margin-top: 12px; justify-content: space-between; align-items: center;">
         <img src="{% static 'deltoid.svg' %}" alt="deltoid" width="76mm" height="76mm">
         <div style="width: 48mm">
             <div style="display: flex; justify-content: space-between;">
                 <span style="font-size: small; color: #777">검사일시</span>
-                <span style="margin-left: 16px; flex-grow: 1; font-size: small">2021년 9월 21일</span>
+                <span style="margin-left: 16px; flex-grow: 1; font-size: small" id="date">2021년 9월 21일</span>
             </div>
             <hr style="margin: 3px 0 6px;border-bottom: 0.5px solid #6633CC">
             <div style="display: flex; justify-content: space-between;">
                 <span style="font-size: small; color: #777">이&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;름&nbsp;&nbsp;| </span>
-                <span style="margin-left: 10px; flex-grow: 1; font-size: small">Kobiljon</span>
+                <span style="margin-left: 10px; flex-grow: 1; font-size: small">{{ name }}</span>
             </div>
             <div style="display: flex; justify-content: space-between;">
                 <span style="font-size: small; color: #777">성&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;별&nbsp;&nbsp;| </span>
-                <span style="margin-left: 10px; flex-grow: 1; font-size: small">남성</span>
+                <span style="margin-left: 10px; flex-grow: 1; font-size: small">{{ gender }}</span>
             </div>
             <div style="display: flex; justify-content: space-between;">
                 <span style="font-size: small; color: #777">연&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;령&nbsp;&nbsp;| </span>
-                <span style="margin-left: 10px; flex-grow: 1; font-size: small">25세</span>
+                <span style="margin-left: 10px; flex-grow: 1; font-size: small">{{ age }}세</span>
             </div>
             <div style="display: flex; justify-content: space-between;">
                 <span style="font-size: small; color: #777">신&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;장&nbsp;&nbsp;| </span>
-                <span style="margin-left: 10px; flex-grow: 1; font-size: small">177cm</span>
+                <span style="margin-left: 10px; flex-grow: 1; font-size: small">{{ height }}cm</span>
             </div>
             <div style="display: flex; justify-content: space-between;">
                 <span style="font-size: small; color: #777">체&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;중&nbsp;&nbsp;| </span>
-                <span style="margin-left: 10px; flex-grow: 1; font-size: small; text-align: start">69kg</span>
+                <span style="margin-left: 10px; flex-grow: 1; font-size: small; text-align: start">{{ weight }}kg</span>
             </div>
         </div>
     </div>
 
+    {# middle #}
     <h6 style="color: #6633CC; margin: 0">
         부위별 쵀대근력 분석
     </h6>
     <div style="height: 1mm; background-color: #E7DFF7"></div>
+    <div style="height: 118mm; padding: 5px; display: flex; justify-content: space-between">
+        {# left column #}
+        <div style="width: 55%; height: 100%">
+            <div style="height: 33.3%">
+                <span style="font-size: medium;">상체</span> <span style="font-size: small">(del)</span>
+                <table cellspacing="0" cellpadding="0" style="border: none">
+                    <tr>
+                        <th></th>
+                        <th>표준이하</th>
+                        <th>표준</th>
+                        <th>표준이상</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span style="display: block; line-height: 0.3; padding-top: 4px; font-size: xx-small; color: gray">덤벨레터라이즈</span>
+                            <span style="display: block">어깨</span>
+                        </td>
+                        <td colspan="3">
+                            <a style="width: {{ shoulderPercentage }}%" class="progress black"></a>
+                            {{ shoulder }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span style="display: block; line-height: 0.3; padding-top: 4px; font-size: xx-small; color: gray">푸쉬웝</span>
+                            <span style="display: block">가슴</span>
+                        </td>
+                        <td colspan="3">
+                            <a style="width: {{ chestPercentage }}%" class="progress black"></a>
+                            {{ chest }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>평균</td>
+                        <td colspan="3">
+                            <a style="width: {{ avgTopPartPercentile }}%" class="progress blue"></a>
+                            {{ avgTopPartScore }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
 
-    <div style="height: 140mm; padding: 4px; display: flex; justify-content: space-between">
-        <div style="width: 55%; height: 100%; border: 1px dashed lightblue;">
+            <div style="height: 33.3%">
+                <span style="font-size: medium;">몸통</span> <span style="font-size: small">(del)</span>
+                <table cellspacing="0" cellpadding="0" style="border: none">
+                    <tr>
+                        <th></th>
+                        <th>표준이하</th>
+                        <th>표준</th>
+                        <th>표준이상</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span style="display: block; line-height: 0.3; padding-top: 4px; font-size: xx-small; color: gray">덤벨레터라이즈</span>
+                            <span style="display: block">등</span>
+                        </td>
+                        <td colspan="3">
+                            <a style="width: {{ backPercentage }}%" class="progress black"></a>
+                            {{ back }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span style="display: block; line-height: 0.3; padding-top: 4px; font-size: xx-small; color: gray">푸쉬웝</span>
+                            <span style="display: block">복근</span>
+                        </td>
+                        <td colspan="3">
+                            <a style="width: {{ absPercentage }}%" class="progress black"></a>
+                            {{ abs }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>평균</td>
+                        <td colspan="3">
+                            <a style="width: {{ avgMidPartPercentile }}%" class="progress blue"></a>
+                            {{ avgMidPartScore }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div style="height: 33.3%">
+                <span style="font-size: medium;">하제</span> <span style="font-size: small">(del)</span>
+                <table cellspacing="0" cellpadding="0" style="border: none">
+                    <tr>
+                        <th></th>
+                        <th>표준이하</th>
+                        <th>표준</th>
+                        <th>표준이상</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span style="display: block; line-height: 0.3; padding-top: 4px; font-size: xx-small; color: gray">덤벨레터라이즈</span>
+                            <span style="display: block">하체</span>
+                        </td>
+                        <td colspan="3">
+                            <a style="width: {{ legsPercentile }}%" class="progress black"></a>
+                            {{ legs }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>평균</td>
+                        <td colspan="3">
+                            <a style="width: {{ legsPercentile }}%" class="progress blue"></a>
+                            {{ legs }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
-        <div style="width: 40%; height: 100%; border: 1px dashed lightblue;">
+
+        {# right column #}
+        <div style="width: 40%; height: 100%">
+            <div id="radarChartRootDiv" style="position: relative; height: 290px;">
+                <span style="position: absolute; font-weight: bold;">신체 표준도</span>
+                <div id="radarChartDiv" style="margin: 0 auto; width: 270px; height: 270px; border-radius: 140px; background-color: #F4F4F4">
+                    <canvas id="radarChart" style="height: 270px; width: 270px; margin: 0 auto"></canvas>
+                </div>
+                <div style="position: absolute; bottom: 0; width: 100%">
+                    <span style="display: block; font-size: small; text-align: center">회원님의 근력검사 평균 <span style="font-weight: bold; font-style: italic">{{ averageScore }}del</span></span>
+                    <span style="display: block; font-size: small; text-align: center">회원님의 총 최대근력 <span style="font-weight: bold; font-style: italic">{{ cumulativeScore }}del</span></span>
+                </div>
+            </div>
+
+            <span style="font-weight: bold; display: block; margin-top: 10px;">최대근력 검사란?</span>
+            <span style="font-size: small; display: block;">델토이드 최대근력검사에서는 개인체형별 맞춤 리프트를 제공, 각 부위별 1 분동안 수행해낼 수 있는 최대 반복횟수로 간접추정식을 사용하여 1RM (1회 최대로 들어올릴 수 있는 최대 중량)을 측정합니다.</span>
+            <span style="font-size: small; display: block;">델토이드만의 DEL 추정식을 계산하여 자신에게 맞는 운동량을 측정할 수 있습니다.</span>
         </div>
     </div>
+    <div>
+    </div>
 
+    {# bottom #}
     <h6 style="color: #6633CC; margin: 0">
         쵀대근력 평균 그래프
     </h6>
     <div style="height: 1mm; background-color: #E7DFF7"></div>
-    <div style="height: 32mm; padding: 4px; display: flex; justify-content: space-between">
+    <div style="height: 37mm; padding: 4px; display: flex; justify-content: space-between">
         <div style="height: 100%; width: 30%; padding: 6px; border: 1px dashed lightblue;">
             <span style="font-size: medium;">상체</span> <span style="font-size: small">(del)</span>
         </div>
@@ -79,8 +207,7 @@
             <span style="font-size: medium;">하제</span> <span style="font-size: small">(del)</span>
         </div>
     </div>
-
-    <div style="height: 32mm; padding: 4px; display: flex; justify-content: space-between">
+    <div style="height: 37mm; padding: 4px; display: flex; justify-content: space-between">
         <div style="height: 100%; width: 30%; padding: 6px; border: 1px dashed lightblue;">
             <span style="font-size: medium;">총 쵀대근력</span> <span style="font-size: small">(del)</span>
         </div>
@@ -88,14 +215,12 @@
             <span style="font-size: medium;">특이사항 및 메모</span>
         </div>
     </div>
-
-    <div style="padding: 0 10px; height: 10mm; margin-top: 10px; background-color: #E7DFF7; display: flex; align-items: center; justify-content: space-between">
-        <span></span>
-        <img src="{% static 'deltoidText.svg' %}" alt="deltoid" height="16mm" style="margin: 0; padding: 0">
-    </div>
 </div>
-<div>
 
+{# footer #}
+<div style="padding: 0 9px; height: 9mm; margin-top: 10px; background-color: #E7DFF7; display: flex; align-items: center; justify-content: space-between">
+    <span></span>
+    <img src="{% static 'deltoidText.svg' %}" alt="deltoid" height="16mm" style="margin: 0; padding: 0">
 </div>
 </body>
 
@@ -114,17 +239,93 @@
 
     body {
         width: 210mm;
-        height: 297mm;
         padding: 4mm;
-        border: 1px dashed lightblue;
     }
 
-    #content {
-        padding: 3mm;
+    table {
+        table-layout: fixed;
+        width: 100%;
+        height: 80%;
+    }
+
+    th {
+        color: white;
+        width: 25%;
+    }
+
+    th:first-child {
+        background-color: #DCDCDC;
+    }
+
+    th:nth-child(2) {
+        background-color: #BAAAE0;
+    }
+
+    th:nth-child(3) {
+        background-color: #7D70B2;
+    }
+
+    th:last-child {
+        background-color: #8089C1;
+    }
+
+    tr:not(:first-child) td:first-child {
+        background-color: #E7DFF7;
+        padding: 0 4px;
+    }
+
+    .progress {
+        display: inline-block;
+        height: 2mm;
+    }
+
+    .black {
+        background-color: black;
+    }
+
+    .blue {
+        background-color: #6633CC;
     }
 </style>
-
 <script>
+    $(document).ready(function () {
+        // essential info
+        let date = new Date({{ timestamp }});
+        $('#date').html(`${date.getFullYear()}년 ${date.getMonth()}월 ${date.getDate()}일`);
 
+        // radar chart
+        new Chart(document.getElementById('radarChart'), {
+            type: 'radar',
+            data: {
+                labels: [['어깨', '({{ shoulder }} del)'], ['가슴', '({{ chest }} del)'], ['등', '({{ back }} del)'], ['복근', '({{ abs }} del)'], ['하체', '({{ legs }} del)']],
+                datasets: [{
+                    data: [{{ shoulder }}, {{ chest }}, {{ back }}, {{ abs }}, {{ legs }}],
+                    backgroundColor: '#A97DFF61',
+                    borderColor: '#A67BFF',
+                    borderWidth: 3,
+                    pointerEnabled: false
+                }]
+            },
+            options: {
+                responsive: false,
+                maintainAspectRatio: false,
+                aspectRatio: 1,
+                scale: {
+                    ticks: {
+                        min: 0, display: false,
+                        maxTicksLimit: 6
+                    },
+                    pointLabels: {fontColor: 'black', fontSize: 11},
+                    gridLines: {
+                        lineWidth: 1.3,
+                        color: "#AAAAAA"
+                    },
+                },
+                elements: {point: {radius: 0}},
+                legend: {display: false},
+                layout: {padding: 20}
+            }
+        });
+    });
 </script>
 </html>

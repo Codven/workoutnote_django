@@ -3,6 +3,7 @@ import random
 import re
 import time
 from datetime import datetime
+import numpy as np
 
 from django.conf import settings
 from django.contrib.auth import login, logout, authenticate
@@ -375,4 +376,52 @@ def handle_favorite_workouts(request):
 @login_required
 @require_http_methods(['GET'])
 def handle_report(request):
-    return render(request=request, template_name='report_kr.html')
+    results = models.OneRepMaxResults.objects.filter(user=request.user)
+    if not results.exists():
+        return redirect(to='calculators')
+
+    last_res = results.order_by('-timestamp').first()
+
+    # allowed percentage range [10%, 90%] region
+    def get_percentile(key, threshold):
+        arr = np.array([x[0] for x in models.OneRepMaxResults.objects.values_list(key)])
+        return 10 + (sum(arr <= threshold) / len(arr)) * 72
+
+    def float2str(number):
+        return f'{number:.1f}'.replace('.0', '')
+
+    shoulder_percentile = get_percentile('shoulder', last_res.shoulder)
+    chest_percentile = get_percentile('chest', last_res.chest)
+    back_percentile = get_percentile('back', last_res.back)
+    abs_percentile = get_percentile('abs', last_res.abs)
+    legs_percentile = get_percentile('legs', last_res.legs)
+
+    return render(request=request, template_name='report_kr.html', context={
+        'timestamp': int(last_res.timestamp.timestamp() * 1000),
+        'name': last_res.name,
+        'gender': '남성' if last_res.gender == models.OneRepMaxResults.Gender.MALE else '여성',
+        'age': last_res.age,
+        'height': float2str(last_res.height),
+        'weight': float2str(last_res.weight),
+
+        'shoulder': float2str(last_res.shoulder),
+        'chest': float2str(last_res.chest),
+        'back': float2str(last_res.back),
+        'abs': float2str(last_res.abs),
+        'legs': float2str(last_res.legs),
+
+        'cumulativeScore': last_res.shoulder + last_res.chest + last_res.back + last_res.abs + last_res.legs,
+        'averageScore': f'{(last_res.shoulder + last_res.chest + last_res.back + last_res.abs + last_res.legs) / 5:.1f}',
+
+        'shoulderPercentage': shoulder_percentile,
+        'chestPercentage': chest_percentile,
+        'avgTopPartPercentile': (shoulder_percentile + chest_percentile) / 2,
+        'avgTopPartScore': float2str((last_res.shoulder + last_res.chest) / 2),
+
+        'backPercentage': back_percentile,
+        'absPercentage': abs_percentile,
+        'avgMidPartPercentile': (back_percentile + abs_percentile) / 2,
+        'avgMidPartScore': float2str((last_res.back + last_res.abs) / 2),
+
+        'legsPercentile': legs_percentile,
+    })

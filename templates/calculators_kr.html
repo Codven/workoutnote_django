@@ -1463,28 +1463,28 @@
                 // essential info
                 let name = $('#oneRepMaxTestDiv input[name="name"]').val();
                 let gender = $('#oneRepMaxTestDiv input[name="oneRmGender"]:checked').val();
-                let age = $('#oneRepMaxTestDiv input[name="age"]').val();
-                let height = $('#oneRepMaxTestDiv input[name="height"]').val();
-                let weight = $('#oneRepMaxTestDiv input[name="weight"]').val();
+                let age = parseInt($('#oneRepMaxTestDiv input[name="age"]').val());
+                let height = parseFloat($('#oneRepMaxTestDiv input[name="height"]').val());
+                let weight = parseFloat($('#oneRepMaxTestDiv input[name="weight"]').val());
                 // shoulder
-                let shoulderWeight = $('#oneRepMaxTestDiv input[name="shoulderWeight"]').val();
-                let shoulderCount = $('#oneRepMaxTestDiv input[name="shoulderCount"]').val();
-                let shoulder = Math.trunc((shoulderWeight + shoulderWeight * shoulderCount * ONE_REP_MAX_CONST) * 10) / 10;
+                let shoulderWeight = parseFloat($('#oneRepMaxTestDiv input[name="shoulderWeight"]').val());
+                let shoulderCount = parseInt($('#oneRepMaxTestDiv input[name="shoulderCount"]').val());
+                let shoulder = shoulderWeight + shoulderWeight * shoulderCount * ONE_REP_MAX_CONST;
                 // chest
-                let chestWeight = $('#oneRepMaxTestDiv input[name="chestWeight"]').val();
-                let chestCount = $('#oneRepMaxTestDiv input[name="chestCount"]').val();
+                let chestWeight = parseFloat($('#oneRepMaxTestDiv input[name="chestWeight"]').val());
+                let chestCount = parseInt($('#oneRepMaxTestDiv input[name="chestCount"]').val());
                 let chest = Math.trunc((chestWeight + chestWeight * chestCount * ONE_REP_MAX_CONST) * 10) / 10;
                 // back
-                let backWeight = $('#oneRepMaxTestDiv input[name="backWeight"]').val();
-                let backCount = $('#oneRepMaxTestDiv input[name="backCount"]').val();
+                let backWeight = parseFloat($('#oneRepMaxTestDiv input[name="backWeight"]').val());
+                let backCount = parseInt($('#oneRepMaxTestDiv input[name="backCount"]').val());
                 let back = Math.trunc((backWeight + backWeight * backCount * ONE_REP_MAX_CONST) * 10) / 10;
                 // abs
-                let absWeight = $('#oneRepMaxTestDiv input[name="absWeight"]').val();
-                let absCount = $('#oneRepMaxTestDiv input[name="absCount"]').val();
+                let absWeight = parseFloat($('#oneRepMaxTestDiv input[name="absWeight"]').val());
+                let absCount = parseInt($('#oneRepMaxTestDiv input[name="absCount"]').val());
                 let abs = Math.trunc((absWeight + absWeight * absCount * ONE_REP_MAX_CONST) * 10) / 10;
                 // legs
-                let legsWeight = $('#oneRepMaxTestDiv input[name="legsWeight"]').val();
-                let legsCount = $('#oneRepMaxTestDiv input[name="legsCount"]').val();
+                let legsWeight = parseFloat($('#oneRepMaxTestDiv input[name="legsWeight"]').val());
+                let legsCount = parseInt($('#oneRepMaxTestDiv input[name="legsCount"]').val());
                 let legs = Math.trunc((legsWeight + legsWeight * legsCount * ONE_REP_MAX_CONST) * 10) / 10;
 
                 let loadPrevious = false;

@@ -954,14 +954,15 @@ def handle_insert_1rm_result_api(request):
         session_key = received_params['sessionKey']
         name = received_params['name']
         gender = received_params['gender']
-        age = received_params['age']
-        height = received_params['height']
-        weight = received_params['weight']
-        shoulder = received_params['shoulder']
-        chest = received_params['chest']
-        back = received_params['back']
-        _abs = received_params['abs']
-        legs = received_params['legs']
+        age = int(received_params['age'])
+        height = float(received_params['height'])
+        weight = float(received_params['weight'])
+        shoulder = float(received_params['shoulder'])
+        chest = float(received_params['chest'])
+        back = float(received_params['back'])
+        _abs = float(received_params['abs'])
+        legs = float(received_params['legs'])
+        print(shoulder, chest, back, _abs, legs)
 
     # 2. sessionKey check
     if not models.SessionKey.objects.filter(key=session_key).exists():

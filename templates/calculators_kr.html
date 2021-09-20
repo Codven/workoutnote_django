@@ -1279,10 +1279,15 @@
                         description.html('어깨, 가슴, 등, 복근 및 다리에 대한 1RM 점수를 계산하기');
                         break;
                     case 'oneRepMaxResultButton':
-                        $('#oneRepMaxResultDiv').show();
-                        $('#oneRepMaxResultDiv div').show();
-                        title.html('델토이드 1RM 검사결과');
-                        description.html('어깨, 가슴, 등, 복근 및 다리에 이전 1RM 점수보기.');
+                        if (previousScores.length === 0) {
+                            alert('You have no previous entries, please fill out the form completely!');
+                            $('#oneRepMaxTestButton').click();
+                        } else {
+                            $('#oneRepMaxResultDiv').show();
+                            $('#oneRepMaxResultDiv div').show();
+                            title.html('델토이드 1RM 검사결과');
+                            description.html('어깨, 가슴, 등, 복근 및 다리에 이전 1RM 점수보기.');
+                        }
                         break;
                     case 'gripStrengthTestButton':
                         $('#gripStrengthTestDiv').show();
@@ -1314,7 +1319,11 @@
                 $('#calculatorSwitchMenu').fadeOut(100);
 
                 calculatorDivs.forEach(div => div.hide());
-                $('#oneRepMaxResultDiv').show();
+                if (previousScores.length === 0) {
+                    alert('You have no previous entries, please fill out the form completely first!');
+                    $('#oneRepMaxTestDiv').show();
+                } else
+                    $('#oneRepMaxResultDiv').show();
 
                 $('#goBackMenuDiv').show();
                 $('#calculatorsDiv').delay(100).fadeIn(100);
@@ -1517,10 +1526,9 @@
             previousScores = [];
             $.post('/api/fetch_1rm_results', {sessionKey: "{{ sessionKey }}"}, function (res) {
                 if (res.success) {
-                    if (res.name === '' || res.gender === '' || res.age === -1 || res.height === -1 || res.weight === -1) {
+                    if (res.name === '' || res.gender === '' || res.age === -1 || res.height === -1 || res.weight === -1)
                         $('#oneRepMaxTestDiv input:not([type=submit])').attr('required', 'true');
-                        alert('You have no previous entries, please fill out the form completely!');
-                    } else {
+                    else {
                         if (res.name != null) {
                             $('#oneRepMaxTestDiv input[name="name"]').val(res.name);
                             $(`#oneRepMaxTestDiv input[name="oneRmGender"][value="${res.gender}"]`).prop('checked', true);

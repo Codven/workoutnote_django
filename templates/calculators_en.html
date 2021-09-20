@@ -1279,10 +1279,15 @@
                         description.html('1RM scores on shoulder, chest, back, abs, and legs.');
                         break;
                     case 'oneRepMaxResultButton':
-                        $('#oneRepMaxResultDiv').show();
-                        $('#oneRepMaxResultDiv div').show();
-                        title.html('Deltoid 1RM Results');
-                        description.html('Your previously computed 1RM scores on shoulder, chest, back, abs, and legs.');
+                        if (previousScores.length === 0) {
+                            alert('You have no previous entries, please fill out the form completely!');
+                            $('#oneRepMaxTestButton').click();
+                        } else {
+                            $('#oneRepMaxResultDiv').show();
+                            $('#oneRepMaxResultDiv div').show();
+                            title.html('Deltoid 1RM Results');
+                            description.html('Your previously computed 1RM scores on shoulder, chest, back, abs, and legs.');
+                        }
                         break;
                     case 'gripStrengthTestButton':
                         $('#gripStrengthTestDiv').show();
@@ -1314,7 +1319,11 @@
                 $('#calculatorSwitchMenu').fadeOut(100);
 
                 calculatorDivs.forEach(div => div.hide());
-                $('#oneRepMaxResultDiv').show();
+                if (previousScores.length === 0) {
+                    alert('You have no previous entries, please fill out the form completely first!');
+                    $('#oneRepMaxTestDiv').show();
+                } else
+                    $('#oneRepMaxResultDiv').show();
 
                 $('#goBackMenuDiv').show();
                 $('#calculatorsDiv').delay(100).fadeIn(100);

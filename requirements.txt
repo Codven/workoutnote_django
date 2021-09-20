@@ -3,6 +3,7 @@ beautifulsoup4==4.9.3
 cachetools==4.2.2
 certifi==2021.5.30
 chardet==4.0.0
+Cython==0.29.24
 Django==3.2.4
 google==2.0.3
 google-api-core==1.30.0
@@ -13,6 +14,7 @@ google-auth-oauthlib==0.4.2
 googleapis-common-protos==1.52.0
 httplib2==0.19.1
 idna==2.10
+numpy==1.21.2
 oauthlib==3.1.1
 packaging==20.9
 Pillow==8.3.1
@@ -20,6 +22,7 @@ protobuf==3.17.3
 psycopg2-binary==2.9.1
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
+pybind11==2.7.1
 pyparsing==2.4.7
 pytz==2021.1
 requests==2.25.1

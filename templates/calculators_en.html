@@ -1526,10 +1526,9 @@
             previousScores = [];
             $.post('/api/fetch_1rm_results', {sessionKey: "{{ sessionKey }}"}, function (res) {
                 if (res.success) {
-                    if (res.name === '' || res.gender === '' || res.age === -1 || res.height === -1 || res.weight === -1) {
+                    if (res.name === '' || res.gender === '' || res.age === -1 || res.height === -1 || res.weight === -1)
                         $('#oneRepMaxTestDiv input:not([type=submit])').attr('required', 'true');
-                        alert('You have no previous entries, please fill out the form completely!');
-                    } else {
+                    else {
                         if (res.name != null) {
                             $('#oneRepMaxTestDiv input[name="name"]').val(res.name);
                             $(`#oneRepMaxTestDiv input[name="oneRmGender"][value="${res.gender}"]`).prop('checked', true);

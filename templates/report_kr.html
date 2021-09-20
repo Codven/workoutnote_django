@@ -24,8 +24,8 @@
 <div>
     {# top #}
     <div style="display: flex; margin-top: 12px; justify-content: space-between; align-items: center;">
-        <img src="{% static 'deltoid.svg' %}" alt="deltoid" width="76mm" height="76mm">
-        <div style="width: 48mm">
+        <img src="{% static 'deltoid.svg' %}" alt="deltoid" width="96mm" height="96mm">
+        <div style="width: 76mm">
             <div style="display: flex; justify-content: space-between;">
                 <span style="font-size: small; color: #777">검사일시</span>
                 <span style="margin-left: 16px; flex-grow: 1; font-size: small" id="date">2021년 9월 21일</span>
@@ -188,8 +188,6 @@
             <span style="font-size: small; display: block;">델토이드만의 DEL 추정식을 계산하여 자신에게 맞는 운동량을 측정할 수 있습니다.</span>
         </div>
     </div>
-    <div>
-    </div>
 
     {# bottom #}
     <h6 style="color: #6633CC; margin: 0">
@@ -197,22 +195,27 @@
     </h6>
     <div style="height: 1mm; background-color: #E7DFF7"></div>
     <div style="height: 37mm; padding: 4px; display: flex; justify-content: space-between">
-        <div style="height: 100%; width: 30%; padding: 6px; border: 1px dashed lightblue;">
+        <div style="height: 100%; width: 30%; padding: 6px">
             <span style="font-size: medium;">상체</span> <span style="font-size: small">(del)</span>
+            <canvas style="padding-top: 6px" id="topScoresLineGraph"></canvas>
         </div>
-        <div style="height: 100%; width: 30%; padding: 6px; border: 1px dashed lightblue;">
+        <div style="height: 100%; width: 30%; padding: 6px">
             <span style="font-size: medium;">몸통</span> <span style="font-size: small">(del)</span>
+            <canvas style="padding-top: 6px" id="midScoresLineGraph"></canvas>
         </div>
-        <div style="height: 100%; width: 30%; padding: 6px; border: 1px dashed lightblue;">
+        <div style="height: 100%; width: 30%; padding: 6px">
             <span style="font-size: medium;">하제</span> <span style="font-size: small">(del)</span>
+            <canvas style="padding-top: 6px" id="legsScoresLineGraph"></canvas>
         </div>
     </div>
     <div style="height: 37mm; padding: 4px; display: flex; justify-content: space-between">
-        <div style="height: 100%; width: 30%; padding: 6px; border: 1px dashed lightblue;">
+        <div style="height: 100%; width: 30%; padding: 6px">
             <span style="font-size: medium;">총 쵀대근력</span> <span style="font-size: small">(del)</span>
+            <canvas style="padding-top: 6px" id="totalScoresBarChart"></canvas>
         </div>
-        <div style="height: 100%; width: 65%; padding: 6px; border: 1px dashed lightblue;">
+        <div style="height: 100%; width: 65%; padding: 6px">
             <span style="font-size: medium;">특이사항 및 메모</span>
+            <textarea style="width: 100%; height: 82%; background-color: #F0F0F0; resize: none; border: none; padding: 4px; outline: none"></textarea>
         </div>
     </div>
 </div>
@@ -293,7 +296,7 @@
         let date = new Date({{ timestamp }});
         $('#date').html(`${date.getFullYear()}년 ${date.getMonth()}월 ${date.getDate()}일`);
 
-        // radar chart
+        // region radar chart
         new Chart(document.getElementById('radarChart'), {
             type: 'radar',
             data: {
@@ -326,6 +329,266 @@
                 layout: {padding: 20}
             }
         });
-    });
+        // endregion
+
+        // region top line graph
+        let scores = [{% for score in topPartScores %}{timestamp: {{ score.timestamp }}, score: {{ score.score }}}, {% endfor %}];
+        let topScores = Array(4).fill(null);
+        let dates = Array(4).fill("...");
+        let i;
+        for (i = 0; i < scores.length; i++) {
+            topScores.splice(4 - i, 1, scores[i].score);
+            let date = new Date(scores[i].timestamp);
+            dates.splice(4 - i, 1, [date.getFullYear().toString(), `${padZero(date.getMonth(), 2)}${padZero(date.getDate(), 2)}`]);
+        }
+        new Chart(document.getElementById('topScoresLineGraph'), {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    data: topScores,
+                    pointBackgroundColor: '#6633CC',
+                    borderColor: '#777',
+                    borderWidth: 1,
+                    fill: false,
+                    lineTension: 0,
+                    radius: 5
+                }]
+            },
+            options: {
+                legend: {display: false},
+                scales: {
+                    xAxes: [{gridLines: {color: "white"}}],
+                    yAxes: [{
+                        ticks: {min: 1, maxTicksLimit: 4},
+                        gridLines: {borderDash: [8, 4], color: "lightgray", drawBorder: false}
+                    }]
+                }
+            }
+        });
+        // endregion
+
+        // region mid line graph
+        scores = [{% for score in midPartScores %}{timestamp: {{ score.timestamp }}, score: {{ score.score }}}, {% endfor %}];
+        let midScores = Array(4).fill(null);
+        dates = Array(4).fill("...");
+        for (i = 0; i < scores.length; i++) {
+            midScores.splice(4 - i, 1, scores[i].score);
+            let date = new Date(scores[i].timestamp);
+            dates.splice(4 - i, 1, [date.getFullYear().toString(), `${padZero(date.getMonth(), 2)}${padZero(date.getDate(), 2)}`]);
+        }
+        new Chart(document.getElementById('midScoresLineGraph'), {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    data: midScores,
+                    pointBackgroundColor: '#6633CC',
+                    borderColor: '#777',
+                    borderWidth: 1,
+                    fill: false,
+                    lineTension: 0,
+                    radius: 5
+                }]
+            },
+            options: {
+                legend: {display: false},
+                scales: {
+                    xAxes: [{gridLines: {color: "white"}}],
+                    yAxes: [{
+                        ticks: {min: 1, maxTicksLimit: 4},
+                        gridLines: {borderDash: [8, 4], color: "lightgray", drawBorder: false}
+                    }]
+                }
+            }
+        });
+        // endregion
+
+        // region legs line graph
+        scores = [{% for score in legsScores %}{timestamp: {{ score.timestamp }}, score: {{ score.score }}}, {% endfor %}];
+        let legsScores = Array(4).fill(null);
+        dates = Array(4).fill("...");
+        for (i = 0; i < scores.length; i++) {
+            legsScores.splice(4 - i, 1, scores[i].score);
+            let date = new Date(scores[i].timestamp);
+            dates.splice(4 - i, 1, [date.getFullYear().toString(), `${padZero(date.getMonth(), 2)}${padZero(date.getDate(), 2)}`]);
+        }
+        new Chart(document.getElementById('legsScoresLineGraph'), {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    data: legsScores,
+                    pointBackgroundColor: '#6633CC',
+                    borderColor: '#777',
+                    borderWidth: 1,
+                    fill: false,
+                    lineTension: 0,
+                    radius: 5
+                }]
+            },
+            options: {
+                legend: {display: false},
+                scales: {
+                    xAxes: [{gridLines: {color: "white"}}],
+                    yAxes: [{
+                        ticks: {min: 1, maxTicksLimit: 4},
+                        gridLines: {borderDash: [8, 4], color: "lightgray", drawBorder: false}
+                    }]
+                }
+            }
+        });
+        // endregion
+
+        // region bar chart
+        scores = [{% for score in totalScores %}{timestamp: {{ score.timestamp }}, score: {{ score.score }}}, {% endfor %}];
+        let totalScores = Array(4).fill(0);
+        dates = Array(4).fill("...");
+        for (i = 0; i < scores.length; i++) {
+            totalScores.splice(4 - i, 1, scores[i].score);
+            let date = new Date(scores[i].timestamp);
+            dates.splice(4 - i, 1, [date.getFullYear().toString(), `${padZero(date.getMonth(), 2)}${padZero(date.getDate(), 2)}`]);
+        }
+        Chart.helpers.drawRoundedTopRectangle = function (ctx, x, y, width, height, radius) {
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            // top right corner
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            // bottom right   corner
+            ctx.lineTo(x + width, y + height);
+            // bottom left corner
+            ctx.lineTo(x, y + height);
+            // top left
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+        };
+        Chart.elements.RoundedTopRectangle = Chart.elements.Rectangle.extend({
+            draw: function () {
+                let ctx = this._chart.ctx;
+                let vm = this._view;
+                let left, right, top, bottom, signX, signY, borderSkipped;
+                let borderWidth = vm.borderWidth;
+
+                if (!vm.horizontal) {
+                    // bar
+                    left = vm.x - vm.width / 2;
+                    right = vm.x + vm.width / 2;
+                    top = vm.y;
+                    bottom = vm.base;
+                    signX = 1;
+                    signY = bottom > top ? 1 : -1;
+                    borderSkipped = vm.borderSkipped || 'bottom';
+                } else {
+                    // horizontal bar
+                    left = vm.base;
+                    right = vm.x;
+                    top = vm.y - vm.height / 2;
+                    bottom = vm.y + vm.height / 2;
+                    signX = right > left ? 1 : -1;
+                    signY = 1;
+                    borderSkipped = vm.borderSkipped || 'left';
+                }
+
+                // Canvas doesn't allow us to stroke inside the width so we can
+                // adjust the sizes to fit if we're setting a stroke on the line
+                if (borderWidth) {
+                    // borderWidth shold be less than bar width and bar height.
+                    let barSize = Math.min(Math.abs(left - right), Math.abs(top - bottom));
+                    borderWidth = borderWidth > barSize ? barSize : borderWidth;
+                    let halfStroke = borderWidth / 2;
+                    // Adjust borderWidth when bar top position is near vm.base(zero).
+                    let borderLeft = left + (borderSkipped !== 'left' ? halfStroke * signX : 0);
+                    let borderRight = right + (borderSkipped !== 'right' ? -halfStroke * signX : 0);
+                    let borderTop = top + (borderSkipped !== 'top' ? halfStroke * signY : 0);
+                    let borderBottom = bottom + (borderSkipped !== 'bottom' ? -halfStroke * signY : 0);
+                    // not become a vertical line?
+                    if (borderLeft !== borderRight) {
+                        top = borderTop;
+                        bottom = borderBottom;
+                    }
+                    // not become a horizontal line?
+                    if (borderTop !== borderBottom) {
+                        left = borderLeft;
+                        right = borderRight;
+                    }
+                }
+
+                // calculate the bar width and roundess
+                const barWidth = Math.abs(left - right);
+                const roundness = this._chart.config.options.barRoundness || 0.5;
+                const radius = barWidth * roundness * 0.5;
+
+                // keep track of the original top of the bar
+                const prevTop = top;
+
+                // move the top down so there is room to draw the rounded top
+                top = prevTop + radius;
+                const barRadius = top - prevTop;
+
+                ctx.beginPath();
+                ctx.fillStyle = vm.backgroundColor;
+                ctx.strokeStyle = vm.borderColor;
+                ctx.lineWidth = borderWidth;
+
+                // draw the rounded top rectangle
+                Chart.helpers.drawRoundedTopRectangle(ctx, left, (top - barRadius + 1), barWidth, bottom - prevTop, barRadius);
+
+                ctx.fill();
+                if (borderWidth) {
+                    ctx.stroke();
+                }
+
+                // restore the original top value so tooltips and scales still work
+                top = prevTop;
+            },
+        });
+        Chart.defaults.roundedBar = Chart.helpers.clone(Chart.defaults.bar);
+        Chart.controllers.roundedBar = Chart.controllers.bar.extend({dataElementType: Chart.elements.RoundedTopRectangle});
+        new Chart(document.getElementById('totalScoresBarChart'), {
+            type: 'roundedBar',
+            data: {
+                labels: dates,
+                datasets: [{
+                    backgroundColor: ["#E7DFF7", "#E7DFF7", "#E7DFF7", "#E7DFF7", "#6633CC"],
+                    data: totalScores
+                }]
+            },
+            options: {
+                legend: {display: false},
+                barRoundness: 0.7,
+                scales: {
+                    xAxes: [{
+                        gridLines: {color: "white"},
+                        barPercentage: 0.5
+                    }],
+                    yAxes: [{
+                        ticks: {min: 1, maxTicksLimit: 4},
+                        gridLines: {borderDash: [8, 4], color: "lightgray", drawBorder: false}
+                    }]
+                },
+                plugins: {
+                    datalabels: {
+                        formatter: (value, ctx) => {
+                            return value !== 0 ? value.toLocaleString(/* ... */) : 'N/A'
+                        },
+                        anchor: 'end',
+                        align: 'end',
+                        color: '#888'
+                    }
+                }
+            }
+        });
+        // endregion
+
+        setTimeout(print, 1000);
+    })
+
+    function padZero(num, size) {
+        num = num.toString();
+        while (num.length < size) num = "0" + num;
+        return num;
+    }
 </script>
 </html>

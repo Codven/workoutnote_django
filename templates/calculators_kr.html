@@ -1620,7 +1620,6 @@
             $('#legsResult').html(`${legs}del`);
 
             // bar chart
-            let max = 0;
             let totalScores = Array(4).fill(0);
             let dates = Array(4).fill("...");
             let i;
@@ -1628,7 +1627,6 @@
                 totalScores.splice(4 - i, 1, scores[i].shoulder + scores[i].chest + scores[i].back + scores[i].abs + scores[i].legs);
                 let date = new Date(scores[i].timestamp);
                 dates.splice(4 - i, 1, [date.getFullYear().toString(), `${padZero(date.getMonth(), 2)}${padZero(date.getDate(), 2)}`]);
-                max = Math.max(max, totalScores[4 - i]);
             }
 
             Chart.helpers.drawRoundedTopRectangle = function (ctx, x, y, width, height, radius) {
@@ -1746,7 +1744,7 @@
                             barPercentage: 0.5
                         }],
                         yAxes: [{
-                            ticks: {min: 1, stepSize: Math.trunc(max / 4)},
+                            ticks: {min: 1, maxTicksLimit: 4},
                             gridLines: {borderDash: [8, 4], color: "lightgray", drawBorder: false}
                         }]
                     },

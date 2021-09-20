@@ -380,26 +380,56 @@ def handle_report(request):
     if not results.exists():
         return redirect(to='calculators')
 
-    last_res = results.order_by('-timestamp').first()
-
     # allowed percentage range [10%, 90%] region
-    def get_percentile(key, threshold):
-        arr = np.array([x[0] for x in models.OneRepMaxResults.objects.values_list(key)])
+    def get_percentile(arr, threshold):
+        arr = np.array(arr)
         return 10 + (sum(arr <= threshold) / len(arr)) * 72
 
     def float2str(number):
         return f'{number:.1f}'.replace('.0', '')
 
-    shoulder_percentile = get_percentile('shoulder', last_res.shoulder)
-    chest_percentile = get_percentile('chest', last_res.chest)
-    back_percentile = get_percentile('back', last_res.back)
-    abs_percentile = get_percentile('abs', last_res.abs)
-    legs_percentile = get_percentile('legs', last_res.legs)
+    # region load all values
+    shoulder_values = []
+    chest_values = []
+    back_values = []
+    abs_values = []
+    legs_values = []
+    for item in models.OneRepMaxResults.objects.all():
+        shoulder_values += [item.shoulder]
+        chest_values += [item.chest]
+        back_values += [item.back]
+        abs_values += [item.abs]
+        legs_values += [item.legs]
+    # endregion
+
+    # region compute percentiles
+    last_res = results.order_by('-timestamp').first()
+    shoulder_percentile = get_percentile(shoulder_values, last_res.shoulder)
+    chest_percentile = get_percentile(chest_values, last_res.chest)
+    back_percentile = get_percentile(back_values, last_res.back)
+    abs_percentile = get_percentile(abs_values, last_res.abs)
+    legs_percentile = get_percentile(legs_values, last_res.legs)
+    # endregion
+
+    # region gather score history
+    top_part_scores = []
+    mid_part_scores = []
+    legs_scores = []
+    total_scores = []
+    for item in models.OneRepMaxResults.objects.filter(user=request.user).order_by('-timestamp'):
+        ts = int(item.timestamp.timestamp() * 1000)
+        top_part_scores += [{'timestamp': ts, 'score': (item.shoulder + item.chest) / 2}]
+        mid_part_scores += [{'timestamp': ts, 'score': (item.back + item.abs) / 2}]
+        legs_scores += [{'timestamp': ts, 'score': item.legs}]
+        total_scores += [{'timestamp': ts, 'score': item.shoulder + item.chest + item.back + item.abs + item.legs}]
+        if len(total_scores) == 4:
+            break
+    # endregion
 
     return render(request=request, template_name='report_kr.html', context={
         'timestamp': int(last_res.timestamp.timestamp() * 1000),
         'name': last_res.name,
-        'gender': '남성' if last_res.gender == models.OneRepMaxResults.Gender.MALE else '여성',
+        'gender': '남성' if last_res.gender == models.OneRepMaxResults.Gender.MALE.lower() else '여성',
         'age': last_res.age,
         'height': float2str(last_res.height),
         'weight': float2str(last_res.weight),
@@ -424,4 +454,9 @@ def handle_report(request):
         'avgMidPartScore': float2str((last_res.back + last_res.abs) / 2),
 
         'legsPercentile': legs_percentile,
+
+        'topPartScores': top_part_scores,
+        'midPartScores': mid_part_scores,
+        'legsScores': legs_scores,
+        'totalScores': total_scores,
     })

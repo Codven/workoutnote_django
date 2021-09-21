@@ -311,6 +311,7 @@
             p.addClass('checked');
             $.each($('#aspectRatioButtonsDiv input[type=radio]:not(:checked)'), (i, x) => x.parentNode.className = 'unchecked');
 
+            let rootDiv = $('#photoCardDiv');
             let img = $('#bgPhoto');
             let imgDiv = img.parent();
             let chartDiv = $('#radarChartDiv');
@@ -321,26 +322,22 @@
 
             switch (r.val()) {
                 case 'square':
+                    rootDiv.css('width', `${w}px`);
                     imgDiv.css('width', `${w}px`);
                     img.css('width', `${w}px`);
                     chartDiv.css('width', `${w}px`);
-                    chartDiv.css('left', 0);
                     header.css('width', `${w}px`);
-                    header.css('left', 0);
                     footer.css('width', `${w}px`);
-                    footer.css('left', 0);
                     chartDiv.removeClass('leftBottom');
                     chartDiv.addClass('center');
                     break;
                 case 'notSquare':
+                    rootDiv.css('width', `${0.8 * w}px`);
                     imgDiv.css('width', `${0.8 * w}px`);
                     img.css('width', `${w}px`);
                     chartDiv.css('width', `${0.8 * w}px`);
-                    chartDiv.css('left', `${0.1 * w}px`);
                     header.css('width', `${0.8 * w}px`);
-                    header.css('left', `${0.1 * w}px`);
                     footer.css('width', `${0.8 * w}px`);
-                    footer.css('left', `${0.1 * w}px`);
                     chartDiv.removeClass('center');
                     chartDiv.addClass('leftBottom');
                     break;
@@ -351,26 +348,12 @@
 
         // img buttons
         $('#imgSaveButton').click(function () {
-            // todo export #photoCardDiv as an image
-            let w = 1400;
-            let h = 1400;
-            let canvas = document.createElement('canvas');
-            canvas.width = w;
-            canvas.height = h;
-            canvas.style.width = `${w}px`;
-            canvas.style.height = `${h}px`;
-            let context = canvas.getContext('2d');
-            context.scale(1.6, 1.6);
-            context.translate(51, 277);
-            html2canvas($('#photoCardDiv'), {
-                canvas: canvas,
-                onrendered: function (canvas) {
-                    let a = document.createElement('a');
-                    // toDataURL defaults to png, so we need to request a jpeg, then convert for file download.
-                    a.href = canvas.toDataURL("image/jpeg").replace("image/jpeg", "image/octet-stream");
-                    a.download = 'myWorkoutnoteCard.jpg';
-                    a.click();
-                }
+            html2canvas(document.getElementById('photoCardDiv')).then(canvas => {
+                let a = document.createElement('a');
+                // toDataURL defaults to png, so we need to request a jpeg, then convert for file download.
+                a.href = canvas.toDataURL("image/jpeg").replace("image/jpeg", "image/octet-stream");
+                a.download = 'myWorkoutnoteCard.jpg';
+                a.click();
             });
         });
         $('#imgChangeButton').click(() => $('#imageInput').click());

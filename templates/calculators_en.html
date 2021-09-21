@@ -406,7 +406,7 @@
                             <div>
                                 <a id="printButton" class="lightButton">Print</a>
                                 <a id="photoCardButton" class="lightButton">Photo card</a>
-                                <div>
+                                <div id="shareButtonsDiv">
                                     <a id="uploadButton" class="lightButton skip"><img src="{% static 'upload.svg' %}" alt="upload" width="20px" height="20px"></a>
                                     <span style="width: 4px"></span>
                                     <a id="returnButton" class="darkButton skip"> <img src="{% static 'return.svg' %}" alt="return" width="18px" height="18px"> Return</a>
@@ -713,6 +713,10 @@
 
             #_1RMResultActionButtons div div a {
                 flex-grow: 1;
+            }
+
+            #shareButtonsDiv {
+                display: none !important;
             }
 
             .lightButton:not(.skip), .darkButton:not(.skip) {
@@ -1022,6 +1026,10 @@
 
             #_1RMResultActionButtons div div a {
                 flex-grow: 1;
+            }
+
+            #shareButtonsDiv {
+                display: flex !important;
             }
 
             .lightButton:not(.skip), .darkButton:not(.skip) {
@@ -1513,7 +1521,7 @@
                 window.location.href = '{% url 'report' %}';
             });
             $('#photoCardButton').click(function () {
-
+                window.location.href = '{% url 'photo card' %}';
             });
             $('#uploadButton').click(function () {
 

@@ -460,3 +460,29 @@ def handle_report(request):
         'legsScores': legs_scores,
         'totalScores': total_scores,
     })
+
+
+@login_required
+@require_http_methods(['GET'])
+def handle_photo_card(request):
+    def float2str(number):
+        return f'{number:.1f}'.replace('.0', '')
+
+    q = models.OneRepMaxResults.objects.filter(user=request.user)
+    if not q.exists():
+        return redirect(to='calculators')
+
+    last_res = q.order_by('-timestamp').first()
+    return render(request=request, template_name='photo_card_kr.html', context={
+        'name': last_res.name,
+        'gender': '남성' if last_res.gender == models.OneRepMaxResults.Gender.MALE.lower() else '여성',
+        'age': last_res.age,
+        'timestamp': int(last_res.timestamp.timestamp() * 1000),
+
+        'shoulder': float2str(last_res.shoulder),
+        'chest': float2str(last_res.chest),
+        'back': float2str(last_res.back),
+        'abs': float2str(last_res.abs),
+        'legs': float2str(last_res.legs),
+        'averageScore': float2str((last_res.shoulder + last_res.chest + last_res.back + last_res.abs + last_res.legs) / 5)
+    })

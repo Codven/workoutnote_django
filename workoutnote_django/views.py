@@ -473,9 +473,10 @@ def handle_photo_card(request):
         return redirect(to='calculators')
 
     last_res = q.order_by('-timestamp').first()
-    return render(request=request, template_name='photo_card_kr.html', context={
+    lang = request.COOKIES.get('lang')
+    return render(request=request, template_name='photo_card_kr.html' if lang is not None and lang == 'kr' else 'photo_card_en.html', context={
         'name': last_res.name,
-        'gender': '남성' if last_res.gender == models.OneRepMaxResults.Gender.MALE.lower() else '여성',
+        'gender': '남성' if last_res.gender == models.OneRepMaxResults.Gender.MALE.lower() else '여성' if lang == 'kr' else last_res.gender,
         'age': last_res.age,
         'timestamp': int(last_res.timestamp.timestamp() * 1000),
 

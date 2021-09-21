@@ -19,7 +19,7 @@
 
 <body>
 
-<h4 style="color: #6633CC">델토이드 근력검사 포토카드</h4>
+<h4 style="color: #6633CC">Deltoid Test Photo Card</h4>
 <div style="width: 200mm; height: 200mm">
     <div id="photoCardDiv" style="position: relative; color: white; margin: auto">
         <div style="position: absolute; width: 100%">
@@ -31,7 +31,7 @@
         <div id="header" style="position: absolute">
             <div style="display: inline-block;">
                 <span style="display: block; font-weight: bold">{{ name }}</span>
-                <span style="display: block">{{ gender }}, {{ age }}세</span>
+                <span style="display: block">{{ gender }}, {{ age }}y.o.</span>
             </div>
             <span id="date" style="display: inline-block;">2021.09.20</span>
             <img src="{% static 'deltoidHorizontal.svg' %}" alt="deltoid" height="36mm" style="margin: 0; padding: 0">
@@ -45,7 +45,7 @@
         <div id="footer">
             <span></span>
             <span style="font-size: medium; text-align: end">
-                {{ name }} 님의 1RM 평균 <br><span style="font-size: larger; font-weight: bold; font-style: italic">{{ averageScore }}del</span>
+                {{ name }}'s 1RM avg is <br><span style="font-size: larger; font-weight: bold; font-style: italic">{{ averageScore }}del</span>
             </span>
         </div>
     </div>
@@ -68,8 +68,8 @@
     <div>
         <input accept="image/*" type="file" id="imageInput" name="img" onchange="imagePicked(this);" style="visibility: hidden;"/>
 
-        <a id="imgChangeButton" class="lightButton">이미지 변경</a>
-        <a id="imgSaveButton" class="lightButton">다운로드</a>
+        <a id="imgChangeButton" class="lightButton">Change Image</a>
+        <a id="imgSaveButton" class="lightButton">Download</a>
     </div>
     <div id="imgScreen">
     </div>
@@ -272,7 +272,7 @@
         new Chart(document.getElementById('radarChart'), {
             type: 'radar',
             data: {
-                labels: [['어깨', '({{ shoulder }} del)'], ['가슴', '({{ chest }} del)'], ['등', '({{ back }} del)'], ['복근', '({{ abs }} del)'], ['하체', '({{ legs }} del)']],
+                labels: [['Shoulder', '({{ shoulder }} del)'], ['Chest', '({{ chest }} del)'], ['Back', '({{ back }} del)'], ['Abs', '({{ abs }} del)'], ['Legs', '({{ legs }} del)']],
                 datasets: [{
                     data: [{{ shoulder }}, {{ chest }}, {{ back }}, {{ abs }}, {{ legs }}],
                     backgroundColor: '#A97DFF61',

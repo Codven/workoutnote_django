@@ -125,6 +125,11 @@ def handle_logout(request):
 
 # endregion
 
+
+def handle_privacy_policy(request):
+    return render(request=request, template_name='privacy policy.html')
+
+
 @login_required
 def handle_index(request):
     name = models.Preferences.objects.get(user=request.user).name

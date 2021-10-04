@@ -5,6 +5,8 @@ from django.conf import settings
 from . import views
 
 urlpatterns = [
+    path('policy/', views.handle_privacy_policy, name='policy'),
+
     path('', views.handle_index, name='index'),
     path('admin/', admin.site.urls, name='admin'),
     path('api/', include('api.urls')),

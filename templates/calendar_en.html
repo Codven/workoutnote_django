@@ -462,8 +462,6 @@
         });
 
         function loadMonth(date) {
-            console.log(selectedDate);
-
             $("#calendar_table tr:not(:first-child)").empty();
 
             let dateTs = new Date(date.getTime());
@@ -649,7 +647,6 @@
                 let q = $(cell).children().first();
                 if (!q.hasClass('selected_cell')) {
                     selectedDate = new Date(dateStartTs);
-                    console.log(selectedCell);
                     selectedCell.removeClass('selected_cell');
                     q.addClass('selected_cell');
                     selectedCell = q;

@@ -44,8 +44,8 @@
                         <tr style="color: #777">
                             <td class="arrow_column"></td>
                             <td class="set_column light-grey-text"></td>
-                            <td class="exercise_column" id="selectedExerciseName"
-                                onclick="showExerciseSelectorDivClick();">{% if 'EN' in exercises.0.name_translations %}{{ exercises.0.name_translations.EN }}{% else %}{{ exercises.0.name }}{% endif %}
+                            <td class="exercise_column" id="selectedExerciseName" onclick="showExerciseSelectorDivClick();">
+                                Exercise name
                             </td>
                             <td class="weight_column"><input id="newLiftWeight" class="newLiftWeight" type="number" min="1"
                                                              max="200" placeholder="1"
@@ -433,14 +433,7 @@
                 iconUrl: '{{ exercise.icon.url }}',
                 bodyPart: '{{ exercise.body_part.name }}',
                 category: '{{ exercise.category.name }}'},{% endfor %}];
-        let selectedExercise = {
-            id: {{ exercises.0.id }},
-            name: '{{ exercises.0.name }}',
-            nameTranslations: {{ exercises.0.name_translations|safe }},
-            iconUrl: '{{ exercises.0.icon.url }}',
-            bodyPart: '{{ exercises.0.body_part.name }}',
-            category: '{{ exercises.0.category.name }}'
-        };
+        let selectedExercise = null;
         let stopwatchId, stopwatchSeconds = 0;
 
         function findExerciseByName(name) {
@@ -739,19 +732,21 @@
         }
 
         function addNewLift() {
-            // add to array
-            newLift = {
-                id: newLifts.length + 1,
-                exercise: selectedExercise,
-                liftMass: newWeight,
-                repetitions: newReps,
-                enabled: true,
-                rmMax: Math.trunc((newWeight + newWeight * newReps * ONE_REP_MAX_CONST) * 100) / 100
-            };
-            newLifts.push(newLift);
+            if (selectedExercise != null) {
+                // add to array
+                newLift = {
+                    id: newLifts.length + 1,
+                    exercise: selectedExercise,
+                    liftMass: newWeight,
+                    repetitions: newReps,
+                    enabled: true,
+                    rmMax: Math.trunc((newWeight + newWeight * newReps * ONE_REP_MAX_CONST) * 100) / 100
+                };
+                newLifts.push(newLift);
 
-            // send as a broadcast to all tabs i.e. save locally
-            message_broadcast({action: 'lifts', value: newLifts});
+                // send as a broadcast to all tabs i.e. save locally
+                message_broadcast({action: 'lifts', value: newLifts});
+            }
         }
 
         function addNewExerciseWithRawValues(liftMass, reps, exerciseName, rmMax) {

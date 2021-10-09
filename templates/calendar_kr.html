@@ -145,8 +145,9 @@
                 display: block;
             }
 
-            .calendar_cell:hover {
-                background: #C5BDEC;
+            .selected_cell {
+                background: #6633CC !important;
+                color: white !important;
                 transition: 200ms;
             }
 
@@ -172,12 +173,12 @@
             }
 
             .today_cell {
-                background: #6633CC;
+                background: #C5BDEC;
                 color: white;
             }
 
-            .today_cell.cell_with_event a:first-child {
-                background-color: white;
+            .today_cell.cell_with_event a:first-child, .selected_cell.cell_with_event a:first-child {
+                background-color: white !important;
             }
 
             #calendarDiv .sub_content span {
@@ -296,8 +297,9 @@
                 display: block;
             }
 
-            .calendar_cell:hover {
-                background: #C5BDEC;
+            .selected_cell {
+                background: #6633CC !important;
+                color: white !important;
                 transition: 200ms;
             }
 
@@ -323,11 +325,11 @@
             }
 
             .today_cell {
-                background: #6633CC;
+                background: #C5BDEC;
                 color: white;
             }
 
-            .today_cell.cell_with_event a:first-child {
+            .today_cell.cell_with_event a:first-child, .selected_cell.cell_with_event a:first-child {
                 background-color: white;
             }
 
@@ -379,7 +381,8 @@
                 category: '{{ exercise.category.name }}'},{% endfor %}];
         let selectedMonth;
         let sessionKey;
-        let selectedDateTimestamp;
+        let selectedDate;
+        let selectedCell;
         let updateNoteNecessary = false;
 
         {% load tools %}
@@ -404,32 +407,34 @@
                     for (let i = 0; i < res.workoutDays.length; i++)
                         workoutDays.push(res.workoutDays[i]);
 
+                // select today
+                selectedDate = new Date();
+                selectedDate.setHours(0, 0, 0, 0);
+
+                // view current month
                 selectedMonth = new Date();
                 selectedMonth.setDate(1);
-                selectedMonth.setHours(0);
-                selectedMonth.setMinutes(0);
-                selectedMonth.setSeconds(0);
-                selectedMonth.setMilliseconds(0);
+                selectedMonth.setHours(0, 0, 0, 0);
                 loadMonth(selectedMonth);
 
+                // load today's workouts
                 let fromTs = new Date();
-                fromTs.setHours(0);
-                fromTs.setMinutes(0);
-                fromTs.setSeconds(0);
-                fromTs.setMilliseconds(0);
+                fromTs.setHours(0, 0, 0, 0);
                 let tillTs = new Date(fromTs);
                 tillTs.setDate(fromTs.getDate() + 1);
-                fetchDayWorkouts(fromTs.getTime(), tillTs.getTime());
+                selectCalendarDate(fromTs.getTime(), tillTs.getTime());
             });
-            let date = new Date();
-            date.setHours(0, 0, 0, 0);
-            $.post('/api/fetch_note', {sessionKey: "{{ sessionKey }}", timestamp: date.getTime()}, function (res) {
+
+            // load today's notes
+            let todayDate = new Date();
+            todayDate.setHours(0, 0, 0, 0);
+            $.post('/api/fetch_note', {sessionKey: "{{ sessionKey }}", timestamp: todayDate.getTime()}, function (res) {
                 if (res.success)
                     $('#noteTextArea').val(res.note);
             });
             let updateNoteTextArea = function () {
                 if (updateNoteNecessary) {
-                    $.post('/api/set_note', {sessionKey: "{{ sessionKey }}", timestamp: selectedDateTimestamp, note: $('#noteTextArea').val()}, function (res) {
+                    $.post('/api/set_note', {sessionKey: "{{ sessionKey }}", timestamp: selectedDate, note: $('#noteTextArea').val()}, function (res) {
                         let log = $('#savingLabel');
                         if (res.success) {
                             log.css({color: "green"});
@@ -457,14 +462,13 @@
         });
 
         function loadMonth(date) {
+            console.log(selectedDate);
+
             $("#calendar_table tr:not(:first-child)").empty();
 
             let dateTs = new Date(date.getTime());
             dateTs.setDate(1);
-            dateTs.setHours(0);
-            dateTs.setMinutes(0);
-            dateTs.setSeconds(0);
-            dateTs.setMilliseconds(0);
+            dateTs.setHours(0, 0, 0, 0);
 
             $('#month_text').html(`${monthNames[dateTs.getMonth()]}, ${dateTs.getFullYear()}`);
 
@@ -491,7 +495,9 @@
                 let tillTs = new Date(dateTs.getTime());
                 tillTs.setDate(dateTs.getDate() + 1);
 
-                $('#calendar_table tr:last').append(`<td onclick="fetchDayWorkouts(${dateTs.getTime()}, ${tillTs.getTime()});"><div class="calendar_cell ${$.inArray(dateStr, workoutDays) > -1 ? "cell_with_event" : ""} ${today.getTime() === dateTs.getTime() ? "today_cell" : ""}"><a></a><a>${dateTs.getDate()}</a></div></td>`);
+                let newCell = $('#calendar_table tr:last').append(`<td onclick="selectCalendarDate(${dateTs.getTime()}, ${tillTs.getTime()}, this);"><div class="calendar_cell ${$.inArray(dateStr, workoutDays) > -1 ? "cell_with_event" : ""} ${today.getTime() === dateTs.getTime() ? "today_cell" : ""} ${selectedDate.getTime() === dateTs.getTime() ? "selected_cell" : ""}"><a></a><a>${dateTs.getDate()}</a></div></td>`);
+                if (selectedDate.getTime() === dateTs.getTime())
+                    selectedCell = newCell.children().last().children().first();
 
                 dateTs.setDate(dateTs.getDate() + 1);
             }
@@ -556,6 +562,7 @@
         function displayWorkouts(ts, workouts) {
             displayedWorkouts = workouts;
             let date = new Date(ts);
+            date.setHours(0, 0, 0, 0);
 
             let rootDiv = $('#selected_date_content');
             rootDiv.empty();
@@ -566,7 +573,7 @@
                 let subDiv = $('.sub_content:last');
                 subDiv.append(`<div style="height: 12px; display: flex; align-content: center; justify-content: space-between;">
                     <div>
-                        <span style="color: #5F36C4; font-weight: bold;" class="w3-left">${workouts[i].title}</span>
+                        <span style="color: #5F36C4; font-weight: bold;" class="w3-left">${'[이름없는 운동]' === workouts[i].title ? '[Unnamed]' : workouts[i].title}</span>
                         <img onclick="favoriteWorkoutsClick(this, ${workouts[i].id});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="${workouts[i].isFavorite ? '{% static 'favorite-filled.png' %}' : '{% static 'favorite-outlined.png' %}'}" width="22px" height="22px">
                     </div>
                     <img onclick="optionsClick(this, ${workouts[i].id});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="{% static 'options.png' %}" width="22px" height="22px">
@@ -576,7 +583,8 @@
                 let liftsDiv = $('.sub_content:last div:last');
                 for (let j = 0; j < workouts[i].lifts.length; j++) {
                     liftsDiv.append(`<span>${j + 1}. </span>`);
-                    liftsDiv.append(`<span>${workouts[i].lifts[j].exercise_name}, </span>`);
+                    let exercise = findExerciseByName(workouts[i].lifts[j].exercise_name);
+                    liftsDiv.append(`<span>${'EN' in exercise.nameTranslations ? exercise.nameTranslations['EN'] : exercise.name}, </span>`);
                     liftsDiv.append(`<span>${workouts[i].lifts[j].lift_mass} KG, </span>`);
                     liftsDiv.append(`<span>${workouts[i].lifts[j].repetitions} REPS, </span>`);
                     liftsDiv.append(`<span>${workouts[i].lifts[j].one_rep_max} RM </span>`);
@@ -594,11 +602,9 @@
                     </div>`);
             }
 
-            date.setHours(0, 0, 0, 0);
-            selectedDateTimestamp = date.getTime();
             $('#noteTextArea').val('');
             $('#savingLabel').hide();
-            $.post('/api/fetch_note', {sessionKey: "{{ sessionKey }}", timestamp: selectedDateTimestamp}, function (res) {
+            $.post('/api/fetch_note', {sessionKey: "{{ sessionKey }}", timestamp: ts}, function (res) {
                 if (res.success)
                     $('#noteTextArea').val(res.note);
             });
@@ -636,8 +642,19 @@
             window.location.href = '{% url 'index' %}';
         }
 
-        function fetchDayWorkouts(fromTs, tillTs) {
-            $.post('/api/fetch_workouts', {sessionKey: "{{ sessionKey }}", fromTimestampMs: fromTs, tillTimestampMs: tillTs}).done((res) => res.success ? displayWorkouts(fromTs, res.workouts) : alert('No workout data found on selected day!'));
+        function selectCalendarDate(dateStartTs, dateEndTs, cell = null) {
+            $.post('/api/fetch_workouts', {sessionKey: "{{ sessionKey }}", fromTimestampMs: dateStartTs, "tillTimestampMs": dateEndTs}).done((res) => res.success ? displayWorkouts(dateStartTs, res.workouts) : alert('No workout data found on selected day!'));
+
+            if (cell != null) {
+                let q = $(cell).children().first();
+                if (!q.hasClass('selected_cell')) {
+                    selectedDate = new Date(dateStartTs);
+                    console.log(selectedCell);
+                    selectedCell.removeClass('selected_cell');
+                    q.addClass('selected_cell');
+                    selectedCell = q;
+                }
+            }
         }
     </script>
 {% endblock %}

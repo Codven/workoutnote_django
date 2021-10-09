@@ -294,7 +294,7 @@
     $(document).ready(function () {
         // essential info
         let date = new Date({{ timestamp }});
-        $('#date').html(`${date.getFullYear()}년 ${date.getMonth()}월 ${date.getDate()}일`);
+        $('#date').html(`${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`);
 
         // region radar chart
         new Chart(document.getElementById('radarChart'), {

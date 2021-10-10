@@ -600,18 +600,17 @@
 
             $.post('/api/fetch_targets', {sessionKey: "{{ sessionKey }}"}, function (res) {
                 if (res.success) {
-                    let today = new Date();
-                    for (let i = 0; i < res.targets.length; i++) {
-                        let startDate = new Date(res.targets[i].startDateMs);
-                        let endDate = new Date(res.targets[i].endDateMs);
+                    function processTarget(target) {
+                        let startDate = new Date(target.startDateMs);
+                        let endDate = new Date(target.endDateMs);
                         let dayNumber = Math.trunc((today - startDate) / (1000 * 3600 * 24));
                         $('#targetsDiv').append(`
                             <div style="background-color: white; box-shadow: 1px 1px 8px 0 rgba(89,87,87,0.3); border-radius: 12px; padding: 12px; margin-top: 12px;">
                                 <div style="display: flex; align-items: center; padding: 0 4px">
-                                    <img class="achievement" onclick="toggleTargetClick(${res.targets[i].id});" style="display:none; margin-right: 4px; vertical-align: middle; cursor: pointer;" src="${res.targets[i].achieved ? '{% static 'achieved.png' %}' : '{% static 'failed.png' %}'}" width="22px" height="22px">
-                                    <span class="changeColor" style="flex-grow: 1; font-size: larger">${res.targets[i].name}</span>
+                                    <img class="achievement" onclick="toggleTargetClick(${target.id});" style="display:none; margin-right: 4px; vertical-align: middle; cursor: pointer;" src="${target.achieved ? '{% static 'achieved.png' %}' : '{% static 'failed.png' %}'}" width="22px" height="22px">
+                                    <span class="changeColor" style="flex-grow: 1; font-size: larger">${target.name}</span>
                                     <span class="dayNumber" style="padding: 2px 12px; background-color: #6633CC; border-radius: 16px; color: white; font-weight: bold">D - ${dayNumber}</span>
-                                    <img onclick="removeTargetClick(${res.targets[i].id});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="{% static 'bin.png' %}" width="22px" height="22px">
+                                    <img onclick="removeTargetClick(${target.id});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="{% static 'bin.png' %}" width="22px" height="22px">
                                 </div>
                                 <div style="display: flex; align-items: center; padding: 0 4px; margin-top: 12px">
                                     <span class="changeColor" style="color: #6633CC; font-size: smaller">${startDate.getMonth() + 1}/${startDate.getDate()}</span>
@@ -629,7 +628,7 @@
                         if (endDate <= today) {
                             // finished
                             el.find('.achievement').css('display', 'inline-block');
-                            el.find('.dayNumber').html(res.targets[i].achieved ? 'DONE' : 'FAIL');
+                            el.find('.dayNumber').html(target.achieved ? 'DONE' : 'FAIL');
                             el.find('.dayNumber').css('background-color', 'lightgray');
                             el.find('.progressHolder').css('border', '2px solid lightgray');
                             el.find('.progress').css('background-color', 'lightgray');
@@ -641,6 +640,19 @@
                             el.find('.progress').css('width', pW * progress);
                         }
                     }
+
+                    let today = new Date();
+                    let finished = [];
+                    let ongoing = [];
+                    for (let i = 0; i < res.targets.length; i++) {
+                        let endDate = new Date(res.targets[i].endDateMs);
+                        if (endDate <= today)
+                            finished.push(res.targets[i]);
+                        else
+                            ongoing.push(res.targets[i]);
+                    }
+                    ongoing.forEach(target => processTarget(target));
+                    finished.forEach(target => processTarget(target));
                 } else
                     alert('Failed to save the result, please try again later!');
             });

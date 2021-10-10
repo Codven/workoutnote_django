@@ -629,7 +629,7 @@
                         if (endDate <= today) {
                             // finished
                             el.find('.achievement').css('display', 'inline-block');
-                            el.find('.dayNumber').html(res.targets[i].achieved ? 'FAIL' : 'DONE');
+                            el.find('.dayNumber').html(res.targets[i].achieved ? 'DONE' : 'FAIL');
                             el.find('.dayNumber').css('background-color', 'lightgray');
                             el.find('.progressHolder').css('border', '2px solid lightgray');
                             el.find('.progress').css('background-color', 'lightgray');

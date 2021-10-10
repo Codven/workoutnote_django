@@ -183,3 +183,12 @@ class OneRepMaxResults(models.Model):
 
     class Meta:
         unique_together = ('user', 'timestamp',)
+
+
+class Target(models.Model):
+    user = models.ForeignKey(to=django_User, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now=True)
+    name = models.CharField(max_length=128)
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    achieved = models.BooleanField(default=True)

@@ -1,3 +1,5 @@
+import datetime
+
 from django.views.decorators.http import require_http_methods
 from workoutnote_django import models as wn_models, settings
 from django.contrib.auth.models import User as django_User
@@ -1008,4 +1010,125 @@ def handle_fetch_1rm_results_api(request):
         for res in results[:5]:
             scores += [{'timestamp': int(res.timestamp.timestamp() * 1000), 'shoulder': res.shoulder, 'chest': res.chest, 'back': res.back, 'abs': res.abs, 'legs': res.legs}]
     return JsonResponse(data={'success': True, 'name': name, 'gender': gender, 'age': age, 'height': height, 'weight': weight, 'scores': scores})
+
+
+# endregion
+
+
+# region targets
+@csrf_exempt
+@require_http_methods(['POST'])
+def handle_insert_target_api(request):
+    # 0. expected and received params
+    required_params = ['sessionKey', 'name', 'start_date_ms', 'end_date_ms']
+    received_params = request.POST if 'sessionKey' in request.POST else json.loads(request.body.decode('utf8'))
+
+    # 1. all params check
+    if False in [x in received_params for x in required_params]:
+        return JsonResponse(data={'success': False, 'reason': f'bad params, must provide {",".join(required_params)}'})
+    else:
+        session_key = received_params['sessionKey']
+        name = received_params['name']
+        start_time = datetime.datetime.fromtimestamp(int(received_params['start_date_ms']) / 1000)
+        end_time = datetime.datetime.fromtimestamp(int(received_params['end_date_ms']) / 1000)
+
+    # 2. sessionKey check
+    if not models.SessionKey.objects.filter(key=session_key).exists():
+        return JsonResponse(data={'success': False, 'reason': 'double check sessionKey value'})
+    else:
+        user = models.SessionKey.objects.get(key=session_key).user
+
+    # 3. insert 1rm result
+    wn_models.Target.objects.create(user=user, name=name, start_date=start_time, end_date=end_time)
+    return JsonResponse(data={'success': True})
+
+
+@csrf_exempt
+@require_http_methods(['POST'])
+def handle_fetch_targets_api(request):
+    # 0. expected and received params
+    required_params = ['sessionKey']
+    received_params = request.POST if 'sessionKey' in request.POST else json.loads(request.body.decode('utf8'))
+
+    # 1. all params check
+    if False in [x in received_params for x in required_params]:
+        return JsonResponse(data={'success': False, 'reason': f'bad params, must provide {",".join(required_params)}'})
+    else:
+        session_key = received_params['sessionKey']
+
+    # 2. sessionKey check
+    if not models.SessionKey.objects.filter(key=session_key).exists():
+        return JsonResponse(data={'success': False, 'reason': 'double check sessionKey value'})
+    else:
+        user = models.SessionKey.objects.get(key=session_key).user
+
+    # 3. fetch targets
+    targets = []
+    if wn_models.Target.objects.filter(user=user).exists():
+        for target in wn_models.Target.objects.filter(user=user).order_by('-timestamp'):
+            targets += [{'id': target.id, 'timestamp': int(target.timestamp.timestamp() * 1000), 'name': target.name, 'startDateMs': int(target.start_date.timestamp() * 1000), 'endDateMs': int(target.end_date.timestamp() * 1000), 'achieved': target.achieved}]
+    return JsonResponse(data={'success': True, 'targets': targets})
+
+
+@csrf_exempt
+@require_http_methods(['POST'])
+def handle_toggle_target_api(request):
+    # 0. expected and received params
+    required_params = ['sessionKey', 'target_id']
+    received_params = request.POST if 'sessionKey' in request.POST else json.loads(request.body.decode('utf8'))
+
+    # 1. all params check
+    if False in [x in received_params for x in required_params]:
+        return JsonResponse(data={'success': False, 'reason': f'bad params, must provide {",".join(required_params)}'})
+    else:
+        session_key = received_params['sessionKey']
+        target_id = received_params['target_id']
+
+    # 2. sessionKey check
+    if not models.SessionKey.objects.filter(key=session_key).exists():
+        return JsonResponse(data={'success': False, 'reason': 'double check sessionKey value'})
+    else:
+        user = models.SessionKey.objects.get(key=session_key).user
+
+    # 3. target id check
+    if not wn_models.Target.objects.filter(id=target_id, user=user).exists():
+        return JsonResponse(data={'success': False, 'reason': 'double check target_id value'})
+    else:
+        target = wn_models.Target.objects.get(id=target_id, user=user)
+
+    # 3. toggle target achievement
+    target.achieved = not target.achieved
+    target.save()
+    return JsonResponse(data={'success': True})
+
+
+@csrf_exempt
+@require_http_methods(['POST'])
+def handle_remove_target_api(request):
+    # 0. expected and received params
+    required_params = ['sessionKey', 'target_id']
+    received_params = request.POST if 'sessionKey' in request.POST else json.loads(request.body.decode('utf8'))
+
+    # 1. all params check
+    if False in [x in received_params for x in required_params]:
+        return JsonResponse(data={'success': False, 'reason': f'bad params, must provide {",".join(required_params)}'})
+    else:
+        session_key = received_params['sessionKey']
+        target_id = received_params['target_id']
+
+    # 2. sessionKey check
+    if not models.SessionKey.objects.filter(key=session_key).exists():
+        return JsonResponse(data={'success': False, 'reason': 'double check sessionKey value'})
+    else:
+        user = models.SessionKey.objects.get(key=session_key).user
+
+    # 3. target id check
+    if not wn_models.Target.objects.filter(id=target_id, user=user).exists():
+        return JsonResponse(data={'success': False, 'reason': 'double check target_id value'})
+    else:
+        target = wn_models.Target.objects.get(id=target_id, user=user)
+
+    # 3. remove target
+    target.delete()
+    return JsonResponse(data={'success': True})
 # endregion

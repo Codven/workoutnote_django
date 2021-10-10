@@ -47,4 +47,10 @@ urlpatterns = [
     # one rep max tests
     re_path('^insert_1rm_result/?', views.handle_insert_1rm_result_api),
     re_path('^fetch_1rm_results/?', views.handle_fetch_1rm_results_api),
+
+    # target
+    re_path('^insert_target/?', views.handle_insert_target_api),
+    re_path('^fetch_targets/?', views.handle_fetch_targets_api),
+    re_path('^toggle_target/?', views.handle_toggle_target_api),
+    re_path('^remove_target/?', views.handle_remove_target_api),
 ]

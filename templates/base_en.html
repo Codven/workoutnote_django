@@ -151,6 +151,47 @@
     </div>
 </div>
 
+<div id="createTargetDivRoot" class="w3-top" style="display: none; z-index: 995">
+    <div id="createTargetDiv">
+        <div style="display: flex; justify-content: space-between">
+            <span></span>
+            <span>Register target</span>
+            <img id="closeTargetDiv" style="cursor: pointer;" src="{% static 'close.svg' %}" alt="close" width="16px">
+        </div>
+
+        <span>Target name</span>
+        <input id="targetName" type="text" placeholder="e.g. Lose 5 kilograms">
+
+        <span>Start date</span>
+        <div class="optionsDiv">
+            <select id="targetStartYear">
+                <option value="-1">YYYY</option>
+            </select>
+            <select id="targetStartMonth">
+                <option value="-1">MM</option>
+            </select>
+            <select id="targetStartDay">
+                <option value="-1">DD</option>
+            </select>
+        </div>
+
+        <span>End date</span>
+        <div class="optionsDiv">
+            <select id="targetEndYear">
+                <option value="-1">YYYY</option>
+            </select>
+            <select id="targetEndMonth">
+                <option value="-1">MM</option>
+            </select>
+            <select id="targetEndDay">
+                <option value="-1">DD</option>
+            </select>
+        </div>
+
+        <a class="submitButton" onclick="createTargetClick();">REGISTER</a>
+    </div>
+</div>
+
 </body>
 
 <style>
@@ -258,6 +299,88 @@
             border: 2px solid #5F36C4;
             padding: 4px 8px;
             margin: 4px;
+        }
+
+
+        #createTargetDivRoot {
+            background-color: #3334;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 998;
+        }
+
+        #createTargetDiv {
+            background-color: white;
+            position: relative;
+            width: 60%;
+            top: 10%;
+            left: 20%;
+            border-radius: 32px;
+            padding: 24px 128px;
+        }
+
+        #createTargetDiv span:first-child {
+            display: block;
+            text-align: center;
+            font-size: larger;
+            color: #5F36C4;
+            font-weight: bold;
+            margin-bottom: 48px;
+        }
+
+        #createTargetDiv span:not(:first-child) {
+            display: block;
+            font-size: large;
+            color: #5F36C4;
+            margin-top: 24px;
+        }
+
+        #createTargetDiv input {
+            display: block;
+            outline: none;
+            box-shadow: none;
+
+            padding: 4px 18px;
+            border: 2px solid #5F36C4;
+            border-radius: 32px;
+            width: 100%;
+        }
+
+        #createTargetDiv .optionsDiv {
+            display: flex;
+        }
+
+        #createTargetDiv .optionsDiv select {
+            flex-grow: 1;
+            padding: 4px 18px;
+            border: 2px solid #5F36C4;
+            border-radius: 32px;
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+
+        #createTargetDiv .optionsDiv select:first-child {
+            margin-right: 12px;
+        }
+
+        #createTargetDiv .optionsDiv select:last-child {
+            margin-left: 12px;
+        }
+
+        #createTargetDiv .submitButton {
+            display: block;
+            width: 60%;
+            padding: 8px 32px;
+            margin: 128px auto 0;
+            font-size: larger;
+            background-color: #5F36C4;
+            color: white;
+            border-radius: 32px;
+            text-align: center;
+            cursor: pointer;
         }
     }
 
@@ -381,6 +504,88 @@
             padding: 4px 8px;
             margin: 4px;
         }
+
+
+        #createTargetDivRoot {
+            background-color: #3334;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 998;
+        }
+
+        #createTargetDiv {
+            background-color: white;
+            position: relative;
+            width: 80%;
+            top: 15%;
+            left: 10%;
+            border-radius: 32px;
+            padding: 24px;
+        }
+
+        #createTargetDiv span:first-child {
+            display: block;
+            text-align: center;
+            font-size: larger;
+            color: #5F36C4;
+            font-weight: bold;
+            margin-bottom: 48px;
+        }
+
+        #createTargetDiv span:not(:first-child) {
+            display: block;
+            font-size: large;
+            color: #5F36C4;
+            margin-top: 24px;
+        }
+
+        #createTargetDiv input {
+            display: block;
+            outline: none;
+            box-shadow: none;
+
+            padding: 4px 18px;
+            border: 2px solid #5F36C4;
+            border-radius: 32px;
+            width: 100%;
+        }
+
+        #createTargetDiv .optionsDiv {
+            display: flex;
+        }
+
+        #createTargetDiv .optionsDiv select {
+            flex-grow: 1;
+            padding: 4px 18px;
+            border: 2px solid #5F36C4;
+            border-radius: 32px;
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+
+        #createTargetDiv .optionsDiv select:first-child {
+            margin-right: 12px;
+        }
+
+        #createTargetDiv .optionsDiv select:last-child {
+            margin-left: 12px;
+        }
+
+        #createTargetDiv .submitButton {
+            display: block;
+            width: 60%;
+            padding: 8px 32px;
+            margin: 128px auto 0;
+            font-size: larger;
+            background-color: #5F36C4;
+            color: white;
+            border-radius: 32px;
+            text-align: center;
+            cursor: pointer;
+        }
     }
 
     body {
@@ -500,6 +705,8 @@
         $('#deleteAlertDivRoot').click(() => $('#deleteAlertDivRoot').fadeOut(100));
         $('#selectExerciseDivRoot').click(hideExerciseSelectorDivClick);
         $('#selectExerciseDiv').click((event) => event.stopPropagation());
+        $('#createTargetDivRoot, #closeTargetDiv').click(() => $('#createTargetDivRoot').fadeOut(100));
+        $('#createTargetDiv').click((event) => event.stopPropagation());
 
         $('#searchInput').keyup(onFilterTextChanged);
 
@@ -518,6 +725,16 @@
                 });
             });
         });
+
+        let targetYear = $('#targetStartYear, #targetEndYear');
+        for (let i = 0, date = new Date(); i < 10; i++, date.setFullYear(date.getFullYear() + 1))
+            targetYear.append(`<option value="${date.getFullYear()}">${date.getFullYear()}</option>`);
+        let targetMonth = $('#targetStartMonth, #targetEndMonth');
+        for (let i = 0; i < 12; i++)
+            targetMonth.append(`<option value="${i}">${padZero(i + 1, 2)}</option>`);
+        let targetDay = $('#targetStartDay, #targetEndDay');
+        for (let i = 1; i <= 31; i++)
+            targetDay.append(`<option value="${i}">${padZero(i, 2)}</option>`);
     });
 
     function reloadFavoriteExercises() {
@@ -700,6 +917,12 @@
             newElement.innerHTML = newElementHtml;
             exercisesListDiv.appendChild(newElement);
         }
+    }
+
+    function padZero(num, size) {
+        num = num.toString();
+        while (num.length < size) num = "0" + num;
+        return num;
     }
 
     function hideExerciseSelectorDivClick() {

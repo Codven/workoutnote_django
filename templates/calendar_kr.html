@@ -3,6 +3,25 @@
     {% load static %}
 
     <div id="rootDiv">
+        <div id="mobileTargetsHeader" onclick="showTargetsClick()">
+            <a class="createTargetButton">
+                목표 등록하기
+                <img src="{% static 'add_outline.png' %}" width="32px">
+            </a>
+            <div style="background-color: white; box-shadow: 1px 1px 8px 0 rgba(89,87,87,0.3); border-radius: 12px; padding: 12px; margin: 12px;">
+                <div style="display: flex; align-items: center; padding: 0 4px">
+                    <span class="name" style="flex-grow: 1; font-size: larger"></span>
+                    <span class="dayNumber" style="padding: 2px 12px; background-color: #6633CC; border-radius: 16px; color: white; font-weight: bold"></span>
+                </div>
+                <div style="display: flex; align-items: center; padding: 0 4px; margin-top: 12px">
+                    <span class="startDate" style="color: #6633CC; font-size: smaller"></span>
+                    <div class="progressHolder" style="flex-grow: 1; height: 12px; margin: 0 4px; border-radius: 6px; border: 2px solid #6633CC; position: relative; overflow: hidden">
+                        <div class="progress" style="position: absolute; top: 0; left: 0; height: 12px; background-color: #6633CC"></div>
+                    </div>
+                    <span class="endDate" style="color: #6633CC; font-size: smaller"></span>
+                </div>
+            </div>
+        </div>
         <div id="calendarDiv">
             <div class="sub_content" style="padding: 0;">
                 <div id="calendar_navigator">
@@ -32,7 +51,7 @@
             </div>
         </div>
         <div id="targetsDiv">
-            <a id="createTargetButton" onclick="showTargetCreatorDivClick();">
+            <a class="createTargetButton" onclick="showTargetCreatorDivClick();">
                 목표 등록하기
                 <img src="{% static 'add_outline.png' %}" width="32px">
             </a>
@@ -40,6 +59,18 @@
     </div>
 
     <style>
+        .createTargetButton {
+            display: flex;
+            padding: 16px 24px;
+            border-radius: 16px;
+            background-color: #6633CC;
+            color: white;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-size: large;
+        }
+
         @media (min-width: 801px) {
             #rootDiv {
                 display: flex;
@@ -77,16 +108,8 @@
                 line-height: 1;
             }
 
-            #createTargetButton {
-                display: flex;
-                padding: 16px 24px;
-                border-radius: 16px;
-                background-color: #6633CC;
-                color: white;
-                justify-content: space-between;
-                align-items: center;
-                cursor: pointer;
-                font-size: large;
+            #mobileTargetsHeader {
+                display: none;
             }
         }
 
@@ -104,6 +127,14 @@
             }
 
             #targetsDiv {
+                display: none;
+            }
+
+            #mobileTargetsHeader {
+                padding: 12px;
+            }
+
+            #targetsDiv .createTargetButton {
                 display: none;
             }
         }
@@ -600,6 +631,12 @@
 
             $.post('/api/fetch_targets', {sessionKey: "{{ sessionKey }}"}, function (res) {
                 if (res.success) {
+                    let today = new Date();
+                    let toggleDisplay = $('#targetsDiv').css('display') === 'none';
+
+                    if (toggleDisplay)
+                        $('#targetsDiv').show();
+
                     function processTarget(target) {
                         let startDate = new Date(target.startDateMs);
                         let endDate = new Date(target.endDateMs);
@@ -641,7 +678,6 @@
                         }
                     }
 
-                    let today = new Date();
                     let finished = [];
                     let ongoing = [];
                     for (let i = 0; i < res.targets.length; i++) {
@@ -653,6 +689,32 @@
                     }
                     ongoing.forEach(target => processTarget(target));
                     finished.forEach(target => processTarget(target));
+
+                    // for smartphones
+                    let ch = $('#mobileTargetsHeader').children();
+                    if (ongoing.length > 0) {
+                        ch.first().hide();
+
+                        let startDate = new Date(ongoing[0].startDateMs);
+                        let endDate = new Date(ongoing[0].endDateMs);
+                        let pW = $('#mobileTargetsHeader .progressHolder').css('width');
+                        pW = parseFloat(pW.substr(0, pW.length - 2));
+                        let progress = (today - startDate) / (endDate - startDate);
+
+                        $('#mobileTargetsHeader .name').html(ongoing[0].name);
+                        $('#mobileTargetsHeader .dayNumber').html(`D - ${Math.trunc((today - startDate) / (1000 * 3600 * 24))}`);
+                        $('#mobileTargetsHeader .startDate').html(`${startDate.getMonth() + 1}/${startDate.getDate()}`);
+                        $('#mobileTargetsHeader .progress').css('width', pW * progress);
+                        $('#mobileTargetsHeader .endDate').html(`${endDate.getMonth() + 1}/${endDate.getDate()}`);
+
+                        ch.last().show();
+                    } else {
+                        ch.first().show();
+                        ch.last().hide();
+                    }
+
+                    if (toggleDisplay)
+                        $('#targetsDiv').hide();
                 } else
                     alert('Failed to save the result, please try again later!');
             });
@@ -674,6 +736,16 @@
                 } else
                     alert('Failed to change target achievement, please try again later!');
             });
+        }
+
+        function showTargetsClick() {
+            let ch = $('#mobileTargetsHeader').children();
+            ch.first().show();
+            ch.last().hide();
+
+            $('#calendarDiv').hide();
+            $('#workoutsDiv').hide();
+            $('#targetsDiv').show();
         }
     </script>
 {% endblock %}

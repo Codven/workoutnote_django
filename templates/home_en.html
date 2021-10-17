@@ -124,23 +124,27 @@
                 align-items: center;
             }
 
+            #workoutTitleDivParent {
+                display: inline-block;
+                width: 200px;
+            }
+
             #workoutDate {
                 display: inline-block;
                 font-size: small;
                 text-align: start;
-                max-width: 128px;
+                width: 200px;
                 color: darkgray;
             }
 
-            #workoutTitleDivParent {
-                display: inline-block;
-                width: 160px;
+            #workoutTitleDiv {
+                width: 100%;
             }
 
             #workoutTitle {
-                width: 128px;
                 border-bottom: 1px solid #5F36C4;
                 font-size: 17px;
+                width: 180px;
             }
 
             #liftCreatorFooter {
@@ -682,7 +686,7 @@
             $(`#newLiftWeight option[value=${lastWeight}]`).attr('selected', 'selected');
             $(`#newLiftReps option[value=${lastReps}]`).attr('selected', 'selected');
             $(`#newRmMax`).html(lastRmMax);
-            
+
             if (lastExercise != null)
                 selectExerciseClick(lastExercise.name);
         }

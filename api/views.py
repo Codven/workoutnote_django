@@ -1153,7 +1153,7 @@ def handle_remove_target_api(request):
 @require_http_methods(['POST'])
 def handle_update_target_api(request):
     # 0. expected and received params
-    required_params = ['sessionKey', 'target_id', 'name', 'start_date_ms', 'end_date_ms']
+    required_params = ['sessionKey', 'target_id', 'name', 'start_date_ms', 'end_date_ms', 'achieved']
     received_params = request.POST if 'sessionKey' in request.POST else json.loads(request.body.decode('utf8'))
 
     # 1. all params check
@@ -1165,6 +1165,7 @@ def handle_update_target_api(request):
         name = received_params['name']
         start_time = datetime.datetime.fromtimestamp(int(received_params['start_date_ms']) / 1000)
         end_time = datetime.datetime.fromtimestamp(int(received_params['end_date_ms']) / 1000)
+        achieved = received_params['achieved']
 
     # 2. sessionKey check
     if not models.SessionKey.objects.filter(key=session_key).exists():
@@ -1182,6 +1183,7 @@ def handle_update_target_api(request):
     target.name = name
     target.start_date = start_time
     target.end_date = end_time
+    target.achieved = achieved
     target.save()
     return JsonResponse(data={'success': True})
 # endregion

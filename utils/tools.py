@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User as django_User
+from telesign.messaging import MessagingClient
 from datetime import date, timedelta
 from typing import Tuple
 from math import pow
@@ -212,3 +213,16 @@ class Tools:
             return _date.strftime("%Y.%m.%d. %d %B %Y")
         else:
             return _date.strftime('%d%m%Y')
+
+
+class SmsVerifier:
+    def __init__(self):
+        self.customer_id = "E66BA8A7-A2C8-4DA9-B3F8-0AEFB3F78255"
+        self.api_key = "Inpyqij5NKBLLr+8z1ZaRsdfLqj/Y2zL3A2VZmYLUSWzboc1zj8li6Darg4AEWk+Uw+aJ6odKsLrcY2J9WTi8Q=="
+        self.messenger = MessagingClient(self.customer_id, self.api_key)
+
+    def send_verification_code(self, phone, code):
+        msg = "[Workoutnote.com] your verification code is [{}].".format(code)
+        msg_type = 'OTP'
+        rsp = self.messenger.message(phone, msg, msg_type)
+        print(f'Sms auth resp : {rsp}')

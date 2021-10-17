@@ -8,11 +8,12 @@ from django.contrib.auth import login, authenticate
 from django.core.mail import EmailMessage
 from django.utils import timezone as tz
 from django.http import JsonResponse
-from utils.tools import Tools
+from utils.tools import Tools, SmsVerifier
 from api import models
 import random
 import time
 import json
+import re
 
 
 # region auth
@@ -68,30 +69,39 @@ def handle_check_username_api(request):
 @require_http_methods(['POST'])
 def handle_send_verification_code_api(request):
     # 0. expected and received params
-    required_params = ['email']
-    received_params = request.POST if 'email' in request.POST else json.loads(request.body.decode('utf8'))
+    required_params = ['email']  # can be email or phone number
+    received_params = request.POST if 'email' in request.POST or '' else json.loads(request.body.decode('utf8'))
 
     # 1. all params check
     if False in [x in received_params for x in required_params]:
         return JsonResponse(data={'success': False, 'reason': f'bad params, must provide {",".join(required_params)}'})
     else:
-        email = received_params['email']
+        username = received_params['email']
+        email_regex = r'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$'
+        is_email = re.fullmatch(email_regex, username)
+        phone_regex = r'^010[0-9]{8}$'
+        is_phone = re.fullmatch(phone_regex, username)
+        if not is_email and not is_phone:
+            return JsonResponse(data={'success': False, 'reason': f'bad params, must be valid phone / email'})
 
     # 2. check pre-existing email confirmation code
-    if wn_models.EmailConfirmationCode.objects.filter(email=email).exists():
-        wn_models.EmailConfirmationCode.objects.filter(email=email).delete()
+    if wn_models.EmailConfirmationCode.objects.filter(email=username).exists():
+        wn_models.EmailConfirmationCode.objects.filter(email=username).delete()
 
     # 3. generate email confirmation code
     verification_code = ''.join([str(random.randint(0, 9)) for _ in range(6)])
-    email_message = EmailMessage(
-        'Workoutnote.com email verification',
-        f'Email verification code is : {verification_code}',
-        settings.EMAIL_HOST_USER,
-        [email],
-    )
-    email_message.fail_silently = False
-    email_message.send()
-    wn_models.EmailConfirmationCode.objects.create(email=email, verification_code=verification_code)
+    if is_email:
+        email_message = EmailMessage(
+            'Workoutnote.com email verification',
+            f'Email verification code is : {verification_code}',
+            settings.EMAIL_HOST_USER,
+            [username],
+        )
+        email_message.fail_silently = False
+        email_message.send()
+    elif is_phone:
+        SmsVerifier().send_verification_code(username, verification_code)
+    wn_models.EmailConfirmationCode.objects.create(email=username, verification_code=verification_code)
     return JsonResponse(data={'success': True})
 
 

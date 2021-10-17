@@ -14,72 +14,85 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+    <script src="{% static 'html2canvas.min.js' %}"></script>
 </head>
 
 <body>
 
-<h4 style="color: #6633CC">델토이드 근력검사 포토카드</h4>
-<div style="width: 200mm; height: 200mm">
-    <div id="photoCardDiv" style="position: relative; color: white; margin: auto">
-        <div style="position: absolute; width: 100%">
-            <div style="overflow: hidden; margin: 0 auto">
-                <img id="bgPhoto" style="display: block; margin: 0 auto" src="{% static 'photoCardBg.png' %}" alt="photo card">
+<div id="rootDiv">
+    <h4 style="color: #6633CC">델토이드 근력검사 포토카드</h4>
+    <div style="max-width: 200mm; max-height: 200mm">
+        <div id="photoCardDiv" style="position: relative; color: white; margin: auto">
+            <div style="position: absolute; width: 100%">
+                <div style="overflow: hidden; margin: 0 auto">
+                    <img id="bgPhoto" style="display: block; margin: 0 auto" src="{% static 'photoCardBg.png' %}" alt="photo card">
+                </div>
             </div>
-        </div>
 
-        <div id="header" style="position: absolute">
-            <div style="display: inline-block;">
-                <span style="display: block; font-weight: bold">{{ name }}</span>
-                <span style="display: block">{{ gender }}, {{ age }}세</span>
+            <div id="header" style="position: absolute">
+                <div style="display: inline-block;">
+                    <span style="display: block; font-weight: bold; font-size: smaller;">{{ name }}</span>
+                    <span style="display: block; font-size: smaller;">{{ gender }}, {{ age }}세</span>
+                </div>
+                <span id="date" style="display: inline-block; font-size: small;">2021.09.20</span>
+                <img src="{% static 'deltoidHorizontal.png' %}" alt="deltoid" height="32mm" style="margin: 0; padding: 0">
             </div>
-            <span id="date" style="display: inline-block;">2021.09.20</span>
-            <img src="{% static 'deltoidHorizontal.svg' %}" alt="deltoid" height="36mm" style="margin: 0; padding: 0">
-        </div>
 
-        <div id="radarChartDiv" class="center">
-            <canvas id="radarChart"></canvas>
-            <span></span>
-        </div>
+            <div id="radarChartDiv" class="center">
+                <canvas id="radarChart"></canvas>
+                <span></span>
+            </div>
 
-        <div id="footer">
-            <span></span>
-            <span style="font-size: medium; text-align: end">
-                {{ name }} 님의 1RM 평균 <br><span style="font-size: larger; font-weight: bold; font-style: italic">{{ averageScore }}del</span>
+            <div id="footer">
+                <span></span>
+                <span style="font-size: smaller; text-align: end">
+                {{ name }} 님의 1RM 평균 <span style="font-size: medium; font-weight: bold; font-style: italic">{{ averageScore }}del</span>
             </span>
+            </div>
         </div>
     </div>
-</div>
 
-<div id="aspectRatioButtonsDiv">
-    <label class="checked" style="padding-top: 9px">
-        <input type="radio" name="calc" value="square" checked style="display: none">
-        <a style="display: block; width: 24px; height: 24px; margin: 0 auto"></a>
-        <span style="font-size: small">1 : 1</span>
-    </label>
-    <label class="unchecked" style="padding-top: 10px">
-        <input type="radio" name="calc" value="notSquare" style="display: none">
-        <a style="display: block; width: 19px; height: 24px; margin: 0 auto"></a>
-        <span style="font-size: small">4 : 5</span>
-    </label>
-</div>
-
-<div id="actionButtons">
-    <div>
-        <input accept="image/*" type="file" id="imageInput" name="img" onchange="imagePicked(this);" style="visibility: hidden;"/>
-
-        <a id="imgChangeButton" class="lightButton">이미지 변경</a>
-        <a id="imgSaveButton" class="lightButton">다운로드</a>
+    <div id="aspectRatioButtonsDiv">
+        <label class="checked" style="padding-top: 9px">
+            <input type="radio" name="calc" value="square" checked style="display: none">
+            <a style="display: block; width: 24px; height: 24px; margin: 0 auto"></a>
+            <span style="font-size: small">1 : 1</span>
+        </label>
+        <label class="unchecked" style="padding-top: 10px">
+            <input type="radio" name="calc" value="notSquare" style="display: none">
+            <a style="display: block; width: 19px; height: 24px; margin: 0 auto"></a>
+            <span style="font-size: small">4 : 5</span>
+        </label>
     </div>
-    <div id="imgScreen">
+
+    <div id="actionButtons">
+        <div>
+            <input accept="image/*" type="file" id="imageInput" name="img" onchange="imagePicked(this);" style="visibility: hidden;"/>
+
+            <a id="imgChangeButton" class="lightButton">이미지 변경</a>
+            <a id="imgSaveButton" class="lightButton">다운로드</a>
+        </div>
+        <div id="imgScreen">
+        </div>
     </div>
 </div>
 
 </body>
 
 <style>
-    body {
-        width: 200mm;
+    @media (min-width: 801px) {
+        #rootDiv {
+            width: 70%;
+            margin: 0 auto;
+        }
+    }
+
+    @media (max-width: 800px) {
+    }
+
+    #rootDiv {
+        min-width: 200px;
+        max-width: 600px;
     }
 
     h4 {
@@ -88,12 +101,10 @@
     }
 
     #photoCardDiv {
-        width: 100%;
         margin: 24px auto 0;
     }
 
     #bgPhoto {
-        width: 100%;
         height: auto;
         overflow: hidden;
     }
@@ -111,15 +122,13 @@
 
     #radarChartDiv {
         position: absolute;
-        width: 100%;
-        height: 100%;
     }
 
     #radarChart {
         min-width: 220px;
         min-height: 220px;
-        width: 50%;
-        height: 50%;
+        width: 60%;
+        height: 60%;
     }
 
     #radarChartDiv.center {
@@ -143,7 +152,7 @@
         left: 0;
         bottom: 0;
         width: 100%;
-        padding: 24px;
+        padding: 12px;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -206,7 +215,6 @@
     }
 
     #actionButtons div {
-        width: 256px;
         margin: 0 auto;
     }
 
@@ -249,20 +257,20 @@
 
 <script>
     $(document).ready(function () {
-        let w = $('body').width();
+        let w = $('#rootDiv').width();
         let img = $('#bgPhoto');
-        img.css('width', w);
+        img.css('width', `${w}px`);
         let p = img.parent();
-        p.css('width', w);
-        p.css('height', w);
+        p.css('width', `${w}px`);
+        p.css('height', `${w}px`);
 
         let cardDiv = $('#photoCardDiv');
-        cardDiv.width(w);
-        cardDiv.height(w);
+        cardDiv.css('width', `${w}px`);
+        cardDiv.css('height', `${w}px`);
 
         let radarDiv = $('#radarChartDiv');
-        radarDiv.width(w);
-        radarDiv.height(w);
+        radarDiv.css('width', `${w}px`);
+        radarDiv.css('height', `${w}px`);
 
         // essential info
         let date = new Date({{ timestamp }});
@@ -348,7 +356,8 @@
 
         // img buttons
         $('#imgSaveButton').click(function () {
-            html2canvas(document.getElementById('photoCardDiv')).then(canvas => {
+            window.scrollTo(0, 0);
+            html2canvas(document.getElementById('photoCardDiv'), {dpi: 300}).then(canvas => {
                 let a = document.createElement('a');
                 // toDataURL defaults to png, so we need to request a jpeg, then convert for file download.
                 a.href = canvas.toDataURL("image/jpeg").replace("image/jpeg", "image/octet-stream");

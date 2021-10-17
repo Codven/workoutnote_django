@@ -178,8 +178,8 @@
                     <canvas id="radarChart" style="height: 270px; width: 270px; margin: 0 auto"></canvas>
                 </div>
                 <div style="position: absolute; bottom: 0; width: 100%">
-                    <span style="display: block; font-size: small; text-align: center">회원님의 근력검사 평균 <span style="font-weight: bold; font-style: italic">{{ averageScore }}del</span></span>
-                    <span style="display: block; font-size: small; text-align: center">회원님의 총 최대근력 <span style="font-weight: bold; font-style: italic">{{ cumulativeScore }}del</span></span>
+                    <span style="display: block; font-size: small; text-align: center">회원님의 근력검사 평균 <span style="font-weight: bold; font-style: italic">{{ averageScore|floatformat:1 }}del</span></span>
+                    <span style="display: block; font-size: small; text-align: center">회원님의 총 최대근력 <span style="font-weight: bold; font-style: italic">{{ cumulativeScore|floatformat:1 }}del</span></span>
                 </div>
             </div>
 

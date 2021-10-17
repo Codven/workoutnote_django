@@ -1287,15 +1287,17 @@
                         description.html('어깨, 가슴, 등, 복근 및 다리에 대한 1RM 점수를 계산하기');
                         break;
                     case 'oneRepMaxResultButton':
-                        if (previousScores.length === 0) {
-                            alert('You have no previous entries, please fill out the form completely!');
-                            $('#oneRepMaxTestButton').click();
-                        } else {
-                            $('#oneRepMaxResultDiv').show();
-                            $('#oneRepMaxResultDiv div').show();
-                            title.html('델토이드 1RM 검사결과');
-                            description.html('어깨, 가슴, 등, 복근 및 다리에 이전 1RM 점수보기.');
-                        }
+                        fetchOneRepMaxResults(function () {
+                            if (previousScores.length === 0) {
+                                alert('You have no previous entries, please fill out the form completely!');
+                                $('#oneRepMaxTestButton').click();
+                            } else {
+                                $('#oneRepMaxResultDiv').show();
+                                $('#oneRepMaxResultDiv div').show();
+                                title.html('델토이드 1RM 검사결과');
+                                description.html('어깨, 가슴, 등, 복근 및 다리에 이전 1RM 점수보기.');
+                            }
+                        });
                         break;
                     case 'gripStrengthTestButton':
                         $('#gripStrengthTestDiv').show();
@@ -1571,12 +1573,12 @@
                             showCharts(res.scores);
                         }
                     }
+
+                    if (onSuccess != null)
+                        onSuccess();
                 } else
                     alert('Failed to load previous one rep max test results!');
             });
-
-            if (onSuccess != null)
-                onSuccess();
         }
 
         function showPersonalInfo(name, gender, age, height, weight) {

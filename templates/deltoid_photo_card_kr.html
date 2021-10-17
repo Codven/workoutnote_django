@@ -35,7 +35,7 @@
                     <span style="display: block; font-size: smaller;">{{ gender }}, {{ age }}세</span>
                 </div>
                 <span id="date" style="display: inline-block; font-size: small;">2021.09.20</span>
-                <img src="{% static 'deltoidHorizontal.png' %}" alt="deltoid" height="32mm" style="margin: 0; padding: 0">
+                <img src="{% static 'deltoidHorizontal.png' %}" alt="deltoid" height="24mm" style="margin: 0; padding: 0">
             </div>
 
             <div id="radarChartDiv" class="center">
@@ -326,7 +326,7 @@
             let header = $('#header');
             let footer = $('#footer');
 
-            let w = $('body').width();
+            let w = $('#rootDiv').width();
 
             switch (r.val()) {
                 case 'square':

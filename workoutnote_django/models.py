@@ -70,6 +70,13 @@ class BodyPart(models.Model):
     def __str__(self):
         return f'{self.name}'
 
+    def translate(self, language):
+        language = language.upper()
+        if language in self.name_translations:
+            return self.name_translations[language]
+        else:
+            return self.name
+
 
 class Category(models.Model):
     name = models.CharField(max_length=16)
@@ -107,6 +114,13 @@ class Exercise(models.Model):
 
     def __str__(self):
         return f'{self.name} ({self.body_part}, {self.category})'
+
+    def translate(self, language):
+        language = language.upper()
+        if language in self.name_translations:
+            return self.name_translations[language]
+        else:
+            return self.name
 
 
 class FavoriteExercise(models.Model):

@@ -28,7 +28,8 @@ urlpatterns = [
     path('favorite-workouts/', views.handle_favorite_workouts, name='favorite workouts'),
 
     path('report/', views.handle_report, name='report'),
-    path('photo-card/', views.handle_photo_card, name='photo card'),
+    path('deltoid-photo-card/', views.handle_deltoid_photo_card, name='deltoid photo card'),
+    path('workout-photo-card/<str:session_key>/<int:workout_id>/<str:language>', views.handle_workout_photo_card, name='workout photo card'),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

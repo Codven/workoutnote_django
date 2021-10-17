@@ -186,18 +186,19 @@ def handle_param_calculators(request, session_key, calculator, language):
     :param language (str) - possible options are 'en' or 'kr' (lowercase)
     :param request - django default i.e. provided by default
     """
-    if api_models.SessionKey.objects.filter(key=session_key).exists():
-        login(request=request, user=api_models.SessionKey.objects.get(key=session_key).user)
-
-        res = render(request=request, template_name='calculators_kr.html' if language is not None and language == 'kr' else 'calculators_en.html', context={
-            'at_calculators': True,
-            'sessionKey': session_key,
-            'init_calculator': calculator
-        })
-        res.set_cookie('lang', language)
-        return res
-    else:
+    if not api_models.SessionKey.objects.filter(key=session_key).exists():
         return redirect(to='login')
+    if language not in ['en', 'ru'] or calculator not in ['deltoid_test', 'deltoid_result']:
+        return redirect(to='login')
+
+    login(request=request, user=api_models.SessionKey.objects.get(key=session_key).user)
+    res = render(request=request, template_name='calculators_kr.html' if language is not None and language == 'kr' else 'calculators_en.html', context={
+        'at_calculators': True,
+        'sessionKey': session_key,
+        'init_calculator': calculator
+    })
+    res.set_cookie('lang', language)
+    return res
 
 
 @login_required
@@ -490,7 +491,7 @@ def handle_report(request):
 
 @login_required
 @require_http_methods(['GET'])
-def handle_photo_card(request):
+def handle_deltoid_photo_card(request):
     def float2str(number):
         return f'{number:.1f}'.replace('.0', '')
 
@@ -513,3 +514,51 @@ def handle_photo_card(request):
         'legs': float2str(last_res.legs),
         'averageScore': float2str((last_res.shoulder + last_res.chest + last_res.back + last_res.abs + last_res.legs) / 5)
     })
+
+
+def handle_workout_photo_card(request, session_key, workout_id, language):
+    """
+    :param session_key (str) - user's session key, received after authentication
+    :param workout_id (int) - id of workout to be printed
+    :param language (str) - possible options are 'en' or 'kr' (lowercase)
+    :param request - django default i.e. provided by default
+    """
+    if not api_models.SessionKey.objects.filter(key=session_key).exists():
+        return redirect(to='login')
+    if language not in ['en', 'kr']:
+        return redirect(to='login')
+    user = api_models.SessionKey.objects.get(key=session_key).user
+    login(request=request, user=user)
+    if not models.WorkoutSession.objects.filter(user=user, id=workout_id):
+        return redirect(to='index')
+    workout = models.WorkoutSession.objects.get(id=workout_id)
+    all_lifts = models.Lift.objects.filter(workout_session=workout)
+    total_weight = 0
+    lifts_summary = {}
+    for lift in all_lifts:
+        total_weight += lift.lift_mass * lift.repetitions
+        if lift.exercise in lifts_summary:
+            lifts_summary[lift.exercise]['mass'] += lift.lift_mass
+            lifts_summary[lift.exercise]['reps'] += lift.repetitions
+        else:
+            lifts_summary[lift.exercise] = {'mass': lift.lift_mass, 'reps': lift.repetitions}
+    exercise_names = []
+    lift_stats = []
+
+    def trunc(_str, _len):
+        return f'{_str[:_len]}…' if len(_str) > _len else _str
+
+    for exercise in lifts_summary:
+        exercise_names += [trunc(f'{exercise.translate(language)} ({exercise.body_part.translate(language)})', 32)]
+        lift_stats += [(lifts_summary[exercise]['mass'], lifts_summary[exercise]['reps'])]
+
+    res = render(request=request, template_name='workout_photo_card_kr.html' if language is not None and language == 'kr' else 'workout_photo_card_en.html', context={
+        'timestamp': int(workout.timestamp.timestamp() * 1000),
+        'title': workout.title,
+        'total_weight': total_weight,
+
+        'exercise_names': exercise_names,
+        'lift_stats': lift_stats,
+    })
+    res.set_cookie('lang', language)
+    return res

@@ -9,7 +9,8 @@
                     <div style="height: 12px; display: flex; align-content: center; justify-content: space-between;">
                         <div>
                             <span style="color: #5F36C4; font-weight: bold;" class="w3-left">{{ workout.title }}</span>
-                            <img onclick="favoriteWorkoutsClick(this, {{ workout.id }});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="{% static 'favorite-filled.png' %}" width="22px" height="22px">
+                            <img onclick="favoriteWorkoutsClick(this, {{ workout.id }});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="{% static 'favorite-filled.png' %}" width="18px" height="18px">
+                            <img onclick="shareWorkoutClick({{ workout.id }});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="{% static 'share.png' %}" width="22px" height="22px">
                         </div>
                         <img onclick="optionsClick(this, {{ workout.id }});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="{% static 'options.png' %}" width="22px" height="22px">
                     </div>
@@ -60,6 +61,7 @@
             background-color: darkgray;
         }
     </style>
+
     <script>
         const ONE_REP_MAX_CONST = 0.025;
         let favoriteWorkouts = [
@@ -165,22 +167,31 @@
                         lifts.push({
                             id: lifts.length + 1,
                             exercise: findExerciseByName(favoriteWorkouts[i].lifts[j].exerciseName),
-                            liftMass: favoriteWorkouts[i].lifts[j].lift_mass,
-                            reps: favoriteWorkouts[i].lifts[j].repetitions,
+                            liftMass: favoriteWorkouts[i].lifts[j].liftMass,
+                            repetitions: favoriteWorkouts[i].lifts[j].repetitions,
                             enabled: true,
-                            rmMax: Math.trunc((favoriteWorkouts[i].lifts[j].lift_mass + favoriteWorkouts[i].lifts[j].lift_mass * favoriteWorkouts[i].lifts[j].repetitions * ONE_REP_MAX_CONST) * 100) / 100
+                            rmMax: favoriteWorkouts[i].lifts[j].rmMax
                         });
                     }
                     break;
                 }
-
-            console.log(lifts);
 
             // send as a broadcast to all tabs i.e. save locally
             message_broadcast({action: 'lifts', value: lifts});
 
             // redirect to index page
             window.location.href = '{% url 'index' %}';
+        }
+
+        function shareWorkoutClick(workoutId) {
+            for (let i = 0; i < favoriteWorkouts.length; i++)
+                if (favoriteWorkouts[i].id === workoutId) {
+                    let url = `{% url 'workout photo card' session_key='sessionKey' language='kr' workout_id='0' %}`;
+                    url = url.replace('0', favoriteWorkouts[i].id.toString());
+                    url = url.replace('sessionKey', '{{ sessionKey }}');
+                    window.location.href = url;
+                    break;
+                }
         }
     </script>
 {% endblock %}

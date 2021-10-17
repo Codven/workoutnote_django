@@ -991,7 +991,8 @@
                 subDiv.append(`<div style="height: 12px; display: flex; align-content: center; justify-content: space-between;">
                     <div>
                         <span style="color: #5F36C4; font-weight: bold;" class="w3-left">${workouts[i].title}</span>
-                        <img onclick="favoriteWorkoutsClick(this, ${workouts[i].id});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="${workouts[i].isFavorite ? '{% static 'favorite-filled.png' %}' : '{% static 'favorite-outlined.png' %}'}" width="22px" height="22px">
+                        <img onclick="favoriteWorkoutsClick(this, ${workouts[i].id});" style="margin-left: 12px; vertical-align: middle; cursor: pointer;" src="${workouts[i].isFavorite ? '{% static 'favorite-filled.png' %}' : '{% static 'favorite-outlined.png' %}'}" width="18px" height="18px">
+                        <img onclick="shareWorkoutClick(${workouts[i].id});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="{% static 'share.png' %}" width="22px" height="22px">
                     </div>
                     <img onclick="optionsClick(this, ${workouts[i].id});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="{% static 'options.png' %}" width="22px" height="22px">
                 </div>`);
@@ -1069,6 +1070,17 @@
 
             $('#workoutDate').html('{% now "Y. m. d" %} {% now "D" %}');
             $('#workoutTitle').val("");
+        }
+
+        function shareWorkoutClick(workoutId) {
+            for (let i = 0; i < allWorkouts.length; i++)
+                if (allWorkouts[i].id === workoutId) {
+                    let url = `{% url 'workout photo card' session_key='sessionKey' language='kr' workout_id='0' %}`;
+                    url = url.replace('0', allWorkouts[i].id.toString());
+                    url = url.replace('sessionKey', '{{ sessionKey }}');
+                    window.location.href = url;
+                    break;
+                }
         }
     </script>
 {% endblock %}

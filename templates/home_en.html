@@ -631,7 +631,7 @@
                         `<tr id="exerciseRow${i}">
                             <td class="arrow_column">${i === 0 ? '' : `<a onclick="shiftLiftUp(${i});">△</a>`}${i === 0 || i === lifts.length - 1 ? '' : '<br>'}${i === lifts.length - 1 ? '' : `<a onclick="shiftLiftDown(${i});">▽</a>`}</td>
                             <td onclick="copyExercise(${i});" class="set_column dark-blue-text">${i + 1}</td>
-                            <td onclick="copyExercise(${i});" class="exercise_column dark-blue-text">${lastExercise.nameTranslations.hasOwnProperty('EN') ? lastExercise.nameTranslations['EN'] : lastExercise.exercise.name} (${lastExercise.bodyPart})</td>
+                            <td onclick="copyExercise(${i});" class="exercise_column dark-blue-text">${lastExercise.nameTranslations.hasOwnProperty('EN') ? lastExercise.nameTranslations['EN'] : lastExercise.name} (${lastExercise.bodyPart})</td>
                             <td class="weight_column">
                                 <select id="liftWeight${i}" class="newLiftWeight dark-blue-text" style="text-alight: center;"></select>
                             </td>
@@ -648,9 +648,11 @@
                     );
                     let liftWeightElem = $(`#liftWeight${i}`);
                     let liftRepsElem = $(`#liftReps${i}`);
-                    for (let i = 0; i <= 50; i++) {
-                        liftWeightElem.append(`<option value="${i}" ${i === lastWeight ? 'selected' : ''}>${i}</option>`);
-                        liftRepsElem.append(`<option value="${i}" ${i === lastReps ? 'selected' : ''}>${i}</option>`);
+                    console.log(lifts[i].liftMass);
+                    console.log(lifts[i].repetitions);
+                    for (let j = 0; j <= 50; j++) {
+                        liftWeightElem.append(`<option value="${j}" ${j === lastWeight ? 'selected' : ''}>${j}</option>`);
+                        liftRepsElem.append(`<option value="${j}" ${j === lastReps ? 'selected' : ''}>${j}</option>`);
                     }
 
                     let handler = function () {
@@ -990,7 +992,8 @@
                 subDiv.append(`<div style="height: 12px; display: flex; align-content: center; justify-content: space-between;">
                     <div>
                         <span style="color: #5F36C4; font-weight: bold;" class="w3-left">${'[이름없는 운동]' === workouts[i].title ? '[Unnamed]' : workouts[i].title}</span>
-                        <img onclick="favoriteWorkoutsClick(this, ${workouts[i].id});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="${workouts[i].isFavorite ? '{% static 'favorite-filled.png' %}' : '{% static 'favorite-outlined.png' %}'}" width="22px" height="22px">
+                        <img onclick="favoriteWorkoutsClick(this, ${workouts[i].id});" style="margin-left: 12px; vertical-align: middle; cursor: pointer;" src="${workouts[i].isFavorite ? '{% static 'favorite-filled.png' %}' : '{% static 'favorite-outlined.png' %}'}" width="18px" height="18px">
+                        <img onclick="shareWorkoutClick(${workouts[i].id});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="{% static 'share.png' %}" width="22px" height="22px">
                     </div>
                     <img onclick="optionsClick(this, ${workouts[i].id});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="{% static 'options.png' %}" width="22px" height="22px">
                 </div>`);
@@ -1069,6 +1072,17 @@
 
             $('#workoutDate').html('{% now "Y. m. d" %} {% now "D" %}');
             $('#workoutTitle').val("");
+        }
+
+        function shareWorkoutClick(workoutId) {
+            for (let i = 0; i < allWorkouts.length; i++)
+                if (allWorkouts[i].id === workoutId) {
+                    let url = `{% url 'workout photo card' session_key='sessionKey' language='en' workout_id='0' %}`;
+                    url = url.replace('0', allWorkouts[i].id.toString());
+                    url = url.replace('sessionKey', '{{ sessionKey }}');
+                    window.location.href = url;
+                    break;
+                }
         }
     </script>
 {% endblock %}

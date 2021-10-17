@@ -188,6 +188,13 @@
             </select>
         </div>
 
+        <span id="achievementLabel">목표 달성</span>
+        <div id="achievementDiv">
+            <label class="checked">달성<input type="radio" id="achievementDone" name="achievement"></label>
+            <label class="unchecked">미달성<input type="radio" id="achievementFailed" name="achievement"></label>
+        </div>
+
+        <input type="number" id="updateTargetId" hidden value="-1" style="display: none">
         <a class="submitButton" onclick="createTargetClick();">등록하기</a>
     </div>
 </div>
@@ -322,15 +329,6 @@
             padding: 24px 128px;
         }
 
-        #createTargetDiv span:first-child {
-            display: block;
-            text-align: center;
-            font-size: larger;
-            color: #5F36C4;
-            font-weight: bold;
-            margin-bottom: 48px;
-        }
-
         #createTargetDiv span:not(:first-child) {
             display: block;
             font-size: large;
@@ -338,7 +336,7 @@
             margin-top: 24px;
         }
 
-        #createTargetDiv input {
+        #createTargetDiv input:not([type=radio]) {
             display: block;
             outline: none;
             box-shadow: none;
@@ -526,15 +524,6 @@
             padding: 24px;
         }
 
-        #createTargetDiv span:first-child {
-            display: block;
-            text-align: center;
-            font-size: larger;
-            color: #5F36C4;
-            font-weight: bold;
-            margin-bottom: 48px;
-        }
-
         #createTargetDiv span:not(:first-child) {
             display: block;
             font-size: large;
@@ -542,7 +531,7 @@
             margin-top: 24px;
         }
 
-        #createTargetDiv input {
+        #createTargetDiv input:not([type=radio]) {
             display: block;
             outline: none;
             box-shadow: none;
@@ -682,6 +671,43 @@
         -2px 2px 5px 0 rgba(2, 0, 121, 0.1);
     }
 
+    .checked {
+        background-color: #5F36C4;
+        border-radius: 16px;
+        border: 2px solid #5F36C4;
+        color: white;
+        padding: 4px 8px;
+        margin: 4px;
+        cursor: pointer;
+    }
+
+    .unchecked {
+        background-color: white;
+        border-radius: 16px;
+        color: #5F36C4;
+        border: 2px solid #5F36C4;
+        padding: 4px 8px;
+        margin: 4px;
+        cursor: pointer;
+    }
+
+    #achievementDiv {
+        display: flex;
+        text-align: center;
+    }
+
+    #achievementDiv input[type=radio] {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+
+    #achievementDiv label {
+        display: inline-block;
+        text-align: center;
+        flex-grow: 1;
+    }
+
 </style>
 
 <script>
@@ -735,6 +761,13 @@
         let targetDay = $('#targetStartDay, #targetEndDay');
         for (let i = 1; i <= 31; i++)
             targetDay.append(`<option value="${i}">${padZero(i, 2)}</option>`);
+
+        $('#achievementDiv input[type=radio]').change(function () {
+            let p = $('#achievementDiv input[type=radio]:checked').parent();
+            p.removeClass('unchecked');
+            p.addClass('checked');
+            $.each($('#achievementDiv input[type=radio]:not(:checked)'), (i, x) => x.parentElement.className = 'unchecked');
+        });
     });
 
     function reloadFavoriteExercises() {
@@ -787,8 +820,7 @@
                 if (res.success) {
                     button.src = '{% static 'favorite_unchecked.png' %}';
                     reloadFavoriteExercises();
-                }
-                else
+                } else
                     console.log(`failed to remove exercise(id=${exerciseId}) from favorites`);
             });
         } else {
@@ -797,8 +829,7 @@
                 if (res.success) {
                     button.src = '{% static 'favorite_checked.png' %}';
                     reloadFavoriteExercises();
-                }
-                else
+                } else
                     console.log(`failed to add exercise(id=${exerciseId}) to favorites`);
             });
         }

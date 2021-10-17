@@ -3,12 +3,12 @@
     {% load static %}
 
     <div id="rootDiv">
-        <div id="mobileTargetsHeader" onclick="showTargetsClick()">
+        <div id="mobileTargetsHeader">
             <a class="createTargetButton" onclick="showTargetCreatorDivClick();">
                 Register target
                 <img src="{% static 'add_outline.png' %}" width="32px">
             </a>
-            <div style="background-color: white; box-shadow: 1px 1px 8px 0 rgba(89,87,87,0.3); border-radius: 12px; padding: 12px; margin: 12px;">
+            <div onclick="showTargetsClick()" style="background-color: white; box-shadow: 1px 1px 8px 0 rgba(89,87,87,0.3); border-radius: 12px; padding: 12px; margin: 12px;">
                 <div style="display: flex; align-items: center; padding: 0 4px">
                     <span class="name" style="flex-grow: 1; font-size: larger"></span>
                     <span class="dayNumber" style="padding: 2px 12px; background-color: #6633CC; border-radius: 16px; color: white; font-weight: bold"></span>
@@ -315,7 +315,8 @@
         let selectedDate;
         let selectedCell;
         let updateNoteNecessary = false;
-        let createWeightLossDiv;
+        let targetEditorDiv;
+        let targets = [];
 
         {% load tools %}
         let allWorkouts = [
@@ -393,7 +394,7 @@
             });
 
             // load weight loss plans
-            createWeightLossDiv = document.getElementById('createTargetDivRoot');
+            targetEditorDiv = document.getElementById('createTargetDivRoot');
             reloadTargets();
         });
 
@@ -591,15 +592,29 @@
         }
 
         function showTargetCreatorDivClick() {
-            if (document.readyState === "complete")
-                createWeightLossDiv.style.display = 'block';
+            if (document.readyState === "complete") {
+                let p = $(targetEditorDiv);
+                p.find('#updateTargetId').val(-1);
+                p.find('#targetName').val('');
+                p.find('#targetStartYear').val(-1);
+                p.find('#targetStartMonth').val(-1);
+                p.find('#targetStartDay').val(-1);
+                p.find('#targetEndYear').val(-1);
+                p.find('#targetEndMonth').val(-1);
+                p.find('#targetEndDay').val(-1);
+                p.find('#achievementLabel').hide();
+                p.find('#achievementDiv').hide();
+                p.show();
+            }
         }
 
         function hideTargetCreatorDivClick() {
-            createWeightLossDiv.style.display = 'none';
+            targetEditorDiv.style.display = 'none';
         }
 
         function createTargetClick() {
+            let targetId = $('#updateTargetId').val();
+
             let name = $('#targetName').val();
             if (name.length < 4) {
                 alert('Target name must be at least 4 characters!');
@@ -615,13 +630,24 @@
                 return;
             }
 
-            $.post('/api/insert_target', {sessionKey: "{{ sessionKey }}", name: name, start_date_ms: startDate.getTime(), end_date_ms: endDate.getTime()}, function (res) {
-                if (res.success) {
-                    alert('Target registered successfully!');
-                    reloadTargets();
-                } else
-                    alert('Failed to register target, please try again later!');
-            });
+            if (targetId === -1)
+                $.post('/api/insert_target', {sessionKey: "{{ sessionKey }}", name: name, start_date_ms: startDate.getTime(), end_date_ms: endDate.getTime()}, function (res) {
+                    if (res.success) {
+                        alert('Target registered successfully!');
+                        reloadTargets();
+                    } else
+                        alert('Failed to register target, please try again later!');
+                });
+            else {
+                let achieved = $('#achievementDone').is(':checked') ? 1 : 0;
+                $.post('/api/update_target', {sessionKey: "{{ sessionKey }}", target_id: targetId, name: name, start_date_ms: startDate.getTime(), end_date_ms: endDate.getTime(), achieved: achieved}, function (res) {
+                    if (res.success) {
+                        alert('Target updated successfully!');
+                        reloadTargets();
+                    } else
+                        alert('Failed to update target, please try again later!');
+                });
+            }
 
             hideTargetCreatorDivClick();
         }
@@ -631,6 +657,8 @@
 
             $.post('/api/fetch_targets', {sessionKey: "{{ sessionKey }}"}, function (res) {
                 if (res.success) {
+                    targets = res.targets;
+
                     let today = new Date();
                     let toggleDisplay = $('#targetsDiv').css('display') === 'none';
 
@@ -647,7 +675,7 @@
                                     <img class="achievement" onclick="toggleTargetClick(${target.id});" style="display:none; margin-right: 4px; vertical-align: middle; cursor: pointer;" src="${target.achieved ? '{% static 'achieved.png' %}' : '{% static 'failed.png' %}'}" width="22px" height="22px">
                                     <span class="changeColor" style="flex-grow: 1; font-size: larger">${target.name}</span>
                                     <span class="dayNumber" style="padding: 2px 12px; background-color: #6633CC; border-radius: 16px; color: white; font-weight: bold">D - ${daysLeft}</span>
-                                    <img onclick="removeTargetClick(${target.id});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="{% static 'bin.png' %}" width="22px" height="22px">
+                                    <img onclick="targetOptionsClick(this, ${target.id});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="{% static 'options.png' %}" width="22px" height="22px">
                                 </div>
                                 <div style="display: flex; align-items: center; padding: 0 4px; margin-top: 12px">
                                     <span class="changeColor" style="color: #6633CC; font-size: smaller">${startDate.getMonth() + 1}/${startDate.getDate()}</span>
@@ -746,6 +774,60 @@
             $('#calendarDiv').hide();
             $('#workoutsDiv').hide();
             $('#targetsDiv').show();
+        }
+
+        function targetOptionsClick(img, targetId) {
+            // set location and size
+            let r = img.parentElement.getBoundingClientRect();
+            let o = $('#optionsDiv');
+            o.width(r.width - 30);
+            o.css({left: r.left + 15, top: r.top + 15});
+
+            // set listeners
+            for (let i = 0; i < targets.length; i++)
+                if (targets[i].id === targetId) {
+                    let editButton = $('#optionsDiv a:first-child');
+                    let deleteButton = $('#optionsDiv a:last-child');
+                    editButton.unbind();
+                    deleteButton.unbind();
+                    editButton.click(() => showTargetEditorDivClick(targets[i]));
+                    deleteButton.click(() => removeTargetClick(targets[i].id));
+                }
+
+            // display options
+            $('#optionsDivRoot').fadeIn(100);
+        }
+
+        function showTargetEditorDivClick(target) {
+            if (document.readyState === "complete") {
+                let p = $(targetEditorDiv);
+                p.find('#updateTargetId').val(target.id);
+                p.find('#targetName').val(target.name);
+
+                let start = new Date(target.startDateMs);
+                p.find('#targetStartYear').val(start.getFullYear());
+                p.find('#targetStartMonth').val(start.getMonth());
+                p.find('#targetStartDay').val(start.getDate());
+                let end = new Date(target.endDateMs);
+                p.find('#targetEndYear').val(end.getFullYear());
+                p.find('#targetEndMonth').val(end.getMonth());
+                p.find('#targetEndDay').val(end.getDate());
+
+                if (target.achieved)
+                    p.find('#achievementDone').parent().click();
+                else
+                    p.find('#achievementFailed').parent().click();
+                p.find('#achievementLabel').show();
+                p.find('#achievementDiv').show();
+
+                p.show();
+            }
+        }
+
+        function padZero(num, size) {
+            num = num.toString();
+            while (num.length < size) num = "0" + num;
+            return num;
         }
     </script>
 {% endblock %}

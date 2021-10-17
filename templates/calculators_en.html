@@ -1326,17 +1326,19 @@
                 $('#calculatorsDiv').delay(100).fadeIn(100);
             });
             $('#oneRepMaxResultMenuButton').click(function () {
-                $('#calculatorSwitchMenu').fadeOut(100);
+                fetchOneRepMaxResults(function () {
+                    $('#calculatorSwitchMenu').fadeOut(100);
 
-                calculatorDivs.forEach(div => div.hide());
-                if (previousScores.length === 0) {
-                    alert('You have no previous entries, please fill out the form completely first!');
-                    $('#oneRepMaxTestDiv').show();
-                } else
-                    $('#oneRepMaxResultDiv').show();
+                    calculatorDivs.forEach(div => div.hide());
+                    if (previousScores.length === 0) {
+                        alert('1 You have no previous entries, please fill out the form completely first!');
+                        $('#oneRepMaxTestDiv').show();
+                    } else
+                        $('#oneRepMaxResultDiv').show();
 
-                $('#goBackMenuDiv').show();
-                $('#calculatorsDiv').delay(100).fadeIn(100);
+                    $('#goBackMenuDiv').show();
+                    $('#calculatorsDiv').delay(100).fadeIn(100);
+                });
             });
             $('#gripStrengthTestMenuButton').click(function () {
                 $('#calculatorSwitchMenu').fadeOut(100);
@@ -1543,6 +1545,23 @@
             $('#returnButton').click(function () {
                 $('#goBackMenuButton').click();
             });
+
+            {% if init_calculator %}
+                let mobile = $(document.body).width() < 801;
+                if (mobile) {
+                    {% if init_calculator == 'deltoid_test' %}
+                        $('#oneRepMaxTestMenuButton').click();
+                    {% else %}
+                        $('#oneRepMaxResultMenuButton').click();
+                    {% endif %}
+                } else {
+                    {% if init_calculator == 'deltoid_test' %}
+                        $('#oneRepMaxTestButton').click();
+                    {% else %}
+                        $('#oneRepMaxResultButton').click();
+                    {% endif %}
+                }
+            {% endif %}
         });
 
         function fetchOneRepMaxResults(onSuccess = null) {
@@ -1622,7 +1641,7 @@
                     aspectRatio: 1,
                     scale: {
                         ticks: {min: 0, display: false},
-                        pointLabels: {fontColor: 'black', fontSize: 15},
+                        pointLabels: {fontColor: 'black', fontSize: 24},
                         gridLines: {
                             lineWidth: 1.5,
                             color: "#AAAAAA"

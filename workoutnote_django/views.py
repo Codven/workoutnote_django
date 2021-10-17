@@ -179,6 +179,27 @@ def handle_calculators(request):
     return render(request=request, template_name='calculators_kr.html' if lang is not None and lang == 'kr' else 'calculators_en.html', context={'at_calculators': True, 'sessionKey': session_key})
 
 
+def handle_param_calculators(request, session_key, calculator, language):
+    """
+    :param session_key (str) - user's session key, received after authentication
+    :param calculator (str) - possible options are 'deltoid_test' or 'deltoid_result' (lowercase)
+    :param language (str) - possible options are 'en' or 'kr' (lowercase)
+    :param request - django default i.e. provided by default
+    """
+    if api_models.SessionKey.objects.filter(key=session_key).exists():
+        login(request=request, user=api_models.SessionKey.objects.get(key=session_key).user)
+
+        res = render(request=request, template_name='calculators_kr.html' if language is not None and language == 'kr' else 'calculators_en.html', context={
+            'at_calculators': True,
+            'sessionKey': session_key,
+            'init_calculator': calculator
+        })
+        res.set_cookie('lang', language)
+        return res
+    else:
+        return redirect(to='login')
+
+
 @login_required
 @require_http_methods(['GET', 'POST'])
 def handle_settings(request):
@@ -479,7 +500,7 @@ def handle_photo_card(request):
 
     last_res = q.order_by('-timestamp').first()
     lang = request.COOKIES.get('lang')
-    return render(request=request, template_name='photo_card_kr.html' if lang is not None and lang == 'kr' else 'photo_card_en.html', context={
+    return render(request=request, template_name='deltoid_photo_card_kr.html' if lang is not None and lang == 'kr' else 'deltoid_photo_card_en.html', context={
         'name': last_res.name,
         'gender': '남성' if last_res.gender == models.OneRepMaxResults.Gender.MALE.lower() else '여성' if lang == 'kr' else last_res.gender,
         'age': last_res.age,

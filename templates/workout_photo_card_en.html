@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Workoutnote.com photo card</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'index.css' %}">
+    <link rel="stylesheet" href="{% static 'slicon.css' %}">
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+    <script src="{% static 'html2canvas.min.js' %}"></script>
+</head>
+
+<body>
+
+<div id="rootDiv">
+    <h4 style="color: #6633CC">Deltoid Test Photo Card</h4>
+    <div style="max-width: 200mm; max-height: 200mm">
+        <div id="photoCardDiv" style="position: relative; color: white; margin: auto">
+            <div style="position: absolute; width: 100%">
+                <div style="overflow: hidden; margin: 0 auto">
+                    <img id="bgPhoto" style="display: block; margin: 0 auto" src="{% static 'photoCardBg.png' %}" alt="photo card">
+                </div>
+            </div>
+
+            <div id="header" style="position: absolute">
+                <div style="display: inline-block;">
+                    <span style="display: block; font-weight: bold; font-size: smaller;">{{ name }}</span>
+                    <span style="display: block; font-size: smaller;">{{ gender }}, {{ age }}y.o.</span>
+                </div>
+                <span id="date" style="display: inline-block; font-size: small;">2021.09.20</span>
+                <img src="{% static 'deltoidHorizontal.png' %}" alt="deltoid" height="32mm" style="margin: 0; padding: 0">
+            </div>
+
+            <div id="radarChartDiv" class="center">
+                <canvas id="radarChart"></canvas>
+                <span></span>
+            </div>
+
+            <div id="footer">
+                <span></span>
+                <span style="font-size: smaller; text-align: end">
+                {{ name }}'s 1RM avg is <span style="font-size: medium; font-weight: bold; font-style: italic">{{ averageScore }}del</span>
+            </span>
+            </div>
+        </div>
+    </div>
+
+    <div id="aspectRatioButtonsDiv">
+        <label class="checked" style="padding-top: 9px">
+            <input type="radio" name="calc" value="square" checked style="display: none">
+            <a style="display: block; width: 24px; height: 24px; margin: 0 auto"></a>
+            <span style="font-size: small">1 : 1</span>
+        </label>
+        <label class="unchecked" style="padding-top: 10px">
+            <input type="radio" name="calc" value="notSquare" style="display: none">
+            <a style="display: block; width: 19px; height: 24px; margin: 0 auto"></a>
+            <span style="font-size: small">4 : 5</span>
+        </label>
+    </div>
+
+    <div id="actionButtons">
+        <div>
+            <input accept="image/*" type="file" id="imageInput" name="img" onchange="imagePicked(this);" style="visibility: hidden;"/>
+
+            <a id="imgChangeButton" class="lightButton">Change Image</a>
+            <a id="imgSaveButton" class="lightButton">Download</a>
+        </div>
+        <div id="imgScreen">
+        </div>
+    </div>
+</div>
+
+</body>
+
+<style>
+    @media (min-width: 801px) {
+        #rootDiv {
+            width: 70%;
+            margin: 0 auto;
+        }
+    }
+
+    @media (max-width: 800px) {
+    }
+
+    #rootDiv {
+        min-width: 200px;
+        max-width: 600px;
+    }
+
+    h4 {
+        font-size: xx-large;
+        text-align: center;
+    }
+
+    #photoCardDiv {
+        margin: 24px auto 0;
+    }
+
+    #bgPhoto {
+        height: auto;
+        overflow: hidden;
+    }
+
+    #header {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        padding: 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+    }
+
+    #radarChartDiv {
+        position: absolute;
+    }
+
+    #radarChart {
+        min-width: 220px;
+        min-height: 220px;
+        width: 60%;
+        height: 60%;
+    }
+
+    #radarChartDiv.center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #radarChartDiv.leftBottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
+
+    #radarChartDiv.leftBottom #radarChart {
+        margin-left: 14px;
+    }
+
+    #footer {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        padding: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    #header span, #footer span {
+        font-size: large;
+    }
+
+    #aspectRatioButtonsDiv {
+        margin: 24px;
+        text-align: center;
+    }
+
+    #aspectRatioButtonsDiv input[type=radio] {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        cursor: pointer;
+        appearance: none;
+    }
+
+    .checked {
+        background-color: #5F36C4;
+        border: 2px solid #5F36C4;
+        color: white;
+        padding: 8px;
+        margin: 4px;
+        cursor: pointer;
+
+        display: inline-block;
+        width: 64px;
+        height: 64px;
+        border-radius: 32px;
+    }
+
+    .checked a {
+        border: 2px solid white;
+    }
+
+    .unchecked {
+        background-color: white;
+        color: #5F36C4;
+        border: 2px solid #5F36C4;
+        padding: 4px 8px;
+        margin: 4px;
+        cursor: pointer;
+
+        display: inline-block;
+        width: 64px;
+        height: 64px;
+        border-radius: 32px;
+    }
+
+    .unchecked a {
+        border: 2px solid #5F36C4;
+    }
+
+    #actionButtons {
+        margin-bottom: 32px;
+    }
+
+    #actionButtons div {
+        margin: 0 auto;
+    }
+
+    #actionButtons div div {
+        display: flex;
+    }
+
+    #actionButtons div div a {
+        flex-grow: 1;
+    }
+
+    .lightButton:not(.skip) {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .lightButton {
+        border-radius: 24px;
+        border: 2px solid #6633CC;
+        color: #6633CC;
+        padding: 3px 32px;
+        text-align: center;
+        margin-top: 12px;
+        height: 40px;
+        cursor: pointer;
+        transition: 200ms;
+    }
+
+    .lightButton:hover {
+        background-color: #E7DFF7;
+        transition: 200ms;
+    }
+
+    .html2canvas-container {
+        width: 210mm !important;
+        height: 210mm !important;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        let w = $('#rootDiv').width();
+        let img = $('#bgPhoto');
+        img.css('width', `${w}px`);
+        let p = img.parent();
+        p.css('width', `${w}px`);
+        p.css('height', `${w}px`);
+
+        let cardDiv = $('#photoCardDiv');
+        cardDiv.css('width', `${w}px`);
+        cardDiv.css('height', `${w}px`);
+
+        let radarDiv = $('#radarChartDiv');
+        radarDiv.css('width', `${w}px`);
+        radarDiv.css('height', `${w}px`);
+
+        // essential info
+        let date = new Date({{ timestamp }});
+        $('#date').html(`${date.getFullYear()}. ${padZero(date.getMonth(), 2)}. ${padZero(date.getDate(), 2)}`);
+
+        // region radar chart
+        new Chart(document.getElementById('radarChart'), {
+            type: 'radar',
+            data: {
+                labels: [['Shoulder', '({{ shoulder }} del)'], ['Chest', '({{ chest }} del)'], ['Back', '({{ back }} del)'], ['Abs', '({{ abs }} del)'], ['Legs', '({{ legs }} del)']],
+                datasets: [{
+                    data: [{{ shoulder }}, {{ chest }}, {{ back }}, {{ abs }}, {{ legs }}],
+                    backgroundColor: '#A97DFF61',
+                    borderColor: '#A67BFF',
+                    borderWidth: 3,
+                    pointerEnabled: false
+                }]
+            },
+            options: {
+                responsive: false,
+                maintainAspectRatio: false,
+                aspectRatio: 1,
+                scale: {
+                    ticks: {
+                        min: 0, display: false,
+                        maxTicksLimit: 6
+                    },
+                    pointLabels: {fontColor: 'white', fontSize: 13},
+                    gridLines: {
+                        lineWidth: 1.3,
+                        color: "#AAAAAA"
+                    },
+                },
+                elements: {point: {radius: 0}},
+                legend: {display: false},
+                layout: {padding: 20}
+            }
+        });
+        // endregion
+
+        // aspect ratio buttons
+        $('#aspectRatioButtonsDiv input[type=radio]').change(function () {
+            let r = $('#aspectRatioButtonsDiv input[type=radio]:checked');
+            let p = r.parent();
+            p.removeClass('unchecked');
+            p.addClass('checked');
+            $.each($('#aspectRatioButtonsDiv input[type=radio]:not(:checked)'), (i, x) => x.parentNode.className = 'unchecked');
+
+            let rootDiv = $('#photoCardDiv');
+            let img = $('#bgPhoto');
+            let imgDiv = img.parent();
+            let chartDiv = $('#radarChartDiv');
+            let header = $('#header');
+            let footer = $('#footer');
+
+            let w = $('body').width();
+
+            switch (r.val()) {
+                case 'square':
+                    rootDiv.css('width', `${w}px`);
+                    imgDiv.css('width', `${w}px`);
+                    img.css('width', `${w}px`);
+                    chartDiv.css('width', `${w}px`);
+                    header.css('width', `${w}px`);
+                    footer.css('width', `${w}px`);
+                    chartDiv.removeClass('leftBottom');
+                    chartDiv.addClass('center');
+                    break;
+                case 'notSquare':
+                    rootDiv.css('width', `${0.8 * w}px`);
+                    imgDiv.css('width', `${0.8 * w}px`);
+                    img.css('width', `${w}px`);
+                    chartDiv.css('width', `${0.8 * w}px`);
+                    header.css('width', `${0.8 * w}px`);
+                    footer.css('width', `${0.8 * w}px`);
+                    chartDiv.removeClass('center');
+                    chartDiv.addClass('leftBottom');
+                    break;
+                default:
+                    break;
+            }
+        });
+
+        // img buttons
+        $('#imgSaveButton').click(function () {
+            window.scrollTo(0, 0);
+            html2canvas(document.getElementById('photoCardDiv'), {dpi: 300}).then(canvas => {
+                let a = document.createElement('a');
+                // toDataURL defaults to png, so we need to request a jpeg, then convert for file download.
+                a.href = canvas.toDataURL("image/jpeg", 1.0).replace("image/jpeg", "image/octet-stream");
+                a.download = 'myWorkoutnoteCard.jpg';
+                a.click();
+            });
+        });
+        $('#imgChangeButton').click(() => $('#imageInput').click());
+    });
+
+    function imagePicked(input) {
+        if (input.files && input.files[0]) {
+            let reader = new FileReader();
+            reader.onload = (e) => $('#bgPhoto').attr('src', e.target.result);
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function padZero(num, size) {
+        num = num.toString();
+        while (num.length < size) num = "0" + num;
+        return num;
+    }
+</script>
+</html>

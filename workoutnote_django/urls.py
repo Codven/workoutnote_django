@@ -15,6 +15,7 @@ urlpatterns = [
     path('generate-dummy-data/', views.handle_generate_dummy_data),
 
     path('calculators/', views.handle_calculators, name='calculators'),
+    path('calculators/<str:session_key>/<str:calculator>/<str:language>', views.handle_param_calculators, name='param calculators'),
 
     path('accounts/login/', views.handle_login, name='login'),
     path('accounts/register/', views.handle_register, name='register'),

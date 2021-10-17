@@ -47,12 +47,8 @@
                             <td class="exercise_column" id="selectedExerciseName" onclick="showExerciseSelectorDivClick();">
                                 운동이름
                             </td>
-                            <td class="weight_column"><input id="newLiftWeight" class="newLiftWeight" type="number" min="1"
-                                                             max="200" placeholder="1"
-                                                             value="1"></td>
-                            <td class="repetition_column"><input id="newLiftReps" class="newLiftReps" type="number" min="1"
-                                                                 max="30" placeholder="1"
-                                                                 value="1"></td>
+                            <td class="weight_column"><select id="newLiftWeight" class="newLiftWeight"></select></td>
+                            <td class="repetition_column"><select id="newLiftReps" class="newLiftReps"></select></td>
                             <td class="rm_column" id="newRmMax"></td>
                             <td class="done_column">
                                 <button onclick="addNewLift();" class="grayBackground" style="padding: 8px; margin: 0; line-height: 1; border-radius: 16px; border: none; cursor: pointer;">
@@ -366,6 +362,16 @@
             text-align: center;
         }
 
+        .newLiftWeight, .newLiftReps {
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        #newLiftWeight, #newLiftReps {
+            color: #777;
+        }
+
         /* endregion */
 
         #favorite_workouts_button {
@@ -518,22 +524,28 @@
             selectExerciseDiv = document.getElementById('selectExerciseDivRoot');
             exercisesListDiv = document.getElementById('exercisesListDiv');
 
-            let weight = parseInt($('#newLiftWeight').val());
-            let reps = parseInt($('#newLiftReps').val());
+            let newLiftWeight = $('#newLiftWeight');
+            let newLiftReps = $('#newLiftReps');
+            let weight = parseInt(newLiftWeight.val());
+            let reps = parseInt(newLiftReps.val());
             let rm = Math.trunc((weight + weight * reps * ONE_REP_MAX_CONST) * 100) / 100;
             $('#newRmMax').html(rm);
 
-            $('#newLiftWeight').change(function () {
+            for (let i = 0; i <= 50; i++) {
+                newLiftWeight.append(`<option value="${i}">${i}</option>`);
+                newLiftReps.append(`<option value="${i}">${i}</option>`);
+            }
+            newLiftWeight.change(function () {
                 let kgMode = $('#weight_th').html().toLowerCase() === 'kg';
-                newWeight = kgMode ? parseFloat($('#newLiftWeight').val()) : parseFloat($('#newLiftWeight').val()) * KG2LBS;
+                newWeight = kgMode ? parseFloat(newLiftWeight.val()) : parseFloat(newLiftWeight.val()) * KG2LBS;
                 if (kgMode)
                     $('#newRmMax').html(Math.trunc((newWeight + newWeight * newReps * ONE_REP_MAX_CONST) * 100) / 100);
                 else
                     $('#newRmMax').html(Math.trunc((newWeight * KG2LBS + newWeight * KG2LBS * newReps * ONE_REP_MAX_CONST) * 100) / 100);
             });
-            $('#newLiftReps').change(function () {
+            newLiftReps.change(function () {
                 let kgMode = $('#weight_th').html().toLowerCase() === 'kg';
-                newReps = parseInt($('#newLiftReps').val());
+                newReps = parseInt(newLiftReps.val());
                 if (kgMode)
                     $('#newRmMax').html(Math.trunc((newWeight + newWeight * newReps * ONE_REP_MAX_CONST) * 100) / 100);
                 else
@@ -598,57 +610,82 @@
         });
 
         function setNewLiftsOnUI(lifts) {
+            let kgMode = $('#weight_th').html().toLowerCase() === 'kg';
             $("#newExercisesTable tr:not(:last-child, :first-child)").empty();
 
+
+            let lastExercise;
+            let lastWeight = 0, lastReps = 0;
+            let lastRmMax = '';
             for (let i = 0; i < lifts.length; i++) {
                 let rmMaxLbs = Math.trunc((lifts[i].liftMass * KG2LBS + lifts[i].liftMass * KG2LBS * lifts[i].repetitions * ONE_REP_MAX_CONST) * 100) / 100;
+                lastExercise = lifts[i].exercise;
+                lastWeight = kgMode ? lifts[i].liftMass : Math.trunc(lifts[i].liftMass * KG2LBS * 10) / 10;
+                lastReps = lifts[i].repetitions;
+                lastRmMax = kgMode ? lifts[i].rmMax : rmMaxLbs;
                 if (lifts[i].enabled) {
                     $('#newExercisesTable tr:last').before(
-                        `<tr id="exerciseRow${i}">` +
-                        `   <td class="arrow_column">${i === 0 ? '' : `<a onclick="shiftLiftUp(${i});">△</a>`}${i === 0 || i === lifts.length - 1 ? '' : '<br>'}${i === lifts.length - 1 ? '' : `<a onclick="shiftLiftDown(${i});">▽</a>`}</td>` +
-                        `   <td onclick="copyExercise(${i});" class="set_column dark-blue-text">${i + 1}</td>` +
-                        `   <td onclick="copyExercise(${i});" class="exercise_column dark-blue-text">${lifts[i].exercise.name} (${lifts[i].exercise.bodyPart})</td>` +
-                        `   <td class="weight_column">` +
-                        `       <input id="liftWeight${i}" class="newLiftWeight dark-blue-text" style="text-alight: center;" type="number" min="1" max="200" placeholder="1" value="${$('#weight_th').html().toLowerCase() === 'kg' ? lifts[i].liftMass : Math.trunc(lifts[i].liftMass * KG2LBS * 10) / 10}">` +
-                        `   </td>` +
-                        `   <td class="repetition_column dark-blue-text">` +
-                        `       <input id="liftReps${i}" class="newLiftReps dark-blue-text" style="text-alight: center;" type="number" min="1" max="30" placeholder="1" value="${lifts[i].repetitions}">` +
-                        `   </td>` +
-                        `   <td id="rmMax${i}" class="rm_column dark-blue-text">${$('#weight_th').html().toLowerCase() === 'kg' ? lifts[i].rmMax : rmMaxLbs}</td>` +
-                        `   <td class="done_column">` +
-                        `       <button onclick="toggleExercise(${i});" class="darkBlueBackground" style="padding: 8px; margin: 0; line-height: 1; border-radius: 16px; border: none; cursor: pointer;">` +
-                        `           <img id="timerControlButton" src="{% static 'checked.png' %}" height="16px">` +
-                        `       </button>` +
-                        `   </td>` +
-                        `</tr>`
+                        `<tr id="exerciseRow${i}">
+                            <td class="arrow_column">${i === 0 ? '' : `<a onclick="shiftLiftUp(${i});">△</a>`}${i === 0 || i === lifts.length - 1 ? '' : '<br>'}${i === lifts.length - 1 ? '' : `<a onclick="shiftLiftDown(${i});">▽</a>`}</td>
+                            <td onclick="copyExercise(${i});" class="set_column dark-blue-text">${i + 1}</td>
+                            <td onclick="copyExercise(${i});" class="exercise_column dark-blue-text">${lastExercise.name} (${lastExercise.bodyPart})</td>
+                            <td class="weight_column">
+                                <input id="liftWeight${i}" class="newLiftWeight dark-blue-text" style="text-alight: center;" type="number" min="1" max="200" placeholder="1" value="${lastWeight}">
+                            </td>
+                            <td class="repetition_column dark-blue-text">
+                                <input id="liftReps${i}" class="newLiftReps dark-blue-text" style="text-alight: center;" type="number" min="1" max="30" placeholder="1" value="${lastReps}">
+                            </td>
+                            <td id="rmMax${i}" class="rm_column dark-blue-text">${lastRmMax}</td>
+                            <td class="done_column">
+                                <button onclick="toggleExercise(${i});" class="darkBlueBackground" style="padding: 8px; margin: 0; line-height: 1; border-radius: 16px; border: none; cursor: pointer;">
+                                    <img id="timerControlButton" src="{% static 'checked.png' %}" height="16px">
+                                </button>
+                            </td>
+                        </tr>`
                     );
-                    $(`#liftWeight${i}, #liftReps${i}`).change(function () {
-                        let weight = parseInt($(`#liftWeight${i}`).val());
-                        let reps = parseInt($(`#liftReps${i}`).val());
+                    let liftWeightElem = $(`#liftWeight${i}`);
+                    let liftRepsElem = $(`#liftReps${i}`);
+                    for (let i = 0; i <= 50; i++) {
+                        liftWeightElem.append(`<option value="${i}" ${i === lastWeight ? 'selected' : ''}>${i}</option>`);
+                        liftRepsElem.append(`<option value="${i}" ${i === lastReps ? 'selected' : ''}>${i}</option>`);
+                    }
+
+                    let handler = function () {
+                        let weight = parseInt(liftWeightElem.val());
+                        let reps = parseInt(liftRepsElem.val());
 
                         lifts[i].liftMass = weight;
                         lifts[i].repetitions = reps;
                         lifts[i].rmMax = Math.trunc((weight + weight * reps * ONE_REP_MAX_CONST) * 100) / 100;
 
                         message_broadcast({action: 'lifts', value: lifts});
-                    });
+                    };
+                    liftWeightElem.change(handler);
+                    liftRepsElem.change(handler);
                 } else
                     $('#newExercisesTable tr:last').before(
-                        `<tr id="exerciseRow${i}">` +
-                        `   <td class="arrow_column">${i === 0 ? '' : `<a onclick="shiftLiftUp(${i});">△</a>`}${i === 0 || i === lifts.length - 1 ? '' : '<br>'}${i === lifts.length - 1 ? '' : `<a onclick="shiftLiftDown(${i});">▽</a>`}</td>` +
-                        `   <td onclick="copyExercise(${i});" class="set_column light-grey-text">${i + 1}</td>` +
-                        `	<td onclick="copyExercise(${i});" class="exercise_column light-grey-text">${lifts[i].exercise.name} (${lifts[i].exercise.bodyPart})</td>` +
-                        `	<td class="weight_column light-grey-text">${$('#weight_th').html().toLowerCase() === 'kg' ? lifts[i].liftMass : Math.trunc(lifts[i].liftMass * KG2LBS * 10) / 10}</td>` +
-                        `	<td class="repetition_column light-grey-text">${lifts[i].repetitions}</td>` +
-                        `	<td class="rm_column light-grey-text">${$('#weight_th').html().toLowerCase() === 'kg' ? lifts[i].rmMax : rmMaxLbs}</td>` +
-                        `	<td class="done_column">` +
-                        `       <button onclick="toggleExercise(${i});" style="background-color: transparent; padding: 8px; margin: 0; line-height: 1; border-radius: 16px; border: none; cursor: pointer;">` +
-                        `           <img id="timerControlButton" src="{% static 'unchecked.png' %}" height="16px">` +
-                        `       </button>` +
-                        `	</td>` +
-                        `</tr>`
+                        `<tr id="exerciseRow${i}">
+                            <td class="arrow_column">${i === 0 ? '' : `<a onclick="shiftLiftUp(${i});">△</a>`}${i === 0 || i === lifts.length - 1 ? '' : '<br>'}${i === lifts.length - 1 ? '' : `<a onclick="shiftLiftDown(${i});">▽</a>`}</td>
+                            <td onclick="copyExercise(${i});" class="set_column light-grey-text">${i + 1}</td>
+                            <td onclick="copyExercise(${i});" class="exercise_column light-grey-text">${lastExercise.name} (${lastExercise.bodyPart})</td>
+                            <td class="weight_column light-grey-text">${$('#weight_th').html().toLowerCase() === 'kg' ? lifts[i].liftMass : Math.trunc(lifts[i].liftMass * KG2LBS * 10) / 10}</td>
+                            <td class="repetition_column light-grey-text">${lifts[i].repetitions}</td>
+                            <td class="rm_column light-grey-text">${$('#weight_th').html().toLowerCase() === 'kg' ? lifts[i].rmMax : rmMaxLbs}</td>
+                            <td class="done_column">
+                                <button onclick="toggleExercise(${i});" style="background-color: transparent; padding: 8px; margin: 0; line-height: 1; border-radius: 16px; border: none; cursor: pointer;">
+                                    <img id="timerControlButton" src="{% static 'unchecked.png' %}" height="16px">
+                                </button>
+                            </td>
+                        </tr>`
                     );
             }
+
+            $(`#newLiftWeight option[value=${lastWeight}]`).attr('selected', 'selected');
+            $(`#newLiftReps option[value=${lastReps}]`).attr('selected', 'selected');
+            $(`#newRmMax`).html(lastRmMax);
+            
+            if (lastExercise != null)
+                selectExerciseClick(lastExercise.name);
         }
 
         function showExerciseSelectorDivClick() {
@@ -887,7 +924,6 @@
                             console.log(e);
                         }
                     });
-                    // todo post update workout
                 }
             } else {
                 alert('You need to add at least one exercise for one workout session!');

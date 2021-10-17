@@ -53,4 +53,5 @@ urlpatterns = [
     re_path('^fetch_targets/?', views.handle_fetch_targets_api),
     re_path('^toggle_target/?', views.handle_toggle_target_api),
     re_path('^remove_target/?', views.handle_remove_target_api),
+    re_path('^update_target/?', views.handle_update_target_api),
 ]

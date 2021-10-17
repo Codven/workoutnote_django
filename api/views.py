@@ -1131,4 +1131,41 @@ def handle_remove_target_api(request):
     # 3. remove target
     target.delete()
     return JsonResponse(data={'success': True})
+
+
+@csrf_exempt
+@require_http_methods(['POST'])
+def handle_update_target_api(request):
+    # 0. expected and received params
+    required_params = ['sessionKey', 'target_id', 'name', 'start_date_ms', 'end_date_ms']
+    received_params = request.POST if 'sessionKey' in request.POST else json.loads(request.body.decode('utf8'))
+
+    # 1. all params check
+    if False in [x in received_params for x in required_params]:
+        return JsonResponse(data={'success': False, 'reason': f'bad params, must provide {",".join(required_params)}'})
+    else:
+        session_key = received_params['sessionKey']
+        target_id = int(received_params['target_id'])
+        name = received_params['name']
+        start_time = datetime.datetime.fromtimestamp(int(received_params['start_date_ms']) / 1000)
+        end_time = datetime.datetime.fromtimestamp(int(received_params['end_date_ms']) / 1000)
+
+    # 2. sessionKey check
+    if not models.SessionKey.objects.filter(key=session_key).exists():
+        return JsonResponse(data={'success': False, 'reason': 'double check sessionKey value'})
+    else:
+        user = models.SessionKey.objects.get(key=session_key).user
+
+    # 3. target_id check
+    if not wn_models.Target.objects.filter(user=user, id=target_id).exists():
+        return JsonResponse(data={'success': False, 'reason': 'double check target_id value'})
+    else:
+        target = wn_models.Target.objects.get(id=target_id)
+
+    # 3. update 1rm result
+    target.name = name
+    target.start_date = start_time
+    target.end_date = end_time
+    target.save()
+    return JsonResponse(data={'success': True})
 # endregion

@@ -748,6 +748,8 @@
                     console.log('failed to fetch favorite exercises');
                     favoriteExercises = {};
                 }
+
+                filterExercises();
             });
         {% endif %}
     }
@@ -782,16 +784,20 @@
         if (isFavorite) {
             // remove from favorites
             $.post('/api/unset_favorite_exercise', {sessionKey: "{{ sessionKey }}", exercise_id: exerciseId}).done(function (res) {
-                if (res.success)
+                if (res.success) {
                     button.src = '{% static 'favorite_unchecked.png' %}';
+                    reloadFavoriteExercises();
+                }
                 else
                     console.log(`failed to remove exercise(id=${exerciseId}) from favorites`);
             });
         } else {
             // add to favorite
             $.post('/api/set_favorite_exercise', {sessionKey: "{{ sessionKey }}", exercise_id: exerciseId}).done(function (res) {
-                if (res.success)
+                if (res.success) {
                     button.src = '{% static 'favorite_checked.png' %}';
+                    reloadFavoriteExercises();
+                }
                 else
                     console.log(`failed to add exercise(id=${exerciseId}) to favorites`);
             });

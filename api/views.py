@@ -49,6 +49,22 @@ def handle_login_api(request):
 
 
 @csrf_exempt
+def handle_check_username_api(request):
+    # 0. expected and received params
+    required_params = ['email_or_phone']  # pick one auth method, pass null to the second
+    received_params = request.POST if 'email_or_phone' in request.POST else json.loads(request.body.decode('utf8'))
+
+    # 1. all params check
+    if False in [x in received_params for x in required_params]:
+        return JsonResponse(data={'success': False, 'reason': f'bad params, must provide {",".join(required_params)}'})
+    else:
+        username = received_params['email_or_phone']
+
+    # check if username is taken
+    return JsonResponse(data={'success': True, 'isTaken': django_User.objects.filter(username=username).exists()})
+
+
+@csrf_exempt
 @require_http_methods(['POST'])
 def handle_send_verification_code_api(request):
     # 0. expected and received params

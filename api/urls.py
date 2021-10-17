@@ -4,6 +4,7 @@ from . import views
 urlpatterns = [
     # auth
     re_path('^login/?', views.handle_login_api),
+    re_path('^check_username/?', views.handle_check_username_api),
     re_path('^send_verification_code/?', views.handle_send_verification_code_api),
     re_path('^verify_register/?', views.handle_verify_register_api),
 

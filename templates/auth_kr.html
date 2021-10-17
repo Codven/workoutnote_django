@@ -5,7 +5,7 @@
             <span>LOG IN</span>
             <span>로그인합니다.</span>
         </div>
-        <form action="{% url 'login' %}" id="loginForm" class="form" method="post">
+        <form action="{% url 'login' %}" id="loginForm" onsubmit="event.preventDefault();" class="form" method="post">
             {% csrf_token %}
             <input type="hidden" name="next" value="{{ request.GET.next }}"/>
             <input class="emailInput" type="email" name="email" placeholder="EMAIL / PHONE NUMBER"/>
@@ -202,28 +202,36 @@
             });
 
             $('#registerButton').click(function () {
-                let name = $('#registerForm .nameInput').val();
-                let email = $('#registerForm .emailInput').val();
-                let password = $('#registerForm .passwordInput').val();
-                if (name.length < 2) {
-                    alert('Please enter your name, must be at least 2 characters!');
-                }
-                if (!isValidEmail(email)) {
-                    alert(`"${email}" is invalid email!`);
-                    return;
-                }
-                if (password.length < 4) {
-                    alert('Password is too short, must be at least 4 characters!');
-                    return;
-                }
-                $('#registerForm .button').fadeOut();
-                $.post('/api/send_verification_code', {email: email}).done(function (res) {
+                $.post('/api/check_username', {email_or_phone: username}).done(function (res) {
                     if (res.success) {
-                        $('#registerDiv').fadeOut(200);
-                        $('#verificationDiv').delay(200).fadeIn(200);
-                    } else
-                        alert('Failed to send verification code to the email, please try again later!');
-                    $('#registerForm .button').fadeIn();
+                        if (res.isTaken)
+                            alert('Email/phone number is already registered!');
+                        else {
+                            let name = $('#registerForm .nameInput').val();
+                            let email = $('#registerForm .emailInput').val();
+                            let password = $('#registerForm .passwordInput').val();
+                            if (name.length < 2) {
+                                alert('Please enter your name, must be at least 2 characters!');
+                            }
+                            if (!isValidEmail(email)) {
+                                alert(`"${email}" is invalid email!`);
+                                return;
+                            }
+                            if (password.length < 4) {
+                                alert('Password is too short, must be at least 4 characters!');
+                                return;
+                            }
+                            $('#registerForm .button').fadeOut();
+                            $.post('/api/send_verification_code', {email: email}).done(function (res) {
+                                if (res.success) {
+                                    $('#registerDiv').fadeOut(200);
+                                    $('#verificationDiv').delay(200).fadeIn(200);
+                                } else
+                                    alert('Failed to send verification code to the email, please try again later!');
+                                $('#registerForm .button').fadeIn();
+                            });
+                        }
+                    } else alert('Failed to check username availability, please try again later!');
                 });
             });
             $('#verificationButton').click(function () {
@@ -258,6 +266,19 @@
                         $('#registerDiv').delay(200).fadeIn(200);
                     }
                     $('#verificationForm .button').fadeIn();
+                });
+            });
+
+            $('#loginButton').click(function () {
+                let email = $('#loginForm input[name=email]').val();
+                let password = $('#loginForm input[name=password]').val();
+                $.post('/api/login', {email: email, password: password}).done(function (res) {
+                    if (res.success) {
+                        let form = $('#loginForm');
+                        form.prop('onsubmit', '');
+                        form.submit();
+                    } else
+                        alert('Error in credentials, please try again!');
                 });
             });
         });

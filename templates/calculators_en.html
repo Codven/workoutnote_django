@@ -28,110 +28,6 @@
         <div id="calculatorsDiv">
             <div class="calculatorsSubGroupDiv">
                 <div class="calculatorDiv skip" id="calculatorSwitchTabs">
-                    <label id="oneRepMaxButton" class="checked">One Rep Max Calculator<input type="radio" name="calc"></label>
-                    <label id="plateBarbelButton" class="unchecked">Plate Barbell Calculator<input type="radio" name="calc"></label>
-                    <label id="wilksButton" class="unchecked">Wilks Calculator<input type="radio" name="calc"></label>
-                </div>
-                <div class="calculatorDiv" id="oneRepMaxDiv">
-                    <h3 style="font-weight: bold;">One Rep Max Calculator</h3>
-                    <span>Calculate the one repetition maximum weight for all lifts.</span>
-                    <div class="calculatorContentRoot">
-                        <div id="oneRepMaxCalculatorContent">
-                            <label for="liftMass">Weight (KG)</label>
-                            <input type="number" id="liftMass" name="liftMass" min="1" max="1500" step="0.1" placeholder="Type here">
-
-                            <label for="repetitions">Repetitions</label>
-                            <input type="number" name="repetitions" id="repetitions" min="1" max="500" placeholder="Type here">
-
-                            <input type="submit" value="CALCULATE">
-                        </div>
-                        <div id="oneRepMaxCalculatorResult">
-                            <span>Your 1RM is</span>
-                            <div>
-                                <span id="oneRepMaxResult"></span>
-                                <span> kg</span>
-                            </div>
-                            <span></span>
-                        </div>
-                    </div>
-                    <table id="oneRepMaxCalculatorResultDetailed" style="display: none">
-                        <tr>
-                            <th colspan="2">1RM lift weight percentage</th>
-                            <th>1RM repetitions</th>
-                        </tr>
-                    </table>
-                </div>
-                <div class="calculatorDiv" id="plateBarbellRackingDiv" style="display: none">
-                    <h3 style="font-weight: bold;">Plate Barbell Calculator</h3>
-                    <span>Compute combination of plates for a specific weight.</span>
-                    <div class="calculatorContentRoot">
-                        <div id="plateBarbellRackingCalculatorContent">
-                            <label for="totalLiftMass">Total Lift (KG)</label>
-                            <input type="number" id="totalLiftMass" name="totalLiftMass" min="1" max="1500" step="0.1" placeholder="Type here">
-
-                            <label for="barWeight">Bar Weight (KG)</label>
-                            <input type="number" id="barWeight" name="barWeight" min="1" max="1500" step="0.1" placeholder="Type here">
-
-                            <input type="submit" value="CALCULATE">
-                        </div>
-                        <div id="plateBarbellRackingCalculatorResult"></div>
-                    </div>
-                </div>
-                <div class="calculatorDiv" id="wilksDiv" style="display: none">
-                    <h3 style="font-weight: bold;">Wilks Score Calculator</h3>
-                    <span>Calculate Wilks Score.</span>
-                    <div class="calculatorContentRoot">
-                        <div id="wilksCalculatorContent">
-                            <label>Gender : </label>
-                            <br>
-                            <label style="cursor: pointer">
-                                <input type="radio" name="gender" value="male" checked>
-                                Male
-                            </label>
-                            <label style="cursor: pointer">
-                                <input type="radio" name="gender" value="female">
-                                Female
-                            </label>
-
-                            <hr style="margin: 18px 0; border: none">
-                            <label for="bodyWeight">Body Weight (KG)</label>
-                            <input type="number" id="bodyWeight" name="bodyWeight" min="1" max="1500" step="0.1" placeholder="Type here">
-
-                            <hr style="margin: 18px 0; border: none">
-                            <div style="border: 1px solid white; border-radius: 8px; padding: 12px;">
-                                <label for="benchLiftMass">Bench Lift Mass (KG)</label>
-                                <input type="number" id="benchLiftMass" name="benchLiftMass" min="1" max="1500" step="0.1" placeholder="Type here">
-                                <label for="benchRepetitions">Bench Repetitions</label>
-                                <input type="number" name="benchRepetitions" id="benchRepetitions" min="1" max="500" placeholder="Type here">
-                            </div>
-
-                            <hr style="margin: 18px 0; border: none">
-                            <div style="border: 1px solid white; border-radius: 8px; padding: 12px;">
-                                <label for="squatMass">Squat Mass (KG)</label>
-                                <input type="number" id="squatMass" name="squatMass" min="1" max="1500" step="0.1" placeholder="Type here">
-                                <label for="squatRepetitions">Squat Repetitions</label>
-                                <input type="number" name="squatRepetitions" id="squatRepetitions" min="1" max="500" placeholder="Type here">
-                            </div>
-
-                            <hr style="margin: 18px 0; border: none">
-                            <div style="border: 1px solid white; border-radius: 8px; padding: 12px;">
-                                <label for="deadliftMass">Deadlift Mass (KG)</label>
-                                <input type="number" id="deadliftMass" name="deadliftMass" min="1" max="1500" step="0.1" placeholder="Type here">
-                                <label for="deadliftRepetitions">Deadlift Repetitions</label>
-                                <input type="number" name="deadliftRepetitions" id="deadliftRepetitions" min="1" max="500" placeholder="Type here">
-                            </div>
-
-                            <input type="submit" value="CALCULATE">
-                        </div>
-                        <div id="wilksCalculatorResult">
-                            <span id="wilksScoreResultTitle">Your Wilks Score is:</span> <br>
-                            <span id="wilksScoreResult"></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="calculatorsSubGroupDiv">
-                <div class="calculatorDiv skip" id="calculatorSwitchTabs">
                     <label id="oneRepMaxTestButton" class="unchecked">Deltoid 1RM Test<input type="radio" name="calc"></label>
                     <label id="oneRepMaxResultButton" class="unchecked">Deltoid 1RM Results<input type="radio" name="calc"></label>
                     <label id="gripStrengthTestButton" class="unchecked">Grip Strength Test<input type="radio" name="calc"></label>
@@ -425,6 +321,110 @@
                     <h3 style="font-weight: bold;">Grip Strength Test</h3>
                     <div class="calculatorContentRoot">
                         <span>Under Construction</span>
+                    </div>
+                </div>
+            </div>
+            <div class="calculatorsSubGroupDiv">
+                <div class="calculatorDiv skip" id="calculatorSwitchTabs">
+                    <label id="oneRepMaxButton" class="checked">One Rep Max Calculator<input type="radio" name="calc"></label>
+                    <label id="plateBarbelButton" class="unchecked">Plate Barbell Calculator<input type="radio" name="calc"></label>
+                    <label id="wilksButton" class="unchecked">Wilks Calculator<input type="radio" name="calc"></label>
+                </div>
+                <div class="calculatorDiv" id="oneRepMaxDiv">
+                    <h3 style="font-weight: bold;">One Rep Max Calculator</h3>
+                    <span>Calculate the one repetition maximum weight for all lifts.</span>
+                    <div class="calculatorContentRoot">
+                        <div id="oneRepMaxCalculatorContent">
+                            <label for="liftMass">Weight (KG)</label>
+                            <input type="number" id="liftMass" name="liftMass" min="1" max="1500" step="0.1" placeholder="Type here">
+
+                            <label for="repetitions">Repetitions</label>
+                            <input type="number" name="repetitions" id="repetitions" min="1" max="500" placeholder="Type here">
+
+                            <input type="submit" value="CALCULATE">
+                        </div>
+                        <div id="oneRepMaxCalculatorResult">
+                            <span>Your 1RM is</span>
+                            <div>
+                                <span id="oneRepMaxResult"></span>
+                                <span> kg</span>
+                            </div>
+                            <span></span>
+                        </div>
+                    </div>
+                    <table id="oneRepMaxCalculatorResultDetailed" style="display: none">
+                        <tr>
+                            <th colspan="2">1RM lift weight percentage</th>
+                            <th>1RM repetitions</th>
+                        </tr>
+                    </table>
+                </div>
+                <div class="calculatorDiv" id="plateBarbellRackingDiv" style="display: none">
+                    <h3 style="font-weight: bold;">Plate Barbell Calculator</h3>
+                    <span>Compute combination of plates for a specific weight.</span>
+                    <div class="calculatorContentRoot">
+                        <div id="plateBarbellRackingCalculatorContent">
+                            <label for="totalLiftMass">Total Lift (KG)</label>
+                            <input type="number" id="totalLiftMass" name="totalLiftMass" min="1" max="1500" step="0.1" placeholder="Type here">
+
+                            <label for="barWeight">Bar Weight (KG)</label>
+                            <input type="number" id="barWeight" name="barWeight" min="1" max="1500" step="0.1" placeholder="Type here">
+
+                            <input type="submit" value="CALCULATE">
+                        </div>
+                        <div id="plateBarbellRackingCalculatorResult"></div>
+                    </div>
+                </div>
+                <div class="calculatorDiv" id="wilksDiv" style="display: none">
+                    <h3 style="font-weight: bold;">Wilks Score Calculator</h3>
+                    <span>Calculate Wilks Score.</span>
+                    <div class="calculatorContentRoot">
+                        <div id="wilksCalculatorContent">
+                            <label>Gender : </label>
+                            <br>
+                            <label style="cursor: pointer">
+                                <input type="radio" name="gender" value="male" checked>
+                                Male
+                            </label>
+                            <label style="cursor: pointer">
+                                <input type="radio" name="gender" value="female">
+                                Female
+                            </label>
+
+                            <hr style="margin: 18px 0; border: none">
+                            <label for="bodyWeight">Body Weight (KG)</label>
+                            <input type="number" id="bodyWeight" name="bodyWeight" min="1" max="1500" step="0.1" placeholder="Type here">
+
+                            <hr style="margin: 18px 0; border: none">
+                            <div style="border: 1px solid white; border-radius: 8px; padding: 12px;">
+                                <label for="benchLiftMass">Bench Lift Mass (KG)</label>
+                                <input type="number" id="benchLiftMass" name="benchLiftMass" min="1" max="1500" step="0.1" placeholder="Type here">
+                                <label for="benchRepetitions">Bench Repetitions</label>
+                                <input type="number" name="benchRepetitions" id="benchRepetitions" min="1" max="500" placeholder="Type here">
+                            </div>
+
+                            <hr style="margin: 18px 0; border: none">
+                            <div style="border: 1px solid white; border-radius: 8px; padding: 12px;">
+                                <label for="squatMass">Squat Mass (KG)</label>
+                                <input type="number" id="squatMass" name="squatMass" min="1" max="1500" step="0.1" placeholder="Type here">
+                                <label for="squatRepetitions">Squat Repetitions</label>
+                                <input type="number" name="squatRepetitions" id="squatRepetitions" min="1" max="500" placeholder="Type here">
+                            </div>
+
+                            <hr style="margin: 18px 0; border: none">
+                            <div style="border: 1px solid white; border-radius: 8px; padding: 12px;">
+                                <label for="deadliftMass">Deadlift Mass (KG)</label>
+                                <input type="number" id="deadliftMass" name="deadliftMass" min="1" max="1500" step="0.1" placeholder="Type here">
+                                <label for="deadliftRepetitions">Deadlift Repetitions</label>
+                                <input type="number" name="deadliftRepetitions" id="deadliftRepetitions" min="1" max="500" placeholder="Type here">
+                            </div>
+
+                            <input type="submit" value="CALCULATE">
+                        </div>
+                        <div id="wilksCalculatorResult">
+                            <span id="wilksScoreResultTitle">Your Wilks Score is:</span> <br>
+                            <span id="wilksScoreResult"></span>
+                        </div>
                     </div>
                 </div>
             </div>

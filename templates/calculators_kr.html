@@ -28,110 +28,6 @@
         <div id="calculatorsDiv">
             <div class="calculatorsSubGroupDiv">
                 <div class="calculatorDiv skip" id="calculatorSwitchTabs">
-                    <label id="oneRepMaxButton" class="checked">One Rep Max 계산기<input type="radio" name="calc"></label>
-                    <label id="plateBarbelButton" class="unchecked">플레이트 바벨 계산기<input type="radio" name="calc"></label>
-                    <label id="wilksButton" class="unchecked">Wilks 계산기<input type="radio" name="calc"></label>
-                </div>
-                <div class="calculatorDiv" id="oneRepMaxDiv">
-                    <h3 style="font-weight: bold;">One Rep Max 계산기</h3>
-                    <span>모든 리프트에 대해 1회당 최대 반복 수를 계산합니다.</span>
-                    <div class="calculatorContentRoot">
-                        <div id="oneRepMaxCalculatorContent">
-                            <label for="liftMass">KG</label>
-                            <input type="number" id="liftMass" name="liftMass" min="1" max="1500" step="0.1" placeholder="직접 입력">
-
-                            <label for="repetitions">반복</label>
-                            <input type="number" name="repetitions" id="repetitions" min="1" max="500" placeholder="직접 입력">
-
-                            <input type="submit" value="계산하기">
-                        </div>
-                        <div id="oneRepMaxCalculatorResult">
-                            <span>딩신의 1RM은</span>
-                            <div>
-                                <span id="oneRepMaxResult"></span>
-                                <span> kg</span>
-                            </div>
-                            <span>입니다.</span>
-                        </div>
-                    </div>
-                    <table id="oneRepMaxCalculatorResultDetailed" style="display: none">
-                        <tr>
-                            <th colspan="2">1RM 리프트 중량 백분율</th>
-                            <th>1RM 반복횟수</th>
-                        </tr>
-                    </table>
-                </div>
-                <div class="calculatorDiv" id="plateBarbellRackingDiv" style="display: none">
-                    <h3 style="font-weight: bold;">Plate Barbell 계산기</h3>
-                    <span>바벨 리프트에 필요한 플레이트 무게를 계산합니다.</span>
-                    <div class="calculatorContentRoot">
-                        <div id="plateBarbellRackingCalculatorContent">
-                            <label for="totalLiftMass">Total Lift (KG)</label>
-                            <input type="number" id="totalLiftMass" name="totalLiftMass" min="1" max="1500" step="0.1" placeholder="직접 입력">
-
-                            <label for="barWeight">Bar Weight (KG)</label>
-                            <input type="number" id="barWeight" name="barWeight" min="1" max="1500" step="0.1" placeholder="직접 입력">
-
-                            <input type="submit" value="계산하기">
-                        </div>
-                        <div id="plateBarbellRackingCalculatorResult"></div>
-                    </div>
-                </div>
-                <div class="calculatorDiv" id="wilksDiv" style="display: none">
-                    <h3 style="font-weight: bold;">Wilks Score 계산기</h3>
-                    <span>Wilks Score 계산합니다.</span>
-                    <div class="calculatorContentRoot">
-                        <div id="wilksCalculatorContent">
-                            <label>Gender : </label>
-                            <br>
-                            <label style="cursor: pointer">
-                                <input type="radio" name="gender" value="male" checked>
-                                Male
-                            </label>
-                            <label style="cursor: pointer">
-                                <input type="radio" name="gender" value="female">
-                                Female
-                            </label>
-
-                            <hr style="margin: 18px 0; border: none">
-                            <label for="bodyWeight">Body Weight (KG)</label>
-                            <input type="number" id="bodyWeight" name="bodyWeight" min="1" max="1500" step="0.1" placeholder="직접 입력">
-
-                            <hr style="margin: 18px 0; border: none">
-                            <div style="border: 1px solid white; border-radius: 8px; padding: 12px;">
-                                <label for="benchLiftMass">Bench Lift Mass (KG)</label>
-                                <input type="number" id="benchLiftMass" name="benchLiftMass" min="1" max="1500" step="0.1" placeholder="직접 입력">
-                                <label for="benchRepetitions">Bench Repetitions</label>
-                                <input type="number" name="benchRepetitions" id="benchRepetitions" min="1" max="500" placeholder="직접 입력">
-                            </div>
-
-                            <hr style="margin: 18px 0; border: none">
-                            <div style="border: 1px solid white; border-radius: 8px; padding: 12px;">
-                                <label for="squatMass">Squat Mass (KG)</label>
-                                <input type="number" id="squatMass" name="squatMass" min="1" max="1500" step="0.1" placeholder="직접 입력">
-                                <label for="squatRepetitions">Squat Repetitions</label>
-                                <input type="number" name="squatRepetitions" id="squatRepetitions" min="1" max="500" placeholder="직접 입력">
-                            </div>
-
-                            <hr style="margin: 18px 0; border: none">
-                            <div style="border: 1px solid white; border-radius: 8px; padding: 12px;">
-                                <label for="deadliftMass">Deadlift Mass (KG)</label>
-                                <input type="number" id="deadliftMass" name="deadliftMass" min="1" max="1500" step="0.1" placeholder="직접 입력">
-                                <label for="deadliftRepetitions">Deadlift Repetitions</label>
-                                <input type="number" name="deadliftRepetitions" id="deadliftRepetitions" min="1" max="500" placeholder="직접 입력">
-                            </div>
-
-                            <input type="submit" value="계산하기">
-                        </div>
-                        <div id="wilksCalculatorResult">
-                            <span id="wilksScoreResultTitle">당신의 Wilks Score는:</span> <br>
-                            <span id="wilksScoreResult"></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="calculatorsSubGroupDiv">
-                <div class="calculatorDiv skip" id="calculatorSwitchTabs">
                     <label id="oneRepMaxTestButton" class="unchecked">델토이드 1RM 테스트<input type="radio" name="calc"></label>
                     <label id="oneRepMaxResultButton" class="unchecked">델토이드 1RM 검사결과<input type="radio" name="calc"></label>
                     <label id="gripStrengthTestButton" class="unchecked">악력(전완근) 검사<input type="radio" name="calc"></label>
@@ -425,6 +321,110 @@
                     <h3 style="font-weight: bold;">12분 달리기 검사</h3>
                     <div class="calculatorContentRoot">
                         <span>Under Construction</span>
+                    </div>
+                </div>
+            </div>
+            <div class="calculatorsSubGroupDiv">
+                <div class="calculatorDiv skip" id="calculatorSwitchTabs">
+                    <label id="oneRepMaxButton" class="checked">One Rep Max 계산기<input type="radio" name="calc"></label>
+                    <label id="plateBarbelButton" class="unchecked">플레이트 바벨 계산기<input type="radio" name="calc"></label>
+                    <label id="wilksButton" class="unchecked">Wilks 계산기<input type="radio" name="calc"></label>
+                </div>
+                <div class="calculatorDiv" id="oneRepMaxDiv" style="display: none">
+                    <h3 style="font-weight: bold;">One Rep Max 계산기</h3>
+                    <span>모든 리프트에 대해 1회당 최대 반복 수를 계산합니다.</span>
+                    <div class="calculatorContentRoot">
+                        <div id="oneRepMaxCalculatorContent">
+                            <label for="liftMass">KG</label>
+                            <input type="number" id="liftMass" name="liftMass" min="1" max="1500" step="0.1" placeholder="직접 입력">
+
+                            <label for="repetitions">반복</label>
+                            <input type="number" name="repetitions" id="repetitions" min="1" max="500" placeholder="직접 입력">
+
+                            <input type="submit" value="계산하기">
+                        </div>
+                        <div id="oneRepMaxCalculatorResult">
+                            <span>딩신의 1RM은</span>
+                            <div>
+                                <span id="oneRepMaxResult"></span>
+                                <span> kg</span>
+                            </div>
+                            <span>입니다.</span>
+                        </div>
+                    </div>
+                    <table id="oneRepMaxCalculatorResultDetailed" style="display: none">
+                        <tr>
+                            <th colspan="2">1RM 리프트 중량 백분율</th>
+                            <th>1RM 반복횟수</th>
+                        </tr>
+                    </table>
+                </div>
+                <div class="calculatorDiv" id="plateBarbellRackingDiv" style="display: none">
+                    <h3 style="font-weight: bold;">Plate Barbell 계산기</h3>
+                    <span>바벨 리프트에 필요한 플레이트 무게를 계산합니다.</span>
+                    <div class="calculatorContentRoot">
+                        <div id="plateBarbellRackingCalculatorContent">
+                            <label for="totalLiftMass">Total Lift (KG)</label>
+                            <input type="number" id="totalLiftMass" name="totalLiftMass" min="1" max="1500" step="0.1" placeholder="직접 입력">
+
+                            <label for="barWeight">Bar Weight (KG)</label>
+                            <input type="number" id="barWeight" name="barWeight" min="1" max="1500" step="0.1" placeholder="직접 입력">
+
+                            <input type="submit" value="계산하기">
+                        </div>
+                        <div id="plateBarbellRackingCalculatorResult"></div>
+                    </div>
+                </div>
+                <div class="calculatorDiv" id="wilksDiv" style="display: none">
+                    <h3 style="font-weight: bold;">Wilks Score 계산기</h3>
+                    <span>Wilks Score 계산합니다.</span>
+                    <div class="calculatorContentRoot">
+                        <div id="wilksCalculatorContent">
+                            <label>Gender : </label>
+                            <br>
+                            <label style="cursor: pointer">
+                                <input type="radio" name="gender" value="male" checked>
+                                Male
+                            </label>
+                            <label style="cursor: pointer">
+                                <input type="radio" name="gender" value="female">
+                                Female
+                            </label>
+
+                            <hr style="margin: 18px 0; border: none">
+                            <label for="bodyWeight">Body Weight (KG)</label>
+                            <input type="number" id="bodyWeight" name="bodyWeight" min="1" max="1500" step="0.1" placeholder="직접 입력">
+
+                            <hr style="margin: 18px 0; border: none">
+                            <div style="border: 1px solid white; border-radius: 8px; padding: 12px;">
+                                <label for="benchLiftMass">Bench Lift Mass (KG)</label>
+                                <input type="number" id="benchLiftMass" name="benchLiftMass" min="1" max="1500" step="0.1" placeholder="직접 입력">
+                                <label for="benchRepetitions">Bench Repetitions</label>
+                                <input type="number" name="benchRepetitions" id="benchRepetitions" min="1" max="500" placeholder="직접 입력">
+                            </div>
+
+                            <hr style="margin: 18px 0; border: none">
+                            <div style="border: 1px solid white; border-radius: 8px; padding: 12px;">
+                                <label for="squatMass">Squat Mass (KG)</label>
+                                <input type="number" id="squatMass" name="squatMass" min="1" max="1500" step="0.1" placeholder="직접 입력">
+                                <label for="squatRepetitions">Squat Repetitions</label>
+                                <input type="number" name="squatRepetitions" id="squatRepetitions" min="1" max="500" placeholder="직접 입력">
+                            </div>
+
+                            <hr style="margin: 18px 0; border: none">
+                            <div style="border: 1px solid white; border-radius: 8px; padding: 12px;">
+                                <label for="deadliftMass">Deadlift Mass (KG)</label>
+                                <input type="number" id="deadliftMass" name="deadliftMass" min="1" max="1500" step="0.1" placeholder="직접 입력">
+                                <label for="deadliftRepetitions">Deadlift Repetitions</label>
+                                <input type="number" name="deadliftRepetitions" id="deadliftRepetitions" min="1" max="500" placeholder="직접 입력">
+                            </div>
+
+                            <input type="submit" value="계산하기">
+                        </div>
+                        <div id="wilksCalculatorResult">
+                            <span id="wilksScoreResultTitle">당신의 Wilks Score는:</span> <br>
+                            <span id="wilksScoreResult"></span>
+                        </div>
                     </div>
                 </div>
             </div>

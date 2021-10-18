@@ -502,7 +502,7 @@
             let rootDiv = $('#selected_date_content');
             rootDiv.empty();
             rootDiv.append(`<h4 style="color: #5F36C4"><b>${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}. ${weekdayNames[date.getDay()]}</b></h4>`);
-            workouts.sort((l, r) => l.timestamp < r.timestamp);
+            workouts.sort((l, r) => l.timestamp < r.timestamp ? 1 : l.timestamp > r.timestamp ? -1 : 0);
             for (let i = 0; i < workouts.length; i++) {
                 rootDiv.append(`<div class="sub_content" style="min-height: 190px;"></div>`);
                 let subDiv = $('.sub_content:last');

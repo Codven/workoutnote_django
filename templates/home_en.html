@@ -985,7 +985,8 @@
             rootDiv.empty();
             rootDiv.append(`<h4 style="color: #5F36C4; font-size: 18px"><b>${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}. ${weekdayNames[date.getDay()]}</b></h4>`);
             let kgMode = $('#weight_th').html().toLowerCase() === 'kg';
-            workouts.sort((l, r) => l.timestamp < r.timestamp);
+            workouts.sort((l, r) => l.timestamp < r.timestamp ? 1 : l.timestamp > r.timestamp ? -1 : 0);
+
             for (let i = 0; i < workouts.length; i++) {
                 rootDiv.append(`<div class="sub_content" ></div>`);
                 let subDiv = $('#today_workouts .sub_content:last');
@@ -1059,7 +1060,7 @@
                     enabled: true,
                     rmMax: workout.lifts[i].rmMax
                 });
-            lifts.sort((l, r) => l.id > r.id);
+            lifts.sort((l, r) => l.id < r.id ? -1 : l.id > r.id ? 1 : 0);
             newLifts = lifts;
             setNewLiftsOnUI(lifts);
         }

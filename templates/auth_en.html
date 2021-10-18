@@ -170,7 +170,7 @@
 
         function isValidEmail(email) {
             const emailRe = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            const phoneRe = /^010[0-9]{8}$/;
+            const phoneRe = /^\+8210[0-9]{8}$/;
             return emailRe.test(email) || phoneRe.test(email);
         }
 

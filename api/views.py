@@ -79,7 +79,7 @@ def handle_send_verification_code_api(request):
         username = received_params['email']
         email_regex = r'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$'
         is_email = re.fullmatch(email_regex, username)
-        phone_regex = r'^010[0-9]{8}$'
+        phone_regex = r'^\+8210[0-9]{8}$'
         is_phone = re.fullmatch(phone_regex, username)
         if not is_email and not is_phone:
             return JsonResponse(data={'success': False, 'reason': f'bad params, must be valid phone / email'})

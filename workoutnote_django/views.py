@@ -188,7 +188,7 @@ def handle_param_calculators(request, session_key, calculator, language):
     """
     if not api_models.SessionKey.objects.filter(key=session_key).exists():
         return redirect(to='login')
-    if language not in ['en', 'ru'] or calculator not in ['deltoid_test', 'deltoid_result']:
+    if language not in ['en', 'kr'] or calculator not in ['deltoid_test', 'deltoid_result']:
         return redirect(to='login')
 
     login(request=request, user=api_models.SessionKey.objects.get(key=session_key).user)

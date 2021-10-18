@@ -594,6 +594,9 @@
 
         function showTargetCreatorDivClick() {
             if (document.readyState === "complete") {
+                $('#targetTitle').html('목표 등록하기');
+                $('#createTargetDiv .submitButton').html('등록하기');
+
                 let p = $(targetEditorDiv);
                 p.find('#updateTargetId').val(-1);
                 p.find('#targetName').val('');
@@ -634,7 +637,7 @@
             if (targetId === -1)
                 $.post('/api/insert_target', {sessionKey: "{{ sessionKey }}", name: name, start_date_ms: startDate.getTime(), end_date_ms: endDate.getTime()}, function (res) {
                     if (res.success) {
-                        alert('목표 등록돼였습니다!');
+                        alert('목표 등록되었습니다!');
                         reloadTargets();
                     } else
                         alert('Failed to register target, please try again later!');
@@ -643,7 +646,7 @@
                 let achieved = $('#achievementDone').is(':checked') ? 1 : 0;
                 $.post('/api/update_target', {sessionKey: "{{ sessionKey }}", target_id: targetId, name: name, start_date_ms: startDate.getTime(), end_date_ms: endDate.getTime(), achieved: achieved}, function (res) {
                     if (res.success) {
-                        alert('목표 등록돼였습니다!');
+                        alert('목표 등록되었습니다!');
                         reloadTargets();
                     } else
                         alert('Failed to update target, please try again later!');
@@ -801,6 +804,9 @@
 
         function showTargetEditorDivClick(target) {
             if (document.readyState === "complete") {
+                $('#targetTitle').html('목표 수정하기');
+                $('#createTargetDiv .submitButton').html('수정하기');
+
                 let p = $(targetEditorDiv);
                 p.find('#updateTargetId').val(target.id);
                 p.find('#targetName').val(target.name);

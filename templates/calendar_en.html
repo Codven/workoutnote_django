@@ -594,6 +594,9 @@
 
         function showTargetCreatorDivClick() {
             if (document.readyState === "complete") {
+                $('#targetTitle').html('Register target');
+                $('#createTargetDiv .submitButton').html('REGISTER');
+
                 let p = $(targetEditorDiv);
                 p.find('#updateTargetId').val(-1);
                 p.find('#targetName').val('');
@@ -801,6 +804,9 @@
 
         function showTargetEditorDivClick(target) {
             if (document.readyState === "complete") {
+                $('#targetTitle').html('Edit target');
+                $('#createTargetDiv .submitButton').html('UPDATE');
+
                 let p = $(targetEditorDiv);
                 p.find('#updateTargetId').val(target.id);
                 p.find('#targetName').val(target.name);

@@ -614,7 +614,7 @@
         }
 
         function createTargetClick() {
-            let targetId = $('#updateTargetId').val();
+            let targetId = parseInt($('#updateTargetId').val());
 
             let name = $('#targetName').val();
             if (name.length < 4) {

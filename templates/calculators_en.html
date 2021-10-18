@@ -1407,7 +1407,6 @@
                     [0.01, 0.02, 0.04, 0.06, 0.08, 0.1, 0.12, 0.16, 0.2, 0.24, 0.3].forEach((v, i) => {
                         let percentage = 1 - i * 0.05;
                         $('#oneRepMaxCalculatorResultDetailed tr:last').after(`<tr><td>${Math.trunc(percentage * 100)}</td><td>${Math.trunc(oneRepMax * percentage * 10) / 10} KG</td><td>${Math.trunc(v * 100)}</td></tr>`);
-                        console.log($('#oneRepMaxCalculatorResultDetailed tr'));
                     });
                     $('#oneRepMaxCalculatorResultDetailed').show();
                 }
@@ -1431,7 +1430,6 @@
                             totalLiftMass -= count * w;
                         }
                     });
-                    console.log(plates);
                     if (totalLiftMass === 0)
                         plates.forEach((plate) => div.append(`<a class="liftPlates">${plate}</a>`));
                     else

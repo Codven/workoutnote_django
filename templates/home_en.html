@@ -648,8 +648,6 @@
                     );
                     let liftWeightElem = $(`#liftWeight${i}`);
                     let liftRepsElem = $(`#liftReps${i}`);
-                    console.log(lifts[i].liftMass);
-                    console.log(lifts[i].repetitions);
                     for (let j = 0; j <= 50; j++) {
                         liftWeightElem.append(`<option value="${j}" ${j === lastWeight ? 'selected' : ''}>${j}</option>`);
                         liftRepsElem.append(`<option value="${j}" ${j === lastReps ? 'selected' : ''}>${j}</option>`);
@@ -898,7 +896,6 @@
                     for (let i = 0; i < editWorkout.lifts.length; i++)
                         prevIds.add(editWorkout.lifts[i].id);
 
-                    console.log(`Previous lifts : ${prevIds.size}`);
                     for (let i = 0; i < newLifts.length; i++) {
                         if (!newLifts[i].enabled)
                             // remove
@@ -906,8 +903,6 @@
                         else if (!prevIds.has(newLifts[i].id)) {
                             // add
                             $.post('/api/insert_lift', {sessionKey: "{{ sessionKey }}", workout_session_id: editWorkout.id, exercise_id: newLifts[i].exercise.id, lift_mass: newLifts[i].liftMass, repetitions: newLifts[i].repetitions});
-                            console.log(`New lift: ${newLifts[i].id}`);
-                            console.log({sessionKey: "{{ sessionKey }}", workout_session_id: editWorkout.id, exercise_id: newLifts[i].exercise.id, liftMass: newLifts[i].liftMass, repetitions: newLifts[i].repetitions});
                         } else {
                             // update
                             $.post('/api/update_lift', {sessionKey: "{{ sessionKey }}", workout_session_id: editWorkout.id, lift_id: newLifts[i].id, new_exercise_id: newLifts[i].exercise.id, new_lift_mass: newLifts[i].liftMass, new_repetitions: newLifts[i].repetitions});
@@ -1050,7 +1045,6 @@
             $('#exerciseDuration').attr('value', workout.duration.toString());
 
             let lifts = [];
-            console.log(workout.lifts);
             for (let i = 0; i < workout.lifts.length; i++)
                 lifts.push({
                     id: workout.lifts[i].id,

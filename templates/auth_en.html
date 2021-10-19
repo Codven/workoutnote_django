@@ -175,21 +175,24 @@
         }
 
         $(document).ready(function () {
-            $('#reset_password_text').click(function () {
-                $('#reset_password_text').hide();
+            let reset = $('#reset_password_text');
+            reset.click(function () {
+                reset.hide();
 
-                let email = $('#email_input').val();
-                if (email.length === 0)
+                let email = $('input.emailInput[name=email]').val();
+                if (email.length === 0) {
                     alert('Please enter your email address first!');
-                else if (email.length < 4 || !isValidEmail(email))
+                    reset.show();
+                } else if (email.length < 4 || !isValidEmail(email)) {
                     alert('Email invalid, please fix it and try again!')
-                else
+                    reset.show();
+                } else
                     $.post('/api/request_password_reset', {email: email}).done(function (res) {
                         if (res.success)
                             alert('Password reset email has been sent to your email!')
                         else
                             alert('Failed to reset password, please try again later!');
-                        $('#reset_password_text').show();
+                        reset.show();
                     });
             })
 

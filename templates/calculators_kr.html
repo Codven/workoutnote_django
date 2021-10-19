@@ -1552,6 +1552,10 @@
                     {% else %}
                         $('#oneRepMaxResultMenuButton').click();
                     {% endif %}
+                    setTimeout(() => {
+                        $('#mobileHeader').hide();
+                        $('#goBackMenuDiv').hide();
+                    }, 100);
                 } else {
                     {% if init_calculator == 'deltoid_test' %}
                         $('#oneRepMaxTestButton').click();

@@ -1553,8 +1553,11 @@
                         $('#oneRepMaxResultMenuButton').click();
                     {% endif %}
                     setTimeout(() => {
+                        $('.w3-hide-large').hide();
                         $('#mobileHeader').hide();
                         $('#goBackMenuDiv').hide();
+                        $('#printButton').hide();
+                        $('#returnButton').hide();
                     }, 100);
                 } else {
                     {% if init_calculator == 'deltoid_test' %}

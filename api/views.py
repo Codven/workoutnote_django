@@ -255,7 +255,7 @@ def handle_send_reset_password_email_api(request):
         session_key = models.SessionKey.objects.get(user=user).key
 
     # 3. generate email confirmation code
-    reset_link = f'https://workoutnote.com/reset_password/?k={session_key}'
+    reset_link = f'https://workoutnote.com/reset-password/?k={session_key}'
     if is_email:
         email_message = EmailMessage(
             'Workoutnote.com password reset link (do not share this!)',

@@ -186,7 +186,7 @@
                 } else
                     $.post('/api/request_password_reset', {email: email}).done(function (res) {
                         if (res.success)
-                            alert('Password reset email has been sent to your email!')
+                            alert('Password reset link has been sent to you!')
                         else
                             alert('Failed to reset password, please try again later!');
                         reset.show();

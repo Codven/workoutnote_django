@@ -223,6 +223,13 @@ class SmsVerifier:
 
     def send_verification_code(self, phone, code):
         msg = "[Workoutnote.com] your verification code is [{}].".format(code)
+        self._send(phone, msg)
+
+    def send_password_reset_text(self, phone, reset_link):
+        msg = "[Workoutnote.com password reset link (Do not share this!)]\nPlease proceed to the following link if you forgot your password, and would like to change it.\n{link}"
+        self._send(phone, msg)
+
+    def _send(self, phone, msg):
         msg_type = 'OTP'
         rsp = self.messenger.message(phone, msg, msg_type)
         print(f'Sms auth resp : {rsp}')

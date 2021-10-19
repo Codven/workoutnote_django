@@ -232,32 +232,45 @@ def handle_send_reset_password_email_api(request):
     if False in [x in received_params for x in required_params]:
         return JsonResponse(data={'success': False, 'reason': f'bad params, must provide {",".join(required_params)}'})
     else:
-        email = received_params['email']
+        username = received_params['email']
+        email_regex = r'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$'
+        is_email = re.fullmatch(email_regex, username)
+        phone_regex = r'^\+8210[0-9]{8}$'
+        is_phone = re.fullmatch(phone_regex, username)
+        if not is_email and not is_phone:
+            return JsonResponse(data={'success': False, 'reason': f'bad params, must be valid phone / email'})
 
     # 2. check user and session_key
-    if not django_User.objects.filter(username=email).exists():
+    if not django_User.objects.filter(username=username).exists():
         return JsonResponse(data={'success': False, 'reason': 'user does not exist'})
     else:
-        user = django_User.objects.get(username=email)
-    if not models.SessionKey.objects.filter(user__username=email).exists():
-        session_key = models.SessionKey.generate_key(email=email)
+        user = django_User.objects.get(username=username)
+    if not models.SessionKey.objects.filter(user__username=username).exists():
+        session_key = models.SessionKey.generate_key(email=username)
         while models.SessionKey.objects.filter(key=session_key).exists():
             time.sleep(0.001)
-            session_key = models.SessionKey.generate_key(email=email)
+            session_key = models.SessionKey.generate_key(email=username)
         models.SessionKey.objects.create(user=user, key=session_key)
     else:
         session_key = models.SessionKey.objects.get(user=user).key
 
     # 3. generate email confirmation code
-    email_message = EmailMessage(
-        'Workoutnote.com password reset link (do not share this!)',
-        f'Please proceed to the following link if you forgot your password, and would like to change it.\nhttps://workoutnote.com/reset_password/?k={session_key}"',
-        settings.EMAIL_HOST_USER,
-        [email],
-    )
-    email_message.fail_silently = False
-    email_message.send()
-    return JsonResponse(data={'success': True})
+    reset_link = f'https://workoutnote.com/reset_password/?k={session_key}'
+    if is_email:
+        email_message = EmailMessage(
+            'Workoutnote.com password reset link (do not share this!)',
+            f'Please proceed to the following link if you forgot your password, and would like to change it.\n{reset_link}"',
+            settings.EMAIL_HOST_USER,
+            [username],
+        )
+        email_message.fail_silently = False
+        email_message.send()
+        return JsonResponse(data={'success': True})
+    elif is_phone:
+        SmsVerifier().send_password_reset_text(username, reset_link)
+        return JsonResponse(data={'success': True})
+    else:
+        return JsonResponse(data={'success': False, 'reason': 'weird case, please contact deltoidsoft@gmail.com with the issue!'})
 
 
 # endregion

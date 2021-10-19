@@ -664,21 +664,22 @@
                     targets = res.targets;
 
                     let today = new Date();
-                    let toggleDisplay = $('#targetsDiv').css('display') === 'none';
+                    let targetsDiv = $('#targetsDiv');
+                    let toggleDisplay = targetsDiv.css('display') === 'none';
 
                     if (toggleDisplay)
-                        $('#targetsDiv').show();
+                        targetsDiv.show();
 
                     function processTarget(target) {
                         let startDate = new Date(target.startDateMs);
                         let endDate = new Date(target.endDateMs);
-                        let daysLeft = Math.trunc((endDate - today) / (1000 * 3600 * 24));
-                        $('#targetsDiv').append(`
+                        let daysLeft = Math.ceil((endDate - today) / (1000 * 3600 * 24));
+                        targetsDiv.append(`
                             <div style="background-color: white; box-shadow: 1px 1px 8px 0 rgba(89,87,87,0.3); border-radius: 12px; padding: 12px; margin-top: 12px;">
                                 <div style="display: flex; align-items: center; padding: 0 4px">
                                     <img class="achievement" onclick="toggleTargetClick(${target.id});" style="display:none; margin-right: 4px; vertical-align: middle; cursor: pointer;" src="${target.achieved ? '{% static 'achieved.png' %}' : '{% static 'failed.png' %}'}" width="22px" height="22px">
                                     <span class="changeColor" style="flex-grow: 1; font-size: larger">${target.name}</span>
-                                    <span class="dayNumber" style="padding: 2px 12px; background-color: #6633CC; border-radius: 16px; color: white; font-weight: bold">D - ${daysLeft}</span>
+                                    <span class="dayNumber" style="padding: 2px 12px; background-color: #6633CC; border-radius: 16px; color: white; font-weight: bold">D-${daysLeft}</span>
                                     <img onclick="targetOptionsClick(this, ${target.id});" style="margin-left: 8px; vertical-align: middle; cursor: pointer;" src="{% static 'options.png' %}" width="22px" height="22px">
                                 </div>
                                 <div style="display: flex; align-items: center; padding: 0 4px; margin-top: 12px">
@@ -690,7 +691,7 @@
                                 </div>
                             </div>
                         `);
-                        let el = $('#targetsDiv').children().last();
+                        let el = targetsDiv.children().last();
 
                         let pW = el.find('.progressHolder').css('width');
                         pW = parseFloat(pW.substr(0, pW.length - 2));
@@ -734,7 +735,7 @@
                         let progress = (today - startDate) / (endDate - startDate);
 
                         $('#mobileTargetsHeader .name').html(ongoing[0].name);
-                        $('#mobileTargetsHeader .dayNumber').html(`D - ${Math.trunc((endDate - today) / (1000 * 3600 * 24))}`);
+                        $('#mobileTargetsHeader .dayNumber').html(`D-${Math.ceil((endDate - today) / (1000 * 3600 * 24))}`);
                         $('#mobileTargetsHeader .startDate').html(`${startDate.getMonth() + 1}/${startDate.getDate()}`);
                         $('#mobileTargetsHeader .progress').css('width', pW * progress);
                         $('#mobileTargetsHeader .endDate').html(`${endDate.getMonth() + 1}/${endDate.getDate()}`);
@@ -746,7 +747,7 @@
                     }
 
                     if (toggleDisplay)
-                        $('#targetsDiv').hide();
+                        targetsDiv.hide();
                 } else
                     alert('Failed to save the result, please try again later!');
             });

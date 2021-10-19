@@ -1317,26 +1317,34 @@
             });
 
             $('#oneRepMaxTestMenuButton').click(function () {
-                $('#calculatorSwitchMenu').fadeOut(100);
+                let menu = $('#calculatorSwitchMenu');
+                if (menu.length)
+                    menu.fadeOut(100);
 
                 calculatorDivs.forEach(div => div.hide());
                 $('#oneRepMaxTestDiv').show();
 
-                $('#goBackMenuDiv').show();
+                let backDiv = $('#goBackMenuDiv');
+                if (backDiv.length)
+                    backDiv.show();
                 $('#calculatorsDiv').delay(100).fadeIn(100);
             });
             $('#oneRepMaxResultMenuButton').click(function () {
                 fetchOneRepMaxResults(function () {
-                    $('#calculatorSwitchMenu').fadeOut(100);
+                    let menu = $('#calculatorSwitchMenu');
+                    if (menu.length)
+                        menu.fadeOut(100);
 
                     calculatorDivs.forEach(div => div.hide());
                     if (previousScores.length === 0) {
-                        alert('You have no previous entries, please fill out the form completely first!');
+                        alert('1 You have no previous entries, please fill out the form completely first!');
                         $('#oneRepMaxTestDiv').show();
                     } else
                         $('#oneRepMaxResultDiv').show();
 
-                    $('#goBackMenuDiv').show();
+                    let backDiv = $('#goBackMenuDiv');
+                    if (backDiv.length)
+                        backDiv.show();
                     $('#calculatorsDiv').delay(100).fadeIn(100);
                 });
             });

@@ -1553,11 +1553,11 @@
                         $('#oneRepMaxResultMenuButton').click();
                     {% endif %}
                     setTimeout(() => {
-                        $('.w3-hide-large').hide();
-                        $('#mobileHeader').hide();
-                        $('#goBackMenuDiv').hide();
-                        $('#printButton').hide();
-                        $('#shareButtonsDiv').hide();
+                        $('.w3-hide-large').attr('style', 'display: none !important;');
+                        $('#mobileHeader').attr('style', 'display: none !important;');
+                        $('#goBackMenuDiv').attr('style', 'display: none !important;');
+                        $('#printButton').attr('style', 'display: none !important;');
+                        $('#shareButtonsDiv').attr('style', 'display: none !important;');
                     }, 100);
                 } else {
                     {% if init_calculator == 'deltoid_test' %}

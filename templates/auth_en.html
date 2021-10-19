@@ -183,9 +183,6 @@
                 if (email.length === 0) {
                     alert('Please enter your email address first!');
                     reset.show();
-                } else if (email.length < 4 || !isValidEmail(email)) {
-                    alert('Email invalid, please fix it and try again!')
-                    reset.show();
                 } else
                     $.post('/api/request_password_reset', {email: email}).done(function (res) {
                         if (res.success)

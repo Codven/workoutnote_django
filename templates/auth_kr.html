@@ -8,7 +8,7 @@
         <form action="{% url 'login' %}" id="loginForm" onsubmit="event.preventDefault();" class="form" method="post">
             {% csrf_token %}
             <input type="hidden" name="next" value="{{ request.GET.next }}"/>
-            <input class="emailInput" type="email" name="email" placeholder="EMAIL / PHONE NUMBER"/>
+            <input class="emailInput" type="text" name="email" placeholder="EMAIL / PHONE NUMBER"/>
             <input class="passwordInput" type="password" name="password" placeholder="PASSWORD"/>
             <button id="loginButton" class="button">로그인</button>
             <p class="message">비밀번호를 잊어 버렸습니까?? <a id="reset_password_text" href="#" style="cursor: pointer;">암호를 재설정</a></p>

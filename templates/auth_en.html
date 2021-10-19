@@ -8,7 +8,7 @@
         <form action="{% url 'login' %}" id="loginForm" onsubmit="event.preventDefault();" class="form" method="post">
             {% csrf_token %}
             <input type="hidden" name="next" value="{{ request.GET.next }}"/>
-            <input class="emailInput" type="email" name="email" placeholder="EMAIL / PHONE NUMBER"/>
+            <input class="emailInput" type="text" name="email" placeholder="EMAIL / PHONE NUMBER"/>
             <input class="passwordInput" type="password" name="password" placeholder="PASSWORD"/>
             <button id="loginButton" class="button">LOG IN</button>
             <p class="message">Forgot your password?? <a id="reset_password_text" href="#" style="cursor: pointer;">reset password</a></p>

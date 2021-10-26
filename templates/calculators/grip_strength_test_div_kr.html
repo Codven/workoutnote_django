@@ -13,9 +13,10 @@
         <li class="grip-strength-counter-list-item border-primary shadow">
           <div class="grip-strength-counter-list-item_content">
             <label>{{ forloop.counter }}회차</label>
-            <div class="input-wrapper surfix">
+            <div class="input-wrapper surfix prefix">
+              <span class="prefix">무게</span>
               <input type="text" value="0" />
-              <span>(kg)</span>
+              <span class="surfix">(kg)</span>
             </div>
           </div>
         </li>
@@ -29,9 +30,10 @@
         <li class="grip-strength-counter-list-item border-primary shadow">
           <div class="grip-strength-counter-list-item_content">
             <label>{{ forloop.counter }}회차</label>
-            <div class="input-wrapper surfix">
+            <div class="input-wrapper surfix prefix">
+              <span class="prefix">무게</span>
               <input type="text" value="0" />
-              <span>(kg)</span>
+              <span class="surfix">(kg)</span>
             </div>
           </div>
         </li>
@@ -92,14 +94,28 @@
     padding-right: 28px;
   }
 
+  .grip-strength-counter-list-item .input-wrapper.prefix {
+    padding-left: 40px;
+  }
+
+  .grip-strength-counter-list-item .input-wrapper.prefix span,
   .grip-strength-counter-list-item .input-wrapper.surfix span {
     position: absolute;
-    font-size: 12px;
-    font-weight: 300;
-    right: 0;
     bottom: 9px;
-    letter-spacing: -1px;
-    color: #777777;
+  }
 
+  .grip-strength-counter-list-item .input-wrapper.prefix .prefix {
+    left: 0;
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .grip-strength-counter-list-item .input-wrapper.surfix .surfix {
+    font-weight: 300;
+    font-size: 12px;
+
+    right: 0;
+    letter-spacing: -1px;
+    color: #AAAAAA;
   }
 </style>

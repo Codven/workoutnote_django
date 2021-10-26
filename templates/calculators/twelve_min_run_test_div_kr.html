@@ -1,0 +1,87 @@
+{% load static %}
+
+<div class="calculatorDiv" id="twelveMinRunTestDiv">
+  <h3>12분 달리기 검사</h3>
+  {% include 'calculators/require_form_field_kr.html' %}
+
+  <div class="twelve-min-run-test-container">
+    <div class="twelve-min-run-test-item border-primary shadow">
+      <div class="twelve-min-run-test-item_content">
+        <label>12분 달리기</label>
+        <div class="input-wrapper surfix prefix">
+          <span class="prefix">총 거리</span>
+          <input type="text" value="0" />
+          <span class="surfix">(km)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .twelve-min-run-test-container {
+    margin-top: 50px;
+    margin-bottom: 70px;
+  }
+
+  .twelve-min-run-test-item_content {
+    display: flex;
+    align-items: center;
+    padding-left: 22px;
+    padding-right: 18px;
+    height: 76px;
+  }
+
+  .twelve-min-run-test-item_content label {
+    color: #6633CC;
+    font-size: 16px;
+    line-height: 44px;
+    font-weight: bold;
+    width: 132px
+  }
+
+  .twelve-min-run-test-item .input-wrapper {
+    position: relative;
+    flex: 1;
+    padding: 7px 0;
+    text-align: right;
+    border-bottom: 2px solid;
+  }
+
+  .twelve-min-run-test-item .input-wrapper input {
+    text-align: right;
+    padding: 0;
+    font-weight: bold;
+    width: 100%;
+  }
+
+  .twelve-min-run-test-item .input-wrapper.surfix {
+    padding-right: 28px;
+  }
+
+  .twelve-min-run-test-item .input-wrapper.prefix {
+    padding-left: 40px;
+  }
+
+  .twelve-min-run-test-item .input-wrapper.prefix span,
+  .twelve-min-run-test-item .input-wrapper.surfix span {
+    position: absolute;
+    bottom: 9px;
+  }
+
+  .twelve-min-run-test-item .input-wrapper.prefix .prefix {
+    left: 0;
+    font-weight: bold;
+    font-size: 14px;
+
+  }
+
+  .twelve-min-run-test-item .input-wrapper.surfix .surfix {
+    font-weight: 300;
+    font-size: 12px;
+
+    right: 0;
+    letter-spacing: -1px;
+    color: #AAAAAA;
+  }
+</style>

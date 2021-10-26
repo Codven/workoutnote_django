@@ -1,0 +1,266 @@
+{% load static %}
+
+<div class="calculatorDiv" id="oneRepMaxTestDiv">
+  <h3>델토이드 최대 근력검사</h3>
+
+  {% include 'calculators/require_form_field_kr.html' %}
+  <div class="calculatorExtraContentRoot">
+    <div class="calculatorSubItemDiv">
+      <div class="bodyPartVisualDiv">
+        <a
+          style="position: absolute; top: 10px; z-index: 0"
+          class="bodyPartHighlightCircle"
+        ></a>
+        <img
+          style="z-index: 1; padding-left: 16px; padding-top: 10px"
+          src="{% static 'shoulder.svg' %}"
+          alt="shoulder"
+          width="80px"
+          height="80px"
+        />
+      </div>
+      <div class="bodyPartInputsDiv">
+        <span style="display: block; font-size: medium"
+          >어깨<span style="font-size: small">(덤벨 레터럴레이즈)</span></span
+        >
+        <div>
+          <label>
+            무게(kg)
+            <input
+              class="skip"
+              name="shoulderWeight"
+              required
+              type="number"
+              min="0"
+              max="999"
+              maxlength="3"
+              value="0"
+              placeholder="0"
+            />
+          </label>
+
+          <label>
+            횟수
+            <input
+              class="skip"
+              name="shoulderCount"
+              required
+              type="number"
+              min="0"
+              max="999"
+              maxlength="3"
+              value="0"
+              placeholder="0"
+            />
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="calculatorSubItemDiv">
+      <div class="bodyPartVisualDiv">
+        <a
+          style="position: absolute; top: 0; z-index: 0"
+          class="bodyPartHighlightCircle"
+        ></a>
+        <img
+          style="z-index: 1"
+          src="{% static 'body.svg' %}"
+          alt="chest"
+          width="96px"
+          height="96px"
+        />
+      </div>
+      <div class="bodyPartInputsDiv">
+        <span style="display: block; font-size: medium"
+          >가슴<span style="font-size: small">(푸쉬업)</span></span
+        >
+        <div>
+          <label>
+            무게(kg)
+            <input
+              class="skip"
+              name="chestWeight"
+              required
+              type="number"
+              min="0"
+              max="999"
+              maxlength="3"
+              value="0"
+              placeholder="0"
+            />
+          </label>
+
+          <label>
+            횟수
+            <input
+              class="skip"
+              name="chestCount"
+              required
+              type="number"
+              min="0"
+              max="999"
+              maxlength="3"
+              value="0"
+              placeholder="0"
+            />
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="calculatorSubItemDiv">
+      <div class="bodyPartVisualDiv">
+        <a
+          style="position: absolute; top: 22px; z-index: 0"
+          class="bodyPartHighlightCircle"
+        ></a>
+        <img
+          style="z-index: 1; padding: 3px"
+          src="{% static 'abs.svg' %}"
+          alt="abs"
+          width="80px"
+          height="80px"
+        />
+      </div>
+      <div class="bodyPartInputsDiv">
+        <span style="display: block; font-size: medium"
+          >복근<span style="font-size: small">(크런치)</span></span
+        >
+        <div>
+          <label>
+            무게(kg)
+            <input
+              class="skip"
+              name="absWeight"
+              required
+              type="number"
+              min="0"
+              max="999"
+              maxlength="3"
+              value="0"
+              placeholder="0"
+            />
+          </label>
+
+          <label>
+            횟수
+            <input
+              class="skip"
+              name="absCount"
+              required
+              type="number"
+              min="0"
+              max="999"
+              maxlength="3"
+              value="0"
+              placeholder="0"
+            />
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="calculatorSubItemDiv">
+      <div class="bodyPartVisualDiv">
+        <a
+          style="position: absolute; top: 28px; z-index: 0"
+          class="bodyPartHighlightCircle"
+        ></a>
+        <img
+          style="z-index: 1; padding: 3px"
+          src="{% static 'back.svg' %}"
+          alt="back"
+          width="80px"
+          height="80px"
+        />
+      </div>
+      <div class="bodyPartInputsDiv">
+        <span style="display: block; font-size: medium"
+          >등<span style="font-size: small">(덤벨로우)</span></span
+        >
+        <div>
+          <label>
+            무게(kg)
+            <input
+              class="skip"
+              name="backWeight"
+              required
+              type="number"
+              min="0"
+              max="999"
+              maxlength="3"
+              value="0"
+              placeholder="0"
+            />
+          </label>
+
+          <label>
+            횟수
+            <input
+              class="skip"
+              name="backCount"
+              required
+              type="number"
+              min="0"
+              max="999"
+              maxlength="3"
+              value="0"
+              placeholder="0"
+            />
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="calculatorSubItemDiv">
+      <div class="bodyPartVisualDiv">
+        <a
+          style="position: absolute; top: 22px; z-index: 0"
+          class="bodyPartHighlightCircle"
+        ></a>
+        <img
+          style="z-index: 1"
+          src="{% static 'legs.svg' %}"
+          alt="legs"
+          width="96px"
+          height="96px"
+        />
+      </div>
+      <div class="bodyPartInputsDiv">
+        <span style="display: block; font-size: medium"
+          >하체<span style="font-size: small">(덤벨스쿼트)</span></span
+        >
+        <div>
+          <label>
+            무게(kg)
+            <input
+              class="skip"
+              name="legsWeight"
+              required
+              type="number"
+              min="0"
+              max="999"
+              maxlength="3"
+              value="0"
+              placeholder="0"
+            />
+          </label>
+
+          <label>
+            횟수
+            <input
+              class="skip"
+              name="legsCount"
+              required
+              type="number"
+              min="0"
+              max="999"
+              maxlength="3"
+              value="0"
+              placeholder="0"
+            />
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <input class="skip" type="submit" value="검사결과보기" />
+  </div>
+</div>

@@ -1,0 +1,105 @@
+{% load static %}
+
+<div class="calculatorDiv" id="gripStrengthTestDiv">
+  <h3>악력(전완근) 검사</h3>
+  {% include 'calculators/require_form_field_kr.html' %}
+
+
+  <div class="grip-strength-counter-container">
+    <div class="grip-strength-counter-item">
+      <h3>오른손</h3>
+      <ul class="grip-strength-counter-list">
+        {% for i in "x"|rjust:"3" %}
+        <li class="grip-strength-counter-list-item border-primary shadow">
+          <div class="grip-strength-counter-list-item_content">
+            <label>{{ forloop.counter }}회차</label>
+            <div class="input-wrapper surfix">
+              <input type="text" value="0" />
+              <span>(kg)</span>
+            </div>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="grip-strength-counter-item">
+      <h3>왼손</h3>
+      <ul class="grip-strength-counter-list">
+        {% for i in "x"|rjust:"3" %}
+        <li class="grip-strength-counter-list-item border-primary shadow">
+          <div class="grip-strength-counter-list-item_content">
+            <label>{{ forloop.counter }}회차</label>
+            <div class="input-wrapper surfix">
+              <input type="text" value="0" />
+              <span>(kg)</span>
+            </div>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<style>
+  .grip-strength-counter-container {
+    margin-top: 50px;
+    margin-bottom: 70px;
+  }
+
+  .grip-strength-counter-item+.grip-strength-counter-item {
+    margin-top: 36px;
+  }
+
+  .grip-strength-counter-list {}
+
+  .grip-strength-counter-list-item+.grip-strength-counter-list-item {
+    margin-top: 8px;
+  }
+
+  .grip-strength-counter-list-item_content {
+    display: flex;
+    align-items: center;
+    padding-left: 22px;
+    padding-right: 18px;
+    height: 76px;
+  }
+
+  .grip-strength-counter-list-item_content label {
+    color: #6633CC;
+    font-size: 16px;
+    line-height: 44px;
+    font-weight: bold;
+    width: 132px
+  }
+
+  .grip-strength-counter-list-item .input-wrapper {
+    position: relative;
+    flex: 1;
+    padding: 7px 0;
+    text-align: right;
+    border-bottom: 2px solid;
+  }
+
+  .grip-strength-counter-list-item .input-wrapper input {
+    text-align: right;
+    padding: 0;
+    font-weight: bold;
+    width: 100%;
+  }
+
+  .grip-strength-counter-list-item .input-wrapper.surfix {
+    padding-right: 28px;
+  }
+
+  .grip-strength-counter-list-item .input-wrapper.surfix span {
+    position: absolute;
+    font-size: 12px;
+    font-weight: 300;
+    right: 0;
+    bottom: 9px;
+    letter-spacing: -1px;
+    color: #777777;
+
+  }
+</style>

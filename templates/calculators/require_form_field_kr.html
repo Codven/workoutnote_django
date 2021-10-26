@@ -1,0 +1,101 @@
+<div class="calculatorContentRoot">
+  <div
+    class="w3-small"
+    style="display: block; margin-bottom: 12px; font-weight: bold"
+  >
+    필수항목 입력
+  </div>
+
+  <div class="require-form-field-item">
+    <label for="name">이름</label>
+    <div class="require-form-field-item_input-container">
+      <input type="text" id="name" name="name" placeholder="직접 입력" />
+    </div>
+  </div>
+
+  <div class="require-form-field-item">
+    <label for="gender">성별</label>
+    <div>
+      <label style="cursor: pointer">
+        <input type="radio" name="oneRmGender" value="female" checked />
+        여자
+      </label>
+      <label style="cursor: pointer">
+        <input type="radio" name="oneRmGender" value="male" />
+        남자
+      </label>
+    </div>
+  </div>
+  <div class="require-form-field-item">
+    <label for="age">연령</label>
+    <div class="require-form-field-item_input-container surfix">
+      <input
+        type="number"
+        min="1"
+        max="120"
+        step="1"
+        id="age"
+        name="age"
+        placeholder="e.g. 25"
+      />
+      <span>세</span>
+    </div>
+  </div>
+  <div class="require-form-field-item">
+    <label for="height">키</label>
+    <div class="require-form-field-item_input-container surfix">
+      <input type="number" id="height" name="height" placeholder="e.g. 90" />
+      <span>cm</span>
+    </div>
+  </div>
+
+  <div class="require-form-field-item">
+    <label for="weight">체중</label>
+    <div class="require-form-field-item_input-container surfix">
+      <input type="number" id="weight" name="weight" placeholder="e.g. 35" />
+      <span>kg</span>
+    </div>
+  </div>
+
+  <span style="display: block; margin-top: 8px; font-size: x-small"
+    >*신체정보를 직접 기입하지 않으면 자동으로 최근정보가 입력됩니다.</span
+  >
+</div>
+<style>
+  .require-form-field-item {
+    display: flex;
+  }
+  .require-form-field-item + .require-form-field-item {
+    margin-top: 8px;
+  }
+  .require-form-field-item label {
+    color: #6633cc;
+    width: 54px;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+  .require-form-field-item .require-form-field-item_input-container {
+    position: relative;
+    flex: 1;
+    background: #f0f0f0;
+    height: 34px;
+    padding: 6px 16px;
+    border-radius: 16px;
+    text-align: right;
+  }
+  .require-form-field-item_input-container.surfix {
+    padding-right: 40px;
+  }
+  .require-form-field-item_input-container.surfix span {
+    position: absolute;
+    padding-left: 4px;
+    font-size: 12px;
+    bottom: 7px;
+    color: #777777;
+  }
+  .require-form-field-item .require-form-field-item_input-container input {
+    all: unset;
+  }
+</style>

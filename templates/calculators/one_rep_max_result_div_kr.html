@@ -1,0 +1,271 @@
+{% load static %}
+
+<div class="calculatorDiv" id="oneRepMaxResultDiv">
+  <h3>델토이드 최대 근력검사 결과</h3>
+  <div class="calculatorContentRoot" style="display: flex">
+    <div style="display: inline-block; flex-grow: 1">
+      <div class="_1rmResultInfoDiv">
+        <span>이름</span>
+        <span>|</span>
+        <span class="_1rmResultName"></span>
+      </div>
+      <div class="_1rmResultInfoDiv">
+        <span>성별</span>
+        <span>|</span>
+        <span id="_1rmResultGender"></span>
+      </div>
+      <div class="_1rmResultInfoDiv">
+        <span>연령</span>
+        <span>|</span>
+        <span id="_1rmResultAge"></span>
+      </div>
+    </div>
+    <div style="display: inline-block; flex-grow: 1">
+      <div class="_1rmResultInfoDiv">
+        <span>신장</span>
+        <span>|</span>
+        <span id="_1rmResultHeight"></span>
+      </div>
+      <div class="_1rmResultInfoDiv">
+        <span>체중</span>
+        <span>|</span>
+        <span id="_1rmResultWeight"></span>
+      </div>
+    </div>
+  </div>
+  <div class="calculatorExtraContentRoot">
+    <div style="text-align: center; padding: 32px 0">
+      <span
+        style="
+          font-size: large;
+          border-bottom: 2px solid black;
+          text-align: center;
+        "
+        ><span class="_1rmResultName"></span> 님의 최대근력</span
+      >
+    </div>
+
+    <div id="radarChartRootDiv">
+      <div id="radarChartDiv">
+        <canvas id="radarChart"></canvas>
+      </div>
+    </div>
+
+    <div style="margin-top: 24px">
+      <span style="display: block; text-align: center"
+        ><span class="_1rmResultName"></span> 님의 근력검사 평균
+        <span
+          style="font-weight: bold; font-style: italic"
+          id="_1rmResultAvgScore"
+        ></span
+        ><span style="font-weight: bold; font-style: italic">del</span></span
+      >
+      <span style="display: block; text-align: center"
+        ><span class="_1rmResultName"></span> 님의 총 최대근력
+        <span
+          style="font-weight: bold; font-style: italic"
+          id="_1rmResultTotalScore"
+        ></span
+        ><span style="font-weight: bold; font-style: italic">del</span></span
+      >
+    </div>
+
+    <div style="margin-top: 32px">
+      <span style="display: block; font-size: x-small; color: #959595"
+        >*DEL : 델토이드에서 최대 근력검사 시행 시 사용하는 단위입니다.</span
+      >
+    </div>
+
+    <hr style="border-bottom: 0.5px solid #aaaaaa" />
+
+    <div class="resultSubItemDiv">
+      <div class="bodyPartVisualDiv">
+        <a
+          style="position: absolute; top: 10px; z-index: 0"
+          class="bodyPartHighlightCircle"
+        ></a>
+        <img
+          style="z-index: 1; padding-left: 16px; padding-top: 10px"
+          src="{% static 'shoulder.svg' %}"
+          alt="shoulder"
+          width="80px"
+          height="80px"
+        />
+      </div>
+      <span style="font-size: large"
+        >어깨<span style="font-size: medium">(덤벨 레터럴레이즈)</span></span
+      >
+      <span
+        id="shoulderResult"
+        style="
+          font-size: xxx-large;
+          font-style: italic;
+          font-weight: bold;
+          color: #6633cc;
+        "
+        >del</span
+      >
+    </div>
+
+    <hr style="border-bottom: 0.5px solid #aaaaaa" />
+
+    <div class="resultSubItemDiv">
+      <div class="bodyPartVisualDiv">
+        <a
+          style="position: absolute; top: 0; z-index: 0"
+          class="bodyPartHighlightCircle"
+        ></a>
+        <img
+          style="z-index: 1"
+          src="{% static 'body.svg' %}"
+          alt="chest"
+          width="96px"
+          height="96px"
+        />
+      </div>
+      <span style="font-size: large">가슴(푸쉬업)</span>
+      <span
+        id="chestResult"
+        style="
+          font-size: xxx-large;
+          font-style: italic;
+          font-weight: bold;
+          color: #6633cc;
+        "
+        >del</span
+      >
+    </div>
+
+    <hr style="border-bottom: 0.5px solid #aaaaaa" />
+
+    <div class="resultSubItemDiv">
+      <div class="bodyPartVisualDiv">
+        <a
+          style="position: absolute; top: 22px; z-index: 0"
+          class="bodyPartHighlightCircle"
+        ></a>
+        <img
+          style="z-index: 1; padding: 3px"
+          src="{% static 'abs.svg' %}"
+          alt="abs"
+          width="80px"
+          height="80px"
+        />
+      </div>
+      <span style="font-size: large">복근(크런치)</span>
+      <span
+        id="absResult"
+        style="
+          font-size: xxx-large;
+          font-style: italic;
+          font-weight: bold;
+          color: #6633cc;
+        "
+        >del</span
+      >
+    </div>
+
+    <hr style="border-bottom: 0.5px solid #aaaaaa" />
+
+    <div class="resultSubItemDiv">
+      <div class="bodyPartVisualDiv">
+        <a
+          style="position: absolute; top: 28px; z-index: 0"
+          class="bodyPartHighlightCircle"
+        ></a>
+        <img
+          style="z-index: 1; padding: 3px"
+          src="{% static 'back.svg' %}"
+          alt="back"
+          width="80px"
+          height="80px"
+        />
+      </div>
+      <span style="font-size: large">등(덤벨로우)</span>
+      <span
+        id="backResult"
+        style="
+          font-size: xxx-large;
+          font-style: italic;
+          font-weight: bold;
+          color: #6633cc;
+        "
+        >del</span
+      >
+    </div>
+
+    <hr style="border-bottom: 0.5px solid #aaaaaa" />
+
+    <div class="resultSubItemDiv">
+      <div class="bodyPartVisualDiv">
+        <a
+          style="position: absolute; top: 22px; z-index: 0"
+          class="bodyPartHighlightCircle"
+        ></a>
+        <img
+          style="z-index: 1"
+          src="{% static 'legs.svg' %}"
+          alt="legs"
+          width="96px"
+          height="96px"
+        />
+      </div>
+      <span style="font-size: large">하체(덤벨스쿼트)</span>
+      <span
+        id="legsResult"
+        style="
+          font-size: xxx-large;
+          font-style: italic;
+          font-weight: bold;
+          color: #6633cc;
+        "
+        >del</span
+      >
+    </div>
+
+    <hr style="border-bottom: 0.5px solid #aaaaaa" />
+
+    <div style="text-align: center; padding: 32px 0; margin: 0 32px">
+      <span
+        style="
+          font-size: large;
+          border-bottom: 2px solid black;
+          text-align: center;
+        "
+        ><span class="_1rmResultName"></span> 님의 총 최대근력</span
+      >
+    </div>
+
+    <div id="barChartRootDiv">
+      <div id="barChartDiv">
+        <canvas id="barChart"></canvas>
+      </div>
+    </div>
+
+    <div id="_1RMResultActionButtons">
+      <div>
+        <a id="printButton" class="lightButton">출력화면 보기</a>
+        <a id="photoCardButton" class="lightButton">포토카드로 보기</a>
+        <div id="shareButtonsDiv">
+          <a id="uploadButton" class="lightButton skip"
+            ><img
+              src="{% static 'upload.svg' %}"
+              alt="upload"
+              width="20px"
+              height="20px"
+          /></a>
+          <span style="width: 4px"></span>
+          <a id="returnButton" class="darkButton skip">
+            <img
+              src="{% static 'return.svg' %}"
+              alt="return"
+              width="18px"
+              height="18px"
+            />
+            다시 검사</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

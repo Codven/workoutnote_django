@@ -13,16 +13,21 @@
 </div>
 
 <script>
-  function simpleTimer(elementId, options = {}) {
+  {% comment %} function simpleTimer(elementId, options = {}) {
     var type = options.type || 'increase' // increase, decrease
     var time = type === 'increase' ? 0 : 60 * 12;
     var ele = document.getElementById(elementId);
+
+
+
     var button = ele.getElementsByClassName('simple-timer_button')[0]
     var resetButton = ele.getElementsByClassName('simple-timer_reset-button')[0]
     var timerInnerHtml = button.children[0];
     var isStart = false;
     var isPaused = false;
     var timer
+
+
 
     button.addEventListener('click', () => {
       if (!isStart) {
@@ -60,13 +65,11 @@
       timer = null;
       init()
     };
-``
+
     function pause() {
       console.log('isPaused', isPaused)
       isPaused = !isPaused;
     };
-  }
+  } {% endcomment %}
 
-  var timer1 = simpleTimer("simple-timer");
-  console.log(timer1)
 </script>

@@ -15,6 +15,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+    <script src="{% static 'simpleTimer.js' %}"></script>
 </head>
 
 <body>
@@ -98,7 +99,7 @@
 
 <div id="deleteAlertDivRoot" class="alertDivRoot" style="display: none; z-index: 997;">
     <div id="deleteAlertDiv">
-        <a style="color: black; display: block;">삭제하면 복구할 수 없읍니다. 정말 삭제하시겠읍니까?</a>
+        <a style="color: black; display: block;">삭제하면 복구할 수 없습니다. 정말 삭제하시겠습니까?</a>
         <div>
             <a style="color: dodgerblue;">취소</a>
             <a style="color: red;">삭제</a>

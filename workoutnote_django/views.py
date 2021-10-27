@@ -176,7 +176,7 @@ def handle_calculators(request):
         api_models.SessionKey.objects.create(user=request.user, key=session_key)
     else:
         session_key = api_models.SessionKey.objects.get(user=request.user).key
-    return render(request=request, template_name='calculators/' + 'calculators_kr.html' if lang is not None and lang == 'kr' else 'calculators_en.html', context={'at_calculators': True, 'sessionKey': session_key})
+    return render(request=request, template_name='calculators/' + ('calculators_kr.html' if lang is not None and lang == 'kr' else 'calculators_en.html'), context={'at_calculators': True, 'sessionKey': session_key})
 
 
 def handle_param_calculators(request, session_key, calculator, language):

@@ -47,7 +47,9 @@
                             <td class="exercise_column" id="selectedExerciseName" onclick="showExerciseSelectorDivClick();">
                                 Exercise name
                             </td>
-                            <td class="weight_column"><select id="newLiftWeight" class="newLiftWeight"></select></td>
+                            <td class="weight_column">
+                                <input id="newLiftWeight" class="newLiftWeight" style="width: 40px"/>
+                            </td>
                             <td class="repetition_column"><select id="newLiftReps" class="newLiftReps"></select></td>
                             <td class="rm_column" id="newRmMax"></td>
                             <td class="done_column">
@@ -539,12 +541,17 @@
             $('#newRmMax').html(rm);
 
             for (let i = 0; i <= 50; i++) {
-                newLiftWeight.append(`<option value="${i}">${i}</option>`);
                 newLiftReps.append(`<option value="${i}">${i}</option>`);
             }
+
+            newLiftWeight.click((e) => {
+                newLiftWeight.val(0)
+            })
+
             newLiftWeight.change(function () {
                 let kgMode = $('#weight_th').html().toLowerCase() === 'kg';
                 newWeight = kgMode ? parseFloat(newLiftWeight.val()) : parseFloat(newLiftWeight.val()) * KG2LBS;
+                newLiftWeight.val(newWeight);
                 if (kgMode)
                     $('#newRmMax').html(Math.trunc((newWeight + newWeight * newReps * ONE_REP_MAX_CONST) * 100) / 100);
                 else

@@ -28,7 +28,7 @@
     <div id="sidebar_middle_part" class="w3-padding-64 w3-large w3-text-grey" style="font-weight:bold">
         <a href="{% url 'index' %}" class="w3-bar-item w3-button {% if at_home %}w3-navcolor{% else %}w3-black{% endif %}">
             <img src="{% static 'Home-white.svg' %}" height="30" style="margin-left: 15px; margin-right: 5px">
-            <span style="font-size: smaller;">워크아웃노트</span>
+            <span style="font-size: smaller;">운동일지</span>
         </a>
         <a href="{% url 'calendar' %}" class="w3-bar-item w3-button {% if at_calendar %}w3-navcolor{% else %}w3-black{% endif %}">
             <img src="{% static 'calendar.svg' %}" height="30" style="margin-left: 15px; margin-right: 5px">
@@ -36,7 +36,7 @@
         </a>
         <a href="{% url 'calculators' %}" class="w3-bar-item w3-button {% if at_calculators %}w3-navcolor{% else %}w3-black{% endif %}">
             <img src="{% static 'reward.svg' %}" height="30" style="margin-left: 15px; margin-right: 5px">
-            <span style="font-size: smaller;">델토이드 검사</span>
+            <span style="font-size: smaller;">운동능력검사</span>
         </a>
     </div>
     <div id="sidebar_bottom_part">

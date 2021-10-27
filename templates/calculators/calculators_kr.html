@@ -1,11 +1,11 @@
 {% extends 'base_kr.html' %}
 {% block content %}
+{% load static %}
 
 {% comment %} {% include 'calculators/timer.html' %} {% endcomment %}
 <div id="rootDiv">
   <div id="calculatorSwitchMenu">
     <div id="oneRepMaxTestMenuDiv">
-      {% load static %}
       <img src="{% static 'oneRepMaxTestBg.png' %}" alt="oneRepMaxTest" />
       <div>
         <span>델토이드 최대 근력검사</span>
@@ -17,12 +17,24 @@
         </div>
       </div>
     </div>
-    <a id="gripStrengthTestMenuButton" class="menuBlackButton"
-      >악력(전완근) 검사</a
-    >
-    <a id="twelveMinRunTestMenuButton" class="menuBlackButton"
-      >12분 달리기검사</a
-    >
+    <div class="main-menu-item_container">
+        <div class="main-menu-item_container_title-wrap">
+            <span>악력(전완근) 검사</span>
+        </div>
+        <div class="main-menu-item_container_menu-wrap">
+            <a id="gripStrengthTestMenuButton">테스트하기</a>
+            <a>검사결과보기</a>
+        </div>
+    </div>
+    <div class="main-menu-item_container">
+        <div class="main-menu-item_container_title-wrap">
+            <span>12분 달리기검사</span>
+        </div>
+        <div class="main-menu-item_container_menu-wrap">
+            <a id="twelveMinRunTestMenuButton">테스트하기</a>
+            <a>검사결과보기</a>
+        </div>
+    </div>
     <hr />
     <a id="oneRepMaxMenuButton" class="menuButton">One Rep Max 계산기</a>
     <a id="plateBarbelMenuButton" class="menuButton"

@@ -397,11 +397,14 @@
 
         @media (max-width: 400px) {
             .arrow_column {
+                {% comment %} display: none; {% endcomment %}
+            }
+            .arrow_column a {
                 display: none;
             }
 
             .set_column {
-                display: none;
+                {% comment %} display: none; {% endcomment %}
             }
 
             .exercise_column {

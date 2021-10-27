@@ -763,12 +763,14 @@
         }
 
         function removeTargetClick(targetId) {
-            $.post('/api/remove_target', {sessionKey: "{{ sessionKey }}", target_id: targetId}, function (res) {
-                if (res.success) {
-                    reloadTargets();
-                } else
-                    alert('Failed to change target achievement, please try again later!');
-            });
+            if (window.confirm('삭제하면 복구할 수 없습니다\n삭제하시겠습니까?')) {
+                $.post('/api/remove_target', {sessionKey: "{{ sessionKey }}", target_id: targetId}, function (res) {
+                    if (res.success) {
+                        reloadTargets();
+                    } else
+                        alert('Failed to change target achievement, please try again later!');
+                });
+            }
         }
 
         function showTargetsClick() {

@@ -2,8 +2,9 @@
 
 <div class="calculatorDiv" id="oneRepMaxTestDiv">
   <h3>델토이드 최대 근력검사</h3>
-
+  {% include 'common/round_border_current_date.html' %}
   {% include 'calculators/require_form_field_kr.html' %}
+  <div id="simple-timer-01" ></div>
   <div class="calculatorExtraContentRoot">
     <div class="calculatorSubItemDiv">
       <div class="bodyPartVisualDiv">
@@ -264,3 +265,7 @@
     <input class="skip" type="submit" value="검사결과보기" />
   </div>
 </div>
+
+<script>
+  simpleTimer("simple-timer-01");
+</script>

@@ -3,18 +3,26 @@ function simpleTimer(elementId, options = {}) {
   var time = type === "increase" ? 0 : 60 * 12;
   var ele = document.getElementById(elementId);
 
-  ele.innerHTML = ` <div>
-    <button class="simple-timer_button">
-      <span>00 : 00</span>
-    </button>
-  </div>
-  <div>
-    <button class="simple-timer_reset-button">Reset</button>
+  ele.innerHTML = `
+  <div class="simple-timer_container">
+    <div class="simple-timer_timer">
+      <button class="simple-timer_button">
+        <div class="simple-timer_min">00</div>
+        <div class="simple-timer_div">:</div>
+        <div class="simple-timer_sec">00</div>
+      </button>
+    </div>
+    <div class="simple-timer_option">
+      <button class="simple-timer_reset-button">
+        <span>Reset<span>
+      </button>
+    </div>
   </div>`;
-  console.log(ele)
 
   var button = ele.getElementsByClassName("simple-timer_button")[0];
   var resetButton = ele.getElementsByClassName("simple-timer_reset-button")[0];
+  var minBox = ele.getElementsByClassName("simple-timer_min")[0];
+  var secBox = ele.getElementsByClassName("simple-timer_sec")[0];
   var timerInnerHtml = button.children[0];
   var isStart = false;
   var isPaused = false;
@@ -33,7 +41,8 @@ function simpleTimer(elementId, options = {}) {
     time = type === "increase" ? 0 : 60 * 12;
     isPaused = false;
     isStart = false;
-    timerInnerHtml.innerHTML = "".padStart(2, 0) + " : " + "".padStart(2, 0);
+    minBox.innerHTML = "".padStart(2, 0);
+    secBox.innerHTML = "".padStart(2, 0);
   }
 
   function render() {
@@ -41,8 +50,8 @@ function simpleTimer(elementId, options = {}) {
       time = time + (type === "increase" ? 1 : -1);
       var min = Math.floor(time / 60);
       var sec = time % 60;
-      timerInnerHtml.innerHTML =
-        ("" + min).padStart(2, 0) + " : " + ("" + sec).padStart(2, 0);
+      minBox.innerHTML = ("" + min).padStart(2, 0);
+      secBox.innerHTML = ("" + sec).padStart(2, 0);
     }
   }
 

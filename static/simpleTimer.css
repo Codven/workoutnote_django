@@ -1,0 +1,46 @@
+.simple-timer_container {
+  display: inline-block;
+  width: 280px;
+  box-sizing: border-box;
+}
+
+.simple-timer_container button {
+  all: unset;
+  cursor: pointer;
+}
+.simple-timer_container .simple-timer_timer .simple-timer_button {
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  font-family: Oswald;
+  font-size: 70px;
+  font-weight: 800;
+  box-shadow: 4px 4px 4px 1px rgba(0, 0, 0, 0.25);
+  padding: 16px 24px;
+  background: white;
+  line-height: 1.2;
+  border-radius: 54px;
+  border: 1px solid #DDDDDD;
+  color: #6633cc;
+}
+.simple-timer_div {
+  padding: 0 4px;
+}
+.simple-timer_container .simple-timer_timer .simple-timer_button:active {
+  box-shadow: inset 4px 4px 4px 1px rgba(0, 0, 0, 0.25);
+}
+.simple-timer_button > div {
+  margin-bottom: -12px;
+}
+
+.simple-timer_container .simple-timer_option {
+  padding: 8px;
+  display: flex;
+  justify-content: center;
+}
+.simple-timer_container .simple-timer_reset-button {
+  font-size: 16px;
+  font-weight: 700;
+  color: #6633cc;
+}

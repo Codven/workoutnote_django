@@ -1,0 +1,18 @@
+{% load tools %}
+
+{% current_time "%Y - %m - %d" as cur_time %}
+<span class="round-border-current-date">
+  {{ cur_time }}
+</span>
+
+<style>
+  .round-border-current-date {
+    border: 2px solid #6633CC;
+    box-sizing: border-box;
+    padding: 2px 24px;
+    border-radius: 16px;
+    font-size: 14px;
+    color: #777777;
+    font-weight: 700;
+  }
+</style>

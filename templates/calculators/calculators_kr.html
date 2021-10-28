@@ -2,7 +2,6 @@
 {% block content %}
 {% load static %}
 
-{% comment %} {% include 'calculators/timer.html' %} {% endcomment %}
 <div id="rootDiv">
   <div id="calculatorSwitchMenu">
     <div id="oneRepMaxTestMenuDiv">
@@ -1084,6 +1083,9 @@
   }
 </style>
 
+<script>
+  simpleTimer('simple-timer-01');
+</script>
 <script>
   const ONE_REP_MAX_CONST = 0.025;
   let previousScores = [];
